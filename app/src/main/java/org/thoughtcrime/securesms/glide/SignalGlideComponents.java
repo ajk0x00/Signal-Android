@@ -55,6 +55,7 @@ import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.stickers.StickerRemoteUri;
 import org.thoughtcrime.securesms.stickers.StickerRemoteUriLoader;
 import org.thoughtcrime.securesms.stories.StoryTextPostModel;
+import org.thoughtcrime.securesms.stories.saved.DriveThumbnailLoader;
 import org.thoughtcrime.securesms.util.ConversationShortcutPhoto;
 
 import java.io.File;
@@ -123,6 +124,7 @@ public class SignalGlideComponents implements RegisterGlideComponents {
     registry.append(BlurHash.class, BlurHash.class, new BlurHashModelLoader.Factory());
     registry.append(Badge.class, InputStream.class, BadgeLoader.createFactory());
     registry.append(GiftBadgeModel.class, InputStream.class, GiftBadgeModel.createFactory());
+    registry.append(DriveThumbnailLoader.DriveThumbnailKey.class, InputStream.class, new DriveThumbnailLoader.Factory());
     registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory());
   }
 }

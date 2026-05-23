@@ -1251,6 +1251,9 @@ class StoryViewerPageFragment :
           viewModel.setIsSavingMedia(false)
         }
       },
+      onSaveToDrive = {
+        org.thoughtcrime.securesms.stories.drive.SaveStoryToDriveJob.enqueue(it.conversationMessage.messageRecord.id)
+      },
       onDelete = {
         viewModel.setIsDisplayingDeleteDialog(true)
         lifecycleDisposable += StoryContextMenu.delete(requireContext(), it.conversationMessage.messageRecord).subscribe { _ ->

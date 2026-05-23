@@ -1,0 +1,14 @@
+I need a feature to save the stories media to a Google Drive. Following are my design decisions
+- In the story view page there should be an additional option in the vertical ellipsis button (3 dots) with label 'Save to drive', Add the drive icon too.
+- On clicking that option, if the drive does not have a folder with users name in it, create a new folder and save the media with name dd-mm-yyyy_hh-mm-ss (to avoid name conflict)
+- Inside the stories tab add a new section named 'Saved stories', similar to 'My stories'.
+- Clicking on that section should show all the saved media that belongs to the user's folder.
+- For the saved stories view, use a user interface similar to shared media page inside group chats description.
+- Similar to the shared media page there should filter and sort option.
+- for ease of filtering and sorting keep a database in the app's root storage, keep it minimal and sync the database to drive.
+- Create a job that look if the database sync is already done with in the last 24hr time period, if not, and if the network is available for the sync process, Sync the database with the one in the associated Google Drive folder.
+- If the database from the phone storage got deleted somehow, try download it from the drive if possible.
+- Check already existing code for chat backup, see if we can reuse or repurpose anything there to fit the requirement.
+- We are going to hardcode the authentication credentials in the app itself, it's safe since I'm the only one using this.
+
+Ask all your questions before we implement

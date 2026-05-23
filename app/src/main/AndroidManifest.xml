@@ -533,6 +533,10 @@
             android:exported="false"
             android:theme="@style/Signal.DayNight.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".stories.saved.SavedStoriesActivity"
+            android:exported="false"
+            android:theme="@style/Signal.DayNight.NoActionBar" />
 
         <activity
             android:name=".stories.settings.StorySettingsActivity"

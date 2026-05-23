@@ -712,6 +712,9 @@ dependencies {
   implementation(libs.google.zxing.android.integration)
   implementation(libs.google.zxing.core)
   implementation(libs.google.flexbox)
+  implementation(libs.google.api.services.drive)
+  implementation(libs.google.api.client)
+  implementation(libs.google.http.client.jackson2)
   implementation(libs.subsampling.scale.image.view) {
     exclude(group = "com.android.support", module = "support-annotations")
   }

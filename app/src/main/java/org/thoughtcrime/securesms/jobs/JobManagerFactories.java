@@ -118,6 +118,8 @@ import org.thoughtcrime.securesms.migrations.UserNotificationMigrationJob;
 import org.thoughtcrime.securesms.migrations.UuidMigrationJob;
 import org.thoughtcrime.securesms.migrations.WallpaperCleanupMigrationJob;
 import org.thoughtcrime.securesms.migrations.WallpaperStorageMigrationJob;
+import org.thoughtcrime.securesms.stories.drive.SaveStoryToDriveJob;
+import org.thoughtcrime.securesms.stories.drive.DriveSyncJob;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -251,6 +253,8 @@ public final class JobManagerFactories {
       put(QuoteThumbnailBackfillJob.KEY,               new QuoteThumbnailBackfillJob.Factory());
       put(QuoteThumbnailReconstructionJob.KEY,         new QuoteThumbnailReconstructionJob.Factory());
       put(ReactionSendJob.KEY,                         new ReactionSendJob.Factory());
+      put(SaveStoryToDriveJob.KEY,                     new SaveStoryToDriveJob.Factory());
+      put(DriveSyncJob.KEY,                            new DriveSyncJob.Factory());
       put(RebuildMessageSearchIndexJob.KEY,            new RebuildMessageSearchIndexJob.Factory());
       put(ReclaimUsernameAndLinkJob.KEY,               new ReclaimUsernameAndLinkJob.Factory());
       put(RefreshAttributesJob.KEY,                    new RefreshAttributesJob.Factory());

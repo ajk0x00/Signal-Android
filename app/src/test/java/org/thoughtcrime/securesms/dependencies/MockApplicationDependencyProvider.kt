@@ -64,6 +64,7 @@ import org.whispersystems.signalservice.api.storage.StorageServiceApi
 import org.whispersystems.signalservice.api.websocket.SignalWebSocket
 import org.whispersystems.signalservice.internal.configuration.SignalServiceConfiguration
 import org.whispersystems.signalservice.internal.push.PushServiceSocket
+import org.thoughtcrime.securesms.stories.drive.DriveSyncScheduler
 import java.util.function.Supplier
 
 class MockApplicationDependencyProvider : AppDependencies.Provider {
@@ -325,6 +326,10 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
   }
 
   override fun provideKeyTransparencyApi(unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeyTransparencyApi {
+    return mockk(relaxed = true)
+  }
+
+  override fun provideDriveSyncScheduler(): DriveSyncScheduler {
     return mockk(relaxed = true)
   }
 }

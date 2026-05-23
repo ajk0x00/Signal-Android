@@ -82,8 +82,14 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
     viewModel.isTransitioningToAnotherScreen = false
     initializeSearchAction()
     viewModel.markStoriesRead()
+    refreshSavedStoryCount()
 
     AppDependencies.expireStoriesManager.scheduleIfNecessary()
+  }
+
+  private fun refreshSavedStoryCount() {
+    val count = org.thoughtcrime.securesms.stories.drive.SavedStoryDatabase(requireContext()).getCount()
+    viewModel.setSavedStoryCount(count)
   }
 
   private fun initializeSearchAction() {
@@ -135,6 +141,7 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
 
     StoriesLandingItem.register(adapter)
     MyStoriesItem.register(adapter)
+    org.thoughtcrime.securesms.stories.saved.SavedStoriesItem.register(adapter)
     ExpandHeader.register(adapter)
 
     requireListener<Material3OnScrollHelperBinder>().bindScrollHelper(recyclerView!!, viewLifecycleOwner)
@@ -207,6 +214,17 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
         )
       }
 
+      if (state.savedStoryCount > 0) {
+        customPref(
+          org.thoughtcrime.securesms.stories.saved.SavedStoriesItem.Model(
+            count = state.savedStoryCount,
+            onClick = {
+              startActivity(Intent(requireContext(), org.thoughtcrime.securesms.stories.saved.SavedStoriesActivity::class.java))
+            }
+          )
+        )
+      }
+
       stories.forEach { item ->
         customPref(item)
       }
@@ -263,6 +281,9 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
             messageRecord = it.data.primaryStory.messageRecord
           )
         }
+      },
+      onSaveToDrive = {
+        org.thoughtcrime.securesms.stories.drive.SaveStoryToDriveJob.enqueue(it.data.primaryStory.messageRecord.id)
       },
       onDeleteStory = {
         handleDeleteStory(it)
