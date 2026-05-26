@@ -214,6 +214,10 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
         )
       }
 
+      stories.forEach { item ->
+        customPref(item)
+      }
+
       if (state.savedStoryCount > 0) {
         customPref(
           org.thoughtcrime.securesms.stories.saved.SavedStoriesItem.Model(
@@ -223,10 +227,6 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
             }
           )
         )
-      }
-
-      stories.forEach { item ->
-        customPref(item)
       }
 
       if (hidden.isNotEmpty()) {

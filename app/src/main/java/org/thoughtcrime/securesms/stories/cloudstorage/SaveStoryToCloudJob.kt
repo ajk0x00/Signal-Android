@@ -5,11 +5,13 @@ import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.cloudstorage.CloudStorageCredentialsProvider
 import org.thoughtcrime.securesms.cloudstorage.CloudStorageServiceHelper
 import org.thoughtcrime.securesms.database.SignalDatabase
+import org.thoughtcrime.securesms.database.withAttachments
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.jobmanager.CoroutineJob
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
 import org.thoughtcrime.securesms.keyvalue.SignalStore
+import org.thoughtcrime.securesms.mms.PartAuthority
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.stories.StoryTextPostModel
 import org.thoughtcrime.securesms.util.BitmapUtil
@@ -55,15 +57,34 @@ class SaveStoryToCloudJob private constructor(
   override fun getFactoryKey(): String = KEY
 
   override suspend fun doRun(): Result {
+    return try {
+      runUpload()
+    } catch (e: Exception) {
+      Log.w(TAG, "Upload failed with exception", e)
+      Result.failure()
+    }
+  }
+
+  private fun runUpload(): Result {
     val application = AppDependencies.application
-    val messageRecord = SignalDatabase.messages.getMessageRecordOrNull(messageId)
-      ?: return Result.failure()
+    val messageRecord = SignalDatabase.messages.getMessageRecordOrNull(messageId)?.withAttachments()
+    if (messageRecord == null) {
+      Log.w(TAG, "Aborting: message record not found for id=$messageId")
+      return Result.failure()
+    }
 
     val storage = CloudStorageCredentialsProvider.getStorageInstance(application)
-      ?: return Result.failure()
+    if (storage == null) {
+      Log.w(TAG, "Aborting: failed to build Storage client (check cloud_storage_config.json)")
+      return Result.failure()
+    }
 
-    val (_, bucketName) = CloudStorageCredentialsProvider.getCredentialsAndBucket(application)
-      ?: return Result.failure()
+    val credAndBucket = CloudStorageCredentialsProvider.getCredentialsAndBucket(application)
+    if (credAndBucket == null) {
+      Log.w(TAG, "Aborting: credentials/bucket unavailable")
+      return Result.failure()
+    }
+    val bucketName = credAndBucket.second
 
     val helper = CloudStorageServiceHelper(storage, bucketName)
     val profileName = Recipient.self().profileName.toString()
@@ -71,7 +92,10 @@ class SaveStoryToCloudJob private constructor(
     SignalStore.cloudStorage.bucketName = bucketName
 
     val mmsRecord = messageRecord as? org.thoughtcrime.securesms.database.model.MmsMessageRecord
-      ?: return Result.failure()
+    if (mmsRecord == null) {
+      Log.w(TAG, "Aborting: message $messageId is not an MmsMessageRecord (class=${messageRecord.javaClass.simpleName})")
+      return Result.failure()
+    }
 
     val (inputStream, mimeType, extension) = if (mmsRecord.storyType.isTextStory) {
       val model = StoryTextPostModel.parseFrom(mmsRecord)
@@ -82,11 +106,16 @@ class SaveStoryToCloudJob private constructor(
       Triple(jpeg as InputStream, MediaUtil.IMAGE_JPEG, "jpg")
     } else {
       val slide = mmsRecord.slideDeck.firstSlide
-        ?: return Result.failure()
+      if (slide == null) {
+        Log.w(TAG, "Aborting: no slide on mms message $messageId")
+        return Result.failure()
+      }
       val uri = slide.uri
-        ?: return Result.failure()
-      val stream = application.contentResolver.openInputStream(uri)
-        ?: return Result.failure()
+      if (uri == null) {
+        Log.w(TAG, "Aborting: slide has no uri (contentType=${slide.contentType})")
+        return Result.failure()
+      }
+      val stream = PartAuthority.getAttachmentStream(application, uri)
       val ext = when {
         MediaUtil.isVideoType(slide.contentType) -> "mp4"
         MediaUtil.isImageType(slide.contentType) -> "jpg"
@@ -99,6 +128,7 @@ class SaveStoryToCloudJob private constructor(
     val fileName = "${dateFormatter.format(Date(messageRecord.dateSent))}.$extension"
 
     inputStream.use { stream ->
+      Log.i(TAG, "Uploading $fileName to bucket=$bucketName prefix=$prefix")
       val objectName = helper.uploadFile(prefix, fileName, stream, mimeType)
 
       val mediaType = when {

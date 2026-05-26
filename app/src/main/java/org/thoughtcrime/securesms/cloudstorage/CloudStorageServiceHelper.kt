@@ -63,6 +63,12 @@ class CloudStorageServiceHelper(
     return String(bytes, Charsets.UTF_8)
   }
 
+  fun deleteBlob(objectName: String): Boolean {
+    val deleted = storage.delete(bucketName, objectName)
+    Log.i(TAG, "Delete $objectName -> $deleted")
+    return deleted
+  }
+
   fun uploadJsonDb(prefix: String, jsonContent: String) {
     val objectName = prefix + DB_OBJECT_NAME
     val blobInfo = BlobInfo.newBuilder(bucketName, objectName)

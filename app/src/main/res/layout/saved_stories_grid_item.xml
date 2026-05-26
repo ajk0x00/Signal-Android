@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.thoughtcrime.securesms.components.SquareFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:foreground="?attr/selectableItemBackground"
     android:padding="1dp">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -18,4 +19,11 @@
         android:src="@drawable/v2_media_gallery_item_video_overlay"
         android:visibility="gone" />
 
-</FrameLayout>
+    <View
+        android:id="@+id/selected_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_black_40"
+        android:visibility="gone" />
+
+</org.thoughtcrime.securesms.components.SquareFrameLayout>

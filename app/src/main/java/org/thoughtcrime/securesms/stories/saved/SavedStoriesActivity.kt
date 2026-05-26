@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import org.thoughtcrime.securesms.PassphraseRequiredActivity
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.util.DynamicTheme
+import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme
 
 class SavedStoriesActivity : PassphraseRequiredActivity() {
 
-  private val dynamicTheme = DynamicTheme()
+  private val dynamicTheme = DynamicNoActionBarTheme()
 
   companion object {
     @JvmStatic

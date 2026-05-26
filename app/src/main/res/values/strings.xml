@@ -9943,6 +9943,18 @@
     </plurals>
     <string name="SavedStoriesActivity__title">Saved stories</string>
     <string name="SavedStoriesFragment__no_saved_stories">No saved stories</string>
+    <string name="SavedStoriesFragment__delete">Delete</string>
+    <string name="SavedStoriesFragment__delete_confirm_title">Delete saved stories?</string>
+    <plurals name="SavedStoriesFragment__delete_confirm_body">
+      <item quantity="one">This story will be removed from your saved stories.</item>
+      <item quantity="other">These %d stories will be removed from your saved stories.</item>
+    </plurals>
+    <plurals name="SavedStoriesFragment__selected">
+      <item quantity="one">%d selected</item>
+      <item quantity="other">%d selected</item>
+    </plurals>
+    <string name="SavedStoryViewerActivity__loading">Loading…</string>
+    <string name="SavedStoryViewerActivity__playback_error">Unable to play this video</string>
 
     <!-- EOF -->
 </resources>
