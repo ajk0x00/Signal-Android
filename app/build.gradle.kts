@@ -717,6 +717,8 @@ dependencies {
     exclude(group = "org.conscrypt", module = "conscrypt-openjdk-uber")
     exclude(group = "io.opentelemetry")
     exclude(group = "io.grpc")
+    exclude(group = "com.google.protobuf", module = "protobuf-java")
+    exclude(group = "com.google.api", module = "api-common")
   }
   implementation(libs.google.auth.library.oauth2.http)
   implementation(libs.subsampling.scale.image.view) {
