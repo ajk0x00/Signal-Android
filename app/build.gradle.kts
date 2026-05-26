@@ -199,6 +199,7 @@ android {
         "META-INF/NOTICE",
         "META-INF/LICENSE-notice.md",
         "META-INF/DEPENDENCIES",
+        "META-INF/INDEX.LIST",
         "META-INF/proguard/androidx-annotations.pro",
         "**/*.dylib",
         "**/*.dll",
