@@ -713,7 +713,11 @@ dependencies {
   implementation(libs.google.zxing.android.integration)
   implementation(libs.google.zxing.core)
   implementation(libs.google.flexbox)
-  implementation(libs.google.cloud.storage)
+  implementation(libs.google.cloud.storage) {
+    exclude(group = "org.conscrypt", module = "conscrypt-openjdk-uber")
+    exclude(group = "io.opentelemetry")
+    exclude(group = "io.grpc")
+  }
   implementation(libs.google.auth.library.oauth2.http)
   implementation(libs.subsampling.scale.image.view) {
     exclude(group = "com.android.support", module = "support-annotations")
