@@ -1,6 +1,5 @@
 package org.thoughtcrime.securesms.stories.saved
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.thoughtcrime.securesms.stories.drive.SavedStoryRecord
+import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryRecord
 
 class SavedStoriesViewModel(private val repository: SavedStoriesRepository) : ViewModel() {
 

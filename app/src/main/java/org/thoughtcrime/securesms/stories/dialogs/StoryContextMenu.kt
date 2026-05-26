@@ -165,7 +165,7 @@ object StoryContextMenu {
         override fun onDismissed() = onDismiss()
         override fun onDelete() = model.onDeleteStory(model)
         override fun onSave() = model.onSave(model)
-        override fun onSaveToDrive() = model.onSaveToDrive(model)
+        override fun onSaveToCloud() = model.onSaveToCloud(model)
         override fun onInfo() = model.onInfo(model, previewView)
       }
     )
@@ -181,7 +181,7 @@ object StoryContextMenu {
     onShare: (StoryPost) -> Unit,
     onGoToChat: (StoryPost) -> Unit,
     onSave: (StoryPost) -> Unit,
-    onSaveToDrive: (StoryPost) -> Unit,
+    onSaveToCloud: (StoryPost) -> Unit,
     onDelete: (StoryPost) -> Unit,
     onInfo: (StoryPost) -> Unit,
     onDismiss: () -> Unit
@@ -203,7 +203,7 @@ object StoryContextMenu {
         override fun onGoToChat() = onGoToChat(selectedStory)
         override fun onDismissed() = onDismiss()
         override fun onSave() = onSave(selectedStory)
-        override fun onSaveToDrive() = onSaveToDrive(selectedStory)
+        override fun onSaveToCloud() = onSaveToCloud(selectedStory)
         override fun onDelete() = onDelete(selectedStory)
         override fun onInfo() = onInfo(selectedStory)
       }
@@ -269,8 +269,8 @@ object StoryContextMenu {
       }
 
       add(
-        ActionItem(R.drawable.symbol_drive_24, context.getString(R.string.StoryContextMenu__save_to_drive)) {
-          callbacks.onSaveToDrive()
+        ActionItem(R.drawable.symbol_cloud_24, context.getString(R.string.StoryContextMenu__save_to_cloud)) {
+          callbacks.onSaveToCloud()
         }
       )
 
@@ -299,7 +299,7 @@ object StoryContextMenu {
     fun onGoToChat()
     fun onDismissed()
     fun onSave()
-    fun onSaveToDrive()
+    fun onSaveToCloud()
     fun onDelete()
     fun onInfo()
   }

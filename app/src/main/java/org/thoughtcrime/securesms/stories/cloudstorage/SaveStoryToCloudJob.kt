@@ -1,14 +1,11 @@
-package org.thoughtcrime.securesms.stories.drive
+package org.thoughtcrime.securesms.stories.cloudstorage
 
 import com.bumptech.glide.load.Options
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.jackson2.JacksonFactory
-import com.google.api.services.drive.Drive
 import org.signal.core.util.logging.Log
+import org.thoughtcrime.securesms.cloudstorage.CloudStorageCredentialsProvider
+import org.thoughtcrime.securesms.cloudstorage.CloudStorageServiceHelper
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.dependencies.AppDependencies
-import org.thoughtcrime.securesms.drive.DriveCredentialsProvider
-import org.thoughtcrime.securesms.drive.DriveServiceHelper
 import org.thoughtcrime.securesms.jobmanager.CoroutineJob
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
@@ -23,18 +20,18 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class SaveStoryToDriveJob private constructor(
+class SaveStoryToCloudJob private constructor(
   private val messageId: Long,
   parameters: Parameters
 ) : CoroutineJob(parameters) {
 
   companion object {
-    private val TAG = Log.tag(SaveStoryToDriveJob::class.java)
-    const val KEY = "SaveStoryToDriveJob"
+    private val TAG = Log.tag(SaveStoryToCloudJob::class.java)
+    const val KEY = "SaveStoryToCloudJob"
 
     @JvmStatic
     fun enqueue(messageId: Long) {
-      val job = SaveStoryToDriveJob(
+      val job = SaveStoryToCloudJob(
         messageId = messageId,
         parameters = Parameters.Builder()
           .addConstraint(NetworkConstraint.KEY)
@@ -62,19 +59,16 @@ class SaveStoryToDriveJob private constructor(
     val messageRecord = SignalDatabase.messages.getMessageRecordOrNull(messageId)
       ?: return Result.failure()
 
-    val credential = DriveCredentialsProvider.createCredential(application)
+    val storage = CloudStorageCredentialsProvider.getStorageInstance(application)
       ?: return Result.failure()
 
-    val drive = Drive.Builder(
-      NetHttpTransport(),
-      JacksonFactory.getDefaultInstance(),
-      credential
-    ).setApplicationName("Signal").build()
+    val (_, bucketName) = CloudStorageCredentialsProvider.getCredentialsAndBucket(application)
+      ?: return Result.failure()
 
-    val helper = DriveServiceHelper(drive)
+    val helper = CloudStorageServiceHelper(storage, bucketName)
     val profileName = Recipient.self().profileName.toString()
-    val folderId = helper.ensureFolderExists(profileName)
-    SignalStore.drive.driveFolderId = folderId
+    val prefix = helper.getPrefix(profileName)
+    SignalStore.cloudStorage.bucketName = bucketName
 
     val mmsRecord = messageRecord as? org.thoughtcrime.securesms.database.model.MmsMessageRecord
       ?: return Result.failure()
@@ -105,7 +99,7 @@ class SaveStoryToDriveJob private constructor(
     val fileName = "${dateFormatter.format(Date(messageRecord.dateSent))}.$extension"
 
     inputStream.use { stream ->
-      val driveFileId = helper.uploadFile(folderId, fileName, stream, mimeType)
+      val objectName = helper.uploadFile(prefix, fileName, stream, mimeType)
 
       val mediaType = when {
         mmsRecord.storyType.isTextStory -> SavedStoryMediaType.TEXT
@@ -119,28 +113,28 @@ class SaveStoryToDriveJob private constructor(
         timestamp = messageRecord.dateSent,
         fileSize = 0,
         senderName = profileName,
-        driveFileId = driveFileId
+        objectName = objectName
       )
 
       val db = SavedStoryDatabase(application)
       db.add(record)
-      helper.uploadJsonDb(folderId, db.getJsonContent())
+      helper.uploadJsonDb(prefix, db.getJsonContent())
 
-      SignalStore.drive.driveEnabled = true
-      Log.i(TAG, "Story saved to Drive: $fileName")
+      SignalStore.cloudStorage.enabled = true
+      Log.i(TAG, "Story saved to Cloud: $fileName")
     }
 
     return Result.success()
   }
 
   override fun onFailure() {
-    Log.w(TAG, "Failed to save story to Drive")
+    Log.w(TAG, "Failed to save story to Cloud")
   }
 
-  class Factory : Job.Factory<SaveStoryToDriveJob> {
-    override fun create(parameters: Parameters, serializedData: ByteArray?): SaveStoryToDriveJob {
+  class Factory : Job.Factory<SaveStoryToCloudJob> {
+    override fun create(parameters: Parameters, serializedData: ByteArray?): SaveStoryToCloudJob {
       val messageId = serializedData?.let { String(it).toLong() } ?: 0L
-      return SaveStoryToDriveJob(messageId, parameters)
+      return SaveStoryToCloudJob(messageId, parameters)
     }
   }
 }

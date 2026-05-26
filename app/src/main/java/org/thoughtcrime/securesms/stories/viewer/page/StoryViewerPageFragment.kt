@@ -1251,8 +1251,8 @@ class StoryViewerPageFragment :
           viewModel.setIsSavingMedia(false)
         }
       },
-      onSaveToDrive = {
-        org.thoughtcrime.securesms.stories.drive.SaveStoryToDriveJob.enqueue(it.conversationMessage.messageRecord.id)
+      onSaveToCloud = {
+        org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob.enqueue(it.conversationMessage.messageRecord.id)
       },
       onDelete = {
         viewModel.setIsDisplayingDeleteDialog(true)

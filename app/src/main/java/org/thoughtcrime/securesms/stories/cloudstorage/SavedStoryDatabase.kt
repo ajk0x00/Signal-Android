@@ -1,4 +1,4 @@
-package org.thoughtcrime.securesms.stories.drive
+package org.thoughtcrime.securesms.stories.cloudstorage
 
 import android.content.Context
 import kotlinx.serialization.Serializable
@@ -54,9 +54,9 @@ class SavedStoryDatabase(private val context: Context) {
     writeModel(model.copy(savedStories = model.savedStories + record))
   }
 
-  fun remove(driveFileId: String) {
+  fun remove(objectName: String) {
     val model = readModel()
-    writeModel(model.copy(savedStories = model.savedStories.filter { it.driveFileId != driveFileId }))
+    writeModel(model.copy(savedStories = model.savedStories.filter { it.objectName != objectName }))
   }
 
   fun replaceAll(stories: List<SavedStoryRecord>) {

@@ -1,4 +1,4 @@
-package org.thoughtcrime.securesms.stories.drive
+package org.thoughtcrime.securesms.stories.cloudstorage
 
 import kotlinx.serialization.Serializable
 
@@ -16,5 +16,5 @@ data class SavedStoryRecord(
   val timestamp: Long,
   val fileSize: Long,
   val senderName: String,
-  val driveFileId: String? = null
+  val objectName: String? = null
 )

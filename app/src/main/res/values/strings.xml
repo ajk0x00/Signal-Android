@@ -9932,10 +9932,10 @@
     <!-- Button on the safety tips screen that opens account settings -->
     <string name="SafetyTipsBottomSheet__open_account_settings">Open account settings</string>
 
-    <!-- Save story to Google Drive -->
-    <string name="StoryContextMenu__save_to_drive">Save to Drive</string>
-    <string name="SaveStoryToDriveJob__error">Could not save story to Drive</string>
-    <string name="SaveStoryToDriveJob__success">Story saved to Drive</string>
+    <!-- Save story to Cloud Storage -->
+    <string name="StoryContextMenu__save_to_cloud">Save to Cloud</string>
+    <string name="SaveStoryToCloudJob__error">Could not save story to cloud</string>
+    <string name="SaveStoryToCloudJob__success">Story saved to cloud</string>
     <string name="SavedStoriesItem__saved_stories">Saved stories</string>
     <plurals name="SavedStoriesItem__stories_saved">
       <item quantity="one">%d story saved</item>

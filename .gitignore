@@ -34,5 +34,5 @@ kls_database.db
 .kotlin
 lefthook-local.yml
 sample-videos/
-app/src/main/assets/drive_credentials.json
+app/src/main/assets/cloud_storage_config.json
 .claude/

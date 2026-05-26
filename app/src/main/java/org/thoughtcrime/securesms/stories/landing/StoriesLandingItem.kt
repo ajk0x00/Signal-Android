@@ -52,7 +52,7 @@ object StoriesLandingItem {
     val onShareStory: (Model) -> Unit,
     val onGoToChat: (Model) -> Unit,
     val onSave: (Model) -> Unit,
-    val onSaveToDrive: (Model) -> Unit,
+    val onSaveToCloud: (Model) -> Unit,
     val onDeleteStory: (Model) -> Unit,
     val onInfo: (Model, View) -> Unit,
     val onLockList: () -> Unit,

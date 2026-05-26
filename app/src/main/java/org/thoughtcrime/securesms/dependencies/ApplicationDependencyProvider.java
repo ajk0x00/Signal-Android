@@ -90,7 +90,7 @@ import org.thoughtcrime.securesms.service.TrimThreadsByDateManager;
 import org.thoughtcrime.securesms.service.webrtc.SignalCallManager;
 import org.thoughtcrime.securesms.shakereport.ShakeToReport;
 import org.thoughtcrime.securesms.stories.Stories;
-import org.thoughtcrime.securesms.stories.drive.DriveSyncScheduler;
+import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncScheduler;
 import org.thoughtcrime.securesms.util.AlarmSleepTimer;
 import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.ByteUnit;
@@ -617,8 +617,8 @@ public class ApplicationDependencyProvider implements AppDependencies.Provider {
   }
 
   @Override
-  public @NonNull DriveSyncScheduler provideDriveSyncScheduler() {
-    return new DriveSyncScheduler();
+  public @NonNull CloudStorageSyncScheduler provideCloudStorageSyncScheduler() {
+    return new CloudStorageSyncScheduler();
   }
 
   @VisibleForTesting

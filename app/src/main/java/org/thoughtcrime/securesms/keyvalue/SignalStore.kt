@@ -39,7 +39,7 @@ class SignalStore(context: Application, private val store: KeyValueStore) {
   val backupValues = BackupValues(store)
   val callQualityValues = CallQualityValues(store)
   val labsValues = LabsValues(store)
-  val driveValues = DriveValues(store)
+  val cloudStorageValues = CloudStorageValues(store)
 
   val plainTextValues = PlainTextSharedPrefsDataStore(context)
 
@@ -89,7 +89,7 @@ class SignalStore(context: Application, private val store: KeyValueStore) {
       backup.onFirstEverAppLaunch()
       callQuality.onFirstEverAppLaunch()
       labs.onFirstEverAppLaunch()
-      drive.onFirstEverAppLaunch()
+      cloudStorage.onFirstEverAppLaunch()
     }
 
     @JvmStatic
@@ -124,7 +124,7 @@ class SignalStore(context: Application, private val store: KeyValueStore) {
           backup.keysToIncludeInBackup +
           callQuality.keysToIncludeInBackup +
           labs.keysToIncludeInBackup +
-          drive.keysToIncludeInBackup
+          cloudStorage.keysToIncludeInBackup
       }
 
     /**
@@ -286,9 +286,9 @@ class SignalStore(context: Application, private val store: KeyValueStore) {
       get() = instance!!.labsValues
 
     @JvmStatic
-    @get:JvmName("drive")
-    val drive: DriveValues
-      get() = instance!!.driveValues
+    @get:JvmName("cloudStorage")
+    val cloudStorage: CloudStorageValues
+      get() = instance!!.cloudStorageValues
 
     val groupsV2AciAuthorizationCache: GroupsV2AuthorizationSignalStoreCache
       get() = GroupsV2AuthorizationSignalStoreCache.createAciCache(instance!!.store)

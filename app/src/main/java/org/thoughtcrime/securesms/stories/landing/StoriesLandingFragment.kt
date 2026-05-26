@@ -88,7 +88,7 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
   }
 
   private fun refreshSavedStoryCount() {
-    val count = org.thoughtcrime.securesms.stories.drive.SavedStoryDatabase(requireContext()).getCount()
+    val count = org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryDatabase(requireContext()).getCount()
     viewModel.setSavedStoryCount(count)
   }
 
@@ -282,8 +282,8 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
           )
         }
       },
-      onSaveToDrive = {
-        org.thoughtcrime.securesms.stories.drive.SaveStoryToDriveJob.enqueue(it.data.primaryStory.messageRecord.id)
+      onSaveToCloud = {
+        org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob.enqueue(it.data.primaryStory.messageRecord.id)
       },
       onDeleteStory = {
         handleDeleteStory(it)

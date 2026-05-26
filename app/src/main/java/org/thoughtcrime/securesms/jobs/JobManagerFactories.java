@@ -118,8 +118,8 @@ import org.thoughtcrime.securesms.migrations.UserNotificationMigrationJob;
 import org.thoughtcrime.securesms.migrations.UuidMigrationJob;
 import org.thoughtcrime.securesms.migrations.WallpaperCleanupMigrationJob;
 import org.thoughtcrime.securesms.migrations.WallpaperStorageMigrationJob;
-import org.thoughtcrime.securesms.stories.drive.SaveStoryToDriveJob;
-import org.thoughtcrime.securesms.stories.drive.DriveSyncJob;
+import org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob;
+import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncJob;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -253,8 +253,8 @@ public final class JobManagerFactories {
       put(QuoteThumbnailBackfillJob.KEY,               new QuoteThumbnailBackfillJob.Factory());
       put(QuoteThumbnailReconstructionJob.KEY,         new QuoteThumbnailReconstructionJob.Factory());
       put(ReactionSendJob.KEY,                         new ReactionSendJob.Factory());
-      put(SaveStoryToDriveJob.KEY,                     new SaveStoryToDriveJob.Factory());
-      put(DriveSyncJob.KEY,                            new DriveSyncJob.Factory());
+      put(SaveStoryToCloudJob.KEY,                      new SaveStoryToCloudJob.Factory());
+      put(CloudStorageSyncJob.KEY,                      new CloudStorageSyncJob.Factory());
       put(RebuildMessageSearchIndexJob.KEY,            new RebuildMessageSearchIndexJob.Factory());
       put(ReclaimUsernameAndLinkJob.KEY,               new ReclaimUsernameAndLinkJob.Factory());
       put(RefreshAttributesJob.KEY,                    new RefreshAttributesJob.Factory());
@@ -437,6 +437,8 @@ public final class JobManagerFactories {
       put("BackfillDigestsMigrationJob",                 new PassingMigrationJob.Factory());
       put("BackfillDigestJob",                           new FailingJob.Factory());
       put("ResumableUploadSpecJob",                      new FailingJob.Factory());
+      put("SaveStoryToDriveJob",                         new FailingJob.Factory());
+      put("DriveSyncJob",                                new FailingJob.Factory());
     }};
   }
 

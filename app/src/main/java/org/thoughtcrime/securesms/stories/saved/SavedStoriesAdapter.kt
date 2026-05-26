@@ -7,8 +7,9 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.stories.drive.SavedStoryMediaType
-import org.thoughtcrime.securesms.stories.drive.SavedStoryRecord
+import org.thoughtcrime.securesms.keyvalue.SignalStore
+import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryMediaType
+import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryRecord
 
 class SavedStoriesAdapter : ListAdapter<SavedStoryRecord, SavedStoriesAdapter.ViewHolder>(SavedStoryDiffCallback()) {
 
@@ -28,17 +29,20 @@ class SavedStoriesAdapter : ListAdapter<SavedStoryRecord, SavedStoriesAdapter.Vi
     fun bind(record: SavedStoryRecord) {
       playOverlay.visibility = if (record.mediaType == SavedStoryMediaType.VIDEO) View.VISIBLE else View.GONE
 
-      if (record.driveFileId != null) {
-        com.bumptech.glide.Glide.with(itemView.context)
-          .load(DriveThumbnailLoader.DriveThumbnailKey(record.driveFileId))
-          .centerCrop()
-          .into(thumbnail)
+      if (record.objectName != null) {
+        val bucketName = SignalStore.cloudStorage.bucketName
+        if (bucketName != null) {
+          com.bumptech.glide.Glide.with(itemView.context)
+            .load(CloudStorageThumbnailLoader.CloudStorageThumbnailKey(record.objectName, bucketName))
+            .centerCrop()
+            .into(thumbnail)
+        }
       }
     }
   }
 
   private class SavedStoryDiffCallback : androidx.recyclerview.widget.DiffUtil.ItemCallback<SavedStoryRecord>() {
-    override fun areItemsTheSame(oldItem: SavedStoryRecord, newItem: SavedStoryRecord): Boolean = oldItem.driveFileId == newItem.driveFileId
+    override fun areItemsTheSame(oldItem: SavedStoryRecord, newItem: SavedStoryRecord): Boolean = oldItem.objectName == newItem.objectName
     override fun areContentsTheSame(oldItem: SavedStoryRecord, newItem: SavedStoryRecord): Boolean = oldItem == newItem
   }
 }

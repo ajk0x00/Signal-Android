@@ -42,6 +42,7 @@ import org.thoughtcrime.securesms.service.ScheduledMessageManager
 import org.thoughtcrime.securesms.service.TrimThreadsByDateManager
 import org.thoughtcrime.securesms.service.webrtc.SignalCallManager
 import org.thoughtcrime.securesms.shakereport.ShakeToReport
+import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncScheduler
 import org.thoughtcrime.securesms.util.EarlyMessageCache
 import org.thoughtcrime.securesms.util.FrameRateTracker
 import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache
@@ -64,7 +65,6 @@ import org.whispersystems.signalservice.api.storage.StorageServiceApi
 import org.whispersystems.signalservice.api.websocket.SignalWebSocket
 import org.whispersystems.signalservice.internal.configuration.SignalServiceConfiguration
 import org.whispersystems.signalservice.internal.push.PushServiceSocket
-import org.thoughtcrime.securesms.stories.drive.DriveSyncScheduler
 import java.util.function.Supplier
 
 class MockApplicationDependencyProvider : AppDependencies.Provider {
@@ -329,7 +329,7 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
     return mockk(relaxed = true)
   }
 
-  override fun provideDriveSyncScheduler(): DriveSyncScheduler {
+  override fun provideCloudStorageSyncScheduler(): CloudStorageSyncScheduler {
     return mockk(relaxed = true)
   }
 }

@@ -1,8 +1,8 @@
 package org.thoughtcrime.securesms.stories.saved
 
 import android.content.Context
-import org.thoughtcrime.securesms.stories.drive.SavedStoryDatabase
-import org.thoughtcrime.securesms.stories.drive.SavedStoryRecord
+import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryDatabase
+import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryRecord
 
 class SavedStoriesRepository(private val context: Context) {
 
