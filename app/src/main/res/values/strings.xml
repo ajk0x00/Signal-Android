@@ -9934,6 +9934,17 @@
 
     <!-- Save story to Cloud Storage -->
     <string name="StoryContextMenu__save_to_cloud">Save to Cloud</string>
+    <!-- Context menu action that saves every story from the current user or group to the cloud -->
+    <string name="StoryContextMenu__save_all_stories">Save all stories</string>
+    <!-- Toast shown after tapping "Save all stories", where %1$d is the number of stories being saved -->
+    <plurals name="StoryViewerPageFragment__saving_d_stories">
+        <item quantity="one">Saving %1$d story to cloud…</item>
+        <item quantity="other">Saving %1$d stories to cloud…</item>
+    </plurals>
+    <!-- Media preview overflow action that saves the current photo or video to the cloud -->
+    <string name="MediaPreviewActivity__save_to_cloud">Save to Cloud</string>
+    <!-- Toast shown after tapping "Save to Cloud" in the media preview -->
+    <string name="MediaPreviewActivity__saving_to_cloud">Saving to cloud…</string>
     <string name="SaveStoryToCloudJob__error">Could not save story to cloud</string>
     <string name="SaveStoryToCloudJob__success">Story saved to cloud</string>
     <string name="SavedStoriesItem__saved_stories">Saved stories</string>

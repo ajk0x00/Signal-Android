@@ -21,6 +21,10 @@ class CloudStorageServiceHelper(
     return "$profileName/"
   }
 
+  fun getThumbnailPrefix(profileName: String): String {
+    return "$profileName/thumbnails/"
+  }
+
   fun uploadFile(prefix: String, fileName: String, inputStream: InputStream, mimeType: String): String {
     val objectName = prefix + fileName
     val blobInfo = BlobInfo.newBuilder(bucketName, objectName)

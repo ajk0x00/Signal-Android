@@ -76,8 +76,10 @@ class CloudStorageSyncJob private constructor(parameters: Parameters) : Coroutin
         Log.i(TAG, "Uploaded local DB to Cloud")
       }
       localExists && cloudExists -> {
-        val cloudDb = kotlinx.serialization.json.Json { ignoreUnknownKeys = true }
-          .decodeFromString<SavedStoryDatabaseModel>(cloudJson as String)
+        val cloudDb = kotlinx.serialization.json.Json {
+          ignoreUnknownKeys = true
+          coerceInputValues = true
+        }.decodeFromString<SavedStoryDatabaseModel>(cloudJson as String)
         val localRecords = db.getAll()
 
         val pendingUploads = localRecords.filter { it.objectName == null }

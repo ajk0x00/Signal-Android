@@ -327,6 +327,7 @@ android {
         "proguard/proguard-okhttp.pro",
         "proguard/proguard-ez-vcard.pro",
         "proguard/proguard-dnsjava.pro",
+        "proguard/proguard-google-cloud-storage.pro",
         "proguard/proguard.cfg"
       )
       testProguardFiles(

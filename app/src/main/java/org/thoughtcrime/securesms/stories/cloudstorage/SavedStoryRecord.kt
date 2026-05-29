@@ -12,9 +12,10 @@ enum class SavedStoryMediaType {
 @Serializable
 data class SavedStoryRecord(
   val fileName: String,
-  val mediaType: SavedStoryMediaType,
+  val mediaType: SavedStoryMediaType = SavedStoryMediaType.IMAGE,
   val timestamp: Long,
   val fileSize: Long,
   val senderName: String,
-  val objectName: String? = null
+  val objectName: String? = null,
+  val thumbnailObjectName: String? = null
 )

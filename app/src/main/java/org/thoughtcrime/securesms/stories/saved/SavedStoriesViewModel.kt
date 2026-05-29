@@ -28,6 +28,15 @@ class SavedStoriesViewModel(private val repository: SavedStoriesRepository) : Vi
     }
   }
 
+  fun ensureVideoThumbnail(record: SavedStoryRecord) {
+    viewModelScope.launch(Dispatchers.IO) {
+      if (repository.ensureVideoThumbnail(record)) {
+        val records = repository.getSavedStories()
+        _stories.postValue(records)
+      }
+    }
+  }
+
   fun toggleSelection(objectName: String) {
     val current = _selection.value.orEmpty()
     _selection.value = if (objectName in current) current - objectName else current + objectName

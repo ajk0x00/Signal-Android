@@ -37,6 +37,9 @@ class SavedStoriesFragment : Fragment(R.layout.saved_stories_fragment) {
       onItemLongClick = { record ->
         val objectName = record.objectName ?: return@SavedStoriesAdapter
         viewModel.toggleSelection(objectName)
+      },
+      onNeedVideoThumbnail = { record ->
+        viewModel.ensureVideoThumbnail(record)
       }
     )
 

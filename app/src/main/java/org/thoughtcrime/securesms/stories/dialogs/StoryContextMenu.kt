@@ -166,6 +166,7 @@ object StoryContextMenu {
         override fun onDelete() = model.onDeleteStory(model)
         override fun onSave() = model.onSave(model)
         override fun onSaveToCloud() = model.onSaveToCloud(model)
+        override fun onSaveAllToCloud() = Unit
         override fun onInfo() = model.onInfo(model, previewView)
       }
     )
@@ -182,6 +183,7 @@ object StoryContextMenu {
     onGoToChat: (StoryPost) -> Unit,
     onSave: (StoryPost) -> Unit,
     onSaveToCloud: (StoryPost) -> Unit,
+    onSaveAllToCloud: () -> Unit,
     onDelete: (StoryPost) -> Unit,
     onInfo: (StoryPost) -> Unit,
     onDismiss: () -> Unit
@@ -195,6 +197,7 @@ object StoryContextMenu {
       isToGroup = selectedStory.group != null,
       isFromReleaseChannel = selectedStory.sender.isReleaseNotes,
       canHide = !selectedStory.sender.shouldHideStory,
+      canSaveAll = storyViewerPageState.posts.size > 1,
       callbacks = object : Callbacks {
         override fun onHide() = onHide(selectedStory)
         override fun onUnhide() = onUnhide(selectedStory)
@@ -204,6 +207,7 @@ object StoryContextMenu {
         override fun onDismissed() = onDismiss()
         override fun onSave() = onSave(selectedStory)
         override fun onSaveToCloud() = onSaveToCloud(selectedStory)
+        override fun onSaveAllToCloud() = onSaveAllToCloud()
         override fun onDelete() = onDelete(selectedStory)
         override fun onInfo() = onInfo(selectedStory)
       }
@@ -218,6 +222,7 @@ object StoryContextMenu {
     isFromReleaseChannel: Boolean,
     rootView: ViewGroup = anchorView.rootView as ViewGroup,
     canHide: Boolean,
+    canSaveAll: Boolean = false,
     callbacks: Callbacks
   ) {
     val actions = mutableListOf<ActionItem>().apply {
@@ -274,6 +279,14 @@ object StoryContextMenu {
         }
       )
 
+      if (canSaveAll) {
+        add(
+          ActionItem(R.drawable.symbol_cloud_24, context.getString(R.string.StoryContextMenu__save_all_stories)) {
+            callbacks.onSaveAllToCloud()
+          }
+        )
+      }
+
       add(
         ActionItem(CoreUiR.drawable.symbol_info_24, context.getString(R.string.StoriesLandingItem__info)) {
           callbacks.onInfo()
@@ -300,6 +313,7 @@ object StoryContextMenu {
     fun onDismissed()
     fun onSave()
     fun onSaveToCloud()
+    fun onSaveAllToCloud()
     fun onDelete()
     fun onInfo()
   }

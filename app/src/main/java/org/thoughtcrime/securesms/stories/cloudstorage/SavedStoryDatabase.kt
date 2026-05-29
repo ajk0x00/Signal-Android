@@ -22,6 +22,7 @@ class SavedStoryDatabase(private val context: Context) {
     private val json = Json {
       prettyPrint = false
       ignoreUnknownKeys = true
+      coerceInputValues = true
     }
   }
 
@@ -62,6 +63,11 @@ class SavedStoryDatabase(private val context: Context) {
   fun replaceAll(stories: List<SavedStoryRecord>) {
     val model = readModel()
     writeModel(model.copy(savedStories = stories))
+  }
+
+  fun update(objectName: String, transform: (SavedStoryRecord) -> SavedStoryRecord) {
+    val model = readModel()
+    writeModel(model.copy(savedStories = model.savedStories.map { if (it.objectName == objectName) transform(it) else it }))
   }
 
   fun getCount(): Int {
