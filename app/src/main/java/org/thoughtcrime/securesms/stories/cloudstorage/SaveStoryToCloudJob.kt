@@ -91,6 +91,18 @@ class SaveStoryToCloudJob private constructor(
     val prefix = helper.getPrefix(profileName)
     SignalStore.cloudStorage.bucketName = bucketName
 
+    val initDb = SavedStoryDatabase(application)
+    if (!initDb.exists()) {
+      try {
+        helper.downloadJsonDb(prefix)?.let {
+          initDb.replaceFromJson(it)
+          Log.i(TAG, "Initialized local DB from existing cloud DB at $prefix")
+        }
+      } catch (e: Exception) {
+        Log.w(TAG, "Could not pre-load cloud DB; proceeding with empty local DB", e)
+      }
+    }
+
     val mmsRecord = messageRecord as? org.thoughtcrime.securesms.database.model.MmsMessageRecord
     if (mmsRecord == null) {
       Log.w(TAG, "Aborting: message $messageId is not an MmsMessageRecord (class=${messageRecord.javaClass.simpleName})")

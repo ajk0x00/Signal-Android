@@ -17,7 +17,27 @@ class SavedStoriesRepository(private val context: Context) {
 
   fun getSavedStories(): List<SavedStoryRecord> {
     val db = SavedStoryDatabase(context)
+    if (!db.exists()) {
+      initializeFromCloudIfAvailable(db)
+    }
     return db.getAll().sortedByDescending { it.timestamp }
+  }
+
+  private fun initializeFromCloudIfAvailable(db: SavedStoryDatabase) {
+    val storage = CloudStorageCredentialsProvider.getStorageInstance(context) ?: return
+    val (_, bucketName) = CloudStorageCredentialsProvider.getCredentialsAndBucket(context) ?: return
+    try {
+      val helper = CloudStorageServiceHelper(storage, bucketName)
+      val prefix = helper.getPrefix(Recipient.self().profileName.toString())
+      val cloudJson = helper.downloadJsonDb(prefix)
+      if (cloudJson != null) {
+        db.replaceFromJson(cloudJson)
+        SignalStore.cloudStorage.bucketName = bucketName
+        Log.i(TAG, "Initialized local saved-stories DB from cloud ($prefix)")
+      }
+    } catch (e: Exception) {
+      Log.w(TAG, "Failed to initialize local DB from cloud", e)
+    }
   }
 
   fun deleteRecords(objectNames: Collection<String>) {
