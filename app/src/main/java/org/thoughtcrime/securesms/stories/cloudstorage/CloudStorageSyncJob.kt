@@ -19,6 +19,11 @@ class CloudStorageSyncJob private constructor(parameters: Parameters) : Coroutin
 
     @JvmStatic
     fun enqueueIfNecessary() {
+      if (!SignalStore.account.isRegistered) {
+        Log.i(TAG, "Not registered yet, skipping cloud sync until login")
+        return
+      }
+
       val context = AppDependencies.application
       val db = SavedStoryDatabase(context)
       val lastSync = db.getLastSyncTimestamp()
@@ -49,6 +54,11 @@ class CloudStorageSyncJob private constructor(parameters: Parameters) : Coroutin
   override fun getFactoryKey(): String = KEY
 
   override suspend fun doRun(): Result {
+    if (!SignalStore.account.isRegistered) {
+      Log.w(TAG, "Not registered, aborting cloud sync")
+      return Result.success()
+    }
+
     val context = AppDependencies.application
     val storage = CloudStorageCredentialsProvider.getStorageInstance(context)
       ?: return Result.failure()

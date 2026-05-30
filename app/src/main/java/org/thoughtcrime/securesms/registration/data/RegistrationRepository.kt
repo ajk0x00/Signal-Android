@@ -44,6 +44,7 @@ import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.gcm.FcmUtil
 import org.thoughtcrime.securesms.jobmanager.runJobBlocking
 import org.thoughtcrime.securesms.jobs.CheckKeyTransparencyJob
+import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncJob
 import org.thoughtcrime.securesms.jobs.DirectoryRefreshJob
 import org.thoughtcrime.securesms.jobs.PreKeysSyncJob
 import org.thoughtcrime.securesms.jobs.RefreshOwnProfileJob
@@ -247,6 +248,7 @@ object RegistrationRepository {
 
     recipientTable.clearSelfKeyTransparencyData()
     CheckKeyTransparencyJob.enqueueIfNecessary(addDelay = true)
+    CloudStorageSyncJob.enqueueIfNecessary()
 
     val jobManager = AppDependencies.jobManager
 
