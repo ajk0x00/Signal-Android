@@ -437,6 +437,8 @@ class ConversationFragment :
     private const val ATTACHMENT_KEYBOARD_FRAGMENT_CREATOR_ID = 1
     private const val MEDIA_KEYBOARD_FRAGMENT_CREATOR_ID = 2
 
+    private const val VOICE_RECORDING_TYPING_REFRESH_MS = 2500L
+
     private val RECEIVE_CONTENT_MIME_TYPES = arrayOf(
       "image/jpeg",
       "image/png",
@@ -859,6 +861,7 @@ class ConversationFragment :
     }
 
     inputPanel.onPause()
+    stopVoiceRecordingTypingIndicator()
 
     EventBus.getDefault().unregister(this)
   }
@@ -4904,6 +4907,34 @@ class ConversationFragment :
 
   //region Input Panel Callbacks
 
+  /**
+   * Re-broadcasts the typing-started signal on a fixed interval while a voice note is being
+   * recorded. A single [TypingStatusSender.onTypingStarted] call expires after the sender's
+   * 3s pause timeout, so we refresh under that window to keep the indicator alive for the
+   * recipient for the whole recording. Self-reschedules until cancelled.
+   */
+  private val voiceRecordingTypingRefresh = object : Runnable {
+    override fun run() {
+      val recipient = viewModel.recipientSnapshot
+      if (recipient == null || composeTextEventsListener?.typingStatusEnabled != true || recipient.isBlocked || recipient.isSelf) {
+        return
+      }
+
+      AppDependencies.typingStatusSender.onTypingStarted(args.threadId)
+      ThreadUtil.runOnMainDelayed(this, VOICE_RECORDING_TYPING_REFRESH_MS)
+    }
+  }
+
+  private fun startVoiceRecordingTypingIndicator() {
+    ThreadUtil.cancelRunnableOnMain(voiceRecordingTypingRefresh)
+    voiceRecordingTypingRefresh.run()
+  }
+
+  private fun stopVoiceRecordingTypingIndicator() {
+    ThreadUtil.cancelRunnableOnMain(voiceRecordingTypingRefresh)
+    AppDependencies.typingStatusSender.onTypingStoppedWithNotify(args.threadId)
+  }
+
   private inner class InputPanelListener : InputPanel.Listener {
     override fun onVoiceNoteDraftPlay(audioUri: Uri, progress: Double) {
       getVoiceNoteMediaController().startSinglePlaybackForDraft(audioUri, args.threadId, progress)
@@ -4923,6 +4954,7 @@ class ConversationFragment :
     }
 
     override fun onRecorderStarted() {
+      startVoiceRecordingTypingIndicator()
       voiceMessageRecordingDelegate.onRecorderStarted()
     }
 
@@ -4932,15 +4964,18 @@ class ConversationFragment :
     }
 
     override fun onRecorderFinished() {
+      stopVoiceRecordingTypingIndicator()
       updateToggleButtonState()
       voiceMessageRecordingDelegate.onRecorderFinished()
     }
 
     override fun onRecorderCanceled(byUser: Boolean) {
+      stopVoiceRecordingTypingIndicator()
       voiceMessageRecordingDelegate.onRecorderCanceled(byUser)
     }
 
     override fun onRecorderSaveDraft() {
+      stopVoiceRecordingTypingIndicator()
       voiceMessageRecordingDelegate.onRecordSaveDraft()
       inputPanel.voiceNoteDraft = draftViewModel.voiceNoteDraft
     }
