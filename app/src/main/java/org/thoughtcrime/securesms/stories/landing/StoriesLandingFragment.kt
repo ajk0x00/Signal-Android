@@ -13,7 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.ui.view.Stub
 import org.signal.core.util.concurrent.LifecycleDisposable
@@ -45,6 +47,7 @@ import org.thoughtcrime.securesms.stories.StoryViewerArgs
 import org.thoughtcrime.securesms.stories.dialogs.StoryContextMenu
 import org.thoughtcrime.securesms.stories.dialogs.StoryDialogs
 import org.thoughtcrime.securesms.stories.my.MyStoriesActivity
+import org.thoughtcrime.securesms.stories.saved.SavedStoriesRepository
 import org.thoughtcrime.securesms.stories.viewer.StoryViewerActivity
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
@@ -88,8 +91,11 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
   }
 
   private fun refreshSavedStoryCount() {
-    val count = org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryDatabase(requireContext()).getCount()
-    viewModel.setSavedStoryCount(count)
+    val repository = SavedStoriesRepository(requireContext())
+    viewLifecycleOwner.lifecycleScope.launch {
+      val count = withContext(Dispatchers.IO) { repository.getSavedStoryCount() }
+      viewModel.setSavedStoryCount(count)
+    }
   }
 
   private fun initializeSearchAction() {

@@ -119,7 +119,6 @@ import org.thoughtcrime.securesms.migrations.UuidMigrationJob;
 import org.thoughtcrime.securesms.migrations.WallpaperCleanupMigrationJob;
 import org.thoughtcrime.securesms.migrations.WallpaperStorageMigrationJob;
 import org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob;
-import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncJob;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -254,7 +253,6 @@ public final class JobManagerFactories {
       put(QuoteThumbnailReconstructionJob.KEY,         new QuoteThumbnailReconstructionJob.Factory());
       put(ReactionSendJob.KEY,                         new ReactionSendJob.Factory());
       put(SaveStoryToCloudJob.KEY,                      new SaveStoryToCloudJob.Factory());
-      put(CloudStorageSyncJob.KEY,                      new CloudStorageSyncJob.Factory());
       put(RebuildMessageSearchIndexJob.KEY,            new RebuildMessageSearchIndexJob.Factory());
       put(ReclaimUsernameAndLinkJob.KEY,               new ReclaimUsernameAndLinkJob.Factory());
       put(RefreshAttributesJob.KEY,                    new RefreshAttributesJob.Factory());
@@ -384,6 +382,7 @@ public final class JobManagerFactories {
 
       // Dead jobs
       put(FailingJob.KEY,                                new FailingJob.Factory());
+      put("CloudStorageSyncJob",                         new FailingJob.Factory());
       put(PassingMigrationJob.KEY,                       new PassingMigrationJob.Factory());
       put("PushContentReceiveJob",                       new FailingJob.Factory());
       put("AttachmentUploadJob",                         new FailingJob.Factory());

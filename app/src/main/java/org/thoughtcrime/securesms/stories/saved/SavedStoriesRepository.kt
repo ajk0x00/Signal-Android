@@ -38,12 +38,30 @@ class SavedStoriesRepository(private val context: Context) {
     return db.getAll().sortedByDescending { it.timestamp }
   }
 
+  /**
+   * Count of saved stories, restoring the local DB from cloud first if it doesn't exist yet.
+   * Does network I/O when restoring; call off the main thread.
+   */
+  fun getSavedStoryCount(): Int {
+    val db = SavedStoryDatabase(context)
+    if (!db.exists()) {
+      initializeFromCloudIfAvailable(db)
+    }
+    return db.getCount()
+  }
+
   private fun initializeFromCloudIfAvailable(db: SavedStoryDatabase) {
+    val self = Recipient.self()
+    if (self.profileName.isEmpty) {
+      Log.w(TAG, "Profile name not available yet; skipping cloud init so we don't query an empty prefix")
+      return
+    }
+
     val storage = CloudStorageCredentialsProvider.getStorageInstance(context) ?: return
     val (_, bucketName) = CloudStorageCredentialsProvider.getCredentialsAndBucket(context) ?: return
     try {
       val helper = CloudStorageServiceHelper(storage, bucketName)
-      val prefix = helper.getPrefix(Recipient.self().profileName.toString())
+      val prefix = helper.getPrefix(self.profileName.toString())
       val cloudJson = helper.downloadJsonDb(prefix)
       if (cloudJson != null) {
         db.replaceFromJson(cloudJson)

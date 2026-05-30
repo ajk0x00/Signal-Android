@@ -42,7 +42,6 @@ import org.thoughtcrime.securesms.service.ScheduledMessageManager
 import org.thoughtcrime.securesms.service.TrimThreadsByDateManager
 import org.thoughtcrime.securesms.service.webrtc.SignalCallManager
 import org.thoughtcrime.securesms.shakereport.ShakeToReport
-import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncScheduler
 import org.thoughtcrime.securesms.util.EarlyMessageCache
 import org.thoughtcrime.securesms.util.FrameRateTracker
 import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache
@@ -326,10 +325,6 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
   }
 
   override fun provideKeyTransparencyApi(unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeyTransparencyApi {
-    return mockk(relaxed = true)
-  }
-
-  override fun provideCloudStorageSyncScheduler(): CloudStorageSyncScheduler {
     return mockk(relaxed = true)
   }
 }

@@ -55,7 +55,6 @@ import org.thoughtcrime.securesms.service.ScheduledMessageManager
 import org.thoughtcrime.securesms.service.TrimThreadsByDateManager
 import org.thoughtcrime.securesms.service.webrtc.SignalCallManager
 import org.thoughtcrime.securesms.shakereport.ShakeToReport
-import org.thoughtcrime.securesms.stories.cloudstorage.CloudStorageSyncScheduler
 import org.thoughtcrime.securesms.util.EarlyMessageCache
 import org.thoughtcrime.securesms.util.FrameRateTracker
 import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache
@@ -254,11 +253,6 @@ object AppDependencies {
   @JvmStatic
   val billingApi: BillingApi by lazy {
     provider.provideBillingApi()
-  }
-
-  @JvmStatic
-  val cloudStorageSyncScheduler: CloudStorageSyncScheduler by lazy {
-    provider.provideCloudStorageSyncScheduler()
   }
 
   private val _webSocketObserver: BehaviorSubject<WebSocketConnectionState> = BehaviorSubject.create()
@@ -506,6 +500,5 @@ object AppDependencies {
     fun provideDonationsApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): DonationsApi
     fun provideSvrBApi(libSignalNetwork: Network): SvrBApi
     fun provideKeyTransparencyApi(unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeyTransparencyApi
-    fun provideCloudStorageSyncScheduler(): CloudStorageSyncScheduler
   }
 }
