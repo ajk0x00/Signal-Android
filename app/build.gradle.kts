@@ -345,6 +345,7 @@ android {
       isMinifyEnabled = true
       proguardFiles(*buildTypes["debug"].proguardFiles.toTypedArray())
       buildConfigField("String", "BUILD_VARIANT_TYPE", "\"Release\"")
+      signingConfig = signingConfigs["debug"]
     }
 
     create("instrumentation") {
