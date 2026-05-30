@@ -13,7 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.ui.view.Stub
 import org.signal.core.util.concurrent.LifecycleDisposable
@@ -45,6 +47,7 @@ import org.thoughtcrime.securesms.stories.StoryViewerArgs
 import org.thoughtcrime.securesms.stories.dialogs.StoryContextMenu
 import org.thoughtcrime.securesms.stories.dialogs.StoryDialogs
 import org.thoughtcrime.securesms.stories.my.MyStoriesActivity
+import org.thoughtcrime.securesms.stories.saved.SavedStoriesRepository
 import org.thoughtcrime.securesms.stories.viewer.StoryViewerActivity
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
@@ -82,8 +85,17 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
     viewModel.isTransitioningToAnotherScreen = false
     initializeSearchAction()
     viewModel.markStoriesRead()
+    refreshSavedStoryCount()
 
     AppDependencies.expireStoriesManager.scheduleIfNecessary()
+  }
+
+  private fun refreshSavedStoryCount() {
+    val repository = SavedStoriesRepository(requireContext())
+    viewLifecycleOwner.lifecycleScope.launch {
+      val count = withContext(Dispatchers.IO) { repository.getSavedStoryCount() }
+      viewModel.setSavedStoryCount(count)
+    }
   }
 
   private fun initializeSearchAction() {
@@ -135,6 +147,7 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
 
     StoriesLandingItem.register(adapter)
     MyStoriesItem.register(adapter)
+    org.thoughtcrime.securesms.stories.saved.SavedStoriesItem.register(adapter)
     ExpandHeader.register(adapter)
 
     requireListener<Material3OnScrollHelperBinder>().bindScrollHelper(recyclerView!!, viewLifecycleOwner)
@@ -211,6 +224,17 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
         customPref(item)
       }
 
+      if (state.savedStoryCount > 0) {
+        customPref(
+          org.thoughtcrime.securesms.stories.saved.SavedStoriesItem.Model(
+            count = state.savedStoryCount,
+            onClick = {
+              startActivity(Intent(requireContext(), org.thoughtcrime.securesms.stories.saved.SavedStoriesActivity::class.java))
+            }
+          )
+        )
+      }
+
       if (hidden.isNotEmpty()) {
         customPref(
           ExpandHeader.Model(
@@ -263,6 +287,9 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
             messageRecord = it.data.primaryStory.messageRecord
           )
         }
+      },
+      onSaveToCloud = {
+        org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob.enqueue(it.data.primaryStory.messageRecord.id)
       },
       onDeleteStory = {
         handleDeleteStory(it)

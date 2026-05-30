@@ -198,6 +198,8 @@ android {
         "META-INF/LICENSE.md",
         "META-INF/NOTICE",
         "META-INF/LICENSE-notice.md",
+        "META-INF/DEPENDENCIES",
+        "META-INF/INDEX.LIST",
         "META-INF/proguard/androidx-annotations.pro",
         "**/*.dylib",
         "**/*.dll",
@@ -325,6 +327,7 @@ android {
         "proguard/proguard-okhttp.pro",
         "proguard/proguard-ez-vcard.pro",
         "proguard/proguard-dnsjava.pro",
+        "proguard/proguard-google-cloud-storage.pro",
         "proguard/proguard.cfg"
       )
       testProguardFiles(
@@ -712,6 +715,13 @@ dependencies {
   implementation(libs.google.zxing.android.integration)
   implementation(libs.google.zxing.core)
   implementation(libs.google.flexbox)
+  implementation(libs.google.cloud.storage) {
+    exclude(group = "org.conscrypt", module = "conscrypt-openjdk-uber")
+    exclude(group = "io.opentelemetry")
+    exclude(group = "io.grpc")
+    exclude(group = "com.google.protobuf", module = "protobuf-java")
+  }
+  implementation(libs.google.auth.library.oauth2.http)
   implementation(libs.subsampling.scale.image.view) {
     exclude(group = "com.android.support", module = "support-annotations")
   }

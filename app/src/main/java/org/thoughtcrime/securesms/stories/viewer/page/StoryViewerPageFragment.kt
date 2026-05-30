@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
@@ -1250,6 +1251,16 @@ class StoryViewerPageFragment :
           )
           viewModel.setIsSavingMedia(false)
         }
+      },
+      onSaveToCloud = {
+        org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob.enqueue(it.conversationMessage.messageRecord.id)
+      },
+      onSaveAllToCloud = {
+        val posts = viewModel.getStateSnapshot().posts
+        posts.forEach { post ->
+          org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob.enqueue(post.conversationMessage.messageRecord.id)
+        }
+        Toast.makeText(requireContext(), resources.getQuantityString(R.plurals.StoryViewerPageFragment__saving_d_stories, posts.size, posts.size), Toast.LENGTH_SHORT).show()
       },
       onDelete = {
         viewModel.setIsDisplayingDeleteDialog(true)

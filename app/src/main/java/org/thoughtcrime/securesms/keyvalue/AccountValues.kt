@@ -407,9 +407,17 @@ class AccountValues internal constructor(store: KeyValueStore, context: Context)
     override var lastResortKyberPreKeyRotationTime: Long by longValue(KEY_PNI_LAST_RESORT_KYBER_PREKEY_ROTATION_TIME, 0)
   }
 
-  /** Indicates whether the user has the ability to receive FCM messages. Largely coupled to whether they have Play Service. */
+  /**
+   * Self-built APKs cannot use FCM (Firebase Installations Service rejects the debug-signed cert),
+   * so this getter is hardcoded to false. Every gate site that branches on `fcmEnabled` now treats
+   * this build as a non-FCM device: always-on foreground service, AlarmSleepTimer, and
+   * fetchesMessages=true in RefreshAttributesJob. The setter is kept as a no-op so existing
+   * Java/Kotlin call sites (RegistrationRepository, legacy ApplicationContext logic) still compile.
+   */
   @get:JvmName("isFcmEnabled")
-  var fcmEnabled: Boolean by booleanValue(KEY_FCM_ENABLED, false)
+  var fcmEnabled: Boolean
+    get() = false
+    set(@Suppress("UNUSED_PARAMETER") value) = Unit
 
   /** The FCM token, which allows the server to send us FCM messages. */
   var fcmToken: String?

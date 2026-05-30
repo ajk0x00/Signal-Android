@@ -63,6 +63,10 @@ class StoriesLandingViewModel(private val storiesLandingRepository: StoriesLandi
     storiesLandingRepository.markFailedStoriesNotified()
   }
 
+  fun setSavedStoryCount(count: Int) {
+    store.update { it.copy(savedStoryCount = count) }
+  }
+
   class Factory(private val storiesLandingRepository: StoriesLandingRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
       return modelClass.cast(StoriesLandingViewModel(storiesLandingRepository)) as T

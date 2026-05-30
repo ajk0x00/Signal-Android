@@ -9,6 +9,10 @@
           android:title="@string/media_preview__save_title"
           android:icon="@drawable/ic_download_filled_white_24"
           app:showAsAction="never"/>
+    <item android:id="@+id/save_to_cloud"
+          android:title="@string/MediaPreviewActivity__save_to_cloud"
+          android:icon="@drawable/symbol_cloud_24"
+          app:showAsAction="never"/>
     <item android:id="@+id/delete"
           android:title="@string/delete"
           android:icon="@drawable/ic_trash_24"

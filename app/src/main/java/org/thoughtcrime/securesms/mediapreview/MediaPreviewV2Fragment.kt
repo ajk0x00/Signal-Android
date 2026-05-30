@@ -71,6 +71,7 @@ import org.thoughtcrime.securesms.mediasend.v2.MediaSelectionActivity
 import org.thoughtcrime.securesms.mms.PartAuthority
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.sharing.v2.ShareActivity
+import org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob
 import org.thoughtcrime.securesms.util.DateUtils
 import org.thoughtcrime.securesms.util.Debouncer
 import org.thoughtcrime.securesms.util.FullscreenHelper
@@ -332,17 +333,25 @@ class MediaPreviewV2Fragment :
     if (currentItem.threadId == MediaIntentFactory.NOT_IN_A_THREAD.toLong()) {
       menu.findItem(R.id.delete).isVisible = false
     }
+    menu.findItem(R.id.save_to_cloud).isVisible = currentItem.attachment != null && currentItem.messageId > 0
 
     binding.toolbar.setOnMenuItemClickListener {
       when (it.itemId) {
         R.id.edit -> editMediaItem(currentItem)
         R.id.save -> saveToDisk(currentItem)
+        R.id.save_to_cloud -> saveToCloud(currentItem)
         R.id.delete -> deleteMedia(currentItem)
         android.R.id.home -> requireActivity().finish()
         else -> return@setOnMenuItemClickListener false
       }
       return@setOnMenuItemClickListener true
     }
+  }
+
+  private fun saveToCloud(mediaItem: MediaTable.MediaRecord) {
+    val attachmentId = mediaItem.attachment?.attachmentId?.id ?: -1L
+    SaveStoryToCloudJob.enqueue(mediaItem.messageId, attachmentId)
+    Toast.makeText(requireContext(), R.string.MediaPreviewActivity__saving_to_cloud, Toast.LENGTH_SHORT).show()
   }
 
   private fun bindMediaPreviewPlaybackControls(currentItem: MediaTable.MediaRecord, currentFragment: MediaPreviewFragment?) {
