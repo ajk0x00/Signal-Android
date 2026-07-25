@@ -30,7 +30,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build Release APKs
-        run: ./gradlew assemblePlayProdRelease assembleWebsiteProdRelease
+        run: ./gradlew assemblePlayProdRelease assembleWebsiteProdRelease --no-configuration-cache
 
       - name: Upload APKs to Release
         env:
