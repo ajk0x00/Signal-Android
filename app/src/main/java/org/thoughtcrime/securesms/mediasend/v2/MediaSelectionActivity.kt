@@ -23,8 +23,10 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import org.signal.camera.CameraDisplay
 import org.signal.core.models.media.Media
 import org.signal.core.util.BreakIteratorCompat
+import org.signal.core.util.Debouncer
 import org.signal.core.util.OVERRIDE_TRANSITION_CLOSE_COMPAT
 import org.signal.core.util.concurrent.LifecycleDisposable
 import org.signal.core.util.getParcelableArrayListExtraCompat
@@ -36,10 +38,11 @@ import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.emoji.EmojiEventListener
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.conversation.MessageSendType
+import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardEvent
+import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardEventViewModel
 import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardPageFragment
 import org.thoughtcrime.securesms.keyboard.emoji.search.EmojiSearchFragment
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewUtil
-import org.thoughtcrime.securesms.mediasend.CameraDisplay
 import org.thoughtcrime.securesms.mediasend.MediaSendActivityResult
 import org.thoughtcrime.securesms.mediasend.v2.review.MediaReviewFragment
 import org.thoughtcrime.securesms.mediasend.v2.text.TextStoryPostCreationViewModel
@@ -47,11 +50,11 @@ import org.thoughtcrime.securesms.mediasend.v2.text.send.TextStoryPostSendReposi
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.safety.SafetyNumberBottomSheet
 import org.thoughtcrime.securesms.stories.Stories
-import org.thoughtcrime.securesms.util.Debouncer
 import org.thoughtcrime.securesms.util.FullscreenHelper
 import org.thoughtcrime.securesms.util.WindowUtil
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
 import org.thoughtcrime.securesms.util.visible
+import kotlin.getValue
 import org.signal.core.ui.R as CoreUiR
 
 class MediaSelectionActivity :
@@ -75,6 +78,8 @@ class MediaSelectionActivity :
       TextStoryPostCreationViewModel.Factory(TextStoryPostSendRepository())
     }
   )
+
+  private val addMessageCommandViewModel: EmojiKeyboardEventViewModel by viewModels()
 
   private val destination: MediaSelectionDestination
     get() = MediaSelectionDestination.fromBundle(requireNotNull(intent.getBundleExtra(DESTINATION)))
@@ -350,19 +355,19 @@ class MediaSelectionActivity :
   private fun isCameraFirst(): Boolean = intent.getIntExtra(START_ACTION, -1) == R.id.action_directly_to_mediaCaptureFragment
 
   override fun openEmojiSearch() {
-    viewModel.sendCommand(HudCommand.OpenEmojiSearch)
+    addMessageCommandViewModel.onEvent(EmojiKeyboardEvent.OpenEmojiSearch)
   }
 
   override fun onEmojiSelected(emoji: String?) {
-    viewModel.sendCommand(HudCommand.EmojiInsert(emoji))
+    addMessageCommandViewModel.onEvent(EmojiKeyboardEvent.EmojiInsert(emoji))
   }
 
   override fun onKeyEvent(keyEvent: KeyEvent?) {
-    viewModel.sendCommand(HudCommand.EmojiKeyEvent(keyEvent))
+    addMessageCommandViewModel.onEvent(EmojiKeyboardEvent.EmojiKeyEvent(keyEvent))
   }
 
   override fun closeEmojiSearch() {
-    viewModel.sendCommand(HudCommand.CloseEmojiSearch)
+    addMessageCommandViewModel.onEvent(EmojiKeyboardEvent.CloseEmojiSearch)
   }
 
   private inner class OnBackPressed : OnBackPressedCallback(true) {

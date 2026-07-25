@@ -10,6 +10,7 @@ import org.signal.core.util.Util
 import org.signal.core.util.UuidUtil
 import org.signal.core.util.logging.Log
 import org.signal.core.util.toByteArray
+import org.signal.libsignal.net.KeyTransparency
 import org.thoughtcrime.securesms.backup.v2.MessageBackupTier
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.getSubscriber
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.isUserManuallyCancelled
@@ -17,8 +18,11 @@ import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaym
 import org.thoughtcrime.securesms.database.NotificationProfileTables
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
+import org.thoughtcrime.securesms.database.model.KeyTransparencyStore
 import org.thoughtcrime.securesms.database.model.RecipientRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
+import org.thoughtcrime.securesms.dependencies.KeyTransparencyApi
+import org.thoughtcrime.securesms.jobs.RefreshAttributesJob
 import org.thoughtcrime.securesms.jobs.RetrieveProfileAvatarJob
 import org.thoughtcrime.securesms.jobs.StorageSyncJob
 import org.thoughtcrime.securesms.keyvalue.AccountValues
@@ -178,11 +182,10 @@ object StorageSyncHelper {
         )
       }
 
-      hasBackup = SignalStore.backup.areBackupsEnabled && SignalStore.backup.hasBackupBeenUploaded
       backupTier = when {
         SignalStore.account.isLinkedDevice -> null
-        SignalStore.backup.areBackupsEnabled && SignalStore.backup.backupTier != null -> getBackupLevelValue(SignalStore.backup.backupTier!!)
-        SignalStore.backup.backupTierInternalOverride != null -> getBackupLevelValue(SignalStore.backup.backupTierInternalOverride!!)
+        SignalStore.backup.areBackupsEnabled && SignalStore.backup.backupTier != null -> SignalStore.backup.backupTier!!.toBackupLevel()
+        SignalStore.backup.backupTierInternalOverride != null -> SignalStore.backup.backupTierInternalOverride!!.toBackupLevel()
         else -> null
       }
 
@@ -209,14 +212,6 @@ object StorageSyncHelper {
     }
 
     return accountRecord.toSignalAccountRecord(StorageId.forAccount(storageId)).toSignalStorageRecord()
-  }
-
-  // TODO: Currently we don't have access to the private values of the BackupLevel. Update when it becomes available.
-  private fun getBackupLevelValue(tier: MessageBackupTier): Long {
-    return when (tier) {
-      MessageBackupTier.FREE -> 200
-      MessageBackupTier.PAID -> 201
-    }
   }
 
   private fun getNotificationProfileManualOverride(): AccountRecord.NotificationProfileManualOverride? {
@@ -269,6 +264,11 @@ object StorageSyncHelper {
     SignalStore.story.userHasSeenGroupStoryEducationSheet = update.new.proto.hasSeenGroupStoryEducationSheet
     SignalStore.uiHints.setHasCompletedUsernameOnboarding(update.new.proto.hasCompletedUsernameOnboarding)
 
+    if (update.new.proto.unlistedPhoneNumber != update.old.proto.unlistedPhoneNumber && SignalStore.account.isPrimaryDevice) {
+      Log.i(TAG, "Phone number discoverability changed via storage service. Refreshing attributes to push the change to the server.")
+      AppDependencies.jobManager.add(RefreshAttributesJob())
+    }
+
     if (SignalStore.settings.automaticVerificationEnabled && update.new.proto.automaticKeyVerificationDisabled) {
       SignalDatabase.recipients.clearAllKeyTransparencyData()
     }
@@ -294,6 +294,13 @@ object StorageSyncHelper {
       setSubscriber(remoteBackupsSubscriber)
     }
 
+    if (SignalStore.account.isLinkedDevice) {
+      val remoteBackupTier = MessageBackupTier.fromBackupLevel(update.new.proto.backupTier)
+      if (remoteBackupTier != SignalStore.backup.backupTier) {
+        SignalStore.backup.backupTier = remoteBackupTier
+      }
+    }
+
     if (update.new.proto.subscriptionManuallyCancelled && !update.old.proto.subscriptionManuallyCancelled) {
       SignalStore.inAppPayments.updateLocalStateForManualCancellation(InAppPaymentSubscriberRecord.Type.DONATION)
     }
@@ -306,21 +313,32 @@ object StorageSyncHelper {
       SignalStore.account.username = update.new.proto.username
       SignalStore.account.usernameSyncState = AccountValues.UsernameSyncState.IN_SYNC
       SignalStore.account.usernameSyncErrorCount = 0
+
+      Log.i(TAG, "Resetting KT data due to username change in storage service.")
+      KeyTransparencyApi.reset(aci = SignalStore.account.requireAci().libSignalAci, field = KeyTransparency.AccountDataField.USERNAME_HASH, keyTransparencyStore = KeyTransparencyStore)
     }
 
     if (update.new.proto.usernameLink != null) {
-      SignalStore.account.usernameLink = UsernameLinkComponents(
-        update.new.proto.usernameLink!!.entropy.toByteArray(),
-        UuidUtil.parseOrThrow(update.new.proto.usernameLink!!.serverId.toByteArray())
-      )
+      val remoteServerId = UuidUtil.parseOrNull(update.new.proto.usernameLink!!.serverId.toByteArray())
 
-      SignalStore.misc.usernameQrCodeColorScheme = StorageSyncModels.remoteToLocalUsernameColor(update.new.proto.usernameLink!!.color)
+      if (remoteServerId != null) {
+        SignalStore.account.usernameLink = UsernameLinkComponents(
+          update.new.proto.usernameLink!!.entropy.toByteArray(),
+          remoteServerId
+        )
+
+        SignalStore.misc.usernameQrCodeColorScheme = StorageSyncModels.remoteToLocalUsernameColor(update.new.proto.usernameLink!!.color)
+      } else {
+        Log.w(TAG, "Remote username link had a malformed serverId. Ignoring the username link.")
+      }
     }
 
     SignalStore.releaseChannel.releaseChannelRecipientId?.let { releaseChannelId ->
-      SignalDatabase.recipients.setBlocked(releaseChannelId, update.new.proto.releaseNotesChatBlocked)
-      SignalDatabase.recipients.setMuted(releaseChannelId, update.new.proto.releaseNotesChatMutedUntilTimestamp)
-      SignalDatabase.threads.applyStorageSyncReleaseChannelUpdate(releaseChannelId, update.new.proto.releaseNotesChatArchived, update.new.proto.releaseNotesChatMarkedUnread)
+      update.new.proto.releaseNotesChatBlocked?.let { SignalDatabase.recipients.setBlocked(releaseChannelId, it) }
+      update.new.proto.releaseNotesChatMutedUntilTimestamp?.let { SignalDatabase.recipients.setMuted(releaseChannelId, it) }
+      if (update.new.proto.releaseNotesChatArchived != null && update.new.proto.releaseNotesChatMarkedUnread != null) {
+        SignalDatabase.threads.applyStorageSyncReleaseChannelUpdate(releaseChannelId, update.new.proto.releaseNotesChatArchived!!, update.new.proto.releaseNotesChatMarkedUnread!!)
+      }
       Recipient.live(releaseChannelId).refresh()
     }
 

@@ -35,13 +35,15 @@ class ManageStorageSettingsViewModel : ViewModel() {
     ManageStorageState(
       keepMessagesDuration = SignalStore.settings.keepMessagesDuration,
       lengthLimit = if (SignalStore.settings.isTrimByLengthEnabled) SignalStore.settings.threadTrimLength else ManageStorageState.NO_LIMIT,
-      syncTrimDeletes = SignalStore.settings.shouldSyncThreadTrimDeletes()
+      syncTrimDeletes = SignalStore.settings.shouldSyncThreadTrimDeletes(),
+      localBackupsEnabled = SignalStore.backup.newLocalBackupsEnabled,
+      isPrimary = SignalStore.account.isPrimaryDevice
     )
   )
   val state = store.asStateFlow()
 
   init {
-    viewModelScope.launch(Dispatchers.IO) {
+    viewModelScope.launch(Dispatchers.Default) {
       InAppPaymentsRepository.observeLatestBackupPayment()
         .collectLatest { payment ->
           store.update { it.copy(isPaidTierPending = payment.state == InAppPaymentTable.State.PENDING) }
@@ -132,6 +134,7 @@ class ManageStorageSettingsViewModel : ViewModel() {
 
   private suspend fun getOnDeviceStorageOptimizationState(): OnDeviceStorageOptimizationState {
     return when {
+      !SignalStore.account.isPrimaryDevice -> OnDeviceStorageOptimizationState.FEATURE_NOT_AVAILABLE
       !SignalStore.backup.areBackupsEnabled || !BackupUpgradeAvailabilityChecker.isUpgradeAvailable(AppDependencies.application) -> OnDeviceStorageOptimizationState.FEATURE_NOT_AVAILABLE
       SignalStore.backup.backupTier != MessageBackupTier.PAID -> OnDeviceStorageOptimizationState.REQUIRES_PAID_TIER
       SignalStore.backup.optimizeStorage -> OnDeviceStorageOptimizationState.ENABLED
@@ -179,7 +182,9 @@ class ManageStorageSettingsViewModel : ViewModel() {
     val breakdown: MediaTable.StorageBreakdown? = null,
     val onDeviceStorageOptimizationState: OnDeviceStorageOptimizationState = OnDeviceStorageOptimizationState.FEATURE_NOT_AVAILABLE,
     val storageOptimizationStateChanged: Boolean = false,
-    val isPaidTierPending: Boolean = false
+    val isPaidTierPending: Boolean = false,
+    val localBackupsEnabled: Boolean = false,
+    val isPrimary: Boolean = true
   ) {
     companion object {
       const val NO_LIMIT = 0

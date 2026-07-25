@@ -13,7 +13,7 @@ import com.squareup.wire.Message;
 import org.signal.core.util.Base64;
 import org.signal.core.util.Hex;
 import org.signal.libsignal.protocol.InvalidKeyException;
-import org.signal.libsignal.protocol.logging.Log;
+import org.signal.core.util.logging.Log;
 import org.signal.storageservice.storage.protos.groups.AvatarUploadAttributes;
 import org.signal.storageservice.storage.protos.groups.ExternalGroupCredential;
 import org.signal.storageservice.storage.protos.groups.Group;
@@ -399,10 +399,6 @@ public class PushServiceSocket {
   }
 
   /**
-   * V2 API: Submits registration request and returns the raw Response for manual handling.
-   * Caller is responsible for closing the response.
-   */
-  /**
    * V2 API: Checks SVR2 auth credentials and returns the raw Response for manual handling.
    * Caller is responsible for closing the response.
    */
@@ -484,6 +480,18 @@ public class PushServiceSocket {
   public RegisterAsSecondaryDeviceResponse registerAsSecondaryDevice(RegisterAsSecondaryDeviceRequest request) throws IOException {
     String responseText = makeServiceRequest("/v1/devices/link", "PUT", JsonUtil.toJson(request));
     return JsonUtil.fromJson(responseText, RegisterAsSecondaryDeviceResponse.class);
+  }
+
+  /**
+   * V2 API: Registers as a secondary device, authenticating via basic auth built from the given {@code e164} and {@code password}
+   * rather than the socket's credentials provider
+   * Caller is responsible for closing the response.
+   */
+  public Response registerAsSecondaryDevice(String e164, String password, RegisterAsSecondaryDeviceRequest request) throws IOException {
+    String              authHeader = "Basic " + Base64.encodeWithPadding((e164 + ":" + password).getBytes("UTF-8"));
+    Map<String, String> headers    = Collections.singletonMap("Authorization", authHeader);
+
+    return makeServiceRequestWithoutValidation("/v1/devices/link", "PUT", jsonRequestBody(JsonUtil.toJson(request)), headers, SealedSenderAccess.NONE, false);
   }
 
   public SendMessageResponse sendMessage(OutgoingPushMessageList bundle, @Nullable SealedSenderAccess sealedSenderAccess, boolean story)

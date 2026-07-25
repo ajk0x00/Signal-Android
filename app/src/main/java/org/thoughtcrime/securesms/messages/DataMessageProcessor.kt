@@ -122,7 +122,7 @@ import kotlin.time.Duration.Companion.seconds
 
 object DataMessageProcessor {
 
-  private const val BODY_RANGE_PROCESSING_LIMIT = 250
+  internal const val BODY_RANGE_PROCESSING_LIMIT = 250
   private const val POLL_QUESTION_CHARACTER_LIMIT = 200
   private const val POLL_CHARACTER_LIMIT = 100
   private const val POLL_OPTIONS_LIMIT = 10
@@ -330,6 +330,11 @@ object DataMessageProcessor {
       return null
     }
 
+    if (Recipient.resolved(threadRecipientId).isGroup) {
+      warn(envelope.clientTimestamp!!, "Expiration update targeting a group recipient without group context. Ignoring.")
+      return null
+    }
+
     if (SignalDatabase.recipients.getExpiresInSeconds(threadRecipientId) == expiresIn.inWholeSeconds) {
       log(envelope.clientTimestamp!!, "No change in message expiry for group. Ignoring.")
       return null
@@ -422,6 +427,14 @@ object DataMessageProcessor {
 
       try {
         val storyId = SignalDatabase.messages.getStoryId(authorRecipientId, sentTimestamp).id
+
+        val storyThreadRecipient: Recipient = SignalDatabase.threads.getRecipientForThreadId(SignalDatabase.messages.getMessageRecord(storyId).threadId)!!
+        val storyGroupRecord: GroupRecord? = SignalDatabase.groups.getGroup(storyThreadRecipient.id).orNull()
+        val storyGroupId: GroupId? = storyGroupRecord?.id?.takeIf { storyGroupRecord.isActive }
+        if (storyGroupId != groupId) {
+          warn(envelope.clientTimestamp!!, "Story reaction target does not belong to the same conversation as the incoming message. Dropping reaction.")
+          return null
+        }
 
         if (groupId != null) {
           parentStoryId = GroupReply(storyId)
@@ -533,13 +546,12 @@ object DataMessageProcessor {
       return null
     }
 
-    val targetThread = SignalDatabase.threads.getThreadRecord(targetMessage.threadId)
-    if (targetThread == null) {
+    val targetThreadRecipientId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
+    if (targetThreadRecipientId == null) {
       warn(envelope.clientTimestamp!!, "[handleReaction] Could not find a thread for the message! timestamp: " + targetSentTimestamp + "  author: " + targetAuthor.id)
       return null
     }
 
-    val targetThreadRecipientId = targetThread.recipient.id
     val groupRecord = SignalDatabase.groups.getGroup(targetThreadRecipientId).orNull()
     if (groupRecord != null && !groupRecord.members.contains(senderRecipientId)) {
       warn(envelope.clientTimestamp!!, "[handleReaction] Reaction author is not in the group! timestamp: " + targetSentTimestamp + "  author: " + targetAuthor.id)
@@ -744,6 +756,12 @@ object DataMessageProcessor {
         val groupRecord: GroupRecord? = SignalDatabase.groups.getGroup(threadRecipient.id).orNull()
         val groupStory: Boolean = groupRecord?.isActive ?: false
 
+        val storyGroupId: GroupId? = groupRecord?.id?.takeIf { groupStory }
+        if (storyGroupId != groupId) {
+          warn(envelope.clientTimestamp!!, "Story reply target does not belong to the same conversation as the incoming message. Dropping reply.")
+          return null
+        }
+
         if (!groupStory) {
           threadRecipient = senderRecipient
         }
@@ -773,7 +791,8 @@ object DataMessageProcessor {
         return null
       }
 
-      val bodyRanges: BodyRangeList? = message.bodyRanges.filter { Util.allAreNull(it.mentionAci, it.mentionAciBinary) }.toList().toBodyRangeList()
+      val cappedBodyRanges: List<BodyRange> = message.bodyRanges.take(BODY_RANGE_PROCESSING_LIMIT)
+      val bodyRanges: BodyRangeList? = cappedBodyRanges.filter { Util.allAreNull(it.mentionAci, it.mentionAciBinary) }.toList().toBodyRangeList()
 
       val mediaMessage = IncomingMessage(
         type = MessageType.NORMAL,
@@ -787,7 +806,7 @@ object DataMessageProcessor {
         body = message.body,
         groupId = groupId,
         quote = quoteModel,
-        mentions = getMentions(message.bodyRanges),
+        mentions = getMentions(cappedBodyRanges),
         serverGuid = UuidUtil.getStringUUID(envelope.serverGuid, envelope.serverGuidBinary),
         messageRanges = bodyRanges
       )
@@ -1275,13 +1294,13 @@ object DataMessageProcessor {
       return null
     }
 
-    val targetThread = SignalDatabase.threads.getThreadRecord(targetMessage.threadId)
-    if (targetThread == null) {
+    val targetThreadRecipientId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
+    if (targetThreadRecipientId == null) {
       warn(envelope.clientTimestamp!!, "[handlePinMessage] Could not find a thread for the message! timestamp: ${pinMessage.targetSentTimestamp}")
       return null
     }
 
-    if (targetThread.recipient.id != threadRecipient.id) {
+    if (targetThreadRecipientId != threadRecipient.id) {
       warn(envelope.clientTimestamp!!, "[handlePinMessage] Target message is in a different thread than the thread recipient! timestamp: ${pinMessage.targetSentTimestamp}")
       return null
     }
@@ -1367,13 +1386,13 @@ object DataMessageProcessor {
       return null
     }
 
-    val targetThread = SignalDatabase.threads.getThreadRecord(targetMessage.threadId)
-    if (targetThread == null) {
+    val targetThreadRecipientId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
+    if (targetThreadRecipientId == null) {
       warn(envelope.clientTimestamp!!, "[handleUnpinMessage] Could not find a thread for the message! timestamp: ${unpinMessage.targetSentTimestamp}")
       return null
     }
 
-    if (targetThread.recipient.id != threadRecipient.id) {
+    if (targetThreadRecipientId != threadRecipient.id) {
       warn(envelope.clientTimestamp!!, "[handleUnpinMessage] Target message is in a different thread than the thread recipient! timestamp: ${unpinMessage.targetSentTimestamp}")
       return null
     }
@@ -1427,13 +1446,12 @@ object DataMessageProcessor {
       return null
     }
 
-    val targetThread = SignalDatabase.threads.getThreadRecord(targetMessage.threadId)
-    if (targetThread == null) {
+    val targetThreadRecipientId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
+    if (targetThreadRecipientId == null) {
       warn(envelope.clientTimestamp!!, "[handleAdminRemoteDelete] Could not find a thread for the message! timestamp: $targetSentTimestamp author: ${targetAuthor.id}")
       return null
     }
 
-    val targetThreadRecipientId = targetThread.recipient.id
     if (targetThreadRecipientId != threadRecipient.id) {
       warn(envelope.clientTimestamp!!, "[handleAdminRemoteDelete] Target message is in a different thread than the admin delete! timestamp: $targetSentTimestamp")
       return null
@@ -1616,17 +1634,17 @@ object DataMessageProcessor {
       return null
     }
 
-    val targetThread = SignalDatabase.threads.getThreadRecord(targetMessage.threadId)
-    if (targetThread == null) {
+    val targetThreadRecipientId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
+    if (targetThreadRecipientId == null) {
       warn(envelope.clientTimestamp!!, "[handlePollValidation] Could not find a thread for the message. timestamp: $targetSentTimestamp  author: ${targetAuthor.id}")
       return null
     }
 
-    val groupRecord = SignalDatabase.groups.getGroup(targetThread.recipient.id).orNull()
+    val groupRecord = SignalDatabase.groups.getGroup(targetThreadRecipientId).orNull()
     if (groupRecord != null && !groupRecord.members.contains(senderRecipient.id)) {
       warn(envelope.clientTimestamp!!, "[handlePollValidation] Sender is not in the group. timestamp: $targetSentTimestamp author: ${targetAuthor.id}")
       return null
-    } else if (groupRecord == null && senderRecipient.id != targetThread.recipient.id && senderRecipient.id != Recipient.self().id) {
+    } else if (groupRecord == null && senderRecipient.id != targetThreadRecipientId && senderRecipient.id != Recipient.self().id) {
       warn(envelope.clientTimestamp!!, "[handlePollValidation] Sender is not a part of the 1:1 thread!")
       return null
     }

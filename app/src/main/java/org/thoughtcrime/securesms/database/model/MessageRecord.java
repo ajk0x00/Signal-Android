@@ -42,7 +42,7 @@ import org.signal.archive.proto.GroupChangeChatUpdate;
 import org.signal.archive.proto.GroupCreationUpdate;
 import org.thoughtcrime.securesms.components.emoji.EmojiProvider;
 import org.thoughtcrime.securesms.components.emoji.parsing.EmojiParser;
-import org.thoughtcrime.securesms.components.transfercontrols.TransferControlView;
+import org.thoughtcrime.securesms.components.transfercontrols.TransferControls;
 import org.thoughtcrime.securesms.database.CollapsedState;
 import org.thoughtcrime.securesms.database.MessageTypes;
 import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatch;
@@ -178,10 +178,6 @@ public abstract class MessageRecord extends DisplayRecord {
 
   public boolean isSecure() {
     return MessageTypes.isSecureType(type);
-  }
-
-  public boolean isLegacyMessage() {
-    return MessageTypes.isLegacyType(type);
   }
 
   @Override
@@ -509,6 +505,10 @@ public abstract class MessageRecord extends DisplayRecord {
 
   protected static @NonNull UpdateDescription staticUpdateDescriptionWithExpiration(@NonNull String string, Glyph glyph) {
     return UpdateDescription.staticDescriptionWithExpiration(string, glyph);
+  }
+
+  protected static @NonNull UpdateDescription staticUpdateDescriptionWithExpiration(@NonNull String string, Glyph glyph, @ColorInt int lightTint, @ColorInt int darkTint) {
+    return UpdateDescription.staticDescriptionWithExpiration(string, glyph, lightTint, darkTint);
   }
 
   protected static @NonNull UpdateDescription staticUpdateDescription(@NonNull String string,
@@ -963,7 +963,7 @@ public abstract class MessageRecord extends DisplayRecord {
       if (slides.isEmpty()) {
         return false;
       }
-      return TransferControlView.getTransferState(slides) == expectedTransferState;
+      return TransferControls.getTransferState(slides) == expectedTransferState;
     }
     return false;
   }

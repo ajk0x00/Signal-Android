@@ -7,6 +7,7 @@ package org.signal.registration.sample
 
 import android.app.Application
 import android.os.Build
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.signal.core.models.ServiceId.ACI
 import org.signal.core.models.ServiceId.PNI
 import org.signal.core.ui.CoreUiDependencies
@@ -46,6 +47,7 @@ class RegistrationApplication : Application() {
     Log.initialize(AndroidLogger)
 
     RegistrationPreferences.init(this)
+    createDeviceTransferNotificationChannel()
 
     val trustStore = SampleTrustStore()
     val configuration = createServiceConfiguration(trustStore)
@@ -59,7 +61,21 @@ class RegistrationApplication : Application() {
       RegistrationDependencies(
         networkController = networkController,
         storageController = storageController,
-        sensitiveLogger = LogLogger
+        sensitiveLogger = LogLogger,
+        debugLogCallback = {},
+        proxyConfigCallback = { context ->
+          MaterialAlertDialogBuilder(context)
+            .setMessage("Proxy configuration not supported in the demo.")
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+        },
+        contactSupportCallback = { context, subject ->
+          MaterialAlertDialogBuilder(context)
+            .setMessage("Contact support not supported in the demo. Subject: $subject")
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+        },
+        isLinkAndSyncAvailable = true
       )
     )
 
@@ -72,6 +88,16 @@ class RegistrationApplication : Application() {
         override fun provideForceSplitPane(): Boolean = false
       }
     )
+  }
+
+  private fun createDeviceTransferNotificationChannel() {
+    val manager = getSystemService(android.app.NotificationManager::class.java) ?: return
+    val channel = android.app.NotificationChannel(
+      DemoNetworkController.DEVICE_TRANSFER_NOTIFICATION_CHANNEL_ID,
+      "Device transfer",
+      android.app.NotificationManager.IMPORTANCE_LOW
+    )
+    manager.createNotificationChannel(channel)
   }
 
   private fun createPushServiceSocket(configuration: SignalServiceConfiguration): PushServiceSocket {

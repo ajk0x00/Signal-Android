@@ -10,12 +10,14 @@ import org.signal.core.models.AccountEntropyPool
 import org.signal.core.models.MasterKey
 import org.signal.core.util.logging.Log
 import org.signal.libsignal.net.RequestResult
+import org.signal.registration.LinkAndSyncWaitResult
 import org.signal.registration.NetworkController
 import org.signal.registration.NetworkController.AccountAttributes
 import org.signal.registration.NetworkController.BackupMasterKeyError
 import org.signal.registration.NetworkController.CheckSvrCredentialsError
 import org.signal.registration.NetworkController.CheckSvrCredentialsResponse
 import org.signal.registration.NetworkController.CreateSessionError
+import org.signal.registration.NetworkController.DeviceAttributes
 import org.signal.registration.NetworkController.GetBackupInfoError
 import org.signal.registration.NetworkController.GetBackupInfoResponse
 import org.signal.registration.NetworkController.GetSessionStatusError
@@ -26,10 +28,14 @@ import org.signal.registration.NetworkController.ProvisioningEvent
 import org.signal.registration.NetworkController.RegisterAccountError
 import org.signal.registration.NetworkController.RegisterAccountResponse
 import org.signal.registration.NetworkController.RequestVerificationCodeError
+import org.signal.registration.NetworkController.RestoreAccountRecordError
 import org.signal.registration.NetworkController.RestoreMasterKeyError
+import org.signal.registration.NetworkController.RestoreMethod
 import org.signal.registration.NetworkController.SessionMetadata
 import org.signal.registration.NetworkController.SetAccountAttributesError
+import org.signal.registration.NetworkController.SetProfileError
 import org.signal.registration.NetworkController.SetRegistrationLockError
+import org.signal.registration.NetworkController.SetRestoreMethodError
 import org.signal.registration.NetworkController.SubmitVerificationCodeError
 import org.signal.registration.NetworkController.SvrCredentials
 import org.signal.registration.NetworkController.UpdateSessionError
@@ -168,9 +174,9 @@ class DebugNetworkController(
     return delegate.setPinAndMasterKeyOnSvr(pin, masterKey)
   }
 
-  override suspend fun enqueueSvrGuessResetJob() {
+  override suspend fun enqueueSvrGuessResetJobIfPossible(): Boolean {
     // No override support for simple value methods
-    delegate.enqueueSvrGuessResetJob()
+    return delegate.enqueueSvrGuessResetJobIfPossible()
   }
 
   override suspend fun enableRegistrationLock(): RequestResult<Unit, SetRegistrationLockError> {
@@ -201,6 +207,35 @@ class DebugNetworkController(
     delegate.enqueueAccountAttributesSyncJob()
   }
 
+  override suspend fun setProfile(
+    givenName: String,
+    familyName: String,
+    avatar: ByteArray?,
+    discoverableByPhoneNumber: Boolean
+  ): RequestResult<Unit, SetProfileError> {
+    NetworkDebugState.getOverride<RequestResult<Unit, SetProfileError>>("setProfile")?.let {
+      Log.d(TAG, "[setProfile] Returning debug override")
+      return it
+    }
+    return delegate.setProfile(givenName, familyName, avatar, discoverableByPhoneNumber)
+  }
+
+  override suspend fun restoreAccountRecord(timeout: kotlin.time.Duration): RequestResult<Unit, RestoreAccountRecordError> {
+    NetworkDebugState.getOverride<RequestResult<Unit, RestoreAccountRecordError>>("restoreAccountRecord")?.let {
+      Log.d(TAG, "[restoreAccountRecord] Returning debug override")
+      return it
+    }
+    return delegate.restoreAccountRecord(timeout)
+  }
+
+  override suspend fun setRestoreMethod(token: String, method: RestoreMethod): RequestResult<Unit, SetRestoreMethodError> {
+    NetworkDebugState.getOverride<RequestResult<Unit, SetRestoreMethodError>>("setRestoreMethod")?.let {
+      Log.d(TAG, "[setRestoreMethod] Returning debug override")
+      return it
+    }
+    return delegate.setRestoreMethod(token, method)
+  }
+
   override suspend fun getSvrCredentials(): RequestResult<SvrCredentials, GetSvrCredentialsError> {
     NetworkDebugState.getOverride<RequestResult<SvrCredentials, GetSvrCredentialsError>>("getSvrCredentials")?.let {
       Log.d(TAG, "[getSvrCredentials] Returning debug override")
@@ -211,6 +246,43 @@ class DebugNetworkController(
 
   override fun startProvisioning(): Flow<ProvisioningEvent> {
     return delegate.startProvisioning()
+  }
+
+  override fun startLinkDeviceProvisioning(allowLinkAndSync: Boolean): Flow<NetworkController.LinkDeviceProvisioningEvent> {
+    return delegate.startLinkDeviceProvisioning(allowLinkAndSync)
+  }
+
+  override suspend fun registerAsLinkedDevice(
+    e164: String,
+    password: String,
+    provisioningCode: String,
+    deviceAttributes: DeviceAttributes,
+    aciPreKeys: PreKeyCollection,
+    pniPreKeys: PreKeyCollection,
+    fcmToken: String?
+  ): RequestResult<NetworkController.LinkDeviceResponse, NetworkController.RegisterAsLinkedDeviceError> {
+    return delegate.registerAsLinkedDevice(e164, password, provisioningCode, deviceAttributes, aciPreKeys, pniPreKeys, fcmToken)
+  }
+
+  override suspend fun onLinkedDeviceRegistered() {
+    delegate.onLinkedDeviceRegistered()
+  }
+
+  override suspend fun awaitLinkAndSyncArchive(): LinkAndSyncWaitResult {
+    return delegate.awaitLinkAndSyncArchive()
+  }
+
+  override suspend fun restoreLinkedDeviceFromStorageService() {
+    delegate.restoreLinkedDeviceFromStorageService()
+  }
+
+  override fun startNewDeviceTransferServer(context: android.content.Context, aep: AccountEntropyPool) {
+    if (NetworkDebugState.fakeDeviceTransfer.value) {
+      Log.d(TAG, "[startNewDeviceTransferServer] Fake device transfer enabled (debug override)")
+      org.signal.registration.sample.dependencies.FakeDeviceTransferRunner.start()
+    } else {
+      delegate.startNewDeviceTransferServer(context, aep)
+    }
   }
 
   override suspend fun checkSvrCredentials(
@@ -239,5 +311,13 @@ class DebugNetworkController(
       return it
     }
     return delegate.getBackupFileLastModified(aep, backupInfo)
+  }
+
+  override suspend fun verifyBackupKeyAssociatedWithAccount(aep: AccountEntropyPool): RequestResult<Unit, NetworkController.VerifyBackupKeyError> {
+    NetworkDebugState.getOverride<RequestResult<Unit, NetworkController.VerifyBackupKeyError>>("verifyBackupKeyAssociatedWithAccount")?.let {
+      Log.d(TAG, "[verifyBackupKeyAssociatedWithAccount] Returning debug override")
+      return it
+    }
+    return delegate.verifyBackupKeyAssociatedWithAccount(aep)
   }
 }

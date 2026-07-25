@@ -105,19 +105,25 @@ object ConversationListSearchModels {
     requestManager: RequestManager
   ): MappingEntryProvider<Any> {
     return MappingEntryProviderBuilder<Any>().apply {
-      viewHolder<ThreadModel> { ctx ->
+      viewHolder<ThreadModel>(
+        key = { model -> "Thread:${model.thread.contactSearchKey}" }
+      ) { ctx ->
         LayoutFactory(
           { view -> ThreadViewHolder(onThreadClicked, onThreadLongClicked, lifecycleOwner, requestManager, view) },
           R.layout.conversation_list_item_view
         ).createViewHolder(FrameLayout(ctx))
       }
-      viewHolder<MessageModel> { ctx ->
+      viewHolder<MessageModel>(
+        key = { model -> "Message:${model.message.contactSearchKey}" }
+      ) { ctx ->
         LayoutFactory(
           { view -> MessageViewHolder(onMessageClicked, lifecycleOwner, requestManager, view) },
           R.layout.conversation_list_item_view
         ).createViewHolder(FrameLayout(ctx))
       }
-      viewHolder<GroupWithMembersModel> { ctx ->
+      viewHolder<GroupWithMembersModel>(
+        key = { model -> "GroupWithMembers:${model.groupWithMembers.contactSearchKey}" }
+      ) { ctx ->
         LayoutFactory(
           { view -> GroupWithMembersViewHolder(onGroupWithMembersClicked, lifecycleOwner, requestManager, view) },
           R.layout.conversation_list_item_view
@@ -215,7 +221,7 @@ object ConversationListSearchModels {
 
       (itemView as ConversationListItem).bindThread(
         lifecycleOwner,
-        model.thread.threadRecord,
+        model.thread.threadWithRecipient,
         requestManager,
         Locale.getDefault(),
         emptySet(),
@@ -223,7 +229,7 @@ object ConversationListSearchModels {
         model.thread.query,
         true,
         false,
-        0
+        null
       )
     }
   }

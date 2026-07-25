@@ -1,6 +1,5 @@
 package org.thoughtcrime.securesms.mediasend.v2.gallery
 
-import android.Manifest
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +16,8 @@ import androidx.lifecycle.map
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import org.signal.core.models.media.Media
+import org.signal.core.ui.WindowBreakpoint
+import org.signal.core.ui.getWindowBreakpoint
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.ui.util.StorageUtil
 import org.signal.core.util.Stopwatch
@@ -26,7 +27,6 @@ import org.thoughtcrime.securesms.components.recyclerview.GridDividerDecoration
 import org.thoughtcrime.securesms.conversation.ManageContextMenu
 import org.thoughtcrime.securesms.databinding.V2MediaGalleryFragmentBinding
 import org.thoughtcrime.securesms.mediasend.MediaRepository
-import org.thoughtcrime.securesms.mediasend.camerax.CameraXRemoteConfig
 import org.thoughtcrime.securesms.mediasend.v2.review.MediaGalleryGridItemTouchListener
 import org.thoughtcrime.securesms.util.Material3OnScrollHelper
 import org.thoughtcrime.securesms.util.SystemWindowInsetsSetter
@@ -42,6 +42,10 @@ import org.signal.core.ui.R as CoreUiR
  * media to send.
  */
 class MediaGalleryFragment : Fragment(R.layout.v2_media_gallery_fragment) {
+
+  companion object {
+    private const val SPAN_COUNT = 24
+  }
 
   private val viewModel: MediaGalleryViewModel by viewModels(
     factoryProducer = { MediaGalleryViewModel.Factory(null, null, MediaGalleryRepository(requireContext(), MediaRepository())) }
@@ -79,15 +83,28 @@ class MediaGalleryFragment : Fragment(R.layout.v2_media_gallery_fragment) {
       height = ViewUtil.getStatusBarHeight(view)
     }
 
-    binding.mediaGalleryGrid.layoutManager = object : GridLayoutManager(requireContext(), 4) {
+    binding.mediaGalleryGrid.layoutManager = object : GridLayoutManager(requireContext(), SPAN_COUNT) {
       override fun canScrollVertically() = shouldEnableScrolling
+    }
+
+    val breakpoint = resources.getWindowBreakpoint()
+    val folderSpans = when (breakpoint) {
+      is WindowBreakpoint.Large -> SPAN_COUNT / 4
+      is WindowBreakpoint.Medium -> SPAN_COUNT / 3
+      is WindowBreakpoint.Small -> SPAN_COUNT / 2
+    }
+
+    val fileSpans = when (breakpoint) {
+      is WindowBreakpoint.Large -> SPAN_COUNT / 8
+      is WindowBreakpoint.Medium -> SPAN_COUNT / 6
+      is WindowBreakpoint.Small -> SPAN_COUNT / 4
     }
 
     (binding.mediaGalleryGrid.layoutManager as GridLayoutManager).spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
       override fun getSpanSize(position: Int): Int {
         val isFolder: Boolean = (binding.mediaGalleryGrid.adapter as MappingAdapter).getModel(position).map { it is MediaGallerySelectableItem.FolderModel }.orElse(false)
 
-        return if (isFolder) 2 else 1
+        return if (isFolder) folderSpans else fileSpans
       }
     }
 
@@ -104,24 +121,7 @@ class MediaGalleryFragment : Fragment(R.layout.v2_media_gallery_fragment) {
     if (callbacks.isCameraEnabled()) {
       binding.mediaGalleryToolbar.setOnMenuItemClickListener { item ->
         if (item.itemId == R.id.action_camera) {
-          if (CameraXRemoteConfig.isSupported()) {
-            callbacks.onNavigateToCamera()
-          } else {
-            Permissions.with(this)
-              .request(Manifest.permission.CAMERA)
-              .ifNecessary()
-              .onAllGranted { callbacks.onNavigateToCamera() }
-              .withRationaleDialog(getString(R.string.CameraXFragment_allow_access_camera), getString(R.string.CameraXFragment_to_capture_photos_and_video_allow_camera), R.drawable.ic_camera_24)
-              .withPermanentDenialDialog(
-                getString(R.string.CameraXFragment_signal_needs_camera_access_capture_photos),
-                null,
-                R.string.CameraXFragment_allow_access_camera,
-                R.string.CameraXFragment_to_capture_photos_videos,
-                getParentFragmentManager()
-              )
-              .onAnyDenied { Toast.makeText(requireContext(), R.string.CameraXFragment_signal_needs_camera_access_capture_photos, Toast.LENGTH_LONG).show() }
-              .execute()
-          }
+          callbacks.onNavigateToCamera()
           true
         } else {
           false

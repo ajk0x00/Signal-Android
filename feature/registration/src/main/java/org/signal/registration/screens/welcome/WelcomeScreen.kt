@@ -7,6 +7,8 @@
 
 package org.signal.registration.screens.welcome
 
+import android.content.pm.PackageManager
+import android.util.DisplayMetrics
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,22 +37,26 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.window.layout.WindowMetricsCalculator
 import kotlinx.coroutines.CoroutineScope
 import org.signal.core.ui.WindowBreakpoint
 import org.signal.core.ui.compose.AllDevicePreviews
@@ -65,7 +71,10 @@ import org.signal.core.ui.isWidthExpanded
 import org.signal.core.ui.rememberWindowBreakpoint
 import org.signal.registration.R
 import org.signal.registration.screens.RegistrationScaffold
+import org.signal.registration.screens.attachDebugLogHelper
 import org.signal.registration.test.TestTags
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /**
  * Welcome screen for the registration flow.
@@ -73,37 +82,39 @@ import org.signal.registration.test.TestTags
  */
 @Composable
 fun WelcomeScreen(
+  state: WelcomeScreenState,
   onEvent: (WelcomeScreenEvents) -> Unit,
   modifier: Modifier = Modifier
 ) {
   var showBottomSheet by remember { mutableStateOf(false) }
   val windowBreakpoint = rememberWindowBreakpoint()
   val onRestoreOrTransferClick = { showBottomSheet = true }
-  val onTermsAndPrivacyClick = { onEvent(WelcomeScreenEvents.ViewTermsAndPrivacy) }
+  val displayLinkAsPrimaryOption by rememberDisplayLinkAndSyncAsPrimaryPath(state.isLinkAndSyncAvailable)
 
   when (windowBreakpoint) {
-    WindowBreakpoint.SMALL -> {
+    is WindowBreakpoint.Small -> {
       CompactLayout(
+        state = state,
         onEvent = onEvent,
         onRestoreOrTransferClick = onRestoreOrTransferClick,
-        onTermsAndPrivacyClick = onTermsAndPrivacyClick,
         modifier = modifier
       )
     }
 
-    WindowBreakpoint.MEDIUM -> {
+    is WindowBreakpoint.Medium -> {
       MediumLayout(
+        state = state,
         onEvent = onEvent,
         onRestoreOrTransferClick = onRestoreOrTransferClick,
-        onTermsAndPrivacyClick = onTermsAndPrivacyClick,
         modifier = modifier
       )
     }
 
-    WindowBreakpoint.LARGE_WIDTH, WindowBreakpoint.LARGE_HEIGHT -> {
+    is WindowBreakpoint.Large -> {
       LargeLayout(
+        state = state,
         onEvent = onEvent,
-        onTermsAndPrivacyClick = onTermsAndPrivacyClick,
+        displayLinkAsPrimaryOption = displayLinkAsPrimaryOption,
         onRestoreOrTransferClick = onRestoreOrTransferClick,
         modifier = modifier
       )
@@ -123,8 +134,8 @@ fun WelcomeScreen(
 
 @Composable
 private fun CompactLayout(
+  state: WelcomeScreenState,
   onEvent: (WelcomeScreenEvents) -> Unit,
-  onTermsAndPrivacyClick: () -> Unit,
   onRestoreOrTransferClick: () -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -163,13 +174,14 @@ private fun CompactLayout(
           modifier = Modifier.widthIn(max = 320.dp),
           horizontalAlignment = Alignment.CenterHorizontally
         ) {
-          TermsAndPrivacy(onTermsAndPrivacyClick = onTermsAndPrivacyClick)
+          TermsAndPrivacy(onEvent)
 
-          Spacer(modifier = Modifier.height(24.dp))
+          Spacer(modifier = Modifier.height(16.dp))
 
           PrimaryDeviceCallToActionButtons(
             onEvent = onEvent,
-            onRestoreOrTransferClick = onRestoreOrTransferClick
+            onRestoreOrTransferClick = onRestoreOrTransferClick,
+            showRestoreOrTransfer = state.showRestoreOrTransfer
           )
 
           Spacer(modifier = Modifier.height(48.dp))
@@ -181,8 +193,8 @@ private fun CompactLayout(
 
 @Composable
 private fun MediumLayout(
+  state: WelcomeScreenState,
   onEvent: (WelcomeScreenEvents) -> Unit,
-  onTermsAndPrivacyClick: () -> Unit,
   onRestoreOrTransferClick: () -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -209,7 +221,7 @@ private fun MediumLayout(
         }
 
         TermsAndPrivacy(
-          onTermsAndPrivacyClick = onTermsAndPrivacyClick,
+          onEvent = onEvent,
           modifier = Modifier
             .align(Alignment.BottomCenter)
             .padding(bottom = 24.dp)
@@ -227,7 +239,8 @@ private fun MediumLayout(
         ) {
           PrimaryDeviceCallToActionButtons(
             onEvent = onEvent,
-            onRestoreOrTransferClick = onRestoreOrTransferClick
+            onRestoreOrTransferClick = onRestoreOrTransferClick,
+            showRestoreOrTransfer = state.showRestoreOrTransfer
           )
         }
       }
@@ -237,8 +250,9 @@ private fun MediumLayout(
 
 @Composable
 private fun LargeLayout(
+  state: WelcomeScreenState,
   onEvent: (WelcomeScreenEvents) -> Unit,
-  onTermsAndPrivacyClick: () -> Unit,
+  displayLinkAsPrimaryOption: Boolean,
   onRestoreOrTransferClick: () -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -275,16 +289,23 @@ private fun LargeLayout(
             Spacer(modifier = Modifier.height(77.dp))
 
             TermsAndPrivacy(
-              onTermsAndPrivacyClick = onTermsAndPrivacyClick,
+              onEvent = onEvent,
               modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 8.dp)
             )
 
-            PrimaryDeviceCallToActionButtons(
-              onEvent = onEvent,
-              onRestoreOrTransferClick = onRestoreOrTransferClick
-            )
+            if (displayLinkAsPrimaryOption) {
+              SecondaryDeviceCallToActionButtons(
+                onEvent = onEvent
+              )
+            } else {
+              PrimaryDeviceCallToActionButtons(
+                onEvent = onEvent,
+                onRestoreOrTransferClick = onRestoreOrTransferClick,
+                showRestoreOrTransfer = state.showRestoreOrTransfer
+              )
+            }
           }
         }
       }
@@ -299,7 +320,7 @@ private fun HeroImage(
   Image(
     painter = painterResource(R.drawable.welcome),
     contentDescription = null,
-    modifier = modifier,
+    modifier = modifier.attachDebugLogHelper(),
     contentScale = ContentScale.Fit
   )
 }
@@ -316,16 +337,17 @@ private fun Headline(
     textAlign = textAlign,
     modifier = modifier
       .testTag(TestTags.WELCOME_HEADLINE)
+      .attachDebugLogHelper()
   )
 }
 
 @Composable
 private fun TermsAndPrivacy(
-  onTermsAndPrivacyClick: () -> Unit,
+  onEvent: (WelcomeScreenEvents) -> Unit,
   modifier: Modifier = Modifier
 ) {
   TextButton(
-    onClick = onTermsAndPrivacyClick,
+    onClick = { onEvent(WelcomeScreenEvents.ViewTermsAndPrivacy) },
     colors = ButtonDefaults.textButtonColors(
       contentColor = MaterialTheme.colorScheme.onSurfaceVariant
     ),
@@ -341,7 +363,8 @@ private fun TermsAndPrivacy(
 @Composable
 private fun PrimaryDeviceCallToActionButtons(
   onEvent: (WelcomeScreenEvents) -> Unit,
-  onRestoreOrTransferClick: () -> Unit
+  onRestoreOrTransferClick: () -> Unit,
+  showRestoreOrTransfer: Boolean
 ) {
   Buttons.LargeTonal(
     onClick = { onEvent(WelcomeScreenEvents.Continue) },
@@ -352,18 +375,20 @@ private fun PrimaryDeviceCallToActionButtons(
     Text(stringResource(R.string.RegistrationActivity_continue))
   }
 
-  Spacer(modifier = Modifier.height(17.dp))
+  if (showRestoreOrTransfer) {
+    Spacer(modifier = Modifier.height(16.dp))
 
-  Buttons.LargeTonal(
-    onClick = onRestoreOrTransferClick,
-    colors = ButtonDefaults.filledTonalButtonColors(
-      containerColor = SignalTheme.colors.colorSurface2
-    ),
-    modifier = Modifier
-      .fillMaxWidth()
-      .testTag(TestTags.WELCOME_RESTORE_OR_TRANSFER_BUTTON)
-  ) {
-    Text(stringResource(R.string.registration_activity__restore_or_transfer))
+    Buttons.LargeTonal(
+      onClick = onRestoreOrTransferClick,
+      colors = ButtonDefaults.filledTonalButtonColors(
+        containerColor = SignalTheme.colors.colorSurface2
+      ),
+      modifier = Modifier
+        .fillMaxWidth()
+        .testTag(TestTags.WELCOME_RESTORE_OR_TRANSFER_BUTTON)
+    ) {
+      Text(stringResource(R.string.registration_activity__restore_or_transfer))
+    }
   }
 }
 
@@ -508,11 +533,34 @@ private fun RestoreActionRow(
   }
 }
 
+private const val TABLET_MIN_DIAGONAL_INCHES = 7f
+
+@Composable
+private fun rememberDisplayLinkAndSyncAsPrimaryPath(isLinkAndSyncAvailable: Boolean): State<Boolean> {
+  val context = LocalContext.current
+  val hasHinge = currentWindowAdaptiveInfo().windowPosture.hingeList.isNotEmpty()
+
+  val supportsTelephony = remember(context) {
+    context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)
+  }
+
+  val isLargeDevice = remember(context) {
+    val metrics = WindowMetricsCalculator.getOrCreate().computeMaximumWindowMetrics(context)
+    val dpi = metrics.density * DisplayMetrics.DENSITY_DEFAULT
+    val widthInches = metrics.bounds.width() / dpi
+    val heightInches = metrics.bounds.height() / dpi
+    sqrt(widthInches.pow(2) + heightInches.pow(2)) >= TABLET_MIN_DIAGONAL_INCHES
+  }
+
+  // A hinge means a foldable, which counts as a phone rather than a tablet.
+  return rememberUpdatedState(isLinkAndSyncAvailable && (!supportsTelephony || (isLargeDevice && !hasHinge)))
+}
+
 @AllDevicePreviews
 @Composable
 private fun WelcomeScreenPreview() {
   Previews.Preview {
-    WelcomeScreen(onEvent = {})
+    WelcomeScreen(state = WelcomeScreenState(), onEvent = {})
   }
 }
 

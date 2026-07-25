@@ -42,9 +42,11 @@ import org.signal.archive.proto.Text
 import org.signal.archive.proto.ThreadMergeChatUpdate
 import org.signal.archive.proto.ViewOnceMessage
 import org.signal.core.models.ServiceId
+import org.signal.core.models.database.AttachmentId
 import org.signal.core.util.Base64
 import org.signal.core.util.EventTimer
 import org.signal.core.util.Hex
+import org.signal.core.util.JsonUtils
 import org.signal.core.util.ParallelEventTimer
 import org.signal.core.util.StringUtil
 import org.signal.core.util.UuidUtil
@@ -67,7 +69,6 @@ import org.signal.core.util.requireLong
 import org.signal.core.util.requireLongOrNull
 import org.signal.core.util.requireString
 import org.signal.core.util.toByteArray
-import org.thoughtcrime.securesms.attachments.AttachmentId
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment
 import org.thoughtcrime.securesms.backup.v2.BackupMode
 import org.thoughtcrime.securesms.backup.v2.ExportOddities
@@ -105,7 +106,6 @@ import org.thoughtcrime.securesms.payments.FailureReason
 import org.thoughtcrime.securesms.payments.State
 import org.thoughtcrime.securesms.polls.PollRecord
 import org.thoughtcrime.securesms.recipients.RecipientId
-import org.thoughtcrime.securesms.util.JsonUtils
 import org.thoughtcrime.securesms.util.MediaUtil
 import org.thoughtcrime.securesms.util.mb
 import java.io.Closeable
@@ -435,7 +435,7 @@ class ChatItemArchiveExporter(
 
         else -> {
           val attachments = extraData.attachmentsById[record.id]
-          val sticker = attachments?.firstOrNull { dbAttachment -> dbAttachment.isSticker }
+          val sticker = attachments?.firstOrNull { dbAttachment -> dbAttachment.isSticker && !dbAttachment.quote }
 
           if (sticker?.stickerLocator != null) {
             builder.stickerMessage = sticker.toRemoteStickerMessage(sentTimestamp = record.dateSent, reactions = extraData.reactionsById[id], exportState = exportState)
@@ -647,14 +647,21 @@ private fun BackupMessageRecord.toBasicChatItemBuilder(selfRecipientId: Recipien
     }
   }
 
-  if (!MessageTypes.isExpirationTimerUpdate(record.type) && builder.expiresInMs != null && builder.expireStartDate != null) {
-    val cutoffDuration = ChatItemArchiveExporter.EXPIRATION_CUTOFF.inWholeMilliseconds
-    val expiresAt = builder.expireStartDate!! + builder.expiresInMs!!
-    val threshold = if (exportState.backupMode.isLinkAndSync) backupStartTime else backupStartTime + cutoffDuration
-
-    if (expiresAt < threshold || (builder.expiresInMs!! <= cutoffDuration && !exportState.backupMode.isLinkAndSync)) {
+  if (!MessageTypes.isExpirationTimerUpdate(record.type) && builder.expiresInMs != null) {
+    if (exportState.backupMode.isPlaintextExport) {
       Log.w(TAG, ExportSkips.messageExpiresTooSoon(record.dateSent))
       return null
+    }
+
+    if (builder.expireStartDate != null) {
+      val cutoffDuration = ChatItemArchiveExporter.EXPIRATION_CUTOFF.inWholeMilliseconds
+      val expiresAt = builder.expireStartDate!! + builder.expiresInMs!!
+      val threshold = if (exportState.backupMode.isLinkAndSync) backupStartTime else backupStartTime + cutoffDuration
+
+      if (expiresAt < threshold || (builder.expiresInMs!! <= cutoffDuration && !exportState.backupMode.isLinkAndSync)) {
+        Log.w(TAG, ExportSkips.messageExpiresTooSoon(record.dateSent))
+        return null
+      }
     }
   }
 
@@ -852,8 +859,8 @@ private fun BackupMessageRecord.toRemotePaymentNotificationUpdate(db: SignalData
     PaymentNotification()
   } else {
     PaymentNotification(
-      amountMob = payment.amount.serializeAmountString(),
-      feeMob = payment.fee.serializeAmountString(),
+      amountMob = payment.amount.requireMobileCoin().amountDecimalString,
+      feeMob = payment.fee.requireMobileCoin().amountDecimalString,
       note = payment.note.takeUnless { it.isEmpty() },
       transactionDetails = payment.toRemoteTransactionDetails()
     )

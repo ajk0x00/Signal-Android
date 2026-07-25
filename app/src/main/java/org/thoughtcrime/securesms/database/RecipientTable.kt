@@ -70,7 +70,7 @@ import org.thoughtcrime.securesms.database.SignalDatabase.Companion.threads
 import org.thoughtcrime.securesms.database.model.DistributionListId
 import org.thoughtcrime.securesms.database.model.KeyTransparencyStore
 import org.thoughtcrime.securesms.database.model.RecipientRecord
-import org.thoughtcrime.securesms.database.model.ThreadRecord
+import org.thoughtcrime.securesms.database.model.ThreadWithRecipient
 import org.thoughtcrime.securesms.database.model.databaseprotos.BadgeList
 import org.thoughtcrime.securesms.database.model.databaseprotos.DeviceLastResetTime
 import org.thoughtcrime.securesms.database.model.databaseprotos.ExpiringProfileKeyCredentialColumnData
@@ -424,6 +424,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     fun maskCapabilitiesToLong(capabilities: SignalServiceProfile.Capabilities): Long {
       var value: Long = 0
       value = Bitmask.update(value, Capabilities.STORAGE_SERVICE_ENCRYPTION_V2, Capabilities.BIT_LENGTH, Recipient.Capability.fromBoolean(capabilities.isStorageServiceEncryptionV2).serialize().toLong())
+      value = Bitmask.update(value, Capabilities.USERNAME_SYNC_MESSAGES, Capabilities.BIT_LENGTH, Recipient.Capability.fromBoolean(capabilities.isUsernameSyncMessages).serialize().toLong())
       return value
     }
   }
@@ -773,7 +774,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       return emptyList()
     }
 
-    val prefix = "($ACI_COLUMN NOT NULL OR $PNI_COLUMN NOT NULL) ${if (debounceThreshold != null) " AND ($LAST_PROFILE_FETCH < ${debounceThreshold.inWholeMilliseconds}) AND " else ""}"
+    val prefix = "($ACI_COLUMN NOT NULL OR $PNI_COLUMN NOT NULL) AND ${if (debounceThreshold != null) " ($LAST_PROFILE_FETCH < ${debounceThreshold.inWholeMilliseconds}) AND " else ""}"
     val idQuery = SqlUtil.buildFastCollectionQuery(ID, ids, prefix)
 
     return readableDatabase
@@ -1120,6 +1121,12 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
       put(USERNAME, update.new.proto.username.nullIfBlank())
       put(STORAGE_SERVICE_ID, Base64.encodeWithPadding(update.new.id.raw))
+
+      if (SignalStore.account.isLinkedDevice) {
+        StorageSyncModels.remoteToLocalAvatarColor(update.new.proto.avatarColor)?.let {
+          put(AVATAR_COLOR, it.serialize())
+        }
+      }
 
       if (update.new.proto.hasUnknownFields()) {
         put(STORAGE_SERVICE_PROTO, Base64.encodeWithPadding(update.new.serializedUnknowns!!))
@@ -2119,6 +2126,15 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       AppDependencies.databaseObserver.notifyRecipientChanged(id)
       StorageSyncHelper.scheduleSyncForDataChange()
     }
+  }
+
+  fun isProfileSharing(groupId: GroupId): Boolean {
+    return readableDatabase
+      .select(PROFILE_SHARING)
+      .from(TABLE_NAME)
+      .where("$GROUP_ID = ?", groupId.toString())
+      .run()
+      .readToSingleBoolean(defaultValue = false)
   }
 
   fun setNotificationChannel(id: RecipientId, notificationChannel: String?) {
@@ -3530,7 +3546,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         val selfId = Recipient.self().id.toLong()
         arrayOf(
           ID,
-          """CASE WHEN ${TABLE_NAME}.$ID = $selfId THEN '${includeSelfMode.noteToSelfTitle}' ELSE $SYSTEM_JOINED_NAME END AS $SYSTEM_JOINED_NAME""",
+          """CASE WHEN ${TABLE_NAME}.$ID = $selfId THEN '${includeSelfMode.title}' ELSE $SYSTEM_JOINED_NAME END AS $SYSTEM_JOINED_NAME""",
           E164,
           EMAIL,
           SYSTEM_PHONE_LABEL,
@@ -3540,9 +3556,9 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
           ABOUT_EMOJI,
           EXTRAS,
           GROUPS_IN_COMMON,
-          """CASE WHEN ${TABLE_NAME}.$ID = $selfId THEN '${includeSelfMode.noteToSelfTitle}' ELSE COALESCE(NULLIF($PROFILE_JOINED_NAME, ''), NULLIF($PROFILE_GIVEN_NAME, '')) END AS $SEARCH_PROFILE_NAME""",
+          """CASE WHEN ${TABLE_NAME}.$ID = $selfId THEN '${includeSelfMode.title}' ELSE COALESCE(NULLIF($PROFILE_JOINED_NAME, ''), NULLIF($PROFILE_GIVEN_NAME, '')) END AS $SEARCH_PROFILE_NAME""",
           """
-            CASE WHEN ${TABLE_NAME}.$ID = $selfId THEN '${includeSelfMode.noteToSelfTitle.lowercase()}' ELSE
+            CASE WHEN ${TABLE_NAME}.$ID = $selfId THEN '${includeSelfMode.title.lowercase()}' ELSE
             LOWER(
               COALESCE(
                 NULLIF($NICKNAME_JOINED_NAME, ''),
@@ -3696,6 +3712,25 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     return readableDatabase.query(TABLE_NAME, searchProjection(IncludeSelfMode.Exclude), selection, args, null, null, orderBy)
   }
 
+  fun queryGroupMemberContactsForGroup(groupId: GroupId, inputQuery: String, selfTitle: String): Cursor? {
+    val orderBy = orderByPreferringAlphaOverNumeric(SORT_NAME) + ", " + E164
+    val queryFilter = if (inputQuery.isNotEmpty()) "AND ($SORT_NAME GLOB ? OR $USERNAME GLOB ?)" else ""
+
+    val selection = """
+      $ID IN (SELECT ${GroupTable.MembershipTable.RECIPIENT_ID} FROM ${GroupTable.MembershipTable.TABLE_NAME} WHERE ${GroupTable.MembershipTable.GROUP_ID} = ?)
+      $queryFilter
+    """
+
+    val args = if (queryFilter.isBlank()) {
+      mutableListOf(groupId.toString())
+    } else {
+      val query = SqlUtil.buildCaseInsensitiveGlobPattern(inputQuery)
+      mutableListOf(groupId.toString(), query, query)
+    }
+
+    return readableDatabase.query(TABLE_NAME, searchProjection(IncludeSelfMode.IncludeWithRemap(selfTitle)), selection, args.toTypedArray(), null, null, orderBy)
+  }
+
   fun queryAllContacts(inputQuery: String, includeSelfMode: IncludeSelfMode): Cursor? {
     val query = SqlUtil.buildCaseInsensitiveGlobPattern(inputQuery)
     val selection =
@@ -3803,7 +3838,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     val recipientsWithinInteractionThreshold: MutableSet<RecipientId> = LinkedHashSet()
 
     threadDatabase.readerFor(threadDatabase.getRecentPushConversationList(-1)).use { reader ->
-      var record: ThreadRecord? = reader.getNext()
+      var record: ThreadWithRecipient? = reader.getNext()
 
       while (record != null && record.date > lastInteractionThreshold) {
         val recipient = Recipient.resolved(record.recipient.id)
@@ -4071,7 +4106,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   /**
    * Does not trigger any recipient refreshes -- it is assumed the caller handles this.
    * Will *not* give storageIds to those that shouldn't get them (e.g. MMS groups, unregistered
-   * users).
+   * users) but will rotate ids if one already exists regardless of state.
    */
   fun rotateStorageId(recipientId: RecipientId, logFailure: Boolean = false) {
     val selfId = Recipient.self().id
@@ -4085,7 +4120,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       put(STORAGE_SERVICE_ID, Base64.encodeWithPadding(StorageSyncHelper.generateKey()))
     }
 
-    val query = "$ID = ? AND ($TYPE IN (?, ?, ?, ?) OR $REGISTERED = ? OR $ID = ?)"
+    val query = "$ID = ? AND ($TYPE IN (?, ?, ?, ?) OR $REGISTERED = ? OR $ID = ? OR $STORAGE_SERVICE_ID IS NOT NULL)"
     val args = SqlUtil.buildArgs(recipientId, RecipientType.GV1.id, RecipientType.GV2.id, RecipientType.DISTRIBUTION_LIST.id, RecipientType.CALL_LINK.id, RegisteredState.REGISTERED.id, selfId.toLong())
 
     writableDatabase.update(TABLE_NAME, values, query, args).also { updateCount ->
@@ -4587,12 +4622,12 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
   /**
    * By default, SQLite will prefer numbers over letters when sorting. e.g. (b, a, 1) is sorted as (1, a, b).
-   * This order by will using a GLOB pattern to instead sort it as (a, b, 1).
+   * This order by will using a GLOB pattern to instead sort it as (a, b, 1). We also put null names (eg deleted accounts) at the end
    *
    * @param column The name of the column to sort by
    */
   private fun orderByPreferringAlphaOverNumeric(column: String): String {
-    return "CASE WHEN $column GLOB '[0-9]*' THEN 1 ELSE 0 END, $column"
+    return "CASE WHEN $column IS NULL THEN 2 WHEN $column GLOB '[0-9]*' THEN 1 ELSE 0 END, $column"
   }
 
   private fun <T> Optional<T>.isAbsent(): Boolean {
@@ -4749,7 +4784,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     data object Exclude : IncludeSelfMode
     data object IncludeWithoutRemap : IncludeSelfMode
-    data class IncludeWithRemap(val noteToSelfTitle: String) : IncludeSelfMode
+    data class IncludeWithRemap(val title: String) : IncludeSelfMode
   }
 
   @VisibleForTesting
@@ -4947,8 +4982,9 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 //    const val DELETE_SYNC = 9
 //    const val VERSIONED_EXPIRATION_TIMER = 10
     const val STORAGE_SERVICE_ENCRYPTION_V2 = 11
+    const val USERNAME_SYNC_MESSAGES = 12
 
-    // IMPORTANT: We cannot sore more than 32 capabilities in the bitmask.
+    // IMPORTANT: We cannot store more than 32 capabilities in the bitmask.
   }
 
   enum class VibrateState(val id: Int) {
