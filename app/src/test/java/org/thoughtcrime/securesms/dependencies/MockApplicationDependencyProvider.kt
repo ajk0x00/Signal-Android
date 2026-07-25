@@ -1,8 +1,12 @@
 package org.thoughtcrime.securesms.dependencies
 
+import androidx.media3.exoplayer.ExoPlayer
 import io.mockk.mockk
+import okhttp3.OkHttpClient
 import org.signal.core.util.billing.BillingApi
 import org.signal.core.util.concurrent.DeadlockDetector
+import org.signal.core.util.contentproviders.BlobProvider
+import org.signal.donations.permits.DonationPermitsRepository
 import org.signal.libsignal.net.Network
 import org.signal.libsignal.zkgroup.profiles.ClientZkProfileOperations
 import org.signal.libsignal.zkgroup.receipts.ClientZkReceiptOperations
@@ -19,6 +23,7 @@ import org.signal.network.api.RemoteConfigApi
 import org.signal.network.api.SvrBApi
 import org.signal.network.api.UsernameApi
 import org.signal.network.rest.SignalRestClient
+import org.signal.video.exo.ExoPlayerPool
 import org.thoughtcrime.securesms.components.TypingStatusRepository
 import org.thoughtcrime.securesms.components.TypingStatusSender
 import org.thoughtcrime.securesms.crypto.storage.SignalServiceDataStoreImpl
@@ -45,7 +50,6 @@ import org.thoughtcrime.securesms.shakereport.ShakeToReport
 import org.thoughtcrime.securesms.util.EarlyMessageCache
 import org.thoughtcrime.securesms.util.FrameRateTracker
 import org.thoughtcrime.securesms.video.exo.GiphyMp4Cache
-import org.thoughtcrime.securesms.video.exo.SimpleExoPlayerPool
 import org.thoughtcrime.securesms.webrtc.audio.AudioManagerCompat
 import org.whispersystems.signalservice.api.SignalServiceAccountManager
 import org.whispersystems.signalservice.api.SignalServiceDataStore
@@ -75,6 +79,10 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
     return mockk(relaxed = true)
   }
 
+  override fun provideOkHttpClient(): OkHttpClient {
+    return mockk(relaxed = true)
+  }
+
   override fun provideGroupsV2Operations(signalServiceConfiguration: SignalServiceConfiguration): GroupsV2Operations {
     return mockk(relaxed = true)
   }
@@ -89,6 +97,14 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
     messageApi: MessageApi,
     keysApi: KeysApi
   ): SignalServiceMessageSender {
+    return mockk(relaxed = true)
+  }
+
+  override fun provideMessageService(
+    protocolStore: SignalServiceDataStore,
+    messageApiV2: org.signal.network.api.MessageApiV2,
+    keysApiV2: org.signal.network.api.KeysApiV2
+  ): org.signal.network.service.MessageService {
     return mockk(relaxed = true)
   }
 
@@ -196,7 +212,7 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
     return mockk(relaxed = true)
   }
 
-  override fun provideExoPlayerPool(): SimpleExoPlayerPool {
+  override fun provideExoPlayerPool(): ExoPlayerPool<ExoPlayer> {
     return mockk(relaxed = true)
   }
 
@@ -205,6 +221,10 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
   }
 
   override fun provideDonationsService(donationsApi: DonationsApi): DonationsService {
+    return mockk(relaxed = true)
+  }
+
+  override fun provideDonationPermitsRepository(zkGroupServerPublicParams: ByteArray): DonationPermitsRepository {
     return mockk(relaxed = true)
   }
 
@@ -325,6 +345,10 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
   }
 
   override fun provideKeyTransparencyApi(unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeyTransparencyApi {
+    return mockk(relaxed = true)
+  }
+
+  override fun provideBlobs(): BlobProvider {
     return mockk(relaxed = true)
   }
 }

@@ -29,12 +29,12 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.util.PendingIntentFlags
+import org.signal.core.util.SafeForegroundService
+import org.signal.core.util.UnableToStartException
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.dependencies.AppDependencies
-import org.thoughtcrime.securesms.jobs.UnableToStartException
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
-import org.thoughtcrime.securesms.service.SafeForegroundService
 import org.thoughtcrime.securesms.util.DeviceProperties
 import org.thoughtcrime.securesms.util.TelephonyUtil
 import org.thoughtcrime.securesms.webrtc.CallNotificationBuilder
@@ -411,25 +411,23 @@ class ActiveCallManager(
       val recipient: Recipient = Recipient.resolved(IntentCompat.getParcelableExtra(intent, EXTRA_RECIPIENT_ID, RecipientId::class.java)!!)
       val isVideoCall = intent.getBooleanExtra(EXTRA_IS_VIDEO_CALL, false)
 
-      if (requiresAsyncNotificationLoad) {
-        if (asyncServiceNotification != null && lastAsyncServiceNotificationType == type) {
-          return asyncServiceNotification!!
-        }
-
-        val requestTime = System.currentTimeMillis()
-        lastAsyncServiceNotificationRequestTime = requestTime
-        notificationDisposable = Single.fromCallable { createNotification(type, recipient, isVideoCall, skipAvatarLoad = false) }
-          .subscribeOn(Schedulers.io())
-          .filter { requestTime == lastAsyncServiceNotificationRequestTime }
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribeBy { notification ->
-            lastAsyncServiceNotificationType = type
-            asyncServiceNotification = notification
-            update(this, type, recipient.id, isVideoCall)
-          }
+      if (asyncServiceNotification != null && lastAsyncServiceNotificationType == type) {
+        return asyncServiceNotification!!
       }
 
-      return createNotification(type, recipient, isVideoCall, skipAvatarLoad = requiresAsyncNotificationLoad)
+      val requestTime = System.currentTimeMillis()
+      lastAsyncServiceNotificationRequestTime = requestTime
+      notificationDisposable = Single.fromCallable { createNotification(type, recipient, isVideoCall, skipAvatarLoad = false) }
+        .subscribeOn(Schedulers.io())
+        .filter { requestTime == lastAsyncServiceNotificationRequestTime }
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeBy { notification ->
+          lastAsyncServiceNotificationType = type
+          asyncServiceNotification = notification
+          update(this, type, recipient.id, isVideoCall)
+        }
+
+      return createNotification(type, recipient, isVideoCall, skipAvatarLoad = true)
     }
 
     override fun onServiceUpdateCommandReceived(intent: Intent) {

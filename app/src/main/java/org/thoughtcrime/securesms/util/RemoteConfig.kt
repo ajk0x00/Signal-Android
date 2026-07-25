@@ -841,13 +841,6 @@ object RemoteConfig {
     hotSwappable = true
   )
 
-  /** A comma-separated list of manufacturers that should *not* use CameraX.  */
-  val cameraXModelBlocklist: String by remoteString(
-    key = "android.cameraXModelBlockList.3",
-    defaultValue = "",
-    hotSwappable = true
-  )
-
   /** A comma-separated list of manufacturers that should *not* use CameraX mixed mode.  */
   val cameraXMixedModelBlocklist: String by remoteString(
     key = "android.cameraXMixedModelBlockList.3",
@@ -1165,17 +1158,22 @@ object RemoteConfig {
   )
 
   @JvmStatic
-  @get:JvmName("useHevcEncoder")
-  val useHevcEncoder: Boolean by remoteBoolean(
-    key = "android.useHevcEncoder",
-    defaultValue = false,
-    hotSwappable = false
-  )
-
-  @JvmStatic
   @get:JvmName("useMessageSendRestFallback")
   val useMessageSendRestFallback: Boolean by remoteBoolean(
     key = "android.useMessageSendRestFallback.2",
+    defaultValue = false,
+    hotSwappable = true
+  )
+
+  /**
+   * When true, individual 1:1 sends are routed through [IndividualSendJobV2], which uses the
+   * network-module [org.signal.network.service.MessageService] instead of the legacy
+   * [SignalServiceMessageSender] send path.
+   */
+  @JvmStatic
+  @get:JvmName("useIndividualSendJobV2")
+  val useIndividualSendJobV2: Boolean by remoteBoolean(
+    key = "android.useIndividualSendJobV2.4",
     defaultValue = false,
     hotSwappable = true
   )
@@ -1250,17 +1248,6 @@ object RemoteConfig {
   )
 
   /**
-   * Whether or not to allow 1:1 polls and a higher character limit for questions
-   */
-  @JvmStatic
-  @get:JvmName("pollsV2")
-  val pollsV2: Boolean by remoteBoolean(
-    key = "android.pollsV2",
-    defaultValue = false,
-    hotSwappable = true
-  )
-
-  /**
    * Whether or not to receive admin delete messages.
    */
   @JvmStatic
@@ -1277,7 +1264,7 @@ object RemoteConfig {
   @JvmStatic
   @get:JvmName("sendAdminDelete")
   val sendAdminDelete: Boolean by remoteBoolean(
-    key = "android.sendAdminDelete",
+    key = "android.sendAdminDelete.2",
     defaultValue = false,
     hotSwappable = true
   )
@@ -1319,17 +1306,6 @@ object RemoteConfig {
   @get:JvmName("enableSoftwareVp9")
   val enableSoftwareVp9: Boolean by remoteBoolean(
     key = "android.calling.enableSoftwareVp9",
-    defaultValue = false,
-    hotSwappable = true
-  )
-
-  /**
-   * Whether or not to allow admins to terminate groups.
-   */
-  @JvmStatic
-  @get:JvmName("groupTerminateSend")
-  val groupTerminateSend: Boolean by remoteBoolean(
-    key = "android.groupTerminateSend",
     defaultValue = false,
     hotSwappable = true
   )
@@ -1390,17 +1366,6 @@ object RemoteConfig {
   )
 
   /**
-   * Whether to use our custom [org.signal.core.util.Linkifier] for web URL detection.
-   */
-  @JvmStatic
-  @get:JvmName("useNewLinkifier")
-  val useNewLinkifier: Boolean by remoteBoolean(
-    key = "android.useNewLinkifier",
-    defaultValue = false,
-    hotSwappable = true
-  )
-
-  /**
    * Whether screen sharing is available during calls.
    */
   @JvmStatic
@@ -1430,6 +1395,23 @@ object RemoteConfig {
   val requirePqRatio: Double by remoteDouble(
     key = "android.requirePqRatio",
     defaultValue = 0.0,
+    hotSwappable = true
+  )
+
+  @JvmStatic
+  @get:JvmName("disappearMore")
+  val disappearMore: Boolean by remoteBoolean(
+    key = "android.disappearMore.2",
+    defaultValue = false,
+    hotSwappable = true
+  )
+
+  /** A json string representing possible transcoding configurations for videos */
+  @JvmStatic
+  @get:JvmName("transcodeConfig")
+  val transcodeConfig: String by remoteString(
+    key = "client.attachments.videoTranscodingConfiguration",
+    defaultValue = "",
     hotSwappable = true
   )
 

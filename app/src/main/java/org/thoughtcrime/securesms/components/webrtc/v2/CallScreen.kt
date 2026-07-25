@@ -543,7 +543,7 @@ private fun LargeLocalVideoRenderer(
     participant = localParticipant,
     renderInPip = false,
     raiseHandAllowed = false,
-    mirrorVideo = localParticipant.cameraDirection == CameraState.Direction.FRONT,
+    mirrorVideo = !localParticipant.isScreenSharing && localParticipant.cameraDirection == CameraState.Direction.FRONT,
     showAudioIndicator = false,
     onInfoMoreInfoClick = null,
     modifier = modifier
@@ -620,7 +620,7 @@ private fun ParticipantContextMenu(
         .background(color = MaterialTheme.colorScheme.surfaceVariant)
     )
 
-    if (isSelfAdmin && resolved.isMicrophoneEnabled) {
+    if (resolved.isMicrophoneEnabled) {
       DropdownMenuItem(
         text = { Text(stringResource(R.string.CallParticipantSheet__mute_audio)) },
         leadingIcon = { Icon(painter = painterResource(R.drawable.symbol_mic_slash_24), contentDescription = null) },

@@ -120,6 +120,8 @@ import org.signal.core.ui.permissions.Permissions
 import org.signal.core.ui.util.ThemeUtil
 import org.signal.core.ui.view.Stub
 import org.signal.core.util.ByteLimitInputFilter
+import org.signal.core.util.Debouncer
+import org.signal.core.util.DrawableUtil
 import org.signal.core.util.PendingIntentFlags
 import org.signal.core.util.Result
 import org.signal.core.util.ThreadUtil
@@ -141,6 +143,7 @@ import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.attachments.AttachmentSaver
 import org.thoughtcrime.securesms.audio.AudioRecorder
 import org.thoughtcrime.securesms.backup.v2.ui.subscription.BackupUpgradeAvailabilityChecker
+import org.thoughtcrime.securesms.backup.v2.ui.warning.guardAgainstRecoveryKeyPaste
 import org.thoughtcrime.securesms.badges.gifts.OpenableGift
 import org.thoughtcrime.securesms.badges.gifts.OpenableGiftItemDecoration
 import org.thoughtcrime.securesms.badges.gifts.viewgift.received.ViewReceivedGiftBottomSheet
@@ -278,6 +281,7 @@ import org.thoughtcrime.securesms.groups.ui.migration.GroupsV1MigrationInfoBotto
 import org.thoughtcrime.securesms.groups.ui.migration.GroupsV1MigrationSuggestionsDialog
 import org.thoughtcrime.securesms.groups.v2.GroupBlockJoinRequestResult
 import org.thoughtcrime.securesms.invites.InviteActions
+import org.thoughtcrime.securesms.jobs.AttachmentBackfill
 import org.thoughtcrime.securesms.jobs.ServiceOutageDetectionJob
 import org.thoughtcrime.securesms.keyboard.KeyboardPage
 import org.thoughtcrime.securesms.keyboard.KeyboardPagerFragment
@@ -307,7 +311,7 @@ import org.thoughtcrime.securesms.mms.AudioSlide
 import org.thoughtcrime.securesms.mms.DocumentSlide
 import org.thoughtcrime.securesms.mms.GifSlide
 import org.thoughtcrime.securesms.mms.ImageSlide
-import org.thoughtcrime.securesms.mms.MediaConstraints
+import org.thoughtcrime.securesms.mms.PushMediaConstraints
 import org.thoughtcrime.securesms.mms.QuoteModel
 import org.thoughtcrime.securesms.mms.Slide
 import org.thoughtcrime.securesms.mms.SlideDeck
@@ -322,7 +326,6 @@ import org.thoughtcrime.securesms.polls.PollOption
 import org.thoughtcrime.securesms.polls.PollRecord
 import org.thoughtcrime.securesms.profiles.manage.EditProfileActivity
 import org.thoughtcrime.securesms.profiles.spoofing.ReviewCardDialogFragment
-import org.thoughtcrime.securesms.providers.BlobProvider
 import org.thoughtcrime.securesms.ratelimit.RecaptchaProofBottomSheetFragment
 import org.thoughtcrime.securesms.ratelimit.RecaptchaRequiredEvent
 import org.thoughtcrime.securesms.reactions.ReactionsBottomSheetDialogFragment
@@ -350,11 +353,9 @@ import org.thoughtcrime.securesms.util.BubbleUtil
 import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.ConversationUtil
 import org.thoughtcrime.securesms.util.DateUtils
-import org.thoughtcrime.securesms.util.Debouncer
 import org.thoughtcrime.securesms.util.DeleteDialog
 import org.thoughtcrime.securesms.util.Dialogs
 import org.thoughtcrime.securesms.util.DoubleClickDebouncer
-import org.thoughtcrime.securesms.util.DrawableUtil
 import org.thoughtcrime.securesms.util.FileProviderUtil
 import org.thoughtcrime.securesms.util.FullscreenHelper
 import org.thoughtcrime.securesms.util.MediaUtil
@@ -1014,7 +1015,7 @@ class ConversationFragment :
   override fun onGifSelectSuccess(blobUri: Uri, width: Int, height: Int) {
     setMedia(
       uri = blobUri,
-      mediaType = SlideFactory.MediaType.from(BlobProvider.getMimeType(blobUri))!!,
+      mediaType = SlideFactory.MediaType.from(AppDependencies.blobs.getMimeType(blobUri))!!,
       width = width,
       height = height,
       videoGif = true
@@ -1175,7 +1176,7 @@ class ConversationFragment :
       .doOnSuccess { state ->
         SignalLocalMetrics.ConversationOpen.onDataLoaded()
         conversationItemDecorations.selfRecipientId = Recipient.self().id
-        conversationItemDecorations.setFirstUnreadCount(state.meta.unreadCount)
+        conversationItemDecorations.setUnreadState(state.meta.unreadCount, state.meta.firstUnreadId)
         colorizer.onGroupMembershipChanged(state.meta.groupMemberAcis)
       }
       .observeOn(AndroidSchedulers.mainThread())
@@ -1249,7 +1250,7 @@ class ConversationFragment :
 
     viewLifecycleOwner.lifecycle.addObserver(LastScrolledPositionUpdater(adapter, layoutManager, viewModel))
 
-    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
       var wasTerminated: Boolean? = null
       viewModel
         .groupRecordFlow
@@ -1304,6 +1305,7 @@ class ConversationFragment :
       addTextChangedListener(composeTextEventsListener)
       setStylingChangedListener(composeTextEventsListener)
       setOnClickListener(composeTextEventsListener)
+      guardAgainstRecoveryKeyPaste(this@ConversationFragment)
       filters += ByteLimitInputFilter(MessageUtil.MAX_TOTAL_BODY_SIZE_BYTES)
     }
 
@@ -1404,6 +1406,16 @@ class ConversationFragment :
                 viewModel.onAvatarDownloadFailed()
               }
             }
+          }
+        }
+      }
+    }
+
+    lifecycleScope.launch {
+      lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+        AttachmentBackfill.failures.collect { failure ->
+          if (failure.threadId == args.threadId) {
+            showAttachmentBackfillFailureDialog(failure.reason)
           }
         }
       }
@@ -1612,6 +1624,8 @@ class ConversationFragment :
     }
 
     composeText.setMessageSendType(MessageSendType.SignalMessageSendType)
+
+    invalidateOptionsMenu()
   }
 
   private fun applyReleaseNotesLayout() {
@@ -2168,7 +2182,7 @@ class ConversationFragment :
         inputPanel.clickOnComposeInput()
       }
 
-      is ShareOrDraftData.SetLocation -> attachmentManager.setLocation(data.location, MediaConstraints.getPushMediaConstraints())
+      is ShareOrDraftData.SetLocation -> attachmentManager.setLocation(data.location, PushMediaConstraints(null))
 
       is ShareOrDraftData.SetEditMessage -> {
         composeText.setDraftText(data.draftText)
@@ -2478,7 +2492,11 @@ class ConversationFragment :
         ?: MediaUtil.IMAGE_WEBP
     )
 
-    val quote = inputPanel.quote.orNull()
+    val quote = if (SignalStore.labs.stickerReplies) {
+      inputPanel.quote.orNull()
+    } else {
+      null
+    }
 
     sendMessageWithoutComposeInput(slide = slide, quote = quote, clearCompose = clearCompose)
 
@@ -2889,13 +2907,13 @@ class ConversationFragment :
 
     BlockUnblockDialog.showReportSpamFor(
       requireContext(),
-      lifecycle,
       recipient,
       {
+        val disabledInput = binding.conversationDisabledInput
         messageRequestViewModel
           .onReportSpam()
-          .doOnSubscribe { binding.conversationDisabledInput.showBusy() }
-          .doOnTerminate { binding.conversationDisabledInput.hideBusy() }
+          .doOnSubscribe { disabledInput.showBusy() }
+          .doOnTerminate { disabledInput.hideBusy() }
           .subscribeBy {
             Log.d(TAG, "report spam complete")
             toast(R.string.ConversationFragment_reported_as_spam)
@@ -2905,10 +2923,11 @@ class ConversationFragment :
         null
       } else {
         Runnable {
+          val disabledInput = binding.conversationDisabledInput
           messageRequestViewModel
             .onBlockAndReportSpam()
-            .doOnSubscribe { binding.conversationDisabledInput.showBusy() }
-            .doOnTerminate { binding.conversationDisabledInput.hideBusy() }
+            .doOnSubscribe { disabledInput.showBusy() }
+            .doOnTerminate { disabledInput.hideBusy() }
             .subscribeBy { result ->
               when (result) {
                 is Result.Success -> {
@@ -2937,7 +2956,6 @@ class ConversationFragment :
 
     BlockUnblockDialog.showBlockFor(
       requireContext(),
-      lifecycle,
       recipient
     ) {
       messageRequestViewModel
@@ -2956,7 +2974,6 @@ class ConversationFragment :
 
     BlockUnblockDialog.showUnblockFor(
       requireContext(),
-      lifecycle,
       recipient
     ) {
       messageRequestViewModel
@@ -2969,7 +2986,6 @@ class ConversationFragment :
     messageRequestViewModel
       .onAccept()
       .subscribeWithShowProgress("accept message request")
-      .addTo(disposables)
   }
 
   private fun onDeleteConversation() {
@@ -2982,14 +2998,15 @@ class ConversationFragment :
     ConversationDialogs.displayDeleteDialog(requireContext(), recipient) {
       messageRequestViewModel
         .onDelete()
-        .doAfterSuccess { activity?.finish() }
+        .doAfterSuccess { chatRouter.exitDetailLocation() }
         .subscribeWithShowProgress("delete message request")
     }
   }
 
   private fun Single<Result<Unit, GroupChangeFailureReason>>.subscribeWithShowProgress(logMessage: String): Disposable {
-    return doOnSubscribe { binding.conversationDisabledInput.showBusy() }
-      .doOnTerminate { binding.conversationDisabledInput.hideBusy() }
+    val disabledInput = binding.conversationDisabledInput
+    return doOnSubscribe { disabledInput.showBusy() }
+      .doOnTerminate { disabledInput.hideBusy() }
       .subscribeBy { result ->
         when (result) {
           is Result.Success -> Log.d(TAG, "$logMessage complete")
@@ -3108,6 +3125,19 @@ class ConversationFragment :
       .setPositiveButton(android.R.string.ok, null)
 
     dialogBuilder.show()
+  }
+
+  private fun showAttachmentBackfillFailureDialog(reason: AttachmentBackfill.FailureReason) {
+    val messageRes = when (reason) {
+      AttachmentBackfill.FailureReason.TIMEOUT -> R.string.ConversationFragment_attachment_backfill_timeout
+      AttachmentBackfill.FailureReason.NOT_FOUND -> R.string.ConversationFragment_attachment_backfill_not_found
+    }
+
+    MaterialAlertDialogBuilder(requireContext())
+      .setTitle(R.string.ConversationFragment_attachment_backfill_failed_title)
+      .setMessage(messageRes)
+      .setPositiveButton(android.R.string.ok, null)
+      .show()
   }
 
   private fun handleDisplayDetails(conversationMessage: ConversationMessage) {
@@ -3248,20 +3278,34 @@ class ConversationFragment :
       val toolbarOffset = rect.bottom
       binding.toolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-      val offset = when {
-        meta.getStartPosition() == 0 -> 0
-        meta.shouldJumpToMessage() -> (binding.conversationItemRecycler.height - toolbarOffset) / 4
-        meta.shouldScrollToLastSeen() -> binding.conversationItemRecycler.height - toolbarOffset
-        else -> binding.conversationItemRecycler.height
-      }
+      val startPosition = meta.getStartPosition()
+      Log.d(TAG, "Scrolling to start position $startPosition")
 
-      Log.d(TAG, "Scrolling to start position ${meta.getStartPosition()}")
-      layoutManager.scrollToPositionWithOffset(meta.getStartPosition(), offset) {
-        animationsAllowed = true
-        markReadHelper.stopIgnoringViewReveals(MarkReadHelper.getLatestTimestamp(adapter, layoutManager).orNull())
-        if (meta.shouldJumpToMessage()) {
-          binding.conversationItemRecycler.post {
-            adapter.pulseAtPosition(meta.getStartPosition())
+      if (!meta.messageRequestData.isMessageRequestAccepted) {
+        // Always scroll to the top to show header in MR state
+        layoutManager.scrollToPositionTopAligned(meta.threadSize, toolbarOffset) {
+          animationsAllowed = true
+          markReadHelper.stopIgnoringViewReveals(MarkReadHelper.getLatestTimestamp(adapter, layoutManager).orNull())
+        }
+      } else if (meta.shouldScrollToFirstUnread()) {
+        // Land the divider just below the toolbar.
+        layoutManager.scrollToPositionTopAligned(startPosition, toolbarOffset) {
+          animationsAllowed = true
+          markReadHelper.stopIgnoringViewReveals(MarkReadHelper.getLatestTimestamp(adapter, layoutManager).orNull())
+        }
+      } else {
+        val offset = when {
+          startPosition == 0 -> 0
+          meta.shouldJumpToMessage() -> (binding.conversationItemRecycler.height - toolbarOffset) / 4
+          else -> binding.conversationItemRecycler.height
+        }
+        layoutManager.scrollToPositionWithOffset(startPosition, offset) {
+          animationsAllowed = true
+          markReadHelper.stopIgnoringViewReveals(MarkReadHelper.getLatestTimestamp(adapter, layoutManager).orNull())
+          if (meta.shouldJumpToMessage()) {
+            binding.conversationItemRecycler.post {
+              adapter.pulseAtPosition(startPosition)
+            }
           }
         }
       }
@@ -4720,6 +4764,10 @@ class ConversationFragment :
 
     override fun onReRegisterClicked() {
       startActivity(RegistrationActivity.newIntentForReRegistration(requireContext()))
+    }
+
+    override fun onReLinkDeviceClicked() {
+      startActivity(RegistrationActivity.newIntentForReLinkDevice(requireContext()))
     }
 
     override fun onCancelGroupRequestClicked() {

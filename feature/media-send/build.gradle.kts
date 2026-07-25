@@ -29,12 +29,13 @@ dependencies {
   ktlintRuleset(libs.ktlint.twitter.compose)
 
   // Project dependencies
-  implementation(libs.androidx.ui.test.junit4)
   implementation(project(":core:ui"))
   implementation(project(":core:util"))
   implementation(project(":core:models"))
   implementation(project(":lib:image-editor"))
   implementation(project(":lib:glide"))
+  implementation(project(":lib:video"))
+  implementation(project(":feature:camera"))
 
   // Compose BOM
   platform(libs.androidx.compose.bom).let { composeBom ->
@@ -44,6 +45,7 @@ dependencies {
 
   // Compose dependencies
   implementation(libs.androidx.activity.compose)
+  implementation(libs.androidx.fragment.compose)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.ui.tooling.preview)
   debugImplementation(libs.androidx.compose.ui.tooling.core)
@@ -63,6 +65,12 @@ dependencies {
   // Permissions
   implementation(libs.accompanist.permissions)
 
+  // Media
+  implementation(libs.androidx.media3.exoplayer)
+
+  // CameraX
+  implementation(libs.androidx.camera.core)
+
   // Testing
   testImplementation(testLibs.junit.junit)
   testImplementation(testLibs.mockk)
@@ -72,6 +80,5 @@ dependencies {
   testImplementation(libs.androidx.compose.ui.test.junit4)
   androidTestImplementation(testLibs.androidx.test.ext.junit)
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-  implementation(libs.androidx.compose.ui.test.manifest)
   debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

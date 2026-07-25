@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.signal.core.util.Base64.decode
+import org.signal.core.util.ExpiringProfileCredentialUtil
 import org.signal.core.util.Stopwatch
 import org.signal.core.util.Util
 import org.signal.core.util.concurrent.SignalExecutors
@@ -27,6 +28,7 @@ import org.thoughtcrime.securesms.database.model.RecipientRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobmanager.JsonJobData
+import org.thoughtcrime.securesms.jobmanager.impl.DataRestoreConstraint
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.net.SignalNetwork
@@ -48,7 +50,6 @@ import org.whispersystems.signalservice.api.profiles.ProfileRepository.ProfileFe
 import org.whispersystems.signalservice.api.profiles.ProfileRepository.ProfileFetchResult
 import org.whispersystems.signalservice.api.profiles.ProfileRepository.SignalServiceProfileWithCredential
 import org.whispersystems.signalservice.api.profiles.SignalServiceProfile
-import org.whispersystems.signalservice.api.util.ExpiringProfileCredentialUtil
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
@@ -61,6 +62,7 @@ class RetrieveProfileJob private constructor(parameters: Parameters, private val
   private constructor(recipientIds: Set<RecipientId>, skipDebounce: Boolean) : this(
     parameters = Parameters.Builder()
       .addConstraint(NetworkConstraint.KEY)
+      .addConstraint(DataRestoreConstraint.KEY)
       .apply {
         if (recipientIds.size < 5) {
           setQueue(recipientIds.map { it.toLong() }.sorted().joinToString(separator = "_", prefix = QUEUE_PREFIX))

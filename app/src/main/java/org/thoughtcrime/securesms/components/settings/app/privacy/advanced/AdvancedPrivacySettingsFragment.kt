@@ -273,13 +273,15 @@ private fun AdvancedPrivacySettingsScreen(
         )
       }
 
-      item {
-        Rows.ToggleRow(
-          checked = state.allowSealedSenderFromAnyone,
-          text = stringResource(R.string.preferences_communication__sealed_sender_allow_from_anyone),
-          label = stringResource(R.string.preferences_communication__sealed_sender_allow_from_anyone_description),
-          onCheckChanged = callbacks::onAllowSealedSenderFromAnyoneChanged
-        )
+      if (state.isPrimaryDevice) {
+        item {
+          Rows.ToggleRow(
+            checked = state.allowSealedSenderFromAnyone,
+            text = stringResource(R.string.preferences_communication__sealed_sender_allow_from_anyone),
+            label = stringResource(R.string.preferences_communication__sealed_sender_allow_from_anyone_description),
+            onCheckChanged = callbacks::onAllowSealedSenderFromAnyoneChanged
+          )
+        }
       }
 
       item {
@@ -339,7 +341,8 @@ private fun AdvancedPrivacySettingsScreenPreview() {
         showSealedSenderStatusIcon = false,
         allowSealedSenderFromAnyone = false,
         showProgressSpinner = false,
-        allowAutomaticKeyVerification = false
+        allowAutomaticKeyVerification = false,
+        isPrimaryDevice = true
       ),
       callbacks = AdvancedPrivacySettingsCallbacks.Empty
     )

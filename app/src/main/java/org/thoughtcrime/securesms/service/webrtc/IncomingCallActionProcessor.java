@@ -27,7 +27,7 @@ import org.thoughtcrime.securesms.ringrtc.RemotePeer;
 import org.thoughtcrime.securesms.service.webrtc.state.CallSetupState;
 import org.thoughtcrime.securesms.service.webrtc.state.VideoState;
 import org.thoughtcrime.securesms.service.webrtc.state.WebRtcServiceState;
-import org.thoughtcrime.securesms.util.AppForegroundObserver;
+import org.signal.core.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.NetworkUtil;
 import org.signal.core.util.Util;
 import org.thoughtcrime.securesms.util.RemoteConfig;
@@ -241,9 +241,10 @@ public class IncomingCallActionProcessor extends DeviceAwareActionProcessor {
     SignalDatabase.calls().insertOneToOneCall(remotePeer.getCallId().longValue(),
                                               System.currentTimeMillis(),
                                               remotePeer.getId(),
-                                      currentState.getCallSetupState(activePeer).isRemoteVideoOffer() ? CallTable.Type.VIDEO_CALL : CallTable.Type.AUDIO_CALL,
+                                              currentState.getCallSetupState(activePeer).isRemoteVideoOffer() ? CallTable.Type.VIDEO_CALL : CallTable.Type.AUDIO_CALL,
                                               CallTable.Direction.INCOMING,
-                                              CallTable.Event.ONGOING);
+                                              CallTable.Event.ONGOING,
+                                              false);
 
     if (!shouldDisturbUserWithCall) {
       Log.i(TAG, "Silently ignoring call due to mute settings.");

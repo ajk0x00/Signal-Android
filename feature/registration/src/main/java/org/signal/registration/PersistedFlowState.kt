@@ -23,7 +23,11 @@ data class PersistedFlowState(
   val sessionE164: String?,
   val doNotAttemptRecoveryPassword: Boolean,
   val pendingRestoreOption: PendingRestoreOption? = null,
-  val restoredAepValue: String? = null
+  val restoredAepValue: String? = null,
+  val restoreMethodToken: String? = null,
+  val storageCapable: Boolean = false,
+  val smsVerificationCodeRequest: VerificationCodeRequest? = null,
+  val callVerificationCodeRequest: VerificationCodeRequest? = null
 )
 
 /**
@@ -36,7 +40,11 @@ fun RegistrationFlowState.toPersistedFlowState(): PersistedFlowState {
     sessionE164 = sessionE164,
     doNotAttemptRecoveryPassword = doNotAttemptRecoveryPassword,
     pendingRestoreOption = pendingRestoreOption,
-    restoredAepValue = unverifiedRestoredAep?.value
+    restoredAepValue = unverifiedRestoredAep?.value,
+    restoreMethodToken = restoreMethodToken,
+    storageCapable = storageCapable,
+    smsVerificationCodeRequest = lastSmsVerificationCodeRequest,
+    callVerificationCodeRequest = lastCallVerificationCodeRequest
   )
 }
 
@@ -61,6 +69,10 @@ fun PersistedFlowState.toRegistrationFlowState(
     preExistingRegistrationData = preExistingRegistrationData,
     doNotAttemptRecoveryPassword = doNotAttemptRecoveryPassword,
     pendingRestoreOption = pendingRestoreOption,
-    unverifiedRestoredAep = restoredAepValue?.let { AccountEntropyPool(it) }
+    unverifiedRestoredAep = restoredAepValue?.let { AccountEntropyPool(it) },
+    restoreMethodToken = restoreMethodToken,
+    storageCapable = storageCapable,
+    lastSmsVerificationCodeRequest = smsVerificationCodeRequest,
+    lastCallVerificationCodeRequest = callVerificationCodeRequest
   )
 }

@@ -182,9 +182,9 @@ class PinSettingsViewModel(
           storage = !newOptedOut,
           versionedExpirationTimer = true,
           attachmentBackfill = true,
-          spqr = true
+          spqr = true,
+          usernameChangeSyncMessage = true
         ),
-        name = null,
         pniRegistrationId = RegistrationPreferences.pniRegistrationId,
         recoveryPassword = recoveryPassword
       )

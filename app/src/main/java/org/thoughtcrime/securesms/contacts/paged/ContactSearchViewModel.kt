@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.signal.network.util.Preconditions
 import org.signal.paging.PagedData
 import org.signal.paging.PagingConfig
@@ -62,11 +64,13 @@ class ContactSearchViewModel(
   val arbitraryRepository: ArbitraryRepository?,
   private val searchRepository: SearchRepository,
   private val contactSearchPagedDataSourceRepository: ContactSearchPagedDataSourceRepository,
-  val fixedContacts: Set<ContactSearchKey> = emptySet()
+  val fixedContacts: Set<ContactSearchKey> = emptySet(),
+  private val debounceSearch: Boolean = false
 ) : ViewModel() {
 
   companion object {
     private const val QUERY = "query"
+    private const val SEARCH_DEBOUNCE_MILLIS = 300L
   }
 
   private val safetyNumberRepository: SafetyNumberRepository by lazy { SafetyNumberRepository() }
@@ -87,14 +91,21 @@ class ContactSearchViewModel(
   private val internalFastScrollerEnabled = MutableStateFlow(false)
   private val internalDisplayingContextMenu = MutableStateFlow(false)
   private val internalScrollRequests = MutableSharedFlow<ScrollRequest>(extraBufferCapacity = 1)
+  private val internalSearchInProgress = MutableStateFlow(false)
 
   val fastScrollerEnabled: StateFlow<Boolean> = internalFastScrollerEnabled
   val isDisplayingContextMenu: StateFlow<Boolean> = internalDisplayingContextMenu
   val scrollRequests: SharedFlow<ScrollRequest> = internalScrollRequests
 
+  /** True while a [setConfiguration] call is fetching results off the main thread. Suitable for driving a loading indicator. */
+  val searchInProgress: StateFlow<Boolean> = internalSearchInProgress
+
+  val query: StateFlow<String?> = rawQuery
+
   init {
     viewModelScope.launch {
-      rawQuery.drop(1).debounce(300).collect { query ->
+      val querySource = if (debounceSearch) rawQuery.drop(1).debounce(SEARCH_DEBOUNCE_MILLIS) else rawQuery.drop(1)
+      querySource.collect { query ->
         savedStateHandle[QUERY] = query
         internalConfigurationState.update { it.copy(query = query) }
       }
@@ -143,18 +154,24 @@ class ContactSearchViewModel(
     internalScrollRequests.tryEmit(ScrollRequest(position))
   }
 
-  fun setConfiguration(contactSearchConfiguration: ContactSearchConfiguration) {
-    val pagedDataSource = ContactSearchPagedDataSource(
-      contactSearchConfiguration,
-      arbitraryRepository = arbitraryRepository,
-      searchRepository = searchRepository,
-      contactSearchPagedDataSourceRepository = contactSearchPagedDataSourceRepository
-    )
-    internalTotalCount.value = pagedDataSource.size()
-    pagedData.value = PagedData.createForStateFlow(pagedDataSource, pagingConfig)
+  suspend fun setConfiguration(contactSearchConfiguration: ContactSearchConfiguration) {
+    internalSearchInProgress.value = true
+    try {
+      val (pagedDataSource, size) = withContext(Dispatchers.Default) {
+        val source = ContactSearchPagedDataSource(
+          contactSearchConfiguration,
+          arbitraryRepository = arbitraryRepository,
+          searchRepository = searchRepository,
+          contactSearchPagedDataSourceRepository = contactSearchPagedDataSourceRepository
+        )
+        source to source.size()
+      }
+      internalTotalCount.value = size
+      pagedData.value = PagedData.createForStateFlow(pagedDataSource, pagingConfig, data.value)
+    } finally {
+      internalSearchInProgress.value = false
+    }
   }
-
-  fun getQuery(): String? = rawQuery.value
 
   fun setQuery(query: String?) {
     rawQuery.value = query
@@ -252,6 +269,11 @@ class ContactSearchViewModel(
     controller.value?.onDataInvalidated()
   }
 
+  fun refreshGroupData() {
+    contactSearchPagedDataSourceRepository.clearGroupRecordCache()
+    refresh()
+  }
+
   data class ScrollRequest(val position: Int)
 
   class Factory(
@@ -262,7 +284,8 @@ class ContactSearchViewModel(
     private val arbitraryRepository: ArbitraryRepository?,
     private val searchRepository: SearchRepository,
     private val contactSearchPagedDataSourceRepository: ContactSearchPagedDataSourceRepository,
-    private val fixedContacts: Set<ContactSearchKey> = emptySet()
+    private val fixedContacts: Set<ContactSearchKey> = emptySet(),
+    private val debounceSearch: Boolean = false
   ) : AbstractSavedStateViewModelFactory() {
     override fun <T : ViewModel> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
       return modelClass.cast(
@@ -275,7 +298,8 @@ class ContactSearchViewModel(
           arbitraryRepository = arbitraryRepository,
           searchRepository = searchRepository,
           contactSearchPagedDataSourceRepository = contactSearchPagedDataSourceRepository,
-          fixedContacts = fixedContacts
+          fixedContacts = fixedContacts,
+          debounceSearch = debounceSearch
         )
       ) as T
     }
@@ -299,6 +323,22 @@ fun ContactSearchViewModel.bindAdapterToLifecycle(
       launch { mappingModels.collect { adapter.submitList(it) } }
       launch { controller.collect { it?.let { c -> adapter.setPagingController(c) } } }
       launch { configurationState.collect { setConfiguration(mapStateToConfiguration(it)) } }
+    }
+  }
+}
+
+/**
+ * Observes [ContactSearchViewModel.searchInProgress] scoped to the given [LifecycleOwner], invoking
+ * [onSearchInProgressChanged] on the main thread whenever the loading state changes. Designed for Java
+ * callers that want to drive a loading indicator.
+ */
+fun ContactSearchViewModel.bindSearchInProgressToLifecycle(
+  lifecycleOwner: LifecycleOwner,
+  onSearchInProgressChanged: (Boolean) -> Unit
+) {
+  lifecycleOwner.lifecycleScope.launch {
+    lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+      searchInProgress.collect { onSearchInProgressChanged(it) }
     }
   }
 }

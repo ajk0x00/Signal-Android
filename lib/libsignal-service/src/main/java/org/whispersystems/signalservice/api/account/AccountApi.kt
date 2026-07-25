@@ -7,9 +7,11 @@ package org.whispersystems.signalservice.api.account
 
 import org.signal.core.util.Base64
 import org.signal.core.util.Base64.encodeUrlSafeWithoutPadding
+import org.signal.libsignal.net.RequestResult
 import org.signal.libsignal.usernames.BaseUsernameException
 import org.signal.libsignal.usernames.Username
 import org.signal.network.NetworkResult
+import org.signal.network.rest.RestStatusCodeError
 import org.signal.network.websocket.WebSocketRequestMessage
 import org.signal.network.websocket.delete
 import org.signal.network.websocket.get
@@ -20,6 +22,7 @@ import org.whispersystems.signalservice.api.websocket.SignalWebSocket
 import org.whispersystems.signalservice.internal.push.ConfirmUsernameRequest
 import org.whispersystems.signalservice.internal.push.ConfirmUsernameResponse
 import org.whispersystems.signalservice.internal.push.GcmRegistrationId
+import org.whispersystems.signalservice.internal.push.PhoneNumberDiscoverabilityRequest
 import org.whispersystems.signalservice.internal.push.PushServiceSocket
 import org.whispersystems.signalservice.internal.push.ReserveUsernameRequest
 import org.whispersystems.signalservice.internal.push.ReserveUsernameResponse
@@ -75,6 +78,29 @@ class AccountApi(private val authWebSocket: SignalWebSocket.AuthenticatedWebSock
   fun setAccountAttributes(accountAttributes: AccountAttributes): NetworkResult<Unit> {
     val request = WebSocketRequestMessage.put("/v1/accounts/attributes", accountAttributes)
     return NetworkResult.fromWebSocketRequest(authWebSocket, request)
+  }
+
+  /**
+   * Update the capabilities of the calling device.
+   *
+   * PUT /v1/devices/capabilities
+   * - 200: Success
+   */
+  fun setCapabilities(capabilities: AccountAttributes.Capabilities): RequestResult<Unit, RestStatusCodeError> {
+    val request = WebSocketRequestMessage.put("/v1/devices/capabilities", capabilities)
+    return authWebSocket.fromWebSocketRequest(request, Unit::class)
+  }
+
+  /**
+   * Set whether this account is discoverable by phone number. Unlike [setAccountAttributes], this
+   * dedicated endpoint can be called from a linked device.
+   *
+   * PUT /v2/accounts/phone_number_discoverability
+   * - 204: Success
+   */
+  fun setPhoneNumberDiscoverability(discoverable: Boolean): RequestResult<Unit, RestStatusCodeError> {
+    val request = WebSocketRequestMessage.put("/v2/accounts/phone_number_discoverability", PhoneNumberDiscoverabilityRequest(discoverable))
+    return authWebSocket.fromWebSocketRequest(request, Unit::class)
   }
 
   /**
