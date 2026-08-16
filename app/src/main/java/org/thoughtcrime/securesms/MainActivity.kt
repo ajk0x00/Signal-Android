@@ -174,8 +174,10 @@ import org.thoughtcrime.securesms.notifications.profiles.NotificationProfiles
 import org.thoughtcrime.securesms.profiles.manage.UsernameEditFragment
 import org.thoughtcrime.securesms.service.BackupMediaRestoreService
 import org.thoughtcrime.securesms.service.KeyCachingService
+import org.thoughtcrime.securesms.storage.StorageSyncHelper
 import org.thoughtcrime.securesms.starred.StarredMessagesActivity
 import org.thoughtcrime.securesms.stories.Stories
+import org.thoughtcrime.securesms.stories.StoryAppIconManager
 import org.thoughtcrime.securesms.stories.landing.StoriesLandingFragment
 import org.thoughtcrime.securesms.stories.storiesNavEntries
 import org.thoughtcrime.securesms.util.AppStartup
@@ -876,6 +878,7 @@ class MainActivity :
     dynamicTheme.onResume(this)
 
     toolbarViewModel.refresh()
+    StoryAppIconManager.update(this)
 
     if (SignalStore.misc.shouldShowLinkedDevicesReminder) {
       SignalStore.misc.shouldShowLinkedDevicesReminder = false

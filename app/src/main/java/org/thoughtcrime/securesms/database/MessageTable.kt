@@ -108,6 +108,7 @@ import org.thoughtcrime.securesms.database.model.StoryResult
 import org.thoughtcrime.securesms.database.model.StoryType
 import org.thoughtcrime.securesms.database.model.StoryType.Companion.fromCode
 import org.thoughtcrime.securesms.database.model.StoryViewState
+import org.thoughtcrime.securesms.stories.StoryAppIconManager
 import org.thoughtcrime.securesms.database.model.databaseprotos.AdminDeleteStatus
 import org.thoughtcrime.securesms.database.model.databaseprotos.BodyRangeList
 import org.thoughtcrime.securesms.database.model.databaseprotos.DecryptedGroupV2Context
@@ -3217,6 +3218,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
 
     if (retrieved.storyType.isStory) {
       AppDependencies.databaseObserver.notifyStoryObservers(threads.getRecipientIdForThreadId(threadId)!!)
+      StoryAppIconManager.update()
     }
 
     return Optional.of(

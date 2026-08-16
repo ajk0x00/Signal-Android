@@ -28,6 +28,7 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.sms.MessageSender
 import org.thoughtcrime.securesms.stories.Stories
+import org.thoughtcrime.securesms.stories.StoryAppIconManager
 
 /**
  * Open for testing.
@@ -196,6 +197,7 @@ open class StoryViewerPageRepository(context: Context, private val storyViewStat
         val markedMessageInfo = SignalDatabase.messages.setIncomingMessageViewed(storyPost.id)
         if (markedMessageInfo != null) {
           AppDependencies.databaseObserver.notifyConversationListListeners()
+          StoryAppIconManager.update()
 
           if (storyPost.sender.isReleaseNotes) {
             SignalStore.story.userHasViewedOnboardingStory = true
