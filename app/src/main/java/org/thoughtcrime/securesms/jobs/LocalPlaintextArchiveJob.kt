@@ -103,6 +103,8 @@ class LocalPlaintextArchiveJob internal constructor(
         return Result.failure()
       }
 
+      exportDir.createFile("application/octet-stream", ".nomedia")
+
       stopwatch.split("create-dir")
 
       try {
@@ -172,7 +174,7 @@ class LocalPlaintextArchiveJob internal constructor(
     when {
       exporting != null -> {
         val phase = NotificationPhase.Export(exporting.phase)
-        val title = when (exporting.phase) {
+        val contentText = when (exporting.phase) {
           LocalBackupCreationProgress.ExportPhase.MESSAGE -> {
             if (exporting.frameTotalCount > 0) {
               context.getString(
@@ -190,7 +192,7 @@ class LocalPlaintextArchiveJob internal constructor(
           else -> context.getString(R.string.BackupCreationProgressRow__preparing_backup)
         }
         if (previousPhase != phase || exporting.phase == LocalBackupCreationProgress.ExportPhase.MESSAGE) {
-          notification.replaceTitle(title)
+          notification.replaceContentText(contentText)
           previousPhase = phase
         }
         if (exporting.frameTotalCount == 0L) {
@@ -202,7 +204,7 @@ class LocalPlaintextArchiveJob internal constructor(
 
       transferring != null -> {
         if (previousPhase !is NotificationPhase.Transfer) {
-          notification.replaceTitle(AppDependencies.application.getString(R.string.LocalArchiveJob__exporting_media))
+          notification.replaceContentText(AppDependencies.application.getString(R.string.LocalArchiveJob__exporting_media))
           previousPhase = NotificationPhase.Transfer
         }
         if (transferring.total == 0L) {

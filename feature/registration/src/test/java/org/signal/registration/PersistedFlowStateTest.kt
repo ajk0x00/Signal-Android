@@ -12,6 +12,8 @@ import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.signal.core.models.AccountEntropyPool
 import org.signal.core.models.MasterKey
+import org.signal.network.api.RegistrationApiV2.SessionMetadata
+import org.signal.network.api.RegistrationApiV2.SvrCredentials
 
 class PersistedFlowStateTest {
 
@@ -53,7 +55,7 @@ class PersistedFlowStateTest {
 
   @Test
   fun `round-trip serialization with VerificationCodeEntry`() {
-    val session = NetworkController.SessionMetadata(
+    val session = SessionMetadata(
       id = "session-123",
       nextSms = 1000L,
       nextCall = 2000L,
@@ -104,7 +106,7 @@ class PersistedFlowStateTest {
 
   @Test
   fun `round-trip serialization with PinEntryForRegistrationLock`() {
-    val creds = NetworkController.SvrCredentials(username = "user", password = "pass")
+    val creds = SvrCredentials(username = "user", password = "pass")
     val state = PersistedFlowState(
       backStack = listOf(
         RegistrationRoute.Welcome,
@@ -123,7 +125,7 @@ class PersistedFlowStateTest {
 
   @Test
   fun `round-trip serialization with Captcha route`() {
-    val session = NetworkController.SessionMetadata(
+    val session = SessionMetadata(
       id = "session-456",
       nextSms = null,
       nextCall = null,
@@ -161,7 +163,7 @@ class PersistedFlowStateTest {
 
   @Test
   fun `toPersistedFlowState captures correct fields`() {
-    val session = NetworkController.SessionMetadata(
+    val session = SessionMetadata(
       id = "session-789",
       nextSms = null,
       nextCall = null,
@@ -175,6 +177,7 @@ class PersistedFlowStateTest {
       backStack = listOf(RegistrationRoute.Welcome, RegistrationRoute.PinCreate),
       sessionMetadata = session,
       sessionE164 = "+15551234567",
+      submittedVerificationCode = "123456",
       accountEntropyPool = AccountEntropyPool.generate(),
       storageCapable = true,
       temporaryMasterKey = MasterKey(ByteArray(32)),
@@ -188,6 +191,7 @@ class PersistedFlowStateTest {
     assertThat(persisted.backStack).isEqualTo(flowState.backStack)
     assertThat(persisted.sessionMetadata).isEqualTo(session)
     assertThat(persisted.sessionE164).isEqualTo("+15551234567")
+    assertThat(persisted.submittedVerificationCode).isEqualTo("123456")
     assertThat(persisted.doNotAttemptRecoveryPassword).isEqualTo(true)
     assertThat(persisted.storageCapable).isEqualTo(true)
     assertThat(persisted.smsVerificationCodeRequest).isEqualTo(VerificationCodeRequest("+15551234567", 12_345L))
@@ -196,7 +200,7 @@ class PersistedFlowStateTest {
 
   @Test
   fun `toRegistrationFlowState reconstructs all fields`() {
-    val session = NetworkController.SessionMetadata(
+    val session = SessionMetadata(
       id = "session-101",
       nextSms = null,
       nextCall = null,
@@ -210,6 +214,7 @@ class PersistedFlowStateTest {
       backStack = listOf(RegistrationRoute.Welcome, RegistrationRoute.PinCreate),
       sessionMetadata = session,
       sessionE164 = "+15551234567",
+      submittedVerificationCode = "123456",
       doNotAttemptRecoveryPassword = true,
       storageCapable = true,
       smsVerificationCodeRequest = VerificationCodeRequest("+15551234567", 12_345L),
@@ -228,6 +233,7 @@ class PersistedFlowStateTest {
     assertThat(flowState.backStack).isEqualTo(persisted.backStack)
     assertThat(flowState.sessionMetadata).isEqualTo(session)
     assertThat(flowState.sessionE164).isEqualTo("+15551234567")
+    assertThat(flowState.submittedVerificationCode).isEqualTo("123456")
     assertThat(flowState.accountEntropyPool).isEqualTo(aep)
     assertThat(flowState.temporaryMasterKey).isEqualTo(masterKey)
     assertThat(flowState.preExistingRegistrationData).isNull()

@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">Blockera användare?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">\"%1$s\" kommer inte att kunna ringa eller skicka meddelanden till dig.</string>
     <string name="BlockedUsersActivity__block">Blockera</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -294,6 +296,16 @@
     <string name="ClientDeprecatedActivity_warning">Varning</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">Din version av Signal har upphört att gälla. Du kan visa din meddelandehistorik men du kan inte skicka eller ta emot meddelanden förrän du uppdaterar.</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">Datumet är felaktigt</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">Enhetens datum är felaktigt.\nJustera klockan och försök igen.</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">Enhetens datum och tid är:\n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">Justera datum</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">Ingen webbläsare hittades.</string>
     <string name="CommunicationActions_send_email">Skicka e-post</string>
@@ -388,6 +400,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s tog bort det här meddelandet</string>
     <string name="ConversationItem_you_deleted_this_message">Du tog bort detta meddelande</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">Ta bort för alla?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Admin %1$s tog bort detta meddelande</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -579,7 +593,7 @@
     <string name="ConversationFragment_delete">Ta bort</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">Ta bort överallt</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Detta meddelande tas bort för alla i chatten om de använder en ny version av Signal. De kommer att kunna se att du har tagit bort ett meddelande.</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Det här meddelandet raderas för alla i chatten. De kommer att kunna se att du har raderat ett meddelande.</string>
     <string name="ConversationFragment_quoted_message_not_found">Hittade inte originalmeddelandet.</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">Originalmeddelandet inte längre tillgänglig.</string>
     <string name="ConversationFragment_failed_to_open_message">Det gick inte att öppna meddelandet</string>
@@ -758,17 +772,28 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">Inga olästa chattar</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="one">Ta bort vald chatt?</item>
-        <item quantity="other">Ta bort valda chattar?</item>
+        <item quantity="one">Radera meddelandehistorik?</item>
+        <item quantity="other">Radera meddelandehistorik?</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="one">Detta kommer att ta bort den valda chatten permanent.</item>
-        <item quantity="other">Detta kommer att ta bort alla %1$d valda chattar permanent.</item>
+        <item quantity="one">Alla meddelanden i den här chatten kommer att raderas.</item>
+        <item quantity="other">Alla meddelanden i de här chattarna kommer att raderas.</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="one">Alla meddelanden i den här chatten kommer att raderas. Du kommer fortfarande att vara medlem i den här gruppen.</item>
+        <item quantity="other">Alla meddelanden i de här chattarna kommer att raderas. Du kommer fortfarande att vara medlem i alla grupper som du inte har lämnat än.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="one">Detta tar permanent bort den valda chatten från alla dina enheter.</item>
-        <item quantity="other">Detta tar permanent bort de %1$d valda chattarna från alla dina enheter.</item>
+        <item quantity="one">Alla meddelanden i den här chatten kommer att raderas från alla dina enheter.</item>
+        <item quantity="other">Alla meddelanden i de här chattarna kommer att raderas från alla dina enheter.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="one">Alla meddelanden i den här chatten kommer att raderas från alla dina enheter. Du kommer fortfarande att vara medlem i den här gruppen.</item>
+        <item quantity="other">Alla meddelanden i de här chattarna kommer att raderas från alla dina enheter. Du kommer fortfarande att vara medlem i alla grupper som du inte har lämnat än.</item>
     </plurals>
     <string name="ConversationListFragment_deleting">Tar bort</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1046,13 +1071,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Använd detta Signal-konto på skrivbord eller iPad.</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Använd det här Signal-kontot på en annan enhet.</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">Länka en ny enhet</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s Meddelanden och chattinformation skyddas av totalsträckskryptering på alla enheter</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal på Desktop eller iPad</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Alla meddelanden på länkade enheter är privata</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1118,6 +1143,8 @@
     <string name="LinkDeviceFragment__edit_name">Redigera namn</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">Länkningen avbröts</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">Du kan bara ha %1$d länkade enheter.</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">Stäng inte appen</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -3070,6 +3097,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">Gruppen uppdaterad</string>
@@ -4092,15 +4120,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Senaste</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Detta meddelande</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Nyligen använda</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">Humörsymboler &amp; personer</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">Natur</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">Mat</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">Aktiviteter</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">Platser</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">Objekt</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Symboler</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Flaggor</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Uttryckssymboler</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Inga resultat hittades</string>
 
     <!-- GifQuickSearchOption -->
@@ -5626,18 +5645,6 @@
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">Gruppbeskrivning</string>
 
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">Standard</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">Snabbare, mindre data</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">Hög</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">Långsammare, mera data</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">Mediekvalitet</string>
-
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Förnya din prenumeration på Säkerhetskopiering av Signal</string>
@@ -6193,6 +6200,8 @@
     <string name="ConversationSettingsFragment__end_group">Avsluta gruppen</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">Gruppen har avslutats.</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">Arkivera chatt</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6383,18 +6392,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">Ett eller flera objekt var för stora</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">Ett eller flera objekt var ogiltiga</string>
     <string name="MediaReviewFragment__too_many_items_selected">För många objekt valda</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">Din video trimmades för att rymmas inom storleksgränsen</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">Video inställd för att visas en gång</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">Foto inställt för att visas en gång</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">Video inställd på hög kvalitet</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">Video inställd på standardkvalitet</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">Foto inställt på hög kvalitet</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">Foto inställt på standardkvalitet</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">Lägg till en mediefil</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6403,6 +6405,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">Beskär och rotera</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">Ändra mediekvalitet</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">Spara media</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6413,16 +6417,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">Skicka media</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">Slutför att lägga till ett meddelande</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="one">%1$d objekt inställda på hög kvalitet</item>
-        <item quantity="other">%1$d objekt inställda på hög kvalitet</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="one">%1$d objekt inställda på standardkvalitet</item>
-        <item quantity="other">%1$d objekt inställda på standardkvalitet</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">Avbryt</string>
     <string name="ImageEditorHud__draw">Dra</string>
@@ -6935,7 +6929,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">Belopp</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Tack för att du stöder Signal. Ditt bidrag hjälper till att driva på uppdraget att utveckla öppen källkods integritetsteknik som skyddar yttrandefrihet och möjliggör säker global kommunikation för miljoner runt om i världen. Om du är bosatt i USA, spara detta kvitto för dina skatteuppgifter. Signal Technology Foundation är en skattebefriad ideell organisation i USA enligt avsnitt 501c3 i Internal Revenue Code. Vårt federala skatte-ID är 82–4506840.</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Tack för att du stöder Signal. Ditt bidrag hjälper till att främja uppdraget att skydda yttrandefriheten och möjliggöra säker global kommunikation för miljontals människor runt om i världen, genom öppen källkod för integritetsskydd. Spara detta kvitto för dina skatteuppgifter om du är bosatt i USA. Signal Technology Foundation är en skattebefriad ideell organisation i USA enligt avsnitt 501c3 i Internal Revenue Code. Vårt federala skatte-ID är 82-4506840. Signal har inte tillhandahållit några varor eller tjänster i utbyte mot detta bidrag.</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">Inga kvitton</string>
 

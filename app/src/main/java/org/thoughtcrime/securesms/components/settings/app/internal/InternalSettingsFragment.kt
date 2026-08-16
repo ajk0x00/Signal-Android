@@ -25,7 +25,6 @@ import org.signal.core.ui.BottomSheetUtil
 import org.signal.core.ui.permissions.PermissionDeniedBottomSheet
 import org.signal.core.ui.permissions.RationaleDialog
 import org.signal.core.util.AppUtil
-import org.signal.core.util.ThreadUtil
 import org.signal.core.util.Util
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.concurrent.SimpleTask
@@ -717,10 +716,10 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
       )
 
       switchPref(
-        title = DSLSettingsText.from("Disable Telecom integration"),
-        isChecked = state.callingDisableTelecom,
+        title = DSLSettingsText.from("Use Telecom integration"),
+        isChecked = state.callingUseTelecom,
         onClick = {
-          viewModel.setInternalCallingDisableTelecom(!state.callingDisableTelecom)
+          viewModel.setInternalCallingUseTelecom(!state.callingUseTelecom)
         }
       )
 
@@ -774,6 +773,50 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
         isEnabled = state.callingSetAudioConfig,
         onClick = {
           viewModel.setInternalCallingUseInputVoiceComm(!state.callingUseInputVoiceComm)
+        }
+      )
+
+      switchPref(
+        title = DSLSettingsText.from("Set Video Config:"),
+        isChecked = state.callingSetVideoConfig,
+        onClick = {
+          viewModel.setInternalCallingSetVideoConfig(!state.callingSetVideoConfig)
+        }
+      )
+
+      switchPref(
+        title = DSLSettingsText.from("    Use Hardware Vp9 Encode"),
+        isChecked = state.callingUseHardwareVp9Encode,
+        isEnabled = state.callingSetVideoConfig,
+        onClick = {
+          viewModel.setInternalCallingUseHardwareVp9Encode(!state.callingUseHardwareVp9Encode)
+        }
+      )
+
+      switchPref(
+        title = DSLSettingsText.from("    Use Hardware Vp9 Decode"),
+        isChecked = state.callingUseHardwareVp9Decode,
+        isEnabled = state.callingSetVideoConfig,
+        onClick = {
+          viewModel.setInternalCallingUseHardwareVp9Decode(!state.callingUseHardwareVp9Decode)
+        }
+      )
+
+      switchPref(
+        title = DSLSettingsText.from("    Use Software Vp9 Encode"),
+        isChecked = state.callingUseSoftwareVp9Encode,
+        isEnabled = state.callingSetVideoConfig,
+        onClick = {
+          viewModel.setInternalCallingUseSoftwareVp9Encode(!state.callingUseSoftwareVp9Encode)
+        }
+      )
+
+      switchPref(
+        title = DSLSettingsText.from("    Use Software Vp9 Decode"),
+        isChecked = state.callingUseSoftwareVp9Decode,
+        isEnabled = state.callingSetVideoConfig,
+        onClick = {
+          viewModel.setInternalCallingUseSoftwareVp9Decode(!state.callingUseSoftwareVp9Decode)
         }
       )
 
@@ -1055,19 +1098,17 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
       .setTitle("Unregister?")
       .setMessage("Are you sure? You'll have to re-register to use Signal again -- no promises that the process will go smoothly.")
       .setPositiveButton(android.R.string.ok) { _, _ ->
-        AdvancedPrivacySettingsRepository(requireContext()).disablePushMessages {
-          ThreadUtil.runOnMain {
-            when (it) {
-              AdvancedPrivacySettingsRepository.DisablePushMessagesResult.SUCCESS -> {
-                SignalStore.account.setRegistered(false)
-                SignalStore.registration.clearRegistrationComplete()
-                SignalStore.registration.hasUploadedProfile = false
-                Toast.makeText(context, "Unregistered!", Toast.LENGTH_SHORT).show()
-              }
+        lifecycleScope.launch {
+          when (AdvancedPrivacySettingsRepository(requireContext()).disablePushMessages()) {
+            AdvancedPrivacySettingsRepository.DisablePushMessagesResult.SUCCESS -> {
+              SignalStore.account.setRegistered(false)
+              SignalStore.registration.clearRegistrationComplete()
+              SignalStore.registration.hasUploadedProfile = false
+              Toast.makeText(context, "Unregistered!", Toast.LENGTH_SHORT).show()
+            }
 
-              AdvancedPrivacySettingsRepository.DisablePushMessagesResult.NETWORK_ERROR -> {
-                Toast.makeText(context, "Network error!", Toast.LENGTH_SHORT).show()
-              }
+            AdvancedPrivacySettingsRepository.DisablePushMessagesResult.NETWORK_ERROR -> {
+              Toast.makeText(context, "Network error!", Toast.LENGTH_SHORT).show()
             }
           }
         }

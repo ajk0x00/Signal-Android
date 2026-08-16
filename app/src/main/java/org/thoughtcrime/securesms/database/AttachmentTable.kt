@@ -52,6 +52,7 @@ import org.signal.core.util.forEach
 import org.signal.core.util.groupBy
 import org.signal.core.util.isNull
 import org.signal.core.util.logging.Log
+import org.signal.core.util.nullIfEmpty
 import org.signal.core.util.readToList
 import org.signal.core.util.readToSet
 import org.signal.core.util.readToSingleInt
@@ -1722,6 +1723,14 @@ class AttachmentTable(
       .run()
   }
 
+  fun resetRestorableAttachmentsInProgressToNeedsRestore(): Int {
+    return writableDatabase
+      .update(TABLE_NAME)
+      .values(TRANSFER_STATE to TRANSFER_NEEDS_RESTORE)
+      .where("$TRANSFER_STATE = ?", TRANSFER_RESTORE_IN_PROGRESS)
+      .run()
+  }
+
   fun setRestoreTransferState(attachmentId: AttachmentId, state: Int) {
     setRestoreTransferState(listOf(attachmentId), state)
   }
@@ -2499,7 +2508,7 @@ class AttachmentTable(
       WHERE
         $STICKER_PACK_ID NOT NULL AND
         $STICKER_PACK_KEY NOT NULL AND
-        $STICKER_PACK_ID NOT IN (SELECT DISTINCT ${StickerTable.PACK_ID} FROM ${StickerTable.TABLE_NAME})
+        $STICKER_PACK_ID NOT IN (SELECT DISTINCT ${StickerTables.Sticker.PACK_ID} FROM ${StickerTables.Sticker.TABLE_NAME})
     """
 
     return readableDatabase.rawQuery(query, null)
@@ -2827,6 +2836,10 @@ class AttachmentTable(
     }
 
     if (newProperties.videoTrimEndTimeUs != potentialMatchProperties.videoTrimEndTimeUs) {
+      return false
+    }
+
+    if (newProperties.videoMuted != potentialMatchProperties.videoMuted) {
       return false
     }
 
@@ -3501,7 +3514,7 @@ class AttachmentTable(
       height = cursor.requireInt(HEIGHT),
       quote = cursor.requireBoolean(QUOTE),
       quoteTargetContentType = cursor.requireString(QUOTE_TARGET_CONTENT_TYPE),
-      caption = cursor.requireString(CAPTION),
+      caption = cursor.requireString(CAPTION).nullIfEmpty(),
       stickerLocator = cursor.readStickerLocator(),
       blurHash = if (MediaUtil.isAudioType(contentType)) null else BlurHash.parseOrNull(cursor.requireString(BLUR_HASH)),
       audioHash = if (MediaUtil.isAudioType(contentType)) AudioHash.parseOrNull(cursor.requireString(BLUR_HASH)) else null,

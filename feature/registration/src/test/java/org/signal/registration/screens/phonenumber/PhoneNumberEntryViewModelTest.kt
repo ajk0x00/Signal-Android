@@ -33,8 +33,18 @@ import org.junit.Before
 import org.junit.Test
 import org.signal.core.models.AccountEntropyPool
 import org.signal.libsignal.net.RequestResult
+import org.signal.network.api.RegistrationApiV2.CheckSvrCredentialsError
+import org.signal.network.api.RegistrationApiV2.CheckSvrCredentialsResponse
+import org.signal.network.api.RegistrationApiV2.CreateSessionError
+import org.signal.network.api.RegistrationApiV2.RegisterAccountError
+import org.signal.network.api.RegistrationApiV2.RegisterAccountResponse
+import org.signal.network.api.RegistrationApiV2.RegistrationLockResponse
+import org.signal.network.api.RegistrationApiV2.RequestVerificationCodeError
+import org.signal.network.api.RegistrationApiV2.SessionMetadata
+import org.signal.network.api.RegistrationApiV2.SvrCredentials
+import org.signal.network.api.RegistrationApiV2.ThirdPartyServiceErrorResponse
+import org.signal.network.api.RegistrationApiV2.UpdateSessionError
 import org.signal.registration.KeyMaterial
-import org.signal.registration.NetworkController
 import org.signal.registration.PreExistingRegistrationData
 import org.signal.registration.RegistrationFlowEvent
 import org.signal.registration.RegistrationFlowState
@@ -475,6 +485,73 @@ class PhoneNumberEntryViewModelTest {
     assertThat(state.nationalNumber).isEqualTo("15123456789")
   }
 
+  // ==================== Trunk Prefix Normalization Tests ====================
+
+  @Test
+  fun `NextClicked strips a redundant leading trunk prefix before showing the confirmation dialog`() = runTest {
+    // Dutch users habitually type their number with the leading national '0' (e.g. 0612345678), which must not end
+    // up in the E164 (+31612345678, not +310612345678).
+    val initialState = PhoneNumberEntryState(regionCode = "NL", countryCode = "31", nationalNumber = "0612345678", formattedNumber = "06 12345678")
+
+    viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.NextClicked, parentEventEmitter, stateEmitter)
+
+    assertThat(emittedStates).hasSize(1)
+    val result = emittedStates.last()
+    assertThat(result.nationalNumber).isEqualTo("612345678")
+    assertThat(result.countryCode).isEqualTo("31")
+    assertThat(result.isNumberPossible).isTrue()
+    assertThat(result.dialogs.confirmNumber).isTrue()
+  }
+
+  @Test
+  fun `NextClicked leaves a number without a trunk prefix unchanged`() = runTest {
+    val initialState = PhoneNumberEntryState(regionCode = "US", countryCode = "1", nationalNumber = "5551234567", formattedNumber = "(555) 123-4567")
+
+    viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.NextClicked, parentEventEmitter, stateEmitter)
+
+    assertThat(emittedStates).hasSize(1)
+    val result = emittedStates.last()
+    assertThat(result.nationalNumber).isEqualTo("5551234567")
+    assertThat(result.formattedNumber).isEqualTo("(555) 123-4567")
+    assertThat(result.dialogs.confirmNumber).isTrue()
+  }
+
+  @Test
+  fun `NextClicked preserves a leading zero that is a significant part of the number`() = runTest {
+    // Italian landlines include the leading zero as part of the number itself, so it must not be stripped.
+    val initialState = PhoneNumberEntryState(regionCode = "IT", countryCode = "39", nationalNumber = "0612345678", formattedNumber = "06 1234 5678")
+
+    viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.NextClicked, parentEventEmitter, stateEmitter)
+
+    assertThat(emittedStates).hasSize(1)
+    val result = emittedStates.last()
+    assertThat(result.nationalNumber).isEqualTo("0612345678")
+    assertThat(result.dialogs.confirmNumber).isTrue()
+  }
+
+  @Test
+  fun `PhoneNumberConfirmed submits the E164 without a redundant leading trunk prefix`() = runTest {
+    val sessionMetadata = createSessionMetadata(requestedInformation = emptyList())
+
+    coEvery { mockRepository.createSession(any()) } returns
+      RequestResult.Success(sessionMetadata)
+    coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
+      RequestResult.Success(sessionMetadata)
+
+    val initialState = PhoneNumberEntryState(
+      regionCode = "NL",
+      countryCode = "31",
+      nationalNumber = "0612345678"
+    )
+
+    viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.PhoneNumberConfirmed, parentEventEmitter, stateEmitter)
+
+    coVerify(exactly = 1) { mockRepository.createSession("+31612345678") }
+    assertThat(emittedStates.last().nationalNumber).isEqualTo("612345678")
+    assertThat(emittedEvents.filterIsInstance<RegistrationFlowEvent.E164Chosen>())
+      .isEqualTo(listOf(RegistrationFlowEvent.E164Chosen("+31612345678")))
+  }
+
   // ==================== FullPhoneNumberEntered Tests ====================
 
   @Test
@@ -587,7 +664,7 @@ class PhoneNumberEntryViewModelTest {
 
   @Test
   fun `Initialize loads restored SVR credentials into state and marks it initialized`() = runTest {
-    val credentials = listOf(NetworkController.SvrCredentials(username = "user", password = "pass"))
+    val credentials = listOf(SvrCredentials(username = "user", password = "pass"))
     coEvery { mockRepository.getRestoredSvrCredentials() } returns credentials
 
     viewModel.applyEvent(PhoneNumberEntryState(), PhoneNumberEntryScreenEvents.Initialize, parentEventEmitter, stateEmitter)
@@ -720,7 +797,7 @@ class PhoneNumberEntryViewModelTest {
   fun `PhoneNumberSubmitted handles rate limiting from createSession`() = runTest {
     coEvery { mockRepository.createSession(any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.CreateSessionError.RateLimited(60.seconds)
+        CreateSessionError.RateLimited(60.seconds)
       )
 
     val initialState = PhoneNumberEntryState(
@@ -741,7 +818,7 @@ class PhoneNumberEntryViewModelTest {
   fun `PhoneNumberSubmitted handles invalid request from createSession`() = runTest {
     coEvery { mockRepository.createSession(any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.CreateSessionError.InvalidRequest("Bad request")
+        CreateSessionError.InvalidRequest("Bad request")
       )
 
     val initialState = PhoneNumberEntryState(
@@ -951,7 +1028,7 @@ class PhoneNumberEntryViewModelTest {
       RequestResult.Success(sessionMetadata)
     coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RequestVerificationCodeError.RateLimited(30.seconds, sessionMetadata)
+        RequestVerificationCodeError.RateLimited(30.seconds, sessionMetadata)
       )
 
     val initialState = PhoneNumberEntryState(
@@ -986,7 +1063,7 @@ class PhoneNumberEntryViewModelTest {
       RequestResult.Success(sessionMetadata)
     coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RequestVerificationCodeError.SessionNotFound("Session expired")
+        RequestVerificationCodeError.SessionNotFound("Session expired")
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1012,7 +1089,7 @@ class PhoneNumberEntryViewModelTest {
       RequestResult.Success(sessionMetadata)
     coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RequestVerificationCodeError.CouldNotFulfillWithRequestedTransport(sessionMetadata)
+        RequestVerificationCodeError.CouldNotFulfillWithRequestedTransport(sessionMetadata)
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1037,8 +1114,8 @@ class PhoneNumberEntryViewModelTest {
       RequestResult.Success(sessionMetadata)
     coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RequestVerificationCodeError.ThirdPartyServiceError(
-          NetworkController.ThirdPartyServiceErrorResponse("Provider error", false)
+        RequestVerificationCodeError.ThirdPartyServiceError(
+          ThirdPartyServiceErrorResponse("Provider error", false)
         )
       )
 
@@ -1140,7 +1217,7 @@ class PhoneNumberEntryViewModelTest {
     coEvery { mockRepository.awaitPushChallengeToken() } returns "test-push-challenge-token"
     coEvery { mockRepository.submitPushChallengeToken(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.UpdateSessionError.RejectedUpdate("Invalid token")
+        UpdateSessionError.RejectedUpdate("Invalid token")
       )
     coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
       RequestResult.Success(sessionWithPushChallenge)
@@ -1276,7 +1353,7 @@ class PhoneNumberEntryViewModelTest {
     coEvery { mockRepository.awaitPushChallengeToken() } returns "test-push-challenge-token"
     coEvery { mockRepository.submitPushChallengeToken(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.UpdateSessionError.SessionNotFound("Session expired")
+        UpdateSessionError.SessionNotFound("Session expired")
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1352,7 +1429,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.submitCaptchaToken(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.UpdateSessionError.RateLimited(45.seconds, sessionMetadata)
+        UpdateSessionError.RateLimited(45.seconds, sessionMetadata)
       )
 
     viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.CaptchaCompleted("captcha-token"), parentEventEmitter, stateEmitter)
@@ -1379,7 +1456,7 @@ class PhoneNumberEntryViewModelTest {
       RequestResult.Success(sessionMetadata)
     coEvery { mockRepository.requestVerificationCode(any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RequestVerificationCodeError.RateLimited(45.seconds, sessionMetadata)
+        RequestVerificationCodeError.RateLimited(45.seconds, sessionMetadata)
       )
 
     clockedViewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.CaptchaCompleted("captcha-token"), parentEventEmitter, stateEmitter)
@@ -1402,7 +1479,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.submitCaptchaToken(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.UpdateSessionError.RejectedUpdate("Invalid captcha")
+        UpdateSessionError.RejectedUpdate("Invalid captcha")
       )
 
     viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.CaptchaCompleted("captcha-token"), parentEventEmitter, stateEmitter)
@@ -1418,7 +1495,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.submitCaptchaToken(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.UpdateSessionError.SessionNotFound("Session expired")
+        UpdateSessionError.SessionNotFound("Session expired")
       )
 
     viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.CaptchaCompleted("captcha-token"), parentEventEmitter, stateEmitter)
@@ -1457,7 +1534,7 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `ParentStateChanged clears restoredSvrCredentials when doNotAttemptRecoveryPassword is true`() = runTest {
     val credentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
     val state = PhoneNumberEntryState(restoredSvrCredentials = credentials)
     val parentFlowState = RegistrationFlowState(doNotAttemptRecoveryPassword = true)
@@ -1470,7 +1547,7 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `ParentStateChanged keeps restoredSvrCredentials when doNotAttemptRecoveryPassword is false`() = runTest {
     val credentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
     val state = PhoneNumberEntryState(restoredSvrCredentials = credentials)
     val parentFlowState = RegistrationFlowState(doNotAttemptRecoveryPassword = false)
@@ -1545,7 +1622,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.SessionNotFoundOrNotVerified("Not found")
+        RegisterAccountError.SessionNotFoundOrNotVerified("Not found")
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1566,7 +1643,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.DeviceTransferPossible
+        RegisterAccountError.DeviceTransferPossible
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1584,15 +1661,15 @@ class PhoneNumberEntryViewModelTest {
       coEvery { e164 } returns "+15551234567"
       coEvery { registrationLockEnabled } returns false
     }
-    val svrCredentials = NetworkController.SvrCredentials(username = "user", password = "pass")
-    val registrationLockData = NetworkController.RegistrationLockResponse(
+    val svrCredentials = SvrCredentials(username = "user", password = "pass")
+    val registrationLockData = RegistrationLockResponse(
       timeRemaining = 60000L,
       svr2Credentials = svrCredentials
     )
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.RegistrationLock(registrationLockData)
+        RegisterAccountError.RegistrationLock(registrationLockData)
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1603,8 +1680,10 @@ class PhoneNumberEntryViewModelTest {
 
     viewModel.applyEvent(initialState, PhoneNumberEntryScreenEvents.PhoneNumberConfirmed, parentEventEmitter, stateEmitter)
 
-    assertThat(emittedEvents).hasSize(1)
-    assertThat(emittedEvents.first())
+    // The e164 must be recorded before navigating, otherwise the PIN entry screen has nothing to register with and resets the flow
+    assertThat(emittedEvents).hasSize(2)
+    assertThat(emittedEvents[0]).isEqualTo(RegistrationFlowEvent.E164Chosen("+15551234567"))
+    assertThat(emittedEvents[1])
       .isInstanceOf<RegistrationFlowEvent.NavigateToScreen>()
       .prop(RegistrationFlowEvent.NavigateToScreen::route)
       .isInstanceOf<RegistrationRoute.PinEntryForRegistrationLock>()
@@ -1616,17 +1695,17 @@ class PhoneNumberEntryViewModelTest {
     val keyMaterial = mockk<KeyMaterial>(relaxed = true) {
       every { accountEntropyPool } returns aep
     }
-    val response = mockk<NetworkController.RegisterAccountResponse>(relaxed = true)
-    val registrationLockData = NetworkController.RegistrationLockResponse(
+    val response = mockk<RegisterAccountResponse>(relaxed = true)
+    val registrationLockData = RegistrationLockResponse(
       timeRemaining = 60000L,
-      svr2Credentials = NetworkController.SvrCredentials(username = "user", password = "pass")
+      svr2Credentials = SvrCredentials(username = "user", password = "pass")
     )
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), registrationLock = any<String>(), any(), any(), any()) } returns
       RequestResult.Success(response to keyMaterial)
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), registrationLock = null, any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.RegistrationLock(registrationLockData)
+        RegisterAccountError.RegistrationLock(registrationLockData)
       )
 
     val initialState = PhoneNumberEntryState(sessionE164 = "+15551234567")
@@ -1653,14 +1732,14 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `LocalBackupRestoreCompleted with RegistrationLock when already providing the reglock token navigates to PinEntryForRegistrationLock`() = runTest {
     val aep = AccountEntropyPool.generate()
-    val registrationLockData = NetworkController.RegistrationLockResponse(
+    val registrationLockData = RegistrationLockResponse(
       timeRemaining = 60000L,
-      svr2Credentials = NetworkController.SvrCredentials(username = "user", password = "pass")
+      svr2Credentials = SvrCredentials(username = "user", password = "pass")
     )
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.RegistrationLock(registrationLockData)
+        RegisterAccountError.RegistrationLock(registrationLockData)
       )
 
     val initialState = PhoneNumberEntryState(sessionE164 = "+15551234567")
@@ -1689,7 +1768,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.RateLimited(30.seconds)
+        RegisterAccountError.RateLimited(30.seconds)
       )
 
     val initialState = PhoneNumberEntryState(
@@ -1713,7 +1792,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.InvalidRequest("Bad request")
+        RegisterAccountError.InvalidRequest("Bad request")
       )
     coEvery { mockRepository.createSession(any()) } returns
       RequestResult.Success(sessionMetadata)
@@ -1744,7 +1823,7 @@ class PhoneNumberEntryViewModelTest {
 
     coEvery { mockRepository.registerAccountWithRecoveryPassword(any(), any(), any(), any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.RegisterAccountError.RegistrationRecoveryPasswordIncorrect("Wrong password")
+        RegisterAccountError.RegistrationRecoveryPasswordIncorrect("Wrong password")
       )
     coEvery { mockRepository.createSession(any()) } returns
       RequestResult.Success(sessionMetadata)
@@ -1839,10 +1918,10 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `PhoneNumberSubmitted with valid SVR credentials navigates to PinEntryForSmsBypass`() = runTest {
     val svrCredentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
-    val validCredential = NetworkController.SvrCredentials(username = "user", password = "pass")
-    val checkResponse = NetworkController.CheckSvrCredentialsResponse(
+    val validCredential = SvrCredentials(username = "user", password = "pass")
+    val checkResponse = CheckSvrCredentialsResponse(
       matches = mapOf("user:pass" to "match")
     )
 
@@ -1868,9 +1947,9 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `PhoneNumberSubmitted with no matching SVR credentials falls through to session creation`() = runTest {
     val svrCredentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
-    val checkResponse = NetworkController.CheckSvrCredentialsResponse(
+    val checkResponse = CheckSvrCredentialsResponse(
       matches = mapOf("user:pass" to "no-match")
     )
     val sessionMetadata = createSessionMetadata(requestedInformation = emptyList())
@@ -1900,7 +1979,7 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `PhoneNumberSubmitted with SVR credentials network error falls through to session creation`() = runTest {
     val svrCredentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
     val sessionMetadata = createSessionMetadata(requestedInformation = emptyList())
 
@@ -1929,7 +2008,7 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `PhoneNumberSubmitted with SVR credentials application error falls through to session creation`() = runTest {
     val svrCredentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
     val sessionMetadata = createSessionMetadata(requestedInformation = emptyList())
 
@@ -1957,13 +2036,13 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `PhoneNumberSubmitted with SVR credentials invalid request falls through to session creation`() = runTest {
     val svrCredentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
     val sessionMetadata = createSessionMetadata(requestedInformation = emptyList())
 
     coEvery { mockRepository.checkSvrCredentials(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.CheckSvrCredentialsError.InvalidRequest("Bad request")
+        CheckSvrCredentialsError.InvalidRequest("Bad request")
       )
     coEvery { mockRepository.createSession(any()) } returns
       RequestResult.Success(sessionMetadata)
@@ -1987,13 +2066,13 @@ class PhoneNumberEntryViewModelTest {
   @Test
   fun `PhoneNumberSubmitted with SVR credentials unauthorized falls through to session creation`() = runTest {
     val svrCredentials = listOf(
-      NetworkController.SvrCredentials(username = "user", password = "pass")
+      SvrCredentials(username = "user", password = "pass")
     )
     val sessionMetadata = createSessionMetadata(requestedInformation = emptyList())
 
     coEvery { mockRepository.checkSvrCredentials(any(), any()) } returns
       RequestResult.NonSuccess(
-        NetworkController.CheckSvrCredentialsError.Unauthorized
+        CheckSvrCredentialsError.Unauthorized
       )
     coEvery { mockRepository.createSession(any()) } returns
       RequestResult.Success(sessionMetadata)
@@ -2046,7 +2125,7 @@ class PhoneNumberEntryViewModelTest {
     verified: Boolean = false,
     nextSms: Long? = null,
     nextCall: Long? = null
-  ) = NetworkController.SessionMetadata(
+  ) = SessionMetadata(
     id = id,
     nextSms = nextSms,
     nextCall = nextCall,
@@ -2061,7 +2140,7 @@ class PhoneNumberEntryViewModelTest {
     pni: String = "test-pni",
     e164: String = "+15551234567",
     storageCapable: Boolean = true
-  ) = NetworkController.RegisterAccountResponse(
+  ) = RegisterAccountResponse(
     aci = aci,
     pni = pni,
     e164 = e164,

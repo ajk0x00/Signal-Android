@@ -4,8 +4,6 @@ import com.android.build.api.artifact.ArtifactTransformationRequest
 import com.android.build.api.artifact.SingleArtifact
 import com.android.build.api.variant.HasAndroidTest
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.process.ExecOperations
-import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import java.time.Instant
@@ -13,7 +11,6 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.Properties
-import javax.inject.Inject
 
 plugins {
   alias(libs.plugins.android.application)
@@ -32,8 +29,8 @@ plugins {
 val staticIps = Properties().apply { file("static-ips.properties").reader().use { load(it) } }
 staticIps.stringPropertyNames().forEach { rootProject.extra[it] = staticIps.getProperty(it) }
 
-val canonicalVersionCode = 1724
-val canonicalVersionName = "8.20.4"
+val canonicalVersionCode = 1736
+val canonicalVersionName = "8.23.2"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -154,7 +151,11 @@ android {
   experimentalProperties["android.experimental.enableScreenshotTest"] = true
 
   buildToolsVersion = libs.versions.buildTools.get()
-  compileSdkVersion(libs.versions.compileSdk.get())
+
+  compileSdk {
+    version = release(libs.versions.compileSdk.get().toInt())
+  }
+
   ndkVersion = libs.versions.ndk.get()
 
   flavorDimensions += listOf("distribution", "environment")
@@ -191,12 +192,12 @@ android {
 
   sourceSets {
     getByName("test") {
-      java.srcDir("$projectDir/src/testShared")
+      java.directories += "$projectDir/src/testShared"
     }
 
     getByName("androidTest") {
-      java.srcDir("$projectDir/src/testShared")
-      java.srcDir("$projectDir/src/benchmarkShared/java")
+      java.directories += "$projectDir/src/testShared"
+      java.directories += "$projectDir/src/benchmarkShared/java"
     }
   }
 
@@ -415,6 +416,7 @@ android {
       isDefault = false
       isDebuggable = false
       isMinifyEnabled = true
+      isShrinkResources = true
       matchingFallbacks += "debug"
       buildConfigField("String", "BUILD_VARIANT_TYPE", "\"Benchmark\"")
       buildConfigField("boolean", "TRACING_ENABLED", "true")
@@ -525,18 +527,18 @@ android {
   android.buildTypes.configureEach {
     val path = if (name == "release") releaseDir else debugDir
     sourceSets.named(name) {
-      java.srcDir(path)
+      java.directories += path
     }
   }
 
   sourceSets {
     getByName("mocked") {
-      java.srcDir("$projectDir/src/benchmarkShared/java")
+      java.directories += "$projectDir/src/benchmarkShared/java"
       manifest.srcFile("$projectDir/src/benchmarkShared/AndroidManifest.xml")
     }
 
     getByName("benchmark") {
-      java.srcDir("$projectDir/src/benchmarkShared/java")
+      java.directories += "$projectDir/src/benchmarkShared/java"
       manifest.srcFile("$projectDir/src/benchmarkShared/AndroidManifest.xml")
     }
   }
@@ -702,9 +704,11 @@ dependencies {
   implementation(project(":core:ui"))
   implementation(project(":core:models"))
   implementation(project(":core:models-jvm"))
+  implementation(project(":core:serialization"))
   implementation(project(":feature:camera"))
   implementation(project(":feature:registration"))
   implementation(project(":lib:apng"))
+  implementation(project(":lib:emoji"))
 
   implementation(libs.androidx.fragment.ktx)
   implementation(libs.androidx.appcompat)

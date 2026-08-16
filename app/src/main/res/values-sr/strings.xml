@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">Желите ли да блокирате корисника?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">„%1$s“ неће моћи да вас позове нити да вам шаље поруке.</string>
     <string name="BlockedUsersActivity__block">Блокирај</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -294,6 +296,16 @@
     <string name="ClientDeprecatedActivity_warning">Упозорење</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">Ваша верзија Signal-а је истекла. Можете да видите историју порука али нећете моћи да шаљете и примате поруке док не ажурирате апликацију.</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">Датум није исправан</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">Датум на уређају није исправан.\nПодесите сат и пробајте поново.</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">Датум и време на вашем уређају:\n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">Подеси датум</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">Није пронађен веб прегледач.</string>
     <string name="CommunicationActions_send_email">Пошаљи имејл</string>
@@ -388,6 +400,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">Корисник %1$s је избрисао ову поруку</string>
     <string name="ConversationItem_you_deleted_this_message">Избрисали сте ову поруку</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">Избриши свима?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Администратор %1$s је избрисао ову поруку</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -579,7 +593,7 @@
     <string name="ConversationFragment_delete">Избриши</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">Избриши са свих уређаја</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Ова порука ће бити избрисана свима у ћаскању ако користе најновију верзију Signal-а. Моћи ће да виде да сте избрисали поруку.</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Ова порука ће бити избрисана свима у ћаскању. Они ће моћи да виде да сте избрисали поруку.</string>
     <string name="ConversationFragment_quoted_message_not_found">Оригинална порука није пронађена</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">Оригинална порука више није доступна</string>
     <string name="ConversationFragment_failed_to_open_message">Отварање поруке није успело</string>
@@ -758,17 +772,28 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">Нема непрочитаних ћаскања</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="one">Желите ли да избришете изабрано ћаскање?</item>
-        <item quantity="other">Желите ли да избришете изабрана ћаскања?</item>
+        <item quantity="one">Желите ли да избришете историју порука?</item>
+        <item quantity="other">Желите ли да избришете историје порука?</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="one">Овим ћете трајно избрисати сва изабрана ћаскања (%1$d).</item>
-        <item quantity="other">Овим ћете трајно избрисати сва изабрана ћаскања (%1$d).</item>
+        <item quantity="one">Све поруке из овог ћаскања ће бити избрисане.</item>
+        <item quantity="other">Све поруке из ових ћаскања ће бити избрисане.</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="one">Све поруке из овог ћаскања ће бити избрисане. И даље ћете бити члан ове групе.</item>
+        <item quantity="other">Све поруке из ових ћаскања ће бити избрисане. И даље ћете бити члан свих група које нисте сами напустили.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="one">Овим ће изабрано ћаскање бити трајно избрисано са свих ваших уређаја.</item>
-        <item quantity="other">Овим ће сва изабрана ћаскања (%1$d) бити трајно избрисана са свих ваших уређаја.</item>
+        <item quantity="one">Све поруке из овог ћаскања ће бити избрисане са свих ваших уређаја.</item>
+        <item quantity="other">Све поруке из ових ћаскања ће бити избрисане са свих ваших уређаја.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="one">Све поруке из овог ћаскања ће бити избрисане са свих ваших уређаја. И даље ћете бити члан ове групе.</item>
+        <item quantity="other">Све поруке из ових ћаскања ће бити избрисане са свих ваших уређаја. И даље ћете бити члан свих група које нисте сами напустили.</item>
     </plurals>
     <string name="ConversationListFragment_deleting">Брисање</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1046,13 +1071,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Користите Signal на десктоп рачунару или iPad-у.</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Користи овај Signal налог на другом уређају.</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">Повежи нови уређај</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s Поруке и информације о ћаскањима заштићене су шифровањем с краја на крај на свим уређајима</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal на десктоп-рачунару или iPad-у</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Све поруке на повезаним уређајима су приватне</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1118,6 +1143,8 @@
     <string name="LinkDeviceFragment__edit_name">Измени име</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">Повезивање је отказано</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">Максималан број повезаних уређаја који можете имати је: %1$d.</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">Не затварајте апликацију</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -3070,6 +3097,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">Група је ажурирана</string>
@@ -4092,15 +4120,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Недавно</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Ова порука</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Недавно коришћено</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">Смајлији и људи</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">Природа</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">Јело</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">Активности</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">Места</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">Објекти</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Симболи</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Заставе</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Емотикони</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Нема резултата</string>
 
     <!-- GifQuickSearchOption -->
@@ -5626,18 +5645,6 @@
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">Опис групе</string>
 
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">Стандардни квалитет</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">Брже, мање података</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">Висок квалитет</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">Спорије, више података</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">Квалитет медија</string>
-
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Обновите претплату на безбедне резервне копије Signal-а</string>
@@ -6193,6 +6200,8 @@
     <string name="ConversationSettingsFragment__end_group">Угаси групу</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">Ова група је угашена.</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">Архивирај ћаскање</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6383,18 +6392,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">Једна или више ставки су превелике</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">Једна или више ставки су неважеће</string>
     <string name="MediaReviewFragment__too_many_items_selected">Изабрано је превише ставки</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">Видео-клип је скраћен да би одговарао дозвољеној величини</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">Видео је подешен на једнократно гледање</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">Слика је подешена на једнократно гледање</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">Видео је подешен на висок квалитет</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">Видео је подешен на стандардни квалитет</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">Слика је подешена на висок квалитет</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">Слика је подешена на стандардни квалитет</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">Додај медиј</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6403,6 +6405,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">Исеци и ротирај</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">Промени квалитет медија</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">Сачувај медиј</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6413,16 +6417,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">Пошаљи медије</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">Крај уношења поруке</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="one">Ставки подешених на висок квалитет: %1$d</item>
-        <item quantity="other">Ставки подешених на висок квалитет: %1$d</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="one">Ставки подешених на стандардни квалитет: %1$d</item>
-        <item quantity="other">Ставки подешених на стандардни квалитет: %1$d</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">Откажи</string>
     <string name="ImageEditorHud__draw">Нацртајте</string>
@@ -6935,7 +6929,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">Износ</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Хвала вам што подржавате Signal. Ваш допринос омогућава подстицање мисије развоја технологије отвореног кода за заштиту приватности која штити слободно изражавање и омогућава безбедну глобалну комуникацију милионима широм света. Ако сте резидент Сједињених Америчких Држава, сачувајте ову признаницу за своју пореску евиденцију. Signal Technology Foundation је непрофитна организација изузета од опорезивања у Сједињеним Америчким Државама према одељку 501c3 Закона о интерним приходима. Наш савезни порески број је 82–4506840.</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Хвала вам што подржавате Signal. Ваш допринос омогућава подстицање мисије заштите слободног изражавања и пружања безбедне глобалне комуникације милионима широм света кроз технологију отвореног кода за заштиту приватности. Ако сте резидент Сједињених Америчких Држава, сачувајте ову признаницу за своју пореску евиденцију. Signal Technology Foundation је непрофитна организација изузета од опорезивања у Сједињеним Америчким Државама према одељку 501c3 Закона о интерним приходима. Наш савезни порески број је 82-4506840. Signal није доставио никакву робу нити услуге у замену за ову донацију.</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">Нема признаница</string>
 

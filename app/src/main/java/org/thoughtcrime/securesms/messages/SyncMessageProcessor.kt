@@ -14,6 +14,7 @@ import org.signal.core.util.Util
 import org.signal.core.util.UuidUtil
 import org.signal.core.util.isNotEmpty
 import org.signal.core.util.orNull
+import org.signal.emoji.EmojiUtil
 import org.signal.libsignal.net.KeyTransparency
 import org.signal.libsignal.protocol.IdentityKey
 import org.signal.libsignal.protocol.IdentityKeyPair
@@ -28,7 +29,6 @@ import org.signal.ringrtc.CallLinkRootKey
 import org.thoughtcrime.securesms.attachments.Attachment
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment
 import org.thoughtcrime.securesms.attachments.TombstoneAttachment
-import org.thoughtcrime.securesms.components.emoji.EmojiUtil
 import org.thoughtcrime.securesms.components.settings.app.changenumber.ChangeNumberRepository
 import org.thoughtcrime.securesms.contactshare.Contact
 import org.thoughtcrime.securesms.database.AttachmentTable
@@ -40,6 +40,7 @@ import org.thoughtcrime.securesms.database.MessageTable
 import org.thoughtcrime.securesms.database.MessageTable.MarkedMessageInfo
 import org.thoughtcrime.securesms.database.NoSuchMessageException
 import org.thoughtcrime.securesms.database.PaymentMetaDataUtil
+import org.thoughtcrime.securesms.database.RecipientTable
 import org.thoughtcrime.securesms.database.SentStorySyncManifest
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.DistributionListId
@@ -216,11 +217,13 @@ object SyncMessageProcessor {
 
       if (sent.storyMessage != null || sent.storyMessageRecipients.isNotEmpty()) {
         handleSynchronizeSentStoryMessage(envelope, sent)
+        SignalStore.misc.lastSyncMessageSeenTimeMs = System.currentTimeMillis()
         return
       }
 
       if (sent.editMessage != null) {
         handleSynchronizeSentEditMessage(context, envelope, sent, senderRecipient, earlyMessageCacheEntry)
+        SignalStore.misc.lastSyncMessageSeenTimeMs = System.currentTimeMillis()
         return
       }
 
@@ -263,7 +266,8 @@ object SyncMessageProcessor {
         dataMessage.isMediaMessage -> threadId = handleSynchronizeSentMediaMessage(context, sent, envelope.clientTimestamp!!, senderRecipient)
         dataMessage.pollCreate != null -> threadId = handleSynchronizedPollCreate(envelope, dataMessage, sent, senderRecipient)
         dataMessage.pollVote != null -> {
-          DataMessageProcessor.handlePollVote(context, envelope, dataMessage, senderRecipient, earlyMessageCacheEntry)
+          val destination = getSyncMessageDestination(sent)
+          DataMessageProcessor.handlePollVote(context, envelope, dataMessage, senderRecipient, destination, earlyMessageCacheEntry)
           threadId = SignalDatabase.threads.getOrCreateThreadIdFor(getSyncMessageDestination(sent))
         }
         dataMessage.pollTerminate != null -> threadId = handleSynchronizedPollEnd(envelope, dataMessage, sent, senderRecipient, earlyMessageCacheEntry)
@@ -1147,12 +1151,33 @@ object SyncMessageProcessor {
   }
 
   private fun handleSynchronizeBlockedListMessage(blockMessage: Blocked, envelopeTimestamp: Long) {
-    val blockedAcis = if (blockMessage.acisBinary.isNotEmpty()) { blockMessage.acisBinary.mapNotNull { ACI.parseOrNull(it) } } else blockMessage.acis.mapNotNull { ACI.parseOrNull(it) }
-    val blockedE164s = blockMessage.numbers
-    val blockedGroupIds = blockMessage.groupIds.map { it.toByteArray() }
-    log(envelopeTimestamp, "Synchronize block message. Counts: (ACI: ${blockedAcis.size}, E164: ${blockedE164s.size}, Group: ${blockedGroupIds.size})")
+    val blockedAcis = if (blockMessage.blockedAcis.isNotEmpty()) {
+      blockMessage.blockedAcis.mapNotNull { blockedAci -> ACI.parseOrNull(blockedAci.aciBinary)?.let { aci -> RecipientTable.BlockedAci(aci, blockedAci.timestamp ?: 0) } }
+    } else if (blockMessage.acisBinary.isNotEmpty()) {
+      blockMessage.acisBinary.mapNotNull { ACI.parseOrNull(it)?.let { aci -> RecipientTable.BlockedAci(aci) } }
+    } else {
+      emptyList()
+    }
 
-    SignalDatabase.recipients.applyBlockedUpdate(blockedE164s, blockedAcis, blockedGroupIds)
+    val blockedE164s = if (blockMessage.blockedE164s.isNotEmpty()) {
+      blockMessage.blockedE164s.mapNotNull { blockedE164 -> blockedE164.e164?.let { RecipientTable.BlockedE164(it, blockedE164.timestamp ?: 0) } }
+    } else if (blockMessage.numbers.isNotEmpty()) {
+      blockMessage.numbers.map { RecipientTable.BlockedE164(it) }
+    } else {
+      emptyList()
+    }
+
+    val blockedGroups = if (blockMessage.blockedGroups.isNotEmpty()) {
+      blockMessage.blockedGroups.mapNotNull { group -> group.groupId?.toByteArray()?.let { RecipientTable.BlockedGroup(it, group.timestamp ?: 0) } }
+    } else if (blockMessage.groupIds.isNotEmpty()) {
+      blockMessage.groupIds.map { RecipientTable.BlockedGroup(it.toByteArray(), 0) }
+    } else {
+      emptyList()
+    }
+
+    log(envelopeTimestamp, "Synchronize block message. Counts: (ACI: ${blockedAcis.size}, E164: ${blockedE164s.size}, Group: ${blockedGroups.size})")
+
+    SignalDatabase.recipients.applyBlockedUpdate(blockedE164s, blockedAcis, blockedGroups)
   }
 
   private fun handleSynchronizeFetchMessage(fetchType: FetchLatest.Type, envelopeTimestamp: Long) {
@@ -1185,7 +1210,7 @@ object SyncMessageProcessor {
       MessageRequestResponse.Type.ACCEPT -> {
         val wasBlocked = recipient.isBlocked
         SignalDatabase.recipients.setProfileSharing(recipient.id, true)
-        SignalDatabase.recipients.setBlocked(recipient.id, false)
+        SignalDatabase.recipients.setBlocked(recipient.id, false, 0)
         if (wasBlocked) {
           SignalDatabase.messages.insertMessageOutbox(
             message = OutgoingMessage.unblockedMessage(recipient, System.currentTimeMillis(), TimeUnit.SECONDS.toMillis(recipient.expiresInSeconds.toLong())),
@@ -1205,7 +1230,7 @@ object SyncMessageProcessor {
         }
       }
       MessageRequestResponse.Type.BLOCK -> {
-        SignalDatabase.recipients.setBlocked(recipient.id, true)
+        SignalDatabase.recipients.setBlocked(recipient.id, true, envelopeTimestamp)
         RecipientUtil.updateProfileSharingAfterBlock(recipient, true)
         SignalDatabase.messages.insertMessageOutbox(
           message = OutgoingMessage.blockedMessage(recipient, System.currentTimeMillis(), TimeUnit.SECONDS.toMillis(recipient.expiresInSeconds.toLong())),
@@ -1213,7 +1238,7 @@ object SyncMessageProcessor {
         )
       }
       MessageRequestResponse.Type.BLOCK_AND_DELETE -> {
-        SignalDatabase.recipients.setBlocked(recipient.id, true)
+        SignalDatabase.recipients.setBlocked(recipient.id, true, envelopeTimestamp)
         RecipientUtil.updateProfileSharingAfterBlock(recipient, true)
         if (threadId > 0) {
           SignalDatabase.threads.deleteConversation(threadId, syncThreadDelete = false)
@@ -1226,7 +1251,7 @@ object SyncMessageProcessor {
         )
       }
       MessageRequestResponse.Type.BLOCK_AND_SPAM -> {
-        SignalDatabase.recipients.setBlocked(recipient.id, true)
+        SignalDatabase.recipients.setBlocked(recipient.id, true, envelopeTimestamp)
         RecipientUtil.updateProfileSharingAfterBlock(recipient, true)
         SignalDatabase.messages.insertMessageOutbox(
           message = OutgoingMessage.reportSpamMessage(recipient, System.currentTimeMillis(), TimeUnit.SECONDS.toMillis(recipient.expiresInSeconds.toLong())),
@@ -2026,8 +2051,8 @@ object SyncMessageProcessor {
     SignalDatabase.messages.markAsSent(messageId)
 
     if (expiresInMillis > 0) {
-      SignalDatabase.messages.markExpireStarted(messageId, sent.expirationStartTimestamp ?: 0)
-      AppDependencies.expiringMessageManager.scheduleDeletion(messageId, recipient.isGroup, sent.expirationStartTimestamp ?: 0, expiresInMillis)
+      SignalDatabase.messages.markExpireStarted(messageId, sent.expirationStartTimestamp ?: sent.timestamp!!)
+      AppDependencies.expiringMessageManager.scheduleDeletion(messageId, recipient.isGroup, sent.expirationStartTimestamp ?: sent.timestamp!!, expiresInMillis)
     }
 
     return threadId
@@ -2060,6 +2085,13 @@ object SyncMessageProcessor {
       }
       return -1
     }
+
+    val targetThreadId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
+    if (threadId != targetMessage.threadId) {
+      warn(envelope.clientTimestamp!!, "Target thread does not match. $threadId $targetThreadId")
+      return -1
+    }
+
     val poll = SignalDatabase.polls.getPoll(targetMessage.id)
     if (poll == null) {
       warn(envelope.clientTimestamp!!, "Unable to find poll for poll termination. Dropping.")
@@ -2086,8 +2118,8 @@ object SyncMessageProcessor {
     log(envelope.clientTimestamp!!, "Inserted sync poll end message as messageId $messageId")
 
     if (expiresInMillis > 0) {
-      SignalDatabase.messages.markExpireStarted(messageId, sent.expirationStartTimestamp ?: 0)
-      AppDependencies.expiringMessageManager.scheduleDeletion(messageId, recipient.isGroup, sent.expirationStartTimestamp ?: 0, expiresInMillis)
+      SignalDatabase.messages.markExpireStarted(messageId, sent.expirationStartTimestamp ?: sent.timestamp!!)
+      AppDependencies.expiringMessageManager.scheduleDeletion(messageId, recipient.isGroup, sent.expirationStartTimestamp ?: sent.timestamp!!, expiresInMillis)
     }
 
     return threadId
@@ -2153,8 +2185,8 @@ object SyncMessageProcessor {
     log(envelope.clientTimestamp!!, "Inserted sync pin message as messageId $messageId")
 
     if (expiresInMillis > 0) {
-      SignalDatabase.messages.markExpireStarted(messageId, sent.expirationStartTimestamp ?: 0)
-      AppDependencies.expiringMessageManager.scheduleDeletion(messageId, recipient.isGroup, sent.expirationStartTimestamp ?: 0, expiresInMillis)
+      SignalDatabase.messages.markExpireStarted(messageId, sent.expirationStartTimestamp ?: sent.timestamp!!)
+      AppDependencies.expiringMessageManager.scheduleDeletion(messageId, recipient.isGroup, sent.expirationStartTimestamp ?: sent.timestamp!!, expiresInMillis)
     }
 
     return threadId
@@ -2193,7 +2225,7 @@ object SyncMessageProcessor {
   }
 
   private fun AddressableMessage.toSyncMessageId(envelopeTimestamp: Long): MessageTable.SyncMessageId? {
-    return if (this.sentTimestamp != null && Utils.anyNotNull(this.authorServiceId, this.authorServiceIdBinary) || this.authorE164 != null) {
+    return if (this.sentTimestamp != null && (Utils.anyNotNull(this.authorServiceId, this.authorServiceIdBinary) || this.authorE164 != null)) {
       val serviceId = ServiceId.parseOrNull(this.authorServiceId, this.authorServiceIdBinary)
       val id = if (serviceId != null) {
         SignalDatabase.recipients.getOrInsertFromServiceId(serviceId)
