@@ -122,8 +122,7 @@ class AskGroqJob private constructor(
 
   override fun onShouldRetry(e: Exception): Boolean {
     return when (e) {
-      is IllegalStateException -> false // Missing API key or configuration error
-      is IOException -> true            // Network failure / rate limit / 5xx
+      is IOException -> !org.thoughtcrime.securesms.BuildConfig.GROQ_API_KEY.isBlank()
       else -> false
     }
   }

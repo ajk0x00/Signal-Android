@@ -32,7 +32,7 @@ object GroqApiClient {
     val apiKey = BuildConfig.GROQ_API_KEY
     if (apiKey.isBlank()) {
       Log.w(TAG, "Groq API key is not configured.")
-      throw IllegalStateException("Groq API key is not configured in build.")
+      throw IOException("Groq API key is not configured in build.")
     }
 
     val requestJson = JSONObject().apply {
