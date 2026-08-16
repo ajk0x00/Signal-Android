@@ -51,6 +51,26 @@ jobs:
             echo "::warning::Neither CLOUD_STORAGE_CONFIG_JSON nor CLOUD_STORAGE_CONFIG_BASE64 secret was found."
           fi
 
+      - name: Inject Keystore and Signing Config
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 --decode > release.keystore
+            cat <<EOF > keystore.debug.properties
+storeFile=release.keystore
+storePassword=$STORE_PASSWORD
+keyAlias=$KEY_ALIAS
+keyPassword=$KEY_PASSWORD
+EOF
+            echo "Keystore and signing properties successfully configured."
+          else
+            echo "::warning::KEYSTORE_BASE64 secret not found, using default debug keystore."
+          fi
+
       - name: Build Release APKs
         run: |
           ./gradlew \
