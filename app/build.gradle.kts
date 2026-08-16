@@ -227,6 +227,7 @@ android {
         "META-INF/DEPENDENCIES",
         "META-INF/INDEX.LIST",
         "META-INF/proguard/androidx-annotations.pro",
+        "META-INF/services/java.net.spi.**",
         "**/*.dylib",
         "**/*.dll",
         "**/*.proto"
