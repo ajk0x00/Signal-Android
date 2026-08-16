@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import org.signal.core.util.bitmaps.BitmapUtil
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.cloudstorage.CloudStorageCredentialsProvider
 import org.thoughtcrime.securesms.cloudstorage.CloudStorageServiceHelper
@@ -12,7 +13,6 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryDatabase
 import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryMediaType
 import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryRecord
-import org.thoughtcrime.securesms.util.BitmapUtil
 import org.thoughtcrime.securesms.util.MediaUtil
 import java.io.File
 import java.io.FileOutputStream

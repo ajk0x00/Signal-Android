@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">သုံးစွဲသူအား ဘလော့ခ်မည်လား။</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">\"%1$s\" သည် သင့်ကိုဖုန်းခေါ်ခြင်း သို့မဟုတ် စာပို့ခြင်း မလုပ်နိုင်တော့ပါ။</string>
     <string name="BlockedUsersActivity__block">ဘလော့ခ်ရန်</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -292,6 +294,16 @@
     <string name="ClientDeprecatedActivity_warning">သတိပေးချက်</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">သင်၏ Signal ဗားရှင်း သက်တမ်းကုန်သွားပြီ။ သင်၏ မက်ဆေ့ချ်မှတ်တမ်းကို သင်ကြည့်နိုင်သော်လည်း အပ်ဒိတ် မလုပ်မချင်း မက်ဆေ့ချ်များပို့ခြင်း သို့မဟုတ် လက်ခံခြင်း မလုပ်နိုင်ပါ။</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">ရက်စွဲ မမှန်ကန်ပါ</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">သင့်စက်၏ ရက်စွဲ မမှန်ကန်ပါ။\nသင့်စက်၏ နာရီကို မှန်ကန်အောင် ချိန်ညှိပြီး ထပ်မံကြိုးစားပါ။</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">သင့်စက်၏ ရက်စွဲနှင့် အချိန်-\n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">ရက်စွဲကို ချိန်ညှိရန်</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">Web browser ကိုရှာမတွေ့ပါ</string>
     <string name="CommunicationActions_send_email">အီးမေးလ်ပို့ပါ</string>
@@ -386,6 +398,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s မှ ဤမက်ဆေ့ချ်ကို ဖျက်လိုက်ပါပြီ</string>
     <string name="ConversationItem_you_deleted_this_message">သင်ဤမက်ဆေ့ချ်ကို ဖျက်လိုက်သည်</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">လူတိုင်းအတွက် ဖျက်မည်လား။</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">အက်ဒ်မင် %1$s မှ ဤမက်ဆေ့ချ်ကို ဖျက်လိုက်ပါသည်</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -567,7 +581,7 @@
     <string name="ConversationFragment_delete">ဖျက်ရန်</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">နေရာတိုင်းတွင် ဖျက်ရန်</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">ချက်(တ်)ထဲတွင် နောက်ဆုံး Signal ဗားရှင်းကို သုံးနေသည့်သူတိုင်းအတွက် ဤမက်ဆေ့ချ်ကို ဖျက်ပါမည်။ ၎င်းတို့သည် မက်ဆေ့ချ်ကို သင်ဖျက်ခဲ့ကြောင်း တွေ့ရပါမည်။</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">ဤမက်ဆေ့ချ်ကို ချက်(တ်)အတွင်းရှိ လူတိုင်းအတွက် ဖျက်ပစ်မည်ဖြစ်သည်။ ၎င်းတို့သည် မက်ဆေ့ချ်ကို သင်ဖျက်ခဲ့ကြောင်း တွေ့ရပါမည်။</string>
     <string name="ConversationFragment_quoted_message_not_found">မူရင်းစာကိုမတွေ့ပါ</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">မူရင်းသတင်းကိုမရရှိနိုင်ပါ</string>
     <string name="ConversationFragment_failed_to_open_message">စာတိုကိုဖွင့်လို့မရပါ</string>
@@ -744,14 +758,23 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">မဖတ်ရသေးသည့် ချက်(တ်)များ မရှိပါ</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="other">ရွေးထားသော ချက်(တ်)များကို ဖျက်မည်လား။</item>
+        <item quantity="other">မက်ဆေ့ချ်မှတ်တမ်းကို ဖျက်မည်လား။</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="other">ရွေးထားသည့် ချက်(တ်) %1$d ခုလုံးကို အပြီးတိုင်ဖျက်လိမ့်မည်။</item>
+        <item quantity="other">ဤချက်(တ်)များအတွင်းရှိ မက်ဆေ့ချ်အားလုံးကို ဖျက်လိုက်ပါမည်။</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="other">ဤချက်(တ်)များအတွင်းရှိ မက်ဆေ့ချ်အားလုံးကို ဖျက်လိုက်ပါမည်။ သင် မထွက်ရသေးသော အုပ်စုများတွင်မူ အဖွဲ့ဝင်အဖြစ် ဆက်လက်ရှိနေမည်ဖြစ်သည်။</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="other">၎င်းသည် ရွေးချယ်ထားသည့် စကားဝိုင်း %1$d ခုစလုံးကို သင်၏စက်များအားလုံးမှ အပြီးတိုင်ဖျက်သွားမည်။</item>
+        <item quantity="other">ဤချက်(တ်)များအတွင်းရှိ မက်ဆေ့ချ်အားလုံးကို သင့်စက်အားလုံးမှ ဖျက်လိုက်ပါမည်။</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="other">ဤချက်(တ်)များအတွင်းရှိ မက်ဆေ့ချ်အားလုံးကို သင့်စက်အားလုံးမှ ဖျက်လိုက်ပါမည်။ သင် မထွက်ရသေးသော အုပ်စုများတွင်မူ အဖွဲ့ဝင်အဖြစ် ဆက်လက်ရှိနေမည်ဖြစ်သည်။</item>
     </plurals>
     <string name="ConversationListFragment_deleting">ဖျက်နေသည်</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1019,13 +1042,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Desktop သို့မဟုတ် iPad တွင် ဤ Signal အကောင့်ကိုသုံးပါ။</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">ဤ Signal အကောင့်ကို အခြားစက်တွင် အသုံးပြုပါ။</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">စက်အသစ်တစ်ခုကို ချိတ်ဆက်ရန်</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">စက်ပစ္စည်းအားလုံးရှိ %1$s မက်ဆေ့ချ်များနှင့် ချက်(တ်)အချက်အလက်ကို end-to-end ကုဒ်ပြောင်းဝှက်ခြင်းဖြင့် ကာကွယ်ထားသည်</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Desktop သို့မဟုတ် iPad အတွက် Signal</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">ချိတ်ထားသည့် စက်များတွင် မက်ဆေ့ချ်ဆက်သွယ်မှုအားလုံးမှာ သီးသန့်ဖြစ်ပါသည်</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1091,6 +1114,8 @@
     <string name="LinkDeviceFragment__edit_name">အမည်ပြင်ရန်</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">ချိတ်ဆက်ခြင်းကို ပယ်ဖျက်လိုက်ပါပြီ</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">ချိတ်ဆက်ထားသော စက်ကို အများဆုံး %1$d ခုသာ ထားနိုင်ပါသည်။</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">အက်ပ်ကို မပိတ်ပါနှင့်</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -2972,6 +2997,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">အဖွဲ့ကို ပြင်ဆင်ပြီး</string>
@@ -3971,15 +3997,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">နောက်ဆုံး</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">၎င်းမက်ဆေ့ချ်</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">နောက်ဆုံးသုံးခဲ့သော</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">အပြုံးမျက်နှာ နှင့် လူများ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">သဘာဝ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">အစားအစာ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">လှုပ်ရှားမှုများ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">နေရာများ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">အရာဝတ္ထုများ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">သင်္ကေတများ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">အလံများ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">ရုပ်ပြောင်များ</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">ရလဒ်များ ရှာမတွေ့ပါ</string>
 
     <!-- GifQuickSearchOption -->
@@ -5485,18 +5502,6 @@
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">အဖွဲ့ ဖော်ပြချက်</string>
 
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">အသင့်အတင့်</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">ပိုမြန်ဆန်ပြီး ဒေတာ နည်းနည်းသာ လိုသည်</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">မြင့်သော</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">ပိုနှေးပြီး ဒေတာ ပိုလိုသည်</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">ဓာတ်ပုံ အရည်အသွေး</string>
-
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">သင်၏ Signal လုံခြုံရေးဘက်ခ်အပ် စာရင်းသွင်းမှုကို သက်တမ်းတိုးပါ</string>
@@ -6041,6 +6046,8 @@
     <string name="ConversationSettingsFragment__end_group">အဖွဲ့ကို အဆုံးသတ်မည်</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">ဤအဖွဲ့ ပြီးဆုံးသွားပါပြီ။</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">ချက်(တ်)ကို မှတ်တမ်းတင်ရန်</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6225,18 +6232,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">တစ်ခု သို့မဟုတ် တစ်ခုထက်ပိုသော ဖိုင်များသည် ကြီးလွန်းနေပါသည်</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">တစ်ခု သို့မဟုတ် တစ်ခုထက်ပိုသော ဖိုင်များသည် အကျုံးမဝင်ပါ</string>
     <string name="MediaReviewFragment__too_many_items_selected">ဖိုင်များစွာကို ရွေးထားပါသည်</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">သင့်ဗီဒီယိုကို အရွယ်အစားကန့်သတ်ချက်အတွင်း ဝင်စေရန် ဖြတ်တောက်ထားပါသည်</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">ဗီဒီယိုကို တစ်ခါကြည့်အဖြစ် သတ်မှတ်ထားသည်</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">ဓာတ်ပုံကို တစ်ခါကြည့်အဖြစ် သတ်မှတ်ထားသည်</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">ဗီဒီယိုကို အရည်အသွေးအမြင့် သတ်မှတ်ထားသည်</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">ဗီဒီယိုကို ပုံမှန်အရည်အသွေးအဖြစ် သတ်မှတ်ထားသည်</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">ဓာတ်ပုံကို အရည်အသွေးအမြင့် သတ်မှတ်ထားသည်</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">ဓာတ်ပုံကို ပုံမှန်အရည်အသွေးအဖြစ် သတ်မှတ်ထားသည်</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">မီဒီယာတစ်ခုထည့်ရန်</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6245,6 +6245,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">ဖြတ်တောက်ပြီး လှည့်ရန်</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">မီဒီယာ အရည်အသွေး ပြောင်းရန်</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">မီဒီယာကို သိမ်းဆည်းရန်</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6255,14 +6257,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">မီဒီယာကို ပို့ရန်</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">မက်ဆေ့ချ်တစ်ခုထည့်ခြင်း အပြီးသတ်ရန်</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="other">ဖိုင် %1$d ဖိုင်ကို အရည်အသွေးအမြင့် သတ်မှတ်ထားသည်</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="other">ဖိုင် %1$d ဖိုင်ကို ပုံမှန်အရည်အသွေးအဖြစ် သတ်မှတ်ထားသည်</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">ပယ်ဖျက်မယ်</string>
     <string name="ImageEditorHud__draw">ရေးဆွဲရန်</string>
@@ -6775,7 +6769,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">ပမာဏ</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Signal ကို ပံ့ပိုးကူညီသည့်အတွက် ကျေးဇူးတင်ပါသည်။ သင်၏ ကူညီထောက်ပံ့မှုသည် ကမ္ဘာအနှံ့ရှိ သုံးစွဲသူသန်းပေါင်းများစွာအတွက် ကမ္ဘာအနှံ့ ဆက်သွယ်နိုင်မှုကို လုံခြုံစိတ်ချရစေပြီး လွတ်လပ်စွာ ထုတ်ဖော်ခွင့်ကို ကာကွယ်ပေးသည့် ဖွံ့ဖြိုးဆဲ Open Source Privacy နည်းပညာ၏ မစ်ရှင်ကို အားဖြည့်ပေးပါသည်။ သင်သည် အမေရိကန်ပြည်ထောင်စုတွင် နေထိုင်သူ ဖြစ်ပါက သင်၏ အခွန်မှတ်တမ်းများအတွက် ဤပြေစာကို ထိန်းသိမ်းထားပေးပါ။ Signal Technology Foundation သည် ပြည်တွင်းအခွန်ဥပဒေ၏ ပုဒ်မ 501c3 အရ အမေရိကန်ပြည်ထောင်စုရှိ အခွန်ကင်းလွတ်ခွင့်ရသော အကျိုးအမြတ်မယူသည့် အဖွဲ့အစည်း ဖြစ်ပါသည်။ ကျွန်ုပ်တို့၏ ဖက်ဒရယ် အခွန် ID မှာ 2–4506840 ဖြစ်ပါသည်။</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Signal ကို ပံ့ပိုးကူညီသည့်အတွက် ကျေးဇူးတင်ပါသည်။ သင်၏ ကူညီထောက်ပံ့မှုသည် လွတ်လပ်စွာ ထုတ်ဖော်ပြောဆိုခွင့်ကို ကာကွယ်ပေးခြင်းနှင့် သုံးစွဲသူသန်းပေါင်းများစွာ၏ ကမ္ဘာတစ်ဝန်း ဆက်သွယ်မှုများကို လုံခြုံစိတ်ချရစေခြင်း စသည့် မစ်ရှင်ကို Open Source ကိုယ်ပိုင်အချက်အလက် လုံခြုံရေး နည်းပညာမှတစ်ဆင့် ကူညီအားဖြည့်ပေးပါသည်။ သင်သည် အမေရိကန်ပြည်ထောင်စုတွင် နေထိုင်သူဖြစ်ပါက သင်၏အခွန်မှတ်တမ်းများအတွက် ဤပြေစာကိုထိန်းသိမ်းထားပေးပါ။ Signal Technology Foundation သည် ပြည်တွင်းအခွန်ဥပဒေ၏ ပုဒ်မ 501c3 အရ အမေရိကန်ပြည်ထောင်စုရှိ အခွန်ကင်းလွတ်ခွင့်ရသော အကျိုးအမြတ်မယူသည့် အဖွဲ့အစည်း ဖြစ်ပါသည်။ ကျွန်ုပ်တို့၏ ဖက်ဒရယ် အခွန် ID မှာ 82-4506840 ဖြစ်ပါသည်။ ဤပံ့ပိုးမှုအတွက် Signal သည် အပြန်အလှန်အဖြစ် မည်သည့် ကုန်ပစ္စည်း သို့မဟုတ် ဝန်ဆောင်မှုကိုမျှ ပေးအပ်ထားခြင်း မရှိပါ။</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">ပြေစာများ မရှိပါ</string>
 

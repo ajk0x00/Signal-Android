@@ -6,6 +6,7 @@ import com.mobilecoin.lib.exceptions.SerializationException
 import okio.ByteString.Companion.toByteString
 import org.signal.core.models.ServiceId
 import org.signal.core.models.ServiceId.ACI
+import org.signal.core.models.database.StickerRecord
 import org.signal.core.util.Base64
 import org.signal.core.util.Hex
 import org.signal.core.util.UuidUtil
@@ -13,6 +14,7 @@ import org.signal.core.util.isNotEmpty
 import org.signal.core.util.logging.Log
 import org.signal.core.util.orNull
 import org.signal.core.util.toOptional
+import org.signal.emoji.EmojiUtil
 import org.signal.libsignal.zkgroup.receipts.ReceiptCredentialPresentation
 import org.signal.network.util.Preconditions
 import org.thoughtcrime.securesms.attachments.Attachment
@@ -20,7 +22,6 @@ import org.thoughtcrime.securesms.attachments.LocalStickerAttachment
 import org.thoughtcrime.securesms.attachments.PointerAttachment
 import org.thoughtcrime.securesms.attachments.TombstoneAttachment
 import org.thoughtcrime.securesms.calls.links.CallLinks
-import org.thoughtcrime.securesms.components.emoji.EmojiUtil
 import org.thoughtcrime.securesms.contactshare.Contact
 import org.thoughtcrime.securesms.contactshare.ContactModelMapper
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil
@@ -40,7 +41,6 @@ import org.thoughtcrime.securesms.database.model.ParentStoryId
 import org.thoughtcrime.securesms.database.model.ParentStoryId.DirectReply
 import org.thoughtcrime.securesms.database.model.ParentStoryId.GroupReply
 import org.thoughtcrime.securesms.database.model.ReactionRecord
-import org.thoughtcrime.securesms.database.model.StickerRecord
 import org.thoughtcrime.securesms.database.model.databaseprotos.BodyRangeList
 import org.thoughtcrime.securesms.database.model.databaseprotos.GiftBadge
 import org.thoughtcrime.securesms.database.model.databaseprotos.MessageExtras
@@ -63,7 +63,6 @@ import org.thoughtcrime.securesms.jobs.PushProcessEarlyMessagesJob
 import org.thoughtcrime.securesms.jobs.PushProcessMessageJob
 import org.thoughtcrime.securesms.jobs.RefreshAttributesJob
 import org.thoughtcrime.securesms.jobs.RetrieveProfileJob
-import org.thoughtcrime.securesms.jobs.SendDeliveryReceiptJob
 import org.thoughtcrime.securesms.jobs.StorageSyncJob
 import org.thoughtcrime.securesms.jobs.TrimThreadJob
 import org.thoughtcrime.securesms.jobs.UploadAttachmentToArchiveJob
@@ -155,7 +154,8 @@ object DataMessageProcessor {
         senderRecipient = senderRecipient,
         groupSecretParams = groupSecretParams,
         serverGuid = UuidUtil.getStringUUID(envelope.serverGuid, envelope.serverGuidBinary),
-        batchCache = batchCache
+        batchCache = batchCache,
+        receivedTime = receivedTime
       )
       SignalTrace.endSection()
 
@@ -184,7 +184,7 @@ object DataMessageProcessor {
       message.groupCallUpdate != null -> handleGroupCallUpdateMessage(envelope, senderRecipient.id, groupId)
       message.pollCreate != null -> insertResult = handlePollCreate(context, envelope, metadata, message, senderRecipient, threadRecipient, groupId, receivedTime)
       message.pollTerminate != null -> insertResult = handlePollTerminate(context, envelope, metadata, message, senderRecipient, earlyMessageCacheEntry, threadRecipient, groupId, receivedTime)
-      message.pollVote != null -> messageId = handlePollVote(context, envelope, message, senderRecipient, earlyMessageCacheEntry)
+      message.pollVote != null -> messageId = handlePollVote(context, envelope, message, senderRecipient, threadRecipient, earlyMessageCacheEntry)
       message.pinMessage != null -> insertResult = handlePinMessage(envelope, metadata, message, senderRecipient, threadRecipient, groupId, receivedTime, earlyMessageCacheEntry)
       message.unpinMessage != null -> messageId = handleUnpinMessage(envelope, message, senderRecipient, threadRecipient, earlyMessageCacheEntry)
       message.adminDelete != null -> messageId = handleAdminRemoteDelete(context, envelope, message, senderRecipient, threadRecipient, earlyMessageCacheEntry)
@@ -216,7 +216,7 @@ object DataMessageProcessor {
     }
 
     if (metadata.sealedSender && messageId != null) {
-      batchCache.addJob(SendDeliveryReceiptJob(senderRecipient.id, message.timestamp!!, messageId))
+      batchCache.addDeliveryReceipt(senderRecipient.id, groupId, message.timestamp!!, messageId)
     } else if (!metadata.sealedSender) {
       if (RecipientUtil.shouldHaveProfileKey(threadRecipient)) {
         Log.w(MessageContentProcessor.TAG, "Received an unsealed sender message from " + senderRecipient.id + ", but they should already have our profile key. Correcting.")
@@ -1151,7 +1151,7 @@ object DataMessageProcessor {
 
     handlePossibleExpirationUpdate(envelope, metadata, senderRecipient, threadRecipient, groupId, message.expireTimerDuration, message.expireTimerVersion, receivedTime)
 
-    val messageId = handlePollValidation(envelope = envelope, targetSentTimestamp = targetSentTimestamp, senderRecipient = senderRecipient, earlyMessageCacheEntry = earlyMessageCacheEntry, targetAuthor = senderRecipient)
+    val messageId = handlePollValidation(envelope = envelope, targetSentTimestamp = targetSentTimestamp, senderRecipient = senderRecipient, earlyMessageCacheEntry = earlyMessageCacheEntry, targetAuthor = senderRecipient, threadRecipient = threadRecipient)
     if (messageId == null) {
       return null
     }
@@ -1190,6 +1190,7 @@ object DataMessageProcessor {
     envelope: Envelope,
     message: DataMessage,
     senderRecipient: Recipient,
+    threadRecipient: Recipient,
     earlyMessageCacheEntry: EarlyMessageCacheEntry?
   ): MessageId? {
     val pollVote: DataMessage.PollVote = message.pollVote!!
@@ -1203,7 +1204,7 @@ object DataMessageProcessor {
       return null
     }
 
-    val messageId = handlePollValidation(envelope, targetSentTimestamp, senderRecipient, earlyMessageCacheEntry, Recipient.externalPush(targetAuthorServiceId))
+    val messageId = handlePollValidation(envelope, targetSentTimestamp, senderRecipient, earlyMessageCacheEntry, Recipient.externalPush(targetAuthorServiceId), threadRecipient)
     if (messageId == null) {
       return null
     }
@@ -1419,11 +1420,6 @@ object DataMessageProcessor {
   }
 
   fun handleAdminRemoteDelete(context: Context, envelope: Envelope, message: DataMessage, senderRecipient: Recipient, threadRecipient: Recipient, earlyMessageCacheEntry: EarlyMessageCacheEntry?): MessageId? {
-    if (!RemoteConfig.receiveAdminDelete) {
-      log(envelope.clientTimestamp!!, "Admin delete is not allowed due to remote config.")
-      return null
-    }
-
     val delete = message.adminDelete!!
 
     log(envelope.clientTimestamp!!, "Admin delete for message ${delete.targetSentTimestamp}")
@@ -1458,7 +1454,7 @@ object DataMessageProcessor {
     }
 
     val groupRecord = SignalDatabase.groups.getGroup(targetThreadRecipientId).orNull()
-    if (groupRecord == null || !groupRecord.isV2Group) {
+    if (groupRecord == null || !groupRecord.hasV2GroupProperties) {
       warn(envelope.clientTimestamp!!, "[handleAdminRemoteDelete] Invalid group.")
       return null
     }
@@ -1617,7 +1613,8 @@ object DataMessageProcessor {
     targetSentTimestamp: Long,
     senderRecipient: Recipient,
     earlyMessageCacheEntry: EarlyMessageCacheEntry?,
-    targetAuthor: Recipient
+    targetAuthor: Recipient,
+    threadRecipient: Recipient
   ): MessageId? {
     val targetMessage = SignalDatabase.messages.getMessageFor(targetSentTimestamp, targetAuthor.id)
     if (targetMessage == null) {
@@ -1637,6 +1634,11 @@ object DataMessageProcessor {
     val targetThreadRecipientId = SignalDatabase.threads.getRecipientIdForThreadId(targetMessage.threadId)
     if (targetThreadRecipientId == null) {
       warn(envelope.clientTimestamp!!, "[handlePollValidation] Could not find a thread for the message. timestamp: $targetSentTimestamp  author: ${targetAuthor.id}")
+      return null
+    }
+
+    if (targetThreadRecipientId != threadRecipient.id) {
+      warn(envelope.clientTimestamp!!, "[handlePollValidation] Target poll belongs to a different conversation than the message. timestamp: $targetSentTimestamp  author: ${targetAuthor.id}")
       return null
     }
 

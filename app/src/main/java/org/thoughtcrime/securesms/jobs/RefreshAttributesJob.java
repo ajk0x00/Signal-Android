@@ -86,7 +86,7 @@ public class RefreshAttributesJob extends BaseJob {
 
   @Override
   public void onRun() throws IOException {
-    if (!SignalStore.account().isRegistered() || SignalStore.account().getE164() == null) {
+    if (!SignalStore.account().isRegistered() || SignalStore.account().getAci() == null) {
       Log.w(TAG, "Not yet registered. Skipping.");
       return;
     }
@@ -111,7 +111,7 @@ public class RefreshAttributesJob extends BaseJob {
       boolean phoneNumberDiscoverable = SignalStore.phoneNumberPrivacy().getPhoneNumberDiscoverabilityMode() == PhoneNumberDiscoverabilityMode.DISCOVERABLE;
       Log.i(TAG, "Linked device, refreshing device capabilities and phone number discoverability. Capabilities: " + capabilities + ", discoverable: " + phoneNumberDiscoverable);
       RequestResultUtil.successOrThrow(SignalNetwork.account().setCapabilities(capabilities));
-      RequestResultUtil.successOrThrow(SignalNetwork.account().setPhoneNumberDiscoverability(phoneNumberDiscoverable));
+      RequestResultUtil.successOrThrowNoError(SignalNetwork.account().setPhoneNumberDiscoverability(phoneNumberDiscoverable));
     }
 
     hasRefreshedThisAppCycle = true;

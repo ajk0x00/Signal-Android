@@ -9,11 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.signal.core.ui.permissions.Permissions
+import org.signal.core.util.SeekableFileDescriptor
 import org.signal.core.util.concurrent.LifecycleDisposable
 import org.signal.core.util.logging.Log
-import org.signal.mediasend.CameraFragment
 import org.signal.mediasend.MediaConstraints
-import org.signal.mediasend.capture.CameraXFragment
+import org.signal.mediasend.screens.capture.CameraFragment
+import org.signal.mediasend.screens.capture.CameraXFragment
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.mediasend.v2.HudCommand
@@ -23,8 +24,8 @@ import org.thoughtcrime.securesms.registration.olddevice.QuickTransferOldDeviceA
 import org.thoughtcrime.securesms.stories.Stories
 import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
-import java.io.FileDescriptor
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 private val TAG = Log.tag(MediaCaptureFragment::class.java)
 
@@ -114,6 +115,8 @@ class MediaCaptureFragment : Fragment(R.layout.fragment_container), CameraFragme
     lifecycleDisposable += sharedViewModel.hudCommands.subscribe { command ->
       if (command == HudCommand.GoToText) {
         findNavController().safeNavigate(R.id.action_mediaCaptureFragment_to_textStoryPostCreationFragment)
+      } else if (command == HudCommand.GoToReview) {
+        navigator.goToReview(findNavController())
       }
     }
 
@@ -142,7 +145,8 @@ class MediaCaptureFragment : Fragment(R.layout.fragment_container), CameraFragme
     viewModel.onImageCaptured(data, width, height)
   }
 
-  override fun onVideoCaptured(fd: FileDescriptor) {
+  override fun onVideoCaptured(fd: SeekableFileDescriptor, durationMs: Long) {
+    sharedViewModel.onVideoRecorded(durationMs.milliseconds)
     viewModel.onVideoCaptured(fd)
   }
 
@@ -160,11 +164,9 @@ class MediaCaptureFragment : Fragment(R.layout.fragment_container), CameraFragme
     }
   }
 
-  override fun onCameraCountButtonClicked() {
-    val controller = findNavController()
-    captureChildFragment.fadeOutControls {
-      navigator.goToReview(controller)
-    }
+  override fun onCameraCloseClicked() {
+    // TODO [media-send] - Alex R to supply dialog.
+    requireActivity().finish()
   }
 
   override fun onQrCodeFound(data: String) {

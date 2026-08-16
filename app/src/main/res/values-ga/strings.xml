@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">Cuir bac ar an úsáideoir?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">Ní bheidh \"%1$s\" in ann glaoch ort ná teachtaireachtaí a sheoladh chugat.</string>
     <string name="BlockedUsersActivity__block">Cuir bac</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -300,6 +302,16 @@
     <string name="ClientDeprecatedActivity_warning">Rabhadh</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">Tá do leagan de Signal as feidhm. Is féidir leat féachaint ar stair do theachtaireachtaí ach ní bheidh tú in ann teachtaireachtaí a sheoladh ná a fháil go dtí go ndéanfaidh tú nuashonrú.</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">Tá an dáta míchruinn</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">Tá dáta do ghléis míchruinn.\nAthraigh do chlog agus triail arís.</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">Dáta agus am do ghléis:\n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">Athraigh an dáta</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">Níor aimsíodh aon líonléitheoir.</string>
     <string name="CommunicationActions_send_email">Seol Ríomhphost</string>
@@ -394,6 +406,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">Scrios %1$s an teachtaireacht seo</string>
     <string name="ConversationItem_you_deleted_this_message">Scrios tú an teachtaireacht seo</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">Scrios do chách?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Scrios an riarthóir %1$s an teachtaireacht sin</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -615,7 +629,7 @@
     <string name="ConversationFragment_delete">Scrios</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">Scrios gach áit</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Scriosfar an teachtaireacht seo do chách sa chomhrá má tá leagan le déanaí de Signal acu. Feicfidh siad gur scrios tú teachtaireacht.</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Scriosfar an teachtaireacht seo do chách sa chomhrá. Feicfidh siad gur scrios tú teachtaireacht.</string>
     <string name="ConversationFragment_quoted_message_not_found">Níor aimsíodh an teachtaireacht bhunaidh</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">Níl an teachtaireacht bhunaidh le fáil a thuilleadh</string>
     <string name="ConversationFragment_failed_to_open_message">Theip air an teachtaireacht a oscailt</string>
@@ -800,26 +814,43 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">Níl aon chomhráite gan léamh</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="one">Scrios an comhrá roghnaithe?</item>
-        <item quantity="two">Scrios na comhráite roghnaithe?</item>
-        <item quantity="few">Scrios na comhráite roghnaithe?</item>
-        <item quantity="many">Scrios na comhráite roghnaithe?</item>
-        <item quantity="other">Scrios na comhráite roghnaithe?</item>
+        <item quantity="one">Scrios stair na teachtaireachta?</item>
+        <item quantity="two">Scrios stair na dteachtaireachtaí?</item>
+        <item quantity="few">Scrios stair na dteachtaireachtaí?</item>
+        <item quantity="many">Scrios stair na dteachtaireachtaí?</item>
+        <item quantity="other">Scrios stair na dteachtaireachtaí?</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="one">Scriosfar an comhrá roghnaithe go buan leis sin.</item>
-        <item quantity="two">Scriosfar na comhráite roghnaithe go buan leis sin.</item>
-        <item quantity="few">Scriosfar na comhráite roghnaithe go buan leis sin.</item>
-        <item quantity="many">Scriosfar na comhráite roghnaithe go buan leis sin.</item>
-        <item quantity="other">Scriosfar na comhráite roghnaithe go buan leis sin.</item>
+        <item quantity="one">Scriosfar gach teachtaireacht sa chomhrá seo.</item>
+        <item quantity="two">Scriosfar gach teachtaireacht sna comhráite seo.</item>
+        <item quantity="few">Scriosfar gach teachtaireacht sna comhráite seo.</item>
+        <item quantity="many">Scriosfar gach teachtaireacht sna comhráite seo.</item>
+        <item quantity="other">Scriosfar gach teachtaireacht sna comhráite seo.</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="one">Scriosfar gach teachtaireacht sa chomhrá seo. Beidh tú mar bhall den ghrúpa seo fós.</item>
+        <item quantity="two">Scriosfar gach teachtaireacht sna comhráite seo. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+        <item quantity="few">Scriosfar gach teachtaireacht sna comhráite seo. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+        <item quantity="many">Scriosfar gach teachtaireacht sna comhráite seo. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+        <item quantity="other">Scriosfar gach teachtaireacht sna comhráite seo. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="one">Scriosfar an comhrá roghnaithe go buan ó do ghléasanna uile leis sin.</item>
-        <item quantity="two">Scriosfar an %1$d chomhrá roghnaithe go buan ó do ghléasanna uile leis sin.</item>
-        <item quantity="few">Scriosfar na %1$d chomhrá roghnaithe go buan ó do ghléasanna uile leis sin.</item>
-        <item quantity="many">Scriosfar na %1$d gcomhrá roghnaithe go buan ó do ghléasanna uile leis sin.</item>
-        <item quantity="other">Scriosfar na %1$d comhrá roghnaithe go buan ó do ghléasanna uile leis sin.</item>
+        <item quantity="one">Scriosfar gach teachtaireacht sa chomhrá seo ó do ghléasanna uile.</item>
+        <item quantity="two">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile.</item>
+        <item quantity="few">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile.</item>
+        <item quantity="many">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile.</item>
+        <item quantity="other">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="one">Scriosfar gach teachtaireacht sa chomhrá seo ó do ghléasanna uile. Beidh tú mar bhall den ghrúpa seo fós.</item>
+        <item quantity="two">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+        <item quantity="few">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+        <item quantity="many">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
+        <item quantity="other">Scriosfar gach teachtaireacht sna comhráite seo ó do ghléasanna uile. Beidh tú mar bhall d\'aon ghrúpa nár imigh tú as fós.</item>
     </plurals>
     <string name="ConversationListFragment_deleting">Ag scriosadh</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1127,13 +1158,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Úsáid an cuntas Signal seo ar dheasc nó iPad.</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Úsáid an cuntas Signal seo ar ghléas eile.</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">Nasc gléas nua</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s Déantar teachtaireachtaí agus faisnéis comhráite a chosaint le criptiú ó cheann ceann ar gach gléas</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal ar deasc nó ar iPad</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Tá cur teachtaireachtaí ar ghléasanna nasctha príobháideach</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1199,6 +1230,8 @@
     <string name="LinkDeviceFragment__edit_name">Cuir ainm an ghléis in eagar</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">Nascadh curtha ar ceal</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">Ní féidir ach an líon seo gléasanna nasctha a bheith agat: %1$d.</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">Ná dún an aip</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -3364,6 +3397,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">Nuashonraíodh an bhaicle</string>
@@ -4455,15 +4489,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Úsáidte le déanaí</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">An Teachtaireacht Seo</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Úsáidte le Déanaí</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">Straoiseoga ⁊ Daoine</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">An Dúlra</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">Bia</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">Gníomhaíochtaí</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">Áiteanna</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">Rudaí</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Siombailí</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Bratacha</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Straoiseoga</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Gan toradh</string>
 
     <!-- GifQuickSearchOption -->
@@ -5508,29 +5533,29 @@
 
     <!-- LinkedDeviceAccountSettingsFragment -->
     <!-- Title of an informational card shown on the account settings screen of a linked device -->
-    <string name="LinkedDeviceAccountSettingsFragment__this_is_a_linked_device">This is a linked device</string>
+    <string name="LinkedDeviceAccountSettingsFragment__this_is_a_linked_device">Gléas nasctha is ea é seo</string>
     <!-- Body of an informational card explaining that account settings must be managed from the primary device -->
-    <string name="LinkedDeviceAccountSettingsFragment__to_manage_your_account_settings">To manage your account settings, open Signal on your primary device.</string>
+    <string name="LinkedDeviceAccountSettingsFragment__to_manage_your_account_settings">Le socruithe do chuntais a bhainistiú, oscail Signal ar do phríomhghléas.</string>
     <!-- Title of a settings row that deletes all Signal data from this linked device -->
-    <string name="LinkedDeviceAccountSettingsFragment__delete_app_data">Delete app data</string>
+    <string name="LinkedDeviceAccountSettingsFragment__delete_app_data">Scrios sonraí na haipe</string>
     <!-- Subtitle of the delete app data row explaining what it does -->
-    <string name="LinkedDeviceAccountSettingsFragment__this_will_remove_all_data">This will remove all data from the Signal app on this device.</string>
+    <string name="LinkedDeviceAccountSettingsFragment__this_will_remove_all_data">Bainfear na sonraí go léir de chuid aip Signal den ghléas seo leis seo.</string>
     <!-- Title of the confirmation dialog shown when deleting app data from a linked device -->
     <string name="LinkedDeviceAccountSettingsFragment__delete_app_data_question">Scrios sonraí na haipe?</string>
     <!-- Message of the confirmation dialog explaining that only this device\'s data is deleted, not the account -->
-    <string name="LinkedDeviceAccountSettingsFragment__this_will_delete_all_data_and_messages">This will delete all data and messages from the Signal app on this device. Your Signal account and data on your primary device or other linked devices will not be deleted. The app will close after this process is complete.</string>
+    <string name="LinkedDeviceAccountSettingsFragment__this_will_delete_all_data_and_messages">Scriosfar na sonraí agus teachtaireachtaí go léir de chuid aip Signal den ghléas seo leis seo. Ní scriosfar do chuntas Signal ná sonraí ar do phríomhghléas nó ar aon ghléas eile atá nasctha. Dúnfar an app nuair a bheidh an próiseas seo críochnaithe.</string>
 
     <!-- LinkedDeviceAccountLearnMoreBottomSheet -->
     <!-- Emphasized lead-in phrase shown in bold at the start of the learn more sheet body. Must appear verbatim within LinkedDeviceAccountLearnMoreBottomSheet__linked_devices_let_you_access. -->
     <string name="LinkedDeviceAccountLearnMoreBottomSheet__linked_devices">Gléasanna Nasctha</string>
     <!-- Body text of the linked devices learn more sheet. The leading \"Linked Devices\" is shown in bold. -->
-    <string name="LinkedDeviceAccountLearnMoreBottomSheet__linked_devices_let_you_access">Linked Devices let you access your Signal account and messages securely on any of your additional devices.</string>
+    <string name="LinkedDeviceAccountLearnMoreBottomSheet__linked_devices_let_you_access">Cuirtear ar do chumas do chuntas agus teachtaireachtaí Signal a rochtain go slán ar aon cheann de do ghléasanna breise agus Gléasanna Nasctha in úsáid agat.</string>
     <!-- Bullet point describing what devices can be linked -->
-    <string name="LinkedDeviceAccountLearnMoreBottomSheet__you_can_link_a_desktop">You can link a desktop, tablet or additional phone</string>
+    <string name="LinkedDeviceAccountLearnMoreBottomSheet__you_can_link_a_desktop">Is féidir leat ríomhaire deisce, táibléad nó guthán breise a nascadh</string>
     <!-- Bullet point describing that the primary device manages linked devices -->
-    <string name="LinkedDeviceAccountLearnMoreBottomSheet__your_primary_device_manages">Your primary device manages what\'s linked, you can link up to 5 devices.</string>
+    <string name="LinkedDeviceAccountLearnMoreBottomSheet__your_primary_device_manages">Déanann do phríomhghléas bainistíocht ar a bhfuil nasctha, is féidir leat suas le 5 ghléas a nascadh.</string>
     <!-- Bullet point describing that some settings are only available on the primary device -->
-    <string name="LinkedDeviceAccountLearnMoreBottomSheet__some_account_settings">Some account settings are managed on your primary device only, including account settings and backups.</string>
+    <string name="LinkedDeviceAccountLearnMoreBottomSheet__some_account_settings">Ar do phríomhghléas amháin a dhéantar roinnt socruithe cuntais, socruithe agus cúltacaí an chuntais ina measc, a bhainistiú.</string>
 
     <!-- TransferOrRestoreFragment -->
     <string name="TransferOrRestoreFragment__transfer_or_restore_account">Aistrigh cuntas nó cuir ar ais é</string>
@@ -6048,18 +6073,6 @@
 
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">Group Description</string>
-
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">Caighdeánach</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">Níos tapúla, níos lú sonraí</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">Ard</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">Níos moille, níos mó sonraí</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">Media Quality</string>
 
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
@@ -6649,6 +6662,8 @@
     <string name="ConversationSettingsFragment__end_group">Cuir deireadh leis an ngrúpa</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">Tá deireadh curtha leis an ngrúpa.</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">Cuir comhrá sa chartlann</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6857,18 +6872,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">Bhí mír amháin nó níos mó rómhór</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">Bhí mír amháin nó níos mó neamhbhailí</string>
     <string name="MediaReviewFragment__too_many_items_selected">Roghnaíodh an iomarca nithe</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">Bearradh d\'fhíseán le bheith in oiriúint don teorainn mhéide</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">Físeán socraithe ag amharc aonuaire</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">Grianghraf socraithe ag amharc aonuaire</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">Físeán socraithe ag ardchaighdeán</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">Físeán socraithe ag gnáthchaighdeán</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">Grianghraf socraithe ag ardchaighdeán</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">Grianghraf socraithe ag gnáthchaighdeán</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">Cuir Meán leis</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6877,6 +6885,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">Bearr agus Rothlaigh</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">Athraigh Cáilíocht an Mheáin</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">Sábháil Meán</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6887,22 +6897,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">Seol Meán</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">Críochnaigh le Teachtaireacht a chur leis</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="one">%1$d mhír socraithe ag ardchaighdeán</item>
-        <item quantity="two">%1$d mhír socraithe ag ardchaighdeán</item>
-        <item quantity="few">%1$d mhír socraithe ag ardchaighdeán</item>
-        <item quantity="many">%1$d mír socraithe ag ardchaighdeán</item>
-        <item quantity="other">%1$d mír socraithe ag ardchaighdeán</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="one">%1$d mhír socraithe ag gnáthchaighdeán</item>
-        <item quantity="two">%1$d mhír socraithe ag gnáthchaighdeán</item>
-        <item quantity="few">%1$d mhír socraithe ag gnáthchaighdeán</item>
-        <item quantity="many">%1$d mír socraithe ag gnáthchaighdeán</item>
-        <item quantity="other">%1$d mír socraithe ag gnáthchaighdeán</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">Cealaigh</string>
     <string name="ImageEditorHud__draw">Tarraing</string>
@@ -7415,7 +7409,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">Méid</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Go raibh maith agat as tacú le Signal. Cabhraíonn do chion leis an misean a spreagadh chun teicneolaíocht príobháideachta foinse oscailte a fhorbairt, rud a chosnaíonn an tsaoirse cainte agus a chumasaíonn cumarsáid dhomhanda shlán do na milliúin ar fud an domhain. Más cónaitheoir sna Stáit Aontaithe thú, coinnigh an admháil seo do do thaifid chánach. Eagraíocht neamhbhrabúis díolmhaithe ó cháin sna Stáit Aontaithe faoi alt 501c3 den Internal Revenue Code is ea Signal Technology Foundation. Is é 82–4506840 ár nUimhir Aitheantas Cánach Feidearálaí.</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Go raibh maith agat as tacú le Signal. Cabhraíonn do rannchuidiú leis an misean chun saoirse cainte a chosaint agus chun cur ar ár gcumas cumarsáid dhomhanda a chur ar fáil do na milliúin ar fud an domhain, trí theicneolaíocht phríobháideachta foinse oscailte. Más cónaitheoir sna Stáit Aontaithe thú, coinnigh an admháil seo do do thaifid chánach. Eagraíocht neamhbhrabúis díolmhaithe ó cháin sna Stáit Aontaithe faoi alt 501c3 den Internal Revenue Code is ea Signal Technology Foundation. Is é 82–4506840 ár nUimhir Aitheantais Cánach Feidearálaí. Níor thug Signal aon earraí ná aon seirbhísí mar chúiteamh ar an rannchuidiú sin.</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">Níl aon admhálacha ann</string>
 
@@ -9439,15 +9433,15 @@
     <!-- Subtext describing when a backup has never taken place. -->
     <string name="RemoteBackupsSettingsFragment__never">Choíche</string>
     <!-- Subtext on a linked device describing when the primary device last backed up. Placeholder is the formatted date and time. -->
-    <string name="RemoteBackupsSettingsFragment__your_phone_s">Your phone · %1$s</string>
+    <string name="RemoteBackupsSettingsFragment__your_phone_s">Do ghuthán · %1$s</string>
     <!-- Message shown on a linked device with a free backup plan explaining that the subscription is managed on the primary device -->
-    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_upgrade_your_subscription_on_your_primary_device">You can manage or upgrade your Signal Secure Backups subscription on your primary device.</string>
+    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_upgrade_your_subscription_on_your_primary_device">Is féidir leat do shíntiús le Cúltacaí Slána Signal a bhainistiú nó a uasghrádú ar do phríomhghléas.</string>
     <!-- Message shown on a linked device with a paid backup plan explaining that the subscription is managed on the primary device -->
-    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_cancel_your_subscription_on_your_primary_device">You can manage or cancel your Signal Secure Backups subscription on your primary device.</string>
+    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_cancel_your_subscription_on_your_primary_device">Is féidir leat do shíntiús le Cúltacaí Slána Signal a bhainistiú nó a chealú ar do phríomhghléas.</string>
     <!-- Message shown on a linked device with a canceled backup subscription explaining that the subscription is managed on the primary device -->
-    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_renew_your_subscription_on_your_primary_device">You can manage or renew your Signal Secure Backups subscription on your primary device.</string>
+    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_renew_your_subscription_on_your_primary_device">Is féidir leat do shíntiús le Cúltacaí Slána Signal a bhainistiú nó a athnuachan ar do phríomhghuthán.</string>
     <!-- Message shown on a linked device when backups are off or the subscription was not found, explaining that backups are managed on the primary device -->
-    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_upgrade_backups_on_your_primary_device">You can manage or upgrade Signal Secure Backups on your primary device.</string>
+    <string name="RemoteBackupsSettingsFragment__you_can_manage_or_upgrade_backups_on_your_primary_device">Is féidir leat Cúltacaí Slána Signal a bhainistiú nó a uasghrádú ar do phríomhghléas.</string>
     <!-- Button label to perform a backup immediately -->
     <string name="RemoteBackupsSettingsFragment__back_up_now">Déan cúltaca anois</string>
     <!-- Dialog title when confirming whether to turn off and deleting backups -->

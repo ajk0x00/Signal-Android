@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">Blokeerid kasutaja?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">Kasutajal %1$s pole võimalik sulle helistada ega sõnumeid saata.</string>
     <string name="BlockedUsersActivity__block">Blokeeri</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -294,6 +296,16 @@
     <string name="ClientDeprecatedActivity_warning">Hoiatus</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">Sinu Signali versioon on aegunud. Sa saad vaadata sõnumiajalugu, kuid ei saa enne uuendamist sõnumeid saata ega vastu võtta.</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">Kuupäev on ebatäpne</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">Sinu seadme kuupäev on ebatäpne.\nMuuda kellaaega ja proovi uuesti.</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">Sinu seadme kuupäev ja kellaaeg on:\n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">Muuda kuupäeva</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">Veebibrauserit ei leitud.</string>
     <string name="CommunicationActions_send_email">Saada e-post</string>
@@ -388,6 +400,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s kustutas selle sõnumi</string>
     <string name="ConversationItem_you_deleted_this_message">Sa kustutasid selle sõnumi</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">Kas kustutada kõigi jaoks?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Administraator %1$s kustutas selle sõnumi</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -579,7 +593,7 @@
     <string name="ConversationFragment_delete">Kustuta</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">Kustuta kõikjalt</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">See sõnum kustutatakse kõigilt vestluse liikmetelt, kui nad kasutavad Signali värsket versiooni. Nad näevad, et sa kustutasid sõnumi.</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">See sõnum kustutatakse kõigi jaoks selles vestluses. Teised näevad, et sa kustutasid sõnumi.</string>
     <string name="ConversationFragment_quoted_message_not_found">Originaalsõnumit ei leitud</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">Originaalsõnum pole enam saadaval</string>
     <string name="ConversationFragment_failed_to_open_message">Sõnumi avamine ebaõnnestus</string>
@@ -758,17 +772,28 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">Lugemata vestlusi ei ole</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="one">Kas kustutada valitud vestlus?</item>
-        <item quantity="other">Kas kustutada valitud vestlused?</item>
+        <item quantity="one">Kas kustutada sõnumiajalugu?</item>
+        <item quantity="other">Kas kustutada sõnumiajalood?</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="one">See kustutab valitud vestluse jäädavalt.</item>
-        <item quantity="other">See kustutab kõik %1$d valitud vestlust jäädavalt.</item>
+        <item quantity="one">Kõik sõnumid selles vestluses kustutatakse.</item>
+        <item quantity="other">Kõik sõnumid nendes vestlustes kustutatakse.</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="one">Kõik selle vestluse sõnumid kustutatakse. Sa jääd endiselt selle grupi liikmeks.</item>
+        <item quantity="other">Kõik nende vestluste sõnumid kustutatakse. Sa jääd endiselt kõigi gruppide liikmeks, millest sa pole veel lahkunud.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="one">See kustutab valitud vestluse jäädavalt kõigist su seadmetest.</item>
-        <item quantity="other">See kustutab kõik %1$d valitud vestlust jäädavalt kõigist su seadmetest.</item>
+        <item quantity="one">Kõik selle vestluse sõnumid kustutatakse kõigist sinu seadmetest.</item>
+        <item quantity="other">Kõik nende vestluste sõnumid kustutatakse kõigist sinu seadmetest.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="one">Kõik selle vestluse sõnumid kustutatakse kõigist su seadmetest. Sa jääd endiselt selle grupi liikmeks.</item>
+        <item quantity="other">Kõik nende vestluste sõnumid kustutatakse kõigist su seadmetest. Sa jääd endiselt kõigi gruppide liikmeks, millest sa pole veel lahkunud.</item>
     </plurals>
     <string name="ConversationListFragment_deleting">Kustutan</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1046,13 +1071,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Kasuta seda Signali kontot lauaarvutis või iPadis.</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">Kasuta seda Signali kontot teises seadmes.</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">Lingi uus seade</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s Sõnumid ja vestluse info on kaitstud kõigis seadmetes otspunktkrüpteeringuga</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal arvutis või iPadis</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Kogu sõnumivahetus lingitud seadmetes on privaatne</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1118,6 +1143,8 @@
     <string name="LinkDeviceFragment__edit_name">Muuda nime</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">Linkimine tühistatud</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">Sul saab olla vaid %1$d lingitud seadet.</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">Ära sulge äppi</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -3070,6 +3097,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">Grupp uuendatud</string>
@@ -4092,15 +4120,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Hiljutised</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">See sõnum</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Hiljuti kasutatud</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">Emotikonid &amp; inimesed</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">Loodus</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">Toit</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">Hobitegevused</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">Kohad</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">Objektid</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Sümbolid</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Lipud</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Emotikonid</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Tulemusi ei leitud</string>
 
     <!-- GifQuickSearchOption -->
@@ -5626,18 +5645,6 @@
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">Grupi kirjeldus</string>
 
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">Standardne</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">Kiirem, vähem andmeid</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">Kõrge</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">Aeglasem, rohkem andmeid</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">Meedia kvaliteet</string>
-
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Uuenda oma Signali turvaliste varukoopia tellimust</string>
@@ -6193,6 +6200,8 @@
     <string name="ConversationSettingsFragment__end_group">Lõpeta grupp</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">Grupp on lõppenud.</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">Arhiveeri vestlus</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6383,18 +6392,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">Üks või mitu üksust olid liiga suured</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">Üks või mitu üksust olid kehtetud</string>
     <string name="MediaReviewFragment__too_many_items_selected">Liiga palju elemente valitud</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">Sinu videot lühendati, et see mahuks suurusepiirangusse</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">Video on seadistatud üks kord vaatamiseks</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">Foto on seadistatud üks kord vaatamiseks</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">Valitud kõrge videokvaliteet</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">Valitud standardne videokvaliteet</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">Valitud kõrge fotokvaliteet</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">Valitud standardne fotokvaliteet</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">Lisa meedia</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6403,6 +6405,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">Lõika ja pööra</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">Muuda meedia kvaliteeti</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">Salvesta meedia</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6413,16 +6417,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">Saada meedia</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">Lõpeta sõnumi lisamine</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="one">%1$d üksusel valitud kõrge kvaliteet</item>
-        <item quantity="other">%1$d üksusel valitud kõrge kvaliteet</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="one">%1$d üksusel valitud standardne kvaliteet</item>
-        <item quantity="other">%1$d üksusel valitud standardne kvaliteet</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">Loobu</string>
     <string name="ImageEditorHud__draw">Joonista</string>
@@ -6935,7 +6929,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">Summa</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Aitäh Signalit toetamast. Sinu panus annab tõuke missioonile arendada avatud lähtekoodiga privaatsustehnoloogiat, mis kaitseb väljendusvabadust ja võimaldab turvalist suhtlust miljonitele inimestele üle kogu maailma. Kui elad Ameerika Ühendriikides, jäta see kviitung alles oma maksude deklareerimiseks. Signal Technology Foundation on Ameerika Ühendriikides maksuseadustiku (US Internal Revenue Code) jao 501c3 järgi registreeritud maksuvaba mittetulundusühing. Meie föderaalne maksukood (Federal Tax ID) on 82–4506840.</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Aitäh, et toetad Signalit. Sinu panus annab tõuke missioonile kaitsta väljendusvabadust ja võimaldada turvalist suhtlust miljonitele inimestele üle kogu maailma avatud lähtekoodiga privaatsustehnoloogia abil. Kui elad Ameerika Ühendriikides, jäta see kviitung alles oma maksude deklareerimiseks. Signal Technology Foundation on Ameerika Ühendriikides maksuseadustiku (US Internal Revenue Code) jao 501c3 järgi registreeritud maksuvaba mittetulundusühing. Meie föderaalne maksukood (Federal Tax ID) on 82-4506840. Signal ei paku selle annetuse eest vastutasuks kaupu ega teenuseid.</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">Kviitungeid ei ole</string>
 

@@ -107,8 +107,8 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     refresh()
   }
 
-  fun setInternalCallingDisableTelecom(enabled: Boolean) {
-    preferenceDataStore.putBoolean(InternalValues.CALLING_DISABLE_TELECOM, enabled)
+  fun setInternalCallingUseTelecom(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_USE_TELECOM, enabled)
     refresh()
   }
 
@@ -139,6 +139,31 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
 
   fun setInternalCallingUseInputVoiceComm(enabled: Boolean) {
     preferenceDataStore.putBoolean(InternalValues.CALLING_USE_INPUT_VOICE_COMM, enabled)
+    refresh()
+  }
+
+  fun setInternalCallingSetVideoConfig(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_SET_VIDEO_CONFIG, enabled)
+    refresh()
+  }
+
+  fun setInternalCallingUseHardwareVp9Encode(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_USE_HARDWARE_VP9_ENCODE, enabled)
+    refresh()
+  }
+
+  fun setInternalCallingUseHardwareVp9Decode(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_USE_HARDWARE_VP9_DECODE, enabled)
+    refresh()
+  }
+
+  fun setInternalCallingUseSoftwareVp9Encode(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_USE_SOFTWARE_VP9_ENCODE, enabled)
+    refresh()
+  }
+
+  fun setInternalCallingUseSoftwareVp9Decode(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_USE_SOFTWARE_VP9_DECODE, enabled)
     refresh()
   }
 
@@ -221,13 +246,18 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     allowCensorshipSetting = SignalStore.internal.allowChangingCensorshipSetting,
     callingServer = SignalStore.internal.groupCallingServer,
     callingDataMode = SignalStore.internal.callingDataMode,
-    callingDisableTelecom = SignalStore.internal.callingDisableTelecom,
+    callingUseTelecom = SignalStore.internal.callingUseTelecom,
     callingSetAudioConfig = SignalStore.internal.callingSetAudioConfig,
     callingUseOboeAdm = SignalStore.internal.callingUseOboeAdm,
     callingUseSoftwareAec = SignalStore.internal.callingUseSoftwareAec,
     callingUseSoftwareNs = SignalStore.internal.callingUseSoftwareNs,
     callingUseInputLowLatency = SignalStore.internal.callingUseInputLowLatency,
     callingUseInputVoiceComm = SignalStore.internal.callingUseInputVoiceComm,
+    callingSetVideoConfig = SignalStore.internal.callingSetVideoConfig,
+    callingUseHardwareVp9Encode = SignalStore.internal.callingUseHardwareVp9Encode,
+    callingUseHardwareVp9Decode = SignalStore.internal.callingUseHardwareVp9Decode,
+    callingUseSoftwareVp9Encode = SignalStore.internal.callingUseSoftwareVp9Encode,
+    callingUseSoftwareVp9Decode = SignalStore.internal.callingUseSoftwareVp9Decode,
     useBuiltInEmojiSet = SignalStore.internal.forceBuiltInEmoji,
     emojiVersion = null,
     removeSenderKeyMinimium = SignalStore.internal.removeSenderKeyMinimum,

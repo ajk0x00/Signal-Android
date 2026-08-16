@@ -1,31 +1,31 @@
 package org.thoughtcrime.securesms.mediasend.v2
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.KeyEvent
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.transition.AutoTransition
-import androidx.transition.TransitionManager
-import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import org.signal.camera.CameraDisplay
 import org.signal.core.models.media.Media
-import org.signal.core.util.BreakIteratorCompat
+import org.signal.core.ui.WindowBreakpoint
+import org.signal.core.ui.compose.theme.SignalTheme
+import org.signal.core.ui.getWindowBreakpoint
 import org.signal.core.util.Debouncer
 import org.signal.core.util.OVERRIDE_TRANSITION_CLOSE_COMPAT
 import org.signal.core.util.concurrent.LifecycleDisposable
@@ -33,56 +33,55 @@ import org.signal.core.util.getParcelableArrayListExtraCompat
 import org.signal.core.util.getParcelableExtraCompat
 import org.signal.core.util.logging.Log
 import org.signal.core.util.overrideActivityTransitionCompat
+import org.signal.emoji.EmojiEventListener
+import org.signal.mediasend.MediaSendRoute
+import org.signal.mediasend.MediaValidator
+import org.signal.mediasend.screens.capture.MediaCaptureBottomBar
+import org.signal.mediasend.screens.capture.MediaCaptureScreenEvents
 import org.thoughtcrime.securesms.PassphraseRequiredActivity
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.components.emoji.EmojiEventListener
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.conversation.MessageSendType
 import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardEvent
 import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardEventViewModel
 import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardPageFragment
 import org.thoughtcrime.securesms.keyboard.emoji.search.EmojiSearchFragment
-import org.thoughtcrime.securesms.linkpreview.LinkPreviewUtil
 import org.thoughtcrime.securesms.mediasend.MediaSendActivityResult
 import org.thoughtcrime.securesms.mediasend.v2.review.MediaReviewFragment
-import org.thoughtcrime.securesms.mediasend.v2.text.TextStoryPostCreationViewModel
-import org.thoughtcrime.securesms.mediasend.v2.text.send.TextStoryPostSendRepository
+import org.thoughtcrime.securesms.mediasend.v2.text.TextStoryPostCreationFragment
 import org.thoughtcrime.securesms.recipients.RecipientId
-import org.thoughtcrime.securesms.safety.SafetyNumberBottomSheet
 import org.thoughtcrime.securesms.stories.Stories
-import org.thoughtcrime.securesms.util.FullscreenHelper
-import org.thoughtcrime.securesms.util.WindowUtil
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
-import org.thoughtcrime.securesms.util.visible
-import kotlin.getValue
-import org.signal.core.ui.R as CoreUiR
 
 class MediaSelectionActivity :
   PassphraseRequiredActivity(),
   MediaReviewFragment.Callback,
+  TextStoryPostCreationFragment.Callback,
   EmojiKeyboardPageFragment.Callback,
   EmojiEventListener,
   EmojiSearchFragment.Callback {
 
-  private var animateInShadowLayerValueAnimator: ValueAnimator? = null
-  private var animateInTextColorValueAnimator: ValueAnimator? = null
-  private var animateOutShadowLayerValueAnimator: ValueAnimator? = null
-  private var animateOutTextColorValueAnimator: ValueAnimator? = null
+  private var selectedCaptureScreen: MediaSendRoute.Capture by mutableStateOf(MediaSendRoute.Capture.Camera)
+
+  private var isOnCaptureScreen: Boolean by mutableStateOf(false)
 
   lateinit var viewModel: MediaSelectionViewModel
 
   private val lifecycleDisposable = LifecycleDisposable()
 
-  private val textViewModel: TextStoryPostCreationViewModel by viewModels(
-    factoryProducer = {
-      TextStoryPostCreationViewModel.Factory(TextStoryPostSendRepository())
-    }
-  )
-
   private val addMessageCommandViewModel: EmojiKeyboardEventViewModel by viewModels()
 
   private val destination: MediaSelectionDestination
     get() = MediaSelectionDestination.fromBundle(requireNotNull(intent.getBundleExtra(DESTINATION)))
+
+  override val textStoryDestinations: Set<ContactSearchKey.RecipientSearchKey>
+    get() = (destination.getRecipientSearchKeyList() + destination.getRecipientSearchKey()).filterNotNull().toSet()
+
+  override val isAddToGroupStoryFlow: Boolean
+    get() = intent.getBooleanExtra(IS_ADD_TO_GROUP_STORY_FLOW, false)
+
+  override val textStoryDraftText: CharSequence?
+    get() = if (shareToTextStory) draftText else null
 
   private val isStory: Boolean
     get() = intent.getBooleanExtra(IS_STORY, false)
@@ -114,42 +113,46 @@ class MediaSelectionActivity :
   override fun onCreate(savedInstanceState: Bundle?, ready: Boolean) {
     setContentView(R.layout.media_selection_activity)
 
-    FullscreenHelper.showSystemUI(window)
-    WindowUtil.setNavigationBarColor(this, 0x01000000)
-    WindowUtil.setStatusBarColor(window, Color.TRANSPARENT)
-
-    val textStoryToggle: ConstraintLayout = findViewById(R.id.switch_widget)
-    val cameraDisplay = CameraDisplay.getDisplay(this)
-
-    textStoryToggle.updateLayoutParams<FrameLayout.LayoutParams> {
-      bottomMargin = cameraDisplay.getToggleBottomMargin()
+    if (resources.getWindowBreakpoint() !is WindowBreakpoint.Small) {
+      requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 
-    val cameraSelectedConstraintSet = ConstraintSet().apply {
-      clone(textStoryToggle)
-    }
-    val textSelectedConstraintSet = ConstraintSet().apply {
-      clone(this@MediaSelectionActivity, R.layout.media_selection_activity_text_selected_constraints)
-    }
+    val toggleBar: ComposeView = findViewById(R.id.toggle_bar)
+    toggleBar.setContent {
+      val state by viewModel.state.observeAsState()
 
-    val textSwitch: TextView = findViewById(R.id.text_switch)
-    val cameraSwitch: TextView = findViewById(R.id.camera_switch)
+      val canDisplayStorySwitch = remember(state?.selectedMedia) {
+        state?.selectedMedia?.let { canDisplayStorySwitch(it) } ?: false
+      }
 
-    textSwitch.setOnClickListener {
-      viewModel.sendCommand(HudCommand.GoToText)
-    }
+      val canDisplayMediaPreview = remember(state?.selectedMedia) {
+        state?.selectedMedia?.let { canDisplayMediaPreview(it) } ?: false
+      }
 
-    cameraSwitch.setOnClickListener {
-      debouncer.publish { viewModel.sendCommand(HudCommand.GoToCapture) }
+      SignalTheme {
+        if (isOnCaptureScreen) {
+          MediaCaptureBottomBar(
+            canDisplayToggleSwitch = canDisplayStorySwitch,
+            canDisplayMediaBar = canDisplayMediaPreview,
+            selectedCaptureScreen = selectedCaptureScreen,
+            selectedMedia = state?.selectedMedia ?: emptyList(),
+            onEvent = { event ->
+              when (event) {
+                MediaCaptureScreenEvents.ShowCamera -> debouncer.publish { popTextStoryPostCreationFragment() }
+                MediaCaptureScreenEvents.ShowTextStory -> viewModel.sendCommand(HudCommand.GoToText)
+                MediaCaptureScreenEvents.NextClicked -> viewModel.sendCommand(HudCommand.GoToReview)
+                is MediaCaptureScreenEvents.Camera,
+                is MediaCaptureScreenEvents.ParentStateChanged,
+                is MediaCaptureScreenEvents.SelectedCaptureScreenChanged -> Unit
+              }
+            },
+            modifier = Modifier.navigationBarsPadding()
+          )
+        }
+      }
     }
 
     if (savedInstanceState == null) {
-      if (shareToTextStory) {
-        initializeTextStory()
-      }
-
-      cameraSwitch.isSelected = true
-
       val navHostFragment = NavHostFragment.create(R.navigation.media)
 
       supportFragmentManager
@@ -160,28 +163,43 @@ class MediaSelectionActivity :
       navigateToStartDestination()
     } else {
       viewModel.onRestoreState(this, savedInstanceState)
-      textViewModel.restoreFromInstanceState(savedInstanceState)
     }
 
     (supportFragmentManager.findFragmentByTag(NAV_HOST_TAG) as NavHostFragment).navController.addOnDestinationChangedListener { _, d, _ ->
       when (d.id) {
         R.id.mediaCaptureFragment -> {
-          textStoryToggle.visible = canDisplayStorySwitch()
-
-          animateTextStyling(cameraSwitch, textSwitch, 200)
-          TransitionManager.beginDelayedTransition(textStoryToggle, AutoTransition().setDuration(200))
-          cameraSelectedConstraintSet.applyTo(textStoryToggle)
+          selectedCaptureScreen = MediaSendRoute.Capture.Camera
+          isOnCaptureScreen = true
+          requestedOrientation = if (resources.getWindowBreakpoint() is WindowBreakpoint.Small) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+          } else {
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+          }
         }
 
         R.id.textStoryPostCreationFragment -> {
-          textStoryToggle.visible = canDisplayStorySwitch()
-
-          animateTextStyling(textSwitch, cameraSwitch, 200)
-          TransitionManager.beginDelayedTransition(textStoryToggle, AutoTransition().setDuration(200))
-          textSelectedConstraintSet.applyTo(textStoryToggle)
+          selectedCaptureScreen = MediaSendRoute.Capture.TextStory
+          isOnCaptureScreen = true
+          requestedOrientation = if (resources.getWindowBreakpoint() is WindowBreakpoint.Small) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+          } else {
+            ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+          }
         }
 
-        else -> textStoryToggle.visible = false
+        else -> {
+          isOnCaptureScreen = false
+          requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+      }
+
+      // Hard-cut rotation while capturing (like Pixel Camera) instead of the system's smooth rotate.
+      window.attributes = window.attributes.apply {
+        rotationAnimation = if (isOnCaptureScreen) {
+          WindowManager.LayoutParams.ROTATION_ANIMATION_JUMPCUT
+        } else {
+          WindowManager.LayoutParams.ROTATION_ANIMATION_ROTATE
+        }
       }
     }
 
@@ -189,6 +207,10 @@ class MediaSelectionActivity :
     lifecycleDisposable += viewModel.mediaErrors
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe(this::handleError)
+
+    lifecycleDisposable += viewModel.videoTrimmedEvents
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe { Toast.makeText(this, R.string.MediaReviewFragment__video_trimmed_to_fit, Toast.LENGTH_SHORT).show() }
 
     onBackPressedDispatcher.addCallback(OnBackPressed())
 
@@ -200,13 +222,11 @@ class MediaSelectionActivity :
   private fun handleError(error: MediaValidator.FilterError) {
     when (error) {
       MediaValidator.FilterError.None -> return
-      MediaValidator.FilterError.ItemTooLarge -> Toast.makeText(this, R.string.MediaReviewFragment__one_or_more_items_were_too_large, Toast.LENGTH_SHORT).show()
-      MediaValidator.FilterError.ItemInvalidType -> Toast.makeText(this, R.string.MediaReviewFragment__one_or_more_items_were_invalid, Toast.LENGTH_SHORT).show()
+      is MediaValidator.FilterError.ItemTooLarge -> Toast.makeText(this, R.string.MediaReviewFragment__one_or_more_items_were_too_large, Toast.LENGTH_SHORT).show()
+      is MediaValidator.FilterError.ItemInvalidType -> Toast.makeText(this, R.string.MediaReviewFragment__one_or_more_items_were_invalid, Toast.LENGTH_SHORT).show()
       MediaValidator.FilterError.TooManyItems -> Toast.makeText(this, R.string.MediaReviewFragment__too_many_items_selected, Toast.LENGTH_SHORT).show()
       is MediaValidator.FilterError.NoItems -> {
-        if (error.cause != null) {
-          handleError(error.cause)
-        }
+        error.cause?.let { handleError(it) }
         onNoMediaSelected()
       }
     }
@@ -214,69 +234,30 @@ class MediaSelectionActivity :
     viewModel.clearMediaErrors()
   }
 
-  private fun animateTextStyling(selectedSwitch: TextView, unselectedSwitch: TextView, duration: Long) {
-    val offTextColor = ContextCompat.getColor(this, CoreUiR.color.signal_colorOnSurface)
-    val onTextColor = ContextCompat.getColor(this, CoreUiR.color.signal_colorSecondaryContainer)
-
-    animateInShadowLayerValueAnimator?.cancel()
-    animateInTextColorValueAnimator?.cancel()
-    animateOutShadowLayerValueAnimator?.cancel()
-    animateOutTextColorValueAnimator?.cancel()
-
-    animateInShadowLayerValueAnimator = ValueAnimator.ofFloat(selectedSwitch.shadowRadius, 0f).apply {
-      this.duration = duration
-      addUpdateListener { selectedSwitch.setShadowLayer(it.animatedValue as Float, 0f, 0f, Color.BLACK) }
-      start()
-    }
-    animateInTextColorValueAnimator = ValueAnimator.ofObject(ArgbEvaluatorCompat(), selectedSwitch.currentTextColor, onTextColor).apply {
-      setEvaluator(ArgbEvaluatorCompat.getInstance())
-      this.duration = duration
-      addUpdateListener { selectedSwitch.setTextColor(it.animatedValue as Int) }
-      start()
-    }
-    animateOutShadowLayerValueAnimator = ValueAnimator.ofFloat(unselectedSwitch.shadowRadius, 3f).apply {
-      this.duration = duration
-      addUpdateListener { unselectedSwitch.setShadowLayer(it.animatedValue as Float, 0f, 0f, Color.BLACK) }
-      start()
-    }
-    animateOutTextColorValueAnimator = ValueAnimator.ofObject(ArgbEvaluatorCompat(), unselectedSwitch.currentTextColor, offTextColor).apply {
-      setEvaluator(ArgbEvaluatorCompat.getInstance())
-      this.duration = duration
-      addUpdateListener { unselectedSwitch.setTextColor(it.animatedValue as Int) }
-      start()
+  private fun popTextStoryPostCreationFragment() {
+    val navController = findNavController(R.id.fragment_container)
+    if (navController.currentDestination?.id == R.id.textStoryPostCreationFragment) {
+      navController.popBackStack()
     }
   }
 
-  private fun initializeTextStory() {
-    val message = draftText?.toString() ?: return
-    val firstLink = LinkPreviewUtil.findValidPreviewUrls(message).findFirst()
-    val firstLinkUrl = firstLink.map { it.url }.orElse(null)
-
-    val iterator = BreakIteratorCompat.getInstance()
-    iterator.setText(message)
-    val trimmedMessage = iterator.take(700).toString()
-
-    if (firstLinkUrl == message) {
-      textViewModel.setLinkPreview(firstLinkUrl)
-    } else if (firstLinkUrl != null) {
-      textViewModel.setLinkPreview(firstLinkUrl)
-      textViewModel.setBody(trimmedMessage.replace(firstLinkUrl, "").trim())
-    } else {
-      textViewModel.setBody(trimmedMessage.trim())
-    }
-  }
-
-  private fun canDisplayStorySwitch(): Boolean {
+  private fun canDisplayMediaPreview(selectedMedia: List<Media>): Boolean {
     return Stories.isFeatureEnabled() &&
       isCameraFirst() &&
-      !viewModel.hasSelectedMedia() &&
+      selectedMedia.isNotEmpty() &&
+      (destination == MediaSelectionDestination.ChooseAfterMediaSelection || destination is MediaSelectionDestination.SingleStory)
+  }
+
+  private fun canDisplayStorySwitch(selectedMedia: List<Media>): Boolean {
+    return Stories.isFeatureEnabled() &&
+      isCameraFirst() &&
+      selectedMedia.isEmpty() &&
       (destination == MediaSelectionDestination.ChooseAfterMediaSelection || destination is MediaSelectionDestination.SingleStory)
   }
 
   override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     viewModel.onSaveState(outState)
-    textViewModel.saveToInstanceState(outState)
   }
 
   override fun onSentWithResult(mediaSendActivityResult: MediaSendActivityResult) {
@@ -300,20 +281,13 @@ class MediaSelectionActivity :
   }
 
   override fun onSendError(error: Throwable) {
-    if (error is UntrustedRecords.UntrustedRecordsException) {
-      Log.w(TAG, "Send failed due to untrusted identities.")
-      SafetyNumberBottomSheet
-        .forIdentityRecordsAndDestinations(error.untrustedRecords, error.destinations.toList())
-        .show(supportFragmentManager)
-    } else {
-      setResult(RESULT_CANCELED)
+    setResult(RESULT_CANCELED)
 
-      // TODO [alex] - Toast
-      Log.w(TAG, "Failed to send message.", error)
+    // TODO [alex] - Toast
+    Log.w(TAG, "Failed to send message.", error)
 
-      finish()
-      overrideActivityTransitionCompat(OVERRIDE_TRANSITION_CLOSE_COMPAT, R.anim.stationary, R.anim.camera_slide_to_bottom)
-    }
+    finish()
+    overrideActivityTransitionCompat(OVERRIDE_TRANSITION_CLOSE_COMPAT, R.anim.stationary, R.anim.camera_slide_to_bottom)
   }
 
   override fun onNoMediaSelected() {

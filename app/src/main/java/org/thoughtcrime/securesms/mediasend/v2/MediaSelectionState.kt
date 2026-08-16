@@ -4,7 +4,7 @@ import android.net.Uri
 import org.signal.core.models.media.Media
 import org.signal.mediasend.MediaConstraints
 import org.signal.mediasend.SentMediaQuality
-import org.signal.mediasend.edit.video.VideoTrimData
+import org.signal.mediasend.screens.edit.video.VideoTrimData
 import org.thoughtcrime.securesms.conversation.MessageSendType
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.mms.TranscodingConfigProvider
@@ -46,11 +46,11 @@ data class MediaSelectionState(
     return editorStateMap[uri] as? VideoTrimData ?: VideoTrimData()
   }
 
-  fun calculateMaxVideoDurationUs(maxFileSize: Long, videoDuration: Duration): Long {
+  fun calculateMaxVideoDurationUs(videoDuration: Duration): Long {
     return if (isStory && !MediaConstraints.isVideoTranscodeAvailable()) {
       Stories.MAX_VIDEO_DURATION_MILLIS
     } else {
-      TranscodingConfig.calculateMaxVideoUploadDurationInSeconds(transcodingConfigs, videoDuration, maxFileSize).seconds.inWholeMicroseconds
+      TranscodingConfig.calculateMaxVideoUploadDurationInSeconds(transcodingConfigs, videoDuration).seconds.inWholeMicroseconds
     }
   }
 

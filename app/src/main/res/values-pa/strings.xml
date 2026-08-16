@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">ਕੀ ਵਰਤੋਂਕਾਰ ਉੱਤੇ ਪਾਬੰਦੀ ਲਗਾਉਣੀ ਹੈ?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">\"%1$s\" ਤੁਹਾਨੂੰ ਕਾਲ ਨਹੀਂ ਕਰ ਸਕਣਗੇ ਜਾਂ ਸੁਨੇਹੇ ਨਹੀਂ ਭੇਜ ਸਕਣਗੇ।</string>
     <string name="BlockedUsersActivity__block">ਪਾਬੰਦੀ ਲਗਾਓ</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -294,6 +296,16 @@
     <string name="ClientDeprecatedActivity_warning">ਚੇਤਾਵਨੀ</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">ਤੁਹਾਡੇ Signal ਦੇ ਵਰਜ਼ਨ ਦੀ ਮਿਆਦ ਪੁੱਗ ਗਈ ਹੈ। ਤੁਸੀਂ ਆਪਣੇ ਪੁਰਾਣੇ ਸੁਨੇਹੇ ਦੇਖ ਸਕਦੇ ਹੋ ਪਰ ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਆਪਣਾ ਵਰਜ਼ਨ ਅੱਪਡੇਟ ਨਹੀਂ ਕਰਦੇ ਉਦੋਂ ਤੱਕ ਤੁਸੀਂ ਨਾ ਹੀ ਸੁਨੇਹੇ ਭੇਜ ਸਕੋਗੇ ਅਤੇ ਨਾ ਹੀ ਪ੍ਰਾਪਤ ਕਰ ਸਕੋਗੇ।</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">ਮਿਤੀ ਗਲਤ ਹੈ</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਦੀ ਮਿਤੀ ਗਲਤ ਹੈ।\nਆਪਣੀ ਘੜੀ ਨੂੰ ਵਿਵਸਥਿਤ ਕਰੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">ਤੁਹਾਡੇ ਡਿਵਾਈਸ ਦੀ ਮਿਤੀ ਅਤੇ ਸਮਾਂ ਹੈ:\n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">ਮਿਤੀ ਵਿਵਸਥਿਤ ਕਰੋ</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">ਕੋਈ ਵੈੱਬ ਬਰਾਊਜ਼ਰ ਨਹੀਂ ਲੱਭਿਆ।</string>
     <string name="CommunicationActions_send_email">ਈਮੇਲ ਭੇਜੋ</string>
@@ -388,6 +400,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s ਨੇ ਇਹ ਸੁਨੇਹਾ ਮਿਟਾ ਦਿੱਤਾ ਹੈ</string>
     <string name="ConversationItem_you_deleted_this_message">ਤੁਸੀਂ ਇਸ ਸੁਨੇਹੇ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਹੈ</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">ਕੀ ਸਾਰਿਆਂ ਲਈ ਮਿਟਾਉਣਾ ਹੈ?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">ਐਡਮਿਨ %1$s ਨੇ ਇਹ ਸੁਨੇਹਾ ਮਿਟਾ ਦਿੱਤਾ ਹੈ</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -579,7 +593,7 @@
     <string name="ConversationFragment_delete">ਮਿਟਾਓ</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">ਹਰ ਡਿਵਾਈਸ ਤੋਂ ਮਿਟਾਓ</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">ਇਹ ਸੁਨੇਹਾ ਚੈਟ ਵਿੱਚ ਸ਼ਾਮਲ ਸਾਰੇ ਵਿਅਕਤੀਆਂ ਲਈ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ ਜੇ ਉਹ Signal ਦੇ ਨਵੇਂ ਵਰਜ਼ਨ ਦੀ ਵਰਤੋਂ ਕਰ ਰਹੇ ਹਨ। ਉਹ ਇਹ ਦੇਖ ਸਕਣਗੇ ਕਿ ਤੁਸੀਂ ਸੁਨੇਹਾ ਮਿਟਾ ਦਿੱਤਾ ਹੈ।</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">ਇਹ ਸੁਨੇਹਾ ਚੈਟ ਵਿੱਚੋਂ ਸਾਰਿਆਂ ਲਈ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ। ਉਹ ਇਹ ਦੇਖ ਸਕਣਗੇ ਕਿ ਤੁਸੀਂ ਸੁਨੇਹਾ ਮਿਟਾਇਆ ਹੈ।</string>
     <string name="ConversationFragment_quoted_message_not_found">ਅਸਲੀ ਸੁਨੇਹਾ ਨਹੀਂ ਲੱਭਿਆ</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">ਅਸਲ ਸੁਨੇਹਾ ਹੁਣ ਉਪਲਬਧ ਨਹੀਂ ਹੈ</string>
     <string name="ConversationFragment_failed_to_open_message">ਸੁਨੇਹਾ ਖੋਲ੍ਹਣ ਵਿੱਚ ਅਸਫ਼ਲ</string>
@@ -758,17 +772,28 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">ਕੋਈ ਵੀ ਨਾ-ਪੜ੍ਹੀ ਚੈਟ ਮੌਜੂਦ ਨਹੀਂ ਹੈ</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="one">ਕੀ ਚੁਣੀ ਹੋਈ ਚੈਟ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?</item>
-        <item quantity="other">ਕੀ ਚੁਣੀਆਂ ਹੋਈਆਂ ਚੈਟਾਂ ਨੂੰ ਮਿਟਾਉਣਾ ਹੈ?</item>
+        <item quantity="one">ਕੀ ਪੁਰਾਣੇ ਸੁਨੇਹੇ ਮਿਟਾਉਣੇ ਹਨ?</item>
+        <item quantity="other">ਕੀ ਪੁਰਾਣੇ ਸੁਨੇਹੇ ਮਿਟਾਉਣੇ ਹਨ?</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="one">ਅਜਿਹਾ ਕਰਨ \'ਤੇ ਚੁਣੀ ਹੋਈ ਚੈਟ ਨੂੰ ਸਥਾਈ ਤੌਰ \'ਤੇ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
-        <item quantity="other">ਅਜਿਹਾ ਕਰਨ \'ਤੇ ਚੁਣੀਆਂ ਹੋਈਆਂ ਚੈਟਾਂ ਨੂੰ ਸਥਾਈ ਤੌਰ \'ਤੇ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
+        <item quantity="one">ਇਸ ਚੈਟ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
+        <item quantity="other">ਇਹਨਾਂ ਚੈਟਾਂ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="one">ਇਸ ਚੈਟ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ। ਤੁਸੀਂ ਅਜੇ ਵੀ ਇਸ ਗਰੁੱਪ ਦੇ ਮੈਂਬਰ ਰਹੋਗੇ।</item>
+        <item quantity="other">ਇਹਨਾਂ ਚੈਟਾਂ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ। ਤੁਸੀਂ ਅਜੇ ਵੀ ਉਨ੍ਹਾਂ ਗਰੁੱਪਾਂ ਦੇ ਮੈਂਬਰ ਰਹੋਗੇ ਜੋ ਤੁਸੀਂ ਅਜੇ ਤੱਕ ਨਹੀਂ ਛੱਡੇ ਹਨ।</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="one">ਅਜਿਹਾ ਕਰਨ \'ਤੇ ਚੁਣੀ ਹੋਈ ਚੈਟ ਨੂੰ ਤੁਹਾਡੇ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚੋਂ ਸਥਾਈ ਤੌਰ \'ਤੇ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
-        <item quantity="other">ਅਜਿਹਾ ਕਰਨ \'ਤੇ ਚੁਣੀਆਂ ਹੋਈਆਂ %1$d ਚੈਟਾਂ ਨੂੰ ਤੁਹਾਡੇ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚੋਂ ਸਥਾਈ ਤੌਰ \'ਤੇ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
+        <item quantity="one">ਇਸ ਚੈਟ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚੋਂ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
+        <item quantity="other">ਇਹਨਾਂ ਚੈਟਾਂ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚੋਂ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="one">ਇਸ ਚੈਟ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚੋਂ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ। ਤੁਸੀਂ ਅਜੇ ਵੀ ਇਸ ਗਰੁੱਪ ਦੇ ਮੈਂਬਰ ਰਹੋਗੇ।</item>
+        <item quantity="other">ਇਹਨਾਂ ਚੈਟਾਂ ਵਿਚਲੇ ਸਾਰੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਤੁਹਾਡੇ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਵਿੱਚੋਂ ਮਿਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ। ਤੁਸੀਂ ਅਜੇ ਵੀ ਉਨ੍ਹਾਂ ਗਰੁੱਪਾਂ ਦੇ ਮੈਂਬਰ ਰਹੋਗੇ ਜੋ ਤੁਸੀਂ ਅਜੇ ਤੱਕ ਨਹੀਂ ਛੱਡੇ ਹਨ।</item>
     </plurals>
     <string name="ConversationListFragment_deleting">ਮਿਟਾਈਆਂ ਜਾ ਰਹੀਆਂ ਹਨ</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1046,13 +1071,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">ਡੈਸਕਟੌਪ ਜਾਂ iPad \'ਤੇ ਇਸ Signal ਖਾਤੇ ਦੀ ਵਰਤੋਂ ਕਰੋ।</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">ਕਿਸੇ ਹੋਰ ਡਿਵਾਈਸ \'ਤੇ ਇਸ Signal ਖਾਤੇ ਦੀ ਵਰਤੋਂ ਕਰੋ।</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">ਨਵਾਂ ਡਿਵਾਈਸ ਲਿੰਕ ਕਰੋ</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s ਸੁਨੇਹੇ ਅਤੇ ਚੈਟ ਦੀ ਜਾਣਕਾਰੀ ਸਾਰੇ ਡਿਵਾਈਸਾਂ ਉੱਤੇ ਸਿਰੇ-ਤੋਂ-ਸਿਰੇ ਤੱਕ ਇਨਕ੍ਰਿਪਸ਼ਨ ਨਾਲ ਸੁਰੱਖਿਅਤ ਹੁੰਦੀ ਹੈ</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">ਡੈਸਕਟੌਪ ਜਾਂ iPad ਲਈ Signal</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">ਲਿੰਕ ਕੀਤੇ ਡਿਵਾਈਸਾਂ \'ਤੇ ਸਾਰੇ ਸੁਨੇਹੇ ਪ੍ਰਾਈਵੇਟ ਹੁੰਦੇ ਹਨ</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1118,6 +1143,8 @@
     <string name="LinkDeviceFragment__edit_name">ਨਾਂ ਨੂੰ ਸੋਧੋ</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">ਲਿੰਕ ਕਰਨਾ ਰੱਦ ਕੀਤਾ ਗਿਆ</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">ਤੁਸੀਂ ਸਿਰਫ਼ %1$d ਡਿਵਾਈਸ ਲਿੰਕ ਕਰਕੇ ਰੱਖ ਸਕਦੇ ਹੋ।</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">ਐਪ ਨੂੰ ਬੰਦ ਨਾ ਕਰੋ</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -3070,6 +3097,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">ਗਰੁੱਪ ਅੱਪਡੇਟ ਕੀਤਾ</string>
@@ -4092,15 +4120,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">ਹਾਲੀਆ</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">ਇਹ ਸੁਨੇਹਾ</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">ਤਾਜ਼ਾ ਵਰਤੇ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">ਮੁਖੜੇ ਤੇ ਲੋਕ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">ਕੁਦਰਤ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">ਖਾਣ-ਪੀਣ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">ਸਰਗਰਮੀਆਂ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">ਥਾਵਾਂ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">ਚੀਜ਼ਾਂ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">ਚਿੰਨ੍ਹ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">ਝੰਡੇ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">ਜਜ਼ਬਾਤੀ-ਆਈਕਾਨ</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">ਕੋਈ ਨਤੀਜੇ ਨਹੀਂ ਲੱਭੇ</string>
 
     <!-- GifQuickSearchOption -->
@@ -5626,18 +5645,6 @@
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">ਗਰੁੱਪ ਬਾਰੇ ਜਾਣਕਾਰੀ</string>
 
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">ਸਟੈਂਡਰਡ</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">ਵੱਧ ਤੇਜ਼, ਘੱਟ ਡਾਟਾ</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">ਉੱਚਾ</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">ਹੌਲੀ, ਵੱਧ ਡਾਟਾ</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">ਮੀਡੀਆ ਕੁਆਲਟੀ</string>
-
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">ਆਪਣੀ Signal ਸਿਕਿਓਰ ਬੈਕਅੱਪ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਨੂੰ ਰੀਨਿਊ ਕਰੋ</string>
@@ -6193,6 +6200,8 @@
     <string name="ConversationSettingsFragment__end_group">ਗਰੁੱਪ ਬੰਦ ਕਰੋ</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">ਇਹ ਗਰੁੱਪ ਬੰਦ ਹੋ ਗਿਆ ਹੈ।</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">ਚੈਟ ਆਰਕਾਈਵ ਕਰੋ</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6383,18 +6392,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">ਇੱਕ ਜਾਂ ਵੱਧ ਚੀਜ਼ਾਂ ਬਹੁਤ ਵੱਡੀਆਂ ਸਨ</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">ਇੱਕ ਜਾਂ ਵੱਧ ਆਈਟਮਾਂ ਵਾਜਬ ਨਹੀਂ ਹਨ</string>
     <string name="MediaReviewFragment__too_many_items_selected">ਬਹੁਤ ਵੱਧ ਚੀਜ਼ਾਂ ਚੁਣੀਆਂ ਗਈਆਂ</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">ਤੁਹਾਡੀ ਵੀਡੀਓ ਨੂੰ ਆਕਾਰ ਦੀ ਸੀਮਾ ਦੇ ਅੰਦਰ ਫਿੱਟ ਕਰਨ ਲਈ ਛੋਟਾ ਕੀਤਾ ਗਿਆ ਸੀ</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">ਵੀਡੀਓ ਨੂੰ ਇੱਕ ਵਾਰ ਦੇਖਣ ਲਈ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">ਫ਼ੋਟੋ ਨੂੰ ਇੱਕ ਵਾਰ ਦੇਖਣ ਲਈ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">ਵੀਡੀਓ ਨੂੰ ਉੱਚ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">ਵੀਡੀਓ ਨੂੰ ਸਟੈਂਡਰਡ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">ਫ਼ੋਟੋ ਨੂੰ ਉੱਚ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">ਫ਼ੋਟੋ ਨੂੰ ਸਟੈਂਡਰਡ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">ਮੀਡੀਆ ਸ਼ਾਮਲ ਕਰੋ</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6403,6 +6405,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">ਕੱਟੋ ਅਤੇ ਘੁੰਮਾਓ</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">ਮੀਡੀਆ ਕੁਆਲਿਟੀ ਬਦਲੋ</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">ਮੀਡੀਆ ਸੇਵ ਕਰੋ</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6413,16 +6417,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">ਮੀਡੀਆ ਭੇਜੋ</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">ਸੁਨੇਹਾ ਸ਼ਾਮਲ ਕਰਨਾ ਪੂਰਾ ਕਰੋ</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="one">%1$d ਆਈਟਮ ਨੂੰ ਉੱਚ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</item>
-        <item quantity="other">%1$d ਆਈਟਮਾਂ ਨੂੰ ਉੱਚ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="one">%1$d ਆਈਟਮ ਨੂੰ ਸਟੈਂਡਰਡ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</item>
-        <item quantity="other">%1$d ਆਈਟਮਾਂ ਨੂੰ ਸਟੈਂਡਰਡ ਕੁਆਲਿਟੀ \'ਤੇ ਸੈੱਟ ਕੀਤਾ ਗਿਆ</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">ਰੱਦ ਕਰੋ</string>
     <string name="ImageEditorHud__draw">ਖਿੱਚੋ</string>
@@ -6935,7 +6929,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">ਰਕਮ</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Signal ਨੂੰ ਸਹਿਯੋਗ ਦੇਣ ਲਈ ਤੁਹਾਡਾ ਧੰਨਵਾਦ। ਤੁਹਾਡਾ ਯੋਗਦਾਨ ਓਪਨ ਸੋਰਸ ਪ੍ਰਾਈਵੇਸੀ ਤਕਨਾਲੋਜੀ ਵਿਕਸਤ ਕਰਨ ਦੇ ਉਦੇਸ਼ ਨੂੰ ਪੂਰਾ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ। ਇਹ ਤਕਨਾਲੋਜੀ ਆਜ਼ਾਦੀ ਨਾਲ ਆਪਣੇ ਵਿਚਾਰ ਪੇਸ਼ ਕਰਨ ਦੇ ਅਧਿਕਾਰ ਦੀ ਰਾਖੀ ਕਰਦੀ ਹੈ ਅਤੇ ਸੁਰੱਖਿਅਤ ਗਲੋਬਲ ਸੰਚਾਰ ਦੀ ਸਹੂਲਤ ਦਿੰਦੀ ਹੈ। ਜੇਕਰ ਤੁਸੀਂ ਸੰਯੁਕਤ ਰਾਜ ਅਮਰੀਕਾ ਦੇ ਨਿਵਾਸੀ ਹੋ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਟੈਕਸ ਰਿਕਾਰਡਾਂ ਲਈ ਇਸ ਰਸੀਦ ਨੂੰ ਆਪਣੇ ਕੋਲ ਸਾਂਭ ਕੇ ਰੱਖੋ। Signal ਟੈਕਨਾਲੋਜੀ ਫਾਊਂਡੇਸ਼ਨ, ਸੰਯੁਕਤ ਰਾਜ ਅਮਰੀਕਾ ਵਿੱਚ ਇੰਟਰਨਲ ਰਿਵੈਨਿਊ ਕੋਡ ਦੀ ਧਾਰਾ 501c3 ਦੇ ਅਧੀਨ ਇੱਕ ਟੈਕਸ-ਮੁਕਤ ਗੈਰ-ਲਾਭਕਾਰੀ ਸੰਸਥਾ ਹੈ। ਸਾਡੀ ਫੈਡਰਲ ਟੈਕਸ ID 82–4506840 ਹੈ।</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Signal ਨੂੰ ਸਹਿਯੋਗ ਦੇਣ ਲਈ ਤੁਹਾਡਾ ਧੰਨਵਾਦ। ਤੁਹਾਡਾ ਯੋਗਦਾਨ ਓਪਨ ਸੋਰਸ ਪ੍ਰਾਈਵੇਸੀ ਤਕਨਾਲੋਜੀ ਵਿਕਸਤ ਕਰਨ ਦੇ ਉਦੇਸ਼ ਨੂੰ ਪੂਰਾ ਕਰਨ ਵਿੱਚ ਸਾਡੀ ਮਦਦ ਕਰਦਾ ਹੈ। ਇਹ ਤਕਨਾਲੋਜੀ ਆਜ਼ਾਦੀ ਨਾਲ ਆਪਣੇ ਵਿਚਾਰ ਪੇਸ਼ ਕਰਨ ਦੇ ਅਧਿਕਾਰ ਦੀ ਰਾਖੀ ਕਰਦੀ ਹੈ ਅਤੇ ਪੂਰੀ ਦੁਨੀਆਂ ਵਿੱਚ ਸੰਚਾਰ ਨੂੰ ਸੁਰੱਖਿਅਤ ਬਣਾਉਂਦੀ ਹੈ। ਜੇਕਰ ਤੁਸੀਂ ਸੰਯੁਕਤ ਰਾਜ ਅਮਰੀਕਾ ਦੇ ਨਿਵਾਸੀ ਹੋ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਟੈਕਸ ਰਿਕਾਰਡਾਂ ਲਈ ਇਸ ਰਸੀਦ ਨੂੰ ਆਪਣੇ ਕੋਲ ਸਾਂਭ ਕੇ ਰੱਖੋ। Signal ਟੈਕਨਾਲੋਜੀ ਫਾਊਂਡੇਸ਼ਨ, ਸੰਯੁਕਤ ਰਾਜ ਅਮਰੀਕਾ ਵਿੱਚ ਇੰਟਰਨਲ ਰਿਵੈਨਿਊ ਕੋਡ ਦੀ ਧਾਰਾ 501c3 ਦੇ ਤਹਿਤ ਇੱਕ ਟੈਕਸ-ਮੁਕਤ ਗੈਰ-ਲਾਭਕਾਰੀ ਸੰਸਥਾ ਹੈ। ਸਾਡੀ ਫੈਡਰਲ ਟੈਕਸ ID 82-4506840 ਹੈ। Signal ਨੇ ਇਸ ਯੋਗਦਾਨ ਦੇ ਮੱਦੇਨਜ਼ਰ ਕੋਈ ਸਾਮਾਨ ਜਾਂ ਸੇਵਾਵਾਂ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕੀਤੀਆਂ ਹਨ।</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">ਕੋਈ ਵੀ ਰਸੀਦ ਮੌਜੂਦ ਨਹੀਂ ਹੈ</string>
 

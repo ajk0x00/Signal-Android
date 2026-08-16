@@ -4,7 +4,7 @@
   ~ SPDX-License-Identifier: AGPL-3.0-only
   -->
 <!-- smartling.instruction_comments_enabled = on -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
   <!-- Removed by excludeNonTranslatables <string name="app_name" translatable="false">Signal</string> -->
 
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
@@ -171,6 +171,8 @@
     <string name="BlockedUsersActivity__block_user">ಬಳಕೆದಾರರನ್ನು ನಿರ್ಬಂಧಿಸಬೇಕೇ?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">\"%1$s\" ಇವರು ನಿಮಗೆ ಸಂದೇಶಗಳನ್ನು ಕಳಿಸಲು ಅಥವಾ ಕರೆ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ</string>
     <string name="BlockedUsersActivity__block">ನಿರ್ಬಂಧಿಸಿ</string>
+    <!-- Subtitle shown under a blocked user. Placeholder is the time they were blocked-->
+    <string name="BlockedUsersActivity__blocked_on_s">Blocked on %1$s</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
@@ -294,6 +296,16 @@
     <string name="ClientDeprecatedActivity_warning">ಎಚ್ಚರಿಕೆ</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">ನಿಮ್ಮ Signal ಆವೃತ್ತಿಯ ವಾಯಿದೆ ಮುಗಿದಿದೆ. ನೀವು ನಿಮ್ಮ ಹಳೆಯ ಸಂದೇಶಗಳನ್ನು ನೋಡಬಹುದು ಆದರೆ ಹೊಸ ಸಂದೇಶಗಳನ್ನು ಕಳುಹಿಸಲು ಅಥವಾ ಪಡೆಯಲು ದಯವಿಟ್ಟು ನವೀಕರಿಸಿ.</string>
 
+    <!-- ClockSkewActivity -->
+    <!-- Title of the full-screen dialog shown when the device clock is too far off from the real time -->
+    <string name="ClockSkewActivity__title">ದಿನಾಂಕವು ನಿಖರವಾಗಿಲ್ಲ</string>
+    <!-- Body text explaining that the device clock is wrong and needs to be fixed -->
+    <string name="ClockSkewActivity__date_inaccurate_description">ನಿಮ್ಮ ಸಾಧನದ ದಿನಾಂಕವು ನಿಖರವಾಗಿಲ್ಲ.\nನಿಮ್ಮ ಗಡಿಯಾರವನ್ನು ಸರಿಹೊಂದಿಸಿ ಮತ್ತು ಪುನಃ ಪ್ರಯತ್ನಿಸಿ.</string>
+    <!-- Shows the user the current, inaccurate date and time reported by their device. Placeholder is the formatted date, time, and time zone. -->
+    <string name="ClockSkewActivity__time_prefix">ನಿಮ್ಮ ಸಾಧನದ ದಿನಾಂಕ ಮತ್ತು ಸಮಯವು ಹೀಗಿದೆ: \n%1$s</string>
+    <!-- Button that opens the system date and time settings -->
+    <string name="ClockSkewActivity__adjust_date_button">ದಿನಾಂಕವನ್ನು ಸರಿಹೊಂದಿಸಿ</string>
+
     <!-- CommunicationActions -->
     <string name="CommunicationActions_no_browser_found">ಯಾವುದೇ ವೆಬ್ ಬ್ರೌಸರ್ ಕಂಡುಬಂದಿಲ್ಲ.</string>
     <string name="CommunicationActions_send_email">ಈಮೇಲ್‌ ಕಳಿಸಿ</string>
@@ -388,6 +400,8 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s ಈ ಮೆಸೇಜ್ ಅನ್ನು ಅಳಿಸಿದ್ದಾರೆ</string>
     <string name="ConversationItem_you_deleted_this_message">ನೀವು ಈ ಮೆಸೇಜ್ ಅನ್ನು ಅಳಿಸಿದ್ದೀರಿ</string>
+    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
+    <string name="ConversationItem_delete_for_everyone_question">ಎಲ್ಲರಿಗೂ ಅಳಿಸುವುದೇ?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">ಅಡ್ಮಿನ್ %1$s ಈ ಮೆಸೇಜ್ ಅನ್ನು ಅಳಿಸಿದ್ದಾರೆ</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -579,7 +593,7 @@
     <string name="ConversationFragment_delete">ಅಳಿಸಿ</string>
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">ಎಲ್ಲಾ ಕಡೆ ಅಳಿಸಿ</string>
-    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">ಅವರು Signal ನ ಇತ್ತೀಚಿನ ಆವೃತ್ತಿಯಲ್ಲಿದ್ದರೆ ಚಾಟ್‌ನಲ್ಲಿರುವ ಪ್ರತಿಯೊಬ್ಬರಿಗೂ ಈ ಮೆಸೇಜ್ ಅನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ. ನೀವು ಮೆಸೇಜ್ ಅನ್ನು ಅಳಿಸಿದ್ದೀರಿ ಎಂಬುದನ್ನು ಅವರು ನೋಡಲು ಸಾಧ್ಯವಾಗುತ್ತದೆ.</string>
+    <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">ಈ ಮೆಸೇಜ್ ಅನ್ನು ಈ ಚಾಟ್‌ನಲ್ಲಿರುವ ಪ್ರತಿಯೊಬ್ಬರಿಗೂ ಅಳಿಸಲಾಗುತ್ತದೆ. ನೀವು ಮೆಸೇಜ್ ಅನ್ನು ಅಳಿಸಿದ್ದೀರಿ ಎಂಬುದನ್ನು ನೋಡಲು ಅವರಿಗೆ ಸಾಧ್ಯವಾಗುತ್ತದೆ.</string>
     <string name="ConversationFragment_quoted_message_not_found">ಮೂಲ ಸಂದೇಶ ಕಂಡುಬಂದಿಲ್ಲ</string>
     <string name="ConversationFragment_quoted_message_no_longer_available">ಮೂಲ ಸಂದೇಶ ಇನ್ನು ಮುಂದೆ ಲಭ್ಯವಿಲ್ಲ</string>
     <string name="ConversationFragment_failed_to_open_message">ಸಂದೇಶವನ್ನು ತೆರೆಯಲು ವಿಫಲವಾಗಿದೆ</string>
@@ -758,17 +772,28 @@
     <!-- Notice on chat list when no unread chats are available, centered on display -->
     <string name="ConversationListFragment__no_unread_chats">ಓದದಿರುವ ಯಾವುದೇ ಚಾಟ್‌ಗಳಿಲ್ಲ</string>
     <plurals name="ConversationListFragment_delete_selected_conversations">
-        <item quantity="one">ಆಯ್ಕೆಮಾಡಿದ ಚಾಟ್ ಅನ್ನು ಅಳಿಸಬೇಕೇ?</item>
-        <item quantity="other">ಆಯ್ಕೆಮಾಡಿದ ಚಾಟ್‌ಗಳನ್ನು ಅಳಿಸಬೇಕೇ?</item>
+        <item quantity="one">ಸಂದೇಶ ಇತಿಹಾಸವನ್ನು ಅಳಿಸಬೇಕೇ?</item>
+        <item quantity="other">ಸಂದೇಶ ಇತಿಹಾಸಗಳನ್ನು ಅಳಿಸಬೇಕೇ?</item>
     </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations">
-        <item quantity="one">ಇದು ಆಯ್ಕೆ ಮಾಡಿದ ಚಾಟ್ ಅನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುತ್ತದೆ.</item>
-        <item quantity="other">ಇದು ಆಯ್ಕೆ ಮಾಡಿದ ಎಲ್ಲಾ %1$d ಚಾಟ್‌ಗಳನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುತ್ತದೆ.</item>
+        <item quantity="one">ಈ ಚಾಟ್‌ನಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ.</item>
+        <item quantity="other">ಈ ಚಾಟ್‌ಗಳಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ.</item>
     </plurals>
-    <!-- Dialog message shown when deleting one to many conversations from the chat list and the user has a linked device -->
+    <!-- Dialog message shown when deleting chats, with at least one group -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_group">
+        <item quantity="one">ಈ ಚಾಟ್‌ನಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ. ನೀವು ಈಗಲೂ ಈ ಗುಂಪಿನ ಸದಸ್ಯರಾಗಿರುತ್ತೀರಿ.</item>
+        <item quantity="other">ಈ ಚಾಟ್‌ಗಳಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ಅಳಿಸಲಾಗುತ್ತದೆ. ನೀವು ಈವರೆಗೂ ತೊರೆದಿರದ ಯಾವುದೇ ಗುಂಪುಗಳಿಗೆ ನೀವು ಈಗಲೂ ಸದಸ್ಯರಾಗಿರುತ್ತೀರಿ.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats, none of which are groups, and the user has a linked device -->
     <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device">
-        <item quantity="one">ಆಯ್ಕೆಮಾಡಿದ ಚಾಟ್ ಅನ್ನು ಇದು ನಿಮ್ಮ ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುತ್ತದೆ.</item>
-        <item quantity="other">ಆಯ್ಕೆಮಾಡಿದ ಎಲ್ಲಾ %1$d ಚಾಟ್‌ಗಳನ್ನು ಇದು ನಿಮ್ಮ ಸಾಧನಗಳಿಂದ ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುತ್ತದೆ.</item>
+        <item quantity="one">ಈ ಚಾಟ್‌ನಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ನಿಮ್ಮ ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ಅಳಿಸಲಾಗುತ್ತದೆ.</item>
+        <item quantity="other">ಈ ಚಾಟ್‌ ಗಳಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ನಿಮ್ಮ ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ಅಳಿಸಲಾಗುತ್ತದೆ.</item>
+    </plurals>
+    <!-- Dialog message shown when deleting chats with at least one group, and the user has a linked device -->
+    <plurals name="ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device_group">
+        <item quantity="one">ಈ ಚಾಟ್‌ನಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ನಿಮ್ಮ ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ಅಳಿಸಲಾಗುತ್ತದೆ. ನೀವು ಈಗಲೂ ಈ ಗುಂಪಿನ ಸದಸ್ಯರಾಗಿರುತ್ತೀರಿ.</item>
+        <item quantity="other">ಈ ಚಾಟ್‌ಗಳಲ್ಲಿರುವ ಎಲ್ಲಾ ಮೆಸೇಜ್‌ಗಳನ್ನು ನಿಮ್ಮ ಎಲ್ಲಾ ಸಾಧನಗಳಿಂದ ಅಳಿಸಲಾಗುತ್ತದೆ. ನೀವು ಈಗಲೂ ಈ ಗುಂಪಿನ ಸದಸ್ಯರಾಗಿರುತ್ತೀರಿ.</item>
     </plurals>
     <string name="ConversationListFragment_deleting">ಅಳಿಸಲಾಗುತ್ತಿದೆ</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
@@ -1046,13 +1071,13 @@
 
     <!-- LinkDeviceFragment -->
     <!-- Description for how Signal will work with a linked device (eg desktop, iPad) -->
-    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">ಈ Signal ಖಾತೆಯನ್ನು ಡೆಸ್ಕ್‌ಟಾಪ್ ಅಥವಾ iPad ನಲ್ಲಿ ಬಳಸಿ.</string>
+    <string name="LinkDeviceFragment__use_signal_on_desktop_ipad">ಈ Signal ಖಾತೆಯನ್ನು ಬೇರೆ ಸಾಧನದಲ್ಲಿ ಬಳಸಿ.</string>
     <!-- Button prompting users to link a new device to their account -->
     <string name="LinkDeviceFragment__link_a_new_device">ಹೊಸ ಸಾಧನವನ್ನು ಲಿಂಕ್ ಮಾಡಿ</string>
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s ಎಲ್ಲಾ ಸಾಧನಗಳಲ್ಲಿ ಎಂಡ್-ಟು-ಎಂಡ್ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಮೂಲಕ ಮೆಸೇಜ್‌ಗಳು ಮತ್ತು ಚಾಟ್ ಮಾಹಿತಿಯನ್ನು ರಕ್ಷಿಸಲಾಗಿದೆ</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">ಡೆಸ್ಕ್‌ಟಾಪ್ ಅಥವಾ iPad ನಲ್ಲಿ Signal</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on a linked device</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">ಲಿಂಕ್ ಮಾಡಲಾದ ಸಾಧನಗಳಲ್ಲಿನ ಎಲ್ಲಾ ಮೆಸೇಜ್ ಮಾಡುವಿಕೆಯು ಖಾಸಗಿಯಾಗಿರುತ್ತದೆ</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -1118,6 +1143,8 @@
     <string name="LinkDeviceFragment__edit_name">ಹೆಸರು ತಿದ್ದಿ</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
     <string name="LinkDeviceFragment__linking_cancelled">ಲಿಂಕ್ ಮಾಡುವುದನ್ನು ರದ್ದುಮಾಡಲಾಗಿದೆ</string>
+    <!-- Snackbar shown when the user tries to link a new device but has already reached the maximum number of linked devices. Placeholder is the maximum count. -->
+    <string name="LinkDeviceFragment__you_can_only_have_d_linked_devices">ನೀವು %1$d ಲಿಂಕ್ ಮಾಡಲಾದ ಸಾಧನಗಳನ್ನು ಮಾತ್ರ ಹೊಂದಬಹುದು.</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
     <string name="LinkDeviceFragment__do_not_close">ಆ್ಯಪ್ ಅನ್ನು ಮುಚ್ಚಬೇಡಿ</string>
     <!-- Dialog title shown when a device is unlinked -->
@@ -3070,6 +3097,7 @@
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_challenge_received" translatable="false">Challenge Received:</string> -->
   <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_registered" translatable="false">Registered:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_backups" translatable="false">Backups:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">ಗುಂಪು ನವೀಕರಿಸಲಾಗಿದೆ</string>
@@ -4092,15 +4120,6 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">ಇತ್ತೀಚಿನವುಗಳು</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">ಈ ಸಂದೇಶ</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">ಇತ್ತೀಚೆಗೆ ಬಳಸಲಾಗಿದೆ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__smileys_and_people">ಸ್ಮೈಲೀಗಳು ಮತ್ತು ಜನರು</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__nature">ಪರಿಸರ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__food">ಆಹಾರ</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__activities">ಚಟುವಟಿಕೆಗಳು</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__places">ಸ್ಥಳಗಳು</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">ವಸ್ತುಗಳು</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">ಚಿಹ್ನೆಗಳು</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">ಫ್ಲ್ಯಾಗ್‌ಗಳು</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">ಎಮೋಟಿಕಾನ್‌ಗಳು</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">ಯಾವುದೇ ಫಲಿತಾಂಶ ಕಂಡುಬಂದಿಲ್ಲ</string>
 
     <!-- GifQuickSearchOption -->
@@ -5626,18 +5645,6 @@
     <!-- GroupDescriptionDialog -->
     <string name="GroupDescriptionDialog__group_description">ಗುಂಪಿನ ವಿವರಣೆ</string>
 
-    <!-- QualitySelectorBottomSheetDialog -->
-    <!-- Label for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__standard">ಪ್ರಮಾಣಿತ</string>
-    <!-- Description for our standard quality media conversion. -->
-    <string name="QualitySelectorBottomSheetDialog__faster_less_data">ತ್ವರಿತ, ಕಡಿಮೆ ಡೇಟಾ</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__high">ಹೆಚ್ಚು</string>
-    <!-- Label for our high quality media conversion. This has better quality than standard. -->
-    <string name="QualitySelectorBottomSheetDialog__slower_more_data">ನಿಧಾನ, ಹೆಚ್ಚು ಡೇಟಾ</string>
-    <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">ಮಾಧ್ಯಮ ಗುಣಮಟ್ಟ</string>
-
     <!-- AppSettingsFragment -->
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">ನಿಮ್ಮ Signal ಸುರಕ್ಷಿತ ಬ್ಯಾಕಪ್‌ಗಳ ಚಂದಾದಾರಿಕೆಯನ್ನು ನವೀಕರಿಸಿ</string>
@@ -6193,6 +6200,8 @@
     <string name="ConversationSettingsFragment__end_group">ಗುಂಪನ್ನು ಕೊನೆಗೊಳಿಸಿ</string>
     <!-- Banner shown at the top of group settings when the group has been ended -->
     <string name="ConversationSettingsFragment__this_group_was_ended">ಈ ಗುಂಪು ಕೊನೆಗೊಂಡಿದೆ.</string>
+    <!-- Subhead under a legacy group\'s name, joining the member count and the "Legacy Group" label. %1$s is the member count, %2$s is the label -->
+    <string name="ConversationSettingsFragment__s_dot_s">%1$s · %2$s</string>
     <!-- Archive chat option in group conversation settings screen -->
     <string name="ConversationSettingsFragment__archive_chat">ಚಾಟ್ ಆರ್ಕೈವ್ ಮಾಡಿ</string>
     <!-- Delete chat option in group conversation settings screen -->
@@ -6383,18 +6392,11 @@
     <string name="MediaReviewFragment__one_or_more_items_were_too_large">ಒಂದು ಅಥವಾ ಹೆಚ್ಚು ಐಟಂಗಳು ತೀರಾ ದೊಡ್ಡದಾಗಿವೆ</string>
     <string name="MediaReviewFragment__one_or_more_items_were_invalid">ಒಂದು ಅಥವಾ ಹೆಚ್ಚು ಐಟಂಗಳು ಅಮಾನ್ಯವಾಗಿವೆ</string>
     <string name="MediaReviewFragment__too_many_items_selected">ತುಂಬಾ ಐಟಂಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="MediaReviewFragment__video_trimmed_to_fit">ನಿಮ್ಮ ವೀಡಿಯೊವನ್ನು ಗಾತ್ರದ ಮಿತಿಗೆ ಸರಿಹೊಂದಿಸಲು ಟ್ರಿಮ್ ಮಾಡಲಾಗಿತ್ತು</string>
     <!-- Small notification presented to the user when they set their video to view-once mode -->
     <string name="MediaReviewFragment__video_set_to_view_once">ಒಂದು ಬಾರಿಯ ವೀಕ್ಷಣೆಗೆ ವಿಡಿಯೋ ಸೆಟ್ ಆಗಿದೆ</string>
     <!-- Small notification presented to the user when they set their photo to view-once mode -->
     <string name="MediaReviewFragment__photo_set_to_view_once">ಒಂದು ಬಾರಿಯ ವೀಕ್ಷಣೆಗೆ ಫೊಟೋ ಸೆಟ್ ಆಗಿದೆ.</string>
-    <!-- Small notification presented to the user when they set their video to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_high_quality">ಾತ್ಯಧಿಕ ಗುಣಮಟ್ಟಕ್ಕೆ ವೀಡಿಯೊ ಸೆಟ್ ಆಗಿದೆ</string>
-    <!-- Small notification presented to the user when they set their video to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__video_set_to_standard_quality">ಸಾಮಾನ್ಯ ಗುಣಮಟ್ಟಕ್ಕೆ ವಿಡಿಯೋ ಸೆಟ್ ಆಗಿದೆ</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in high visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_high_quality">ಫೊಟೋವನ್ನು ಅತ್ಯಧಿಕ ಗುಣಮಟ್ಟಕ್ಕೆ ಹೊಂದಿಸಲಾಗಿದೆ</string>
-    <!-- Small notification presented to the user when they set their still image to be sent in standard (lower than high) visual quality. -->
-    <string name="MediaReviewFragment__photo_set_to_standard_quality">ಫೊಟೋವನ್ನು ಪ್ರಮಾಣಿತ ಗುಣಮಟ್ಟಕ್ಕೆ ಸೆಟ್ ಮಾಡಲಾಗಿದೆ</string>
     <!-- Accessibility label describing the add media button on the Media review screen -->
     <string name="MediaReviewFragment__add_media_accessibility_label">ಮೀಡಿಯಾ ಸೇರಿಸಿ</string>
     <!-- Accessibility label describing the brush and pen button on the Media review screen -->
@@ -6403,6 +6405,8 @@
     <string name="MediaReviewFragment__crop_rotate_accessibility_label">ಕ್ರಾಪ್ ಮಾಡಿ ಮತ್ತು ತಿರುಗಿಸಿ</string>
     <!-- Accessibility label describing the change media quality button on the Media review screen -->
     <string name="MediaReviewFragment__change_media_quality_accessibility_label">ಮೀಡಿಯಾ ಗುಣಮಟ್ಟವನ್ನು ಬದಲಾಯಿಸಿ</string>
+    <!-- Accessibility label describing the mute video audio button on the Media review screen -->
+    <string name="MediaReviewFragment__mute_video_audio_accessibility_label">Mute Video Audio</string>
     <!-- Accessibility label describing the save media button on the Media review screen -->
     <string name="MediaReviewFragment__save_media_accessibility_label">ಮೀಡಿಯಾ ಸೇವ್ ಮಾಡಿ</string>
     <!-- Accessibility label describing the toggle emoji keyboard button on the Media review screen -->
@@ -6413,16 +6417,6 @@
     <string name="MediaReviewFragment__send_media_accessibility_label">ಮೀಡಿಯಾ ಕಳುಹಿಸಿ</string>
     <!-- Accessibility label describing the finish adding a message button on the Media review screen dialog -->
     <string name="MediaReviewFragment__finish_adding_a_message_accessibility_label">ಮೆಸೇಜ್ ಸೇರಿಸುವುದನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ</string>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in high visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_high_quality">
-        <item quantity="one">%1$d ಐಟಂ ಅನ್ನು ಅತ್ಯಧಿಕ ಗುಣಮಟ್ಟಕ್ಕೆ ಸೆಟ್ ಮಾಡಲಾಗಿದೆ</item>
-        <item quantity="other">%1$d ಐಟಂಗಳನ್ನು ಅತ್ಯಧಿಕ ಗುಣಮಟ್ಟಕ್ಕೆ ಸೆಟ್ ಮಾಡಲಾಗಿದೆ</item>
-    </plurals>
-    <!-- Small notification presented to the user when they set multiple media items to be sent in standard (lower than high) visual quality. -->
-    <plurals name="MediaReviewFragment__items_set_to_standard_quality">
-        <item quantity="one">%1$d ಐಟಂ ಅನ್ನು ಪ್ರಮಾಣಿತ ಗುಣಮಟ್ಟಕ್ಕೆ ಸೆಟ್ ಮಾಡಲಾಗಿದೆ</item>
-        <item quantity="other">%1$d ಐಟಂಗಳನ್ನು ಪ್ರಮಾಣಿತ ಗುಣಮಟ್ಟಕ್ಕೆ ಸೆಟ್ ಮಾಡಲಾಗಿದೆ</item>
-    </plurals>
 
     <string name="ImageEditorHud__cancel">ರದ್ದುಗೊಳಿಸಿ</string>
     <string name="ImageEditorHud__draw">ರಚಿಸಿ</string>
@@ -6935,7 +6929,7 @@
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">ಮೊತ್ತ</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Signal ಅನ್ನು ಬೆಂಬಲಿಸುತ್ತಿರುವುದಕ್ಕಾಗಿ ಧನ್ಯವಾದಗಳು. ನಿಮ್ಮ ಕೊಡುಗೆಯು ವಿಶ್ವಾದ್ಯಂತ ಇರುವ ಲಕ್ಷಾಂತರ ಮಂದಿಯ ಮುಕ್ತ ಅಭಿವ್ಯಕ್ತಿಯನ್ನು ರಕ್ಷಿಸುವ ಹಾಗೂ ಸುರಕ್ಷಿತ ಜಾಗತಿಕ ಸಂವಹನವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವ ಮುಕ್ತ ಮೂಲದ ಗೌಪ್ಯತೆ ತಂತ್ರಜ್ಞಾನವನ್ನು ಅಭಿವೃದ್ಧಿಗೊಳಿಸುವ ಮಿಷನ್‌ಗೆ ಉತ್ತೇಜನ ನೀಡಲು ನೆರವಾಗುತ್ತದೆ. ನೀವು ಯುನೈಟೆಡ್ ಸ್ಟೇಟ್ಸ್‌ನ ನಿವಾಸಿಯಾಗಿದ್ದರೆ, ದಯವಿಟ್ಟು ತೆರಿಗೆ ದಾಖಲೆಗಳಿಗಾಗಿ ಈ ರಸೀದಿಯನ್ನು ದಯವಿಟ್ಟು ಉಳಿಸಿಕೊಳ್ಳಿ. Signal ಟೆಕ್ನಾಲಜಿ ಫೌಂಡೇಶನ್ ಎಂಬುದು ಯುನೈಟೆಡ್ ಸ್ಟೇಟ್ಸ್‌ನ ಇಂಟರ್ನಲ್ ರೆವಿನ್ಯೂ ಕೋಡ್‌ನ ಸೆಕ್ಷನ್ 501c3 ಅಡಿಯಲ್ಲಿನ ಒಂದು ತೆರಿಗೆ ವಿನಾಯ್ತಿಯ ಲಾಭರಹಿತ ಸಂಸ್ಥೆಯಾಗಿದೆ. ನಮ್ಮ ಫೆಡರಲ್ ಟ್ಯಾಕ್ಸ್ ಐಡಿ: 82–4506840.</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting" tools:ignore="TypographyDashes">Signal ಅನ್ನು ಬೆಂಬಲಿಸುತ್ತಿರುವುದಕ್ಕೆ ಧನ್ಯವಾದಗಳು. ಮುಕ್ತ ಅಭಿವ್ಯಕ್ತಿಯನ್ನು ರಕ್ಷಿಸುವ ಮತ್ತು ಓಪನ್ ಸೋರ್‍ಸ್ ಗೌಪ್ಯತೆ ತಂತ್ರಜ್ಞಾನದ ಮೂಲಕ ಪ್ರಪಂಚದಾದ್ಯಂತ ಲಕ್ಷಾಂತರ ಜನರಿಗೆ ಸುರಕ್ಷಿತ ಜಾಗತಿಕ ಸಂವಹನವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವ ಧ್ಯೇಯವನ್ನು ಉತ್ತೇಜಿಸಲು ನಿಮ್ಮ ಕೊಡುಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ. ನೀವು ಯುನೈಟೆಡ್ ಸ್ಟೇಟ್ಸ್ ನಿವಾಸಿಯಾಗಿದ್ದರೆ, ನಿಮ್ಮ ತೆರಿಗೆ ದಾಖಲೆಗಳಿಗಾಗಿ ಈ ರಸೀದಿಯನ್ನು ಇಟ್ಟುಕೊಳ್ಳಿ. Signal Technology Foundation ಎಂಬುದು ಯುನೈಟೆಡ್ ಸ್ಟೇಟ್ಸ್‌ನಲ್ಲಿ Internal Revenue Code ನ ಸೆಕ್ಷನ್ 501c3 ಅಡಿಯಲ್ಲಿ ತೆರಿಗೆ ವಿನಾಯಿತಿ ಪಡೆದ ಲಾಭರಹಿತ ಸಂಸ್ಥೆಯಾಗಿದೆ. ನಮ್ಮ Federal Tax ID is 82-4506840. ಈ ಕೊಡುಗೆಯ ಪರಿಗಣನೆಯಲ್ಲಿ Signal ಯಾವುದೇ ಸರಕುಗಳು ಅಥವಾ ಸೇವೆಗಳನ್ನು ಒದಗಿಸುವುದಿಲ್ಲ.</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">ರಸೀದಿಗಳಿಲ್ಲ</string>
 

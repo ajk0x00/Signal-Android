@@ -18,13 +18,18 @@ class InternalValues internal constructor(store: KeyValueStore) : SignalStoreVal
     const val DELAY_RESENDS: String = "internal.delay_resends"
     const val CALLING_SERVER: String = "internal.calling_server"
     const val CALLING_DATA_MODE: String = "internal.calling_bandwidth_mode"
-    const val CALLING_DISABLE_TELECOM: String = "internal.calling_disable_telecom"
+    const val CALLING_USE_TELECOM: String = "internal.calling_use_telecom"
     const val CALLING_SET_AUDIO_CONFIG: String = "internal.calling_set_audio_config"
     const val CALLING_USE_OBOE_ADM: String = "internal.calling_use_oboe_adm"
     const val CALLING_USE_SOFTWARE_AEC: String = "internal.calling_use_software_aec"
     const val CALLING_USE_SOFTWARE_NS: String = "internal.calling_use_software_ns"
     const val CALLING_USE_INPUT_LOW_LATENCY: String = "internal.calling_use_input_low_latency"
     const val CALLING_USE_INPUT_VOICE_COMM: String = "internal.calling_use_input_voice_comm"
+    const val CALLING_SET_VIDEO_CONFIG: String = "internal.calling_set_video_config"
+    const val CALLING_USE_HARDWARE_VP9_ENCODE: String = "internal.calling_use_hardware_vp9_encode"
+    const val CALLING_USE_HARDWARE_VP9_DECODE: String = "internal.calling_use_hardware_vp9_decode"
+    const val CALLING_USE_SOFTWARE_VP9_ENCODE: String = "internal.calling_use_software_vp9_encode"
+    const val CALLING_USE_SOFTWARE_VP9_DECODE: String = "internal.calling_use_software_vp9_decode"
     const val SHAKE_TO_REPORT: String = "internal.shake_to_report"
     const val DISABLE_STORAGE_SERVICE: String = "internal.disable_storage_service"
     const val LAST_SCROLL_POSITION: String = "internal.last_scroll_position"
@@ -54,7 +59,18 @@ class InternalValues internal constructor(store: KeyValueStore) : SignalStoreVal
    */
   var forceSinglePane by booleanValue(FORCE_SINGLE_PANE_ON_ALL_DEVICES, false).falseForExternalUsers()
 
-  var useNewMediaActivity by booleanValue(USE_NEW_MEDIA_ACTIVITY, false).falseForExternalUsers()
+  /**
+   * Whether to use the new media-send flow. Internal users can override the remote value.
+   */
+  var useNewMediaActivity: Boolean
+    get() = if (RemoteConfig.internalUser) {
+      getBoolean(USE_NEW_MEDIA_ACTIVITY, RemoteConfig.useNewMediaSendFlow)
+    } else {
+      RemoteConfig.useNewMediaSendFlow
+    }
+    set(value) {
+      putBoolean(USE_NEW_MEDIA_ACTIVITY, value)
+    }
 
   /**
    * Members will not be added directly to a GV2 even if they could be.
@@ -136,9 +152,9 @@ class InternalValues internal constructor(store: KeyValueStore) : SignalStoreVal
     }
 
   /**
-   * Whether or not Telecom integration is manually disabled.
+   * Whether or not Telecom integration is enabled.
    */
-  var callingDisableTelecom by booleanValue(CALLING_DISABLE_TELECOM, true).falseForExternalUsers()
+  var callingUseTelecom by booleanValue(CALLING_USE_TELECOM, true).falseForExternalUsers()
 
   /**
    * Whether or not to override the audio settings from the remote configuration.
@@ -169,6 +185,31 @@ class InternalValues internal constructor(store: KeyValueStore) : SignalStoreVal
    * If overriding the audio settings, use Voice Comm for the input or not.
    */
   var callingUseInputVoiceComm by booleanValue(CALLING_USE_INPUT_VOICE_COMM, true).defaultForExternalUsers()
+
+  /**
+   * Whether or not to override the video settings from the remote configuration.
+   */
+  var callingSetVideoConfig by booleanValue(CALLING_SET_VIDEO_CONFIG, false).falseForExternalUsers()
+
+  /**
+   * If overriding the video settings, use hardware VP9 encoder or not if available
+   */
+  var callingUseHardwareVp9Encode by booleanValue(CALLING_USE_HARDWARE_VP9_ENCODE, true).defaultForExternalUsers()
+
+  /**
+   * If overriding the video settings, use hardware VP9 decoder or not if available
+   */
+  var callingUseHardwareVp9Decode by booleanValue(CALLING_USE_HARDWARE_VP9_DECODE, true).defaultForExternalUsers()
+
+  /**
+   * If overriding the video settings, use software VP9 encoder or not
+   */
+  var callingUseSoftwareVp9Encode by booleanValue(CALLING_USE_SOFTWARE_VP9_ENCODE, true).defaultForExternalUsers()
+
+  /**
+   * If overriding the video settings, use software VP9 encoder or not
+   */
+  var callingUseSoftwareVp9Decode by booleanValue(CALLING_USE_SOFTWARE_VP9_DECODE, true).defaultForExternalUsers()
 
   var lastScrollPosition: Int by integerValue(LAST_SCROLL_POSITION, 0).defaultForExternalUsers()
 
