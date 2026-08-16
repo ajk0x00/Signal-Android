@@ -84,44 +84,25 @@ fun AddAMessageRow(
         .background(color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(24.dp))
         .weight(1f)
         .heightIn(min = 44.dp)
-        .then(
-          if (viewOnce) {
-            // A view-once send cannot carry a body, so the row becomes a static label rather than an entry point.
-            Modifier
-          } else {
-            Modifier.clickable(enabled = enabled, onClickLabel = stringResource(if (isReply) R.string.AddAMessageRow__add_a_reply else R.string.AddAMessageRow__add_a_message), onClick = { onEvent(MediaEditScreenEvents.AddMessageClick()) }, role = Role.Button)
-          }
-        )
+        .clickable(enabled = enabled, onClickLabel = stringResource(if (isReply) R.string.AddAMessageRow__add_a_reply else R.string.AddAMessageRow__add_a_message), onClick = { onEvent(MediaEditScreenEvents.AddMessageClick()) }, role = Role.Button)
     ) {
-      if (viewOnce) {
-        Text(
-          text = stringResource(R.string.AddAMessageRow__view_once_media),
-          style = MaterialTheme.typography.bodyLarge,
-          color = MaterialTheme.colorScheme.onSurfaceVariant,
-          textAlign = TextAlign.Center,
-          modifier = Modifier
-            .weight(1f)
-            .padding(horizontal = 16.dp)
-        )
-      } else {
-        IconButtons.IconButton(
-          enabled = enabled,
-          onClick = { onEvent(MediaEditScreenEvents.AddMessageClick(startWithEmojiKeyboard = true)) }
-        ) {
-          Icon(
-            painter = SignalIcons.Emoji.painter,
-            contentDescription = stringResource(R.string.AddAMessageRow__open_emoji_keyboard)
-          )
-        }
-
-        LocalAddAMessageRowTextField.current(
-          message?.takeIf { it.isNotBlank() } ?: stringResource(if (isReply) R.string.AddAMessageRow__add_a_reply else R.string.AddAMessageRow__message),
-          Modifier
-            .weight(1f)
-            .height(44.dp)
-            .padding(end = if (viewOnceAvailable) 0.dp else 16.dp, top = 10.dp, bottom = 10.dp)
+      IconButtons.IconButton(
+        enabled = enabled,
+        onClick = { onEvent(MediaEditScreenEvents.AddMessageClick(startWithEmojiKeyboard = true)) }
+      ) {
+        Icon(
+          painter = SignalIcons.Emoji.painter,
+          contentDescription = stringResource(R.string.AddAMessageRow__open_emoji_keyboard)
         )
       }
+
+      LocalAddAMessageRowTextField.current(
+        message?.takeIf { it.isNotBlank() } ?: stringResource(if (isReply) R.string.AddAMessageRow__add_a_reply else R.string.AddAMessageRow__message),
+        Modifier
+          .weight(1f)
+          .height(44.dp)
+          .padding(end = if (viewOnceAvailable) 0.dp else 16.dp, top = 10.dp, bottom = 10.dp)
+      )
 
       if (viewOnceAvailable) {
         IconButtons.IconButton(
