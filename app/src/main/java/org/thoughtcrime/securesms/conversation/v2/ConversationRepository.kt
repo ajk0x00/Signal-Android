@@ -532,12 +532,18 @@ class ConversationRepository(
         }
       }
 
-      if (body.trim().startsWith("/ask ", ignoreCase = true)) {
-        val question = body.trim().substring(5).trim()
-        if (question.isNotBlank()) {
+      val trimmedBody = body.trim()
+      val isAsk = trimmedBody.startsWith("/ask", ignoreCase = true) &&
+        (trimmedBody.length == 4 || trimmedBody[4].isWhitespace())
+
+      if (isAsk) {
+        val question = if (trimmedBody.length > 4) trimmedBody.substring(4).trim() else ""
+        val quotedText = quote?.text?.trim()?.ifEmpty { null }
+        if (question.isNotBlank() || quotedText != null) {
           AskGeminiJob.enqueue(
             threadId = threadId,
             question = question,
+            quotedText = quotedText,
             originalSentTimestamp = message.sentTimeMillis,
             originalBody = body
           )
