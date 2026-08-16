@@ -66,11 +66,15 @@ jobs:
         run: |
           TAG="${{ steps.release_info.outputs.tag }}"
           echo "Publishing release for tag: $TAG"
-          gh release create "$TAG" app/build/outputs/apk/websiteProd/release/*.apk \
-            --title "$TAG" \
-            --generate-notes \
-            --clobber || \
-          gh release upload "$TAG" app/build/outputs/apk/websiteProd/release/*.apk --clobber
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG exists. Uploading assets..."
+            gh release upload "$TAG" app/build/outputs/apk/websiteProd/release/*.apk --clobber
+          else
+            echo "Release $TAG does not exist. Creating release..."
+            gh release create "$TAG" app/build/outputs/apk/websiteProd/release/*.apk \
+              --title "$TAG" \
+              --generate-notes
+          fi
 
       - name: Upload APKs as Artifacts
         uses: actions/upload-artifact@v4
