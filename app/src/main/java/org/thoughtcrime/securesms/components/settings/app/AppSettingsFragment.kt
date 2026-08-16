@@ -519,7 +519,7 @@ private fun AppSettingsContent(
           )
         }
 
-        if (state.showInternalPreferences) {
+        if (state.showLabsPreferences) {
           item {
             Dividers.Default()
           }
@@ -532,6 +532,14 @@ private fun AppSettingsContent(
                 callbacks.navigate(AppSettingsRoute.LabsRoute.Labs)
               }
             )
+          }
+        }
+
+        if (state.showInternalPreferences) {
+          if (!state.showLabsPreferences) {
+            item {
+              Dividers.Default()
+            }
           }
 
           item {
