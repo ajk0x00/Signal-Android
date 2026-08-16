@@ -28,6 +28,9 @@ test/androidTestEspresso/res/values/arrays.xml
 obj/
 jni/libspeex/.deps/
 pkcs11.password
+*.keystore
+*.jks
+keystore.base64.txt
 dev.keystore
 maps.key
 /local/
