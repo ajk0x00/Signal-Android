@@ -17,6 +17,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Free Disk Space and Set Up Swap
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo docker image prune --all --force 2>/dev/null || true
+          # Disable and remove any existing active swap to avoid 'Text file busy'
+          sudo swapoff -a 2>/dev/null || true
+          sudo rm -f /swapfile
+          # Create 10GB swap to prevent OOM during R8 minification
+          sudo fallocate -l 10G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=10240
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+          df -h
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -70,23 +87,6 @@ jobs:
           else
             echo "::warning::KEYSTORE_BASE64 secret not found, using default debug keystore."
           fi
-
-      - name: Free Disk Space and Set Up Swap
-        run: |
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /usr/local/share/boost
-          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          # Disable and remove any existing active swap to avoid 'Text file busy'
-          sudo swapoff -a 2>/dev/null || true
-          sudo rm -f /swapfile
-          # Create 10GB swap to prevent OOM during R8 minification
-          sudo fallocate -l 10G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=10240
-          sudo chmod 600 /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
-          free -h
 
       - name: Build Release APKs
         env:
