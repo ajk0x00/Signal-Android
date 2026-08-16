@@ -58,6 +58,7 @@ import org.thoughtcrime.securesms.database.SignalDatabase.Companion.attachments
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.recipients
 import org.thoughtcrime.securesms.database.model.GroupRecord
 import org.thoughtcrime.securesms.database.model.IdentityRecord
+import org.thoughtcrime.securesms.jobs.AskGeminiJob
 import org.thoughtcrime.securesms.database.model.Mention
 import org.thoughtcrime.securesms.database.model.MessageId
 import org.thoughtcrime.securesms.database.model.MessageRecord
@@ -528,6 +529,18 @@ class ConversationRepository(
 
         if (!sendSuccessful) {
           emitter.tryOnError(IllegalStateException("Could not send pre-uploaded attachments because they did not exist!"))
+        }
+      }
+
+      if (body.trim().startsWith("/ask ", ignoreCase = true)) {
+        val question = body.trim().substring(5).trim()
+        if (question.isNotBlank()) {
+          AskGeminiJob.enqueue(
+            threadId = threadId,
+            question = question,
+            originalSentTimestamp = message.sentTimeMillis,
+            originalBody = body
+          )
         }
       }
     }

@@ -18,23 +18,19 @@ class LabsValues internal constructor(store: KeyValueStore) : SignalStoreValues(
 
   public override fun getKeysToIncludeInBackup(): List<String> = emptyList()
 
-  var individualChatPlaintextExport by booleanValue(INDIVIDUAL_CHAT_PLAINTEXT_EXPORT, true).falseForExternalUsers()
+  var individualChatPlaintextExport by booleanValue(INDIVIDUAL_CHAT_PLAINTEXT_EXPORT, true)
 
-  var storyArchive by booleanValue(STORY_ARCHIVE, true).falseForExternalUsers()
+  var storyArchive by booleanValue(STORY_ARCHIVE, true)
 
-  var incognito by booleanValue(INCOGNITO, true).falseForExternalUsers()
+  var incognito by booleanValue(INCOGNITO, true)
 
-  var betterSearch by booleanValue(BETTER_SEARCH, true).falseForExternalUsers()
+  var betterSearch by booleanValue(BETTER_SEARCH, true)
 
-  var starredMessages by booleanValue(STARRED_MESSAGES, true).falseForExternalUsers()
+  var starredMessages by booleanValue(STARRED_MESSAGES, true)
 
-  var stickerReplies by booleanValue(STICKER_REPLIES, false).falseForExternalUsers()
+  var stickerReplies by booleanValue(STICKER_REPLIES, false)
 
-  var muteBreakthroughNotifications by booleanValue(MUTE_BREAKTHROUGH_NOTIFICATIONS, true).falseForExternalUsers()
+  var muteBreakthroughNotifications by booleanValue(MUTE_BREAKTHROUGH_NOTIFICATIONS, true)
 
-  var improvedMessageDeletion by booleanValue(IMPROVED_MESSAGE_DELETION, true).falseForExternalUsers()
-
-  private fun SignalStoreValueDelegate<Boolean>.falseForExternalUsers(): SignalStoreValueDelegate<Boolean> {
-    return this.map { actualValue -> RemoteConfig.internalUser && actualValue }
-  }
+  var improvedMessageDeletion by booleanValue(IMPROVED_MESSAGE_DELETION, true)
 }

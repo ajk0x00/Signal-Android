@@ -6,13 +6,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -43,6 +47,8 @@ public class ViewOnceMessageActivity extends PassphraseRequiredActivity implemen
   private VideoPlayer              video;
   private View                     closeButton;
   private TextView                 duration;
+  private FrameLayout              captionContainer;
+  private TextView                 captionText;
   private ViewOnceMessageViewModel viewModel;
   private Uri                      uri;
 
@@ -77,14 +83,24 @@ public class ViewOnceMessageActivity extends PassphraseRequiredActivity implemen
     WindowUtil.clearLightStatusBar(getWindow());
     WindowUtil.clearLightNavigationBar(getWindow());
 
-    this.image       = findViewById(R.id.view_once_image);
-    this.video       = findViewById(R.id.view_once_video);
-    this.duration    = findViewById(R.id.view_once_duration);
-    this.closeButton = findViewById(R.id.view_once_close_button);
-    this.uri         = getIntent().getParcelableExtra(KEY_URI);
+    this.image            = findViewById(R.id.view_once_image);
+    this.video            = findViewById(R.id.view_once_video);
+    this.duration         = findViewById(R.id.view_once_duration);
+    this.closeButton      = findViewById(R.id.view_once_close_button);
+    this.captionContainer = findViewById(R.id.view_once_caption_container);
+    this.captionText      = findViewById(R.id.view_once_caption);
+    this.uri              = getIntent().getParcelableExtra(KEY_URI);
+
+    if (this.captionText != null) {
+      this.captionText.setMovementMethod(new ScrollingMovementMethod());
+    }
 
     SystemWindowInsetsSetter.attach(closeButton, this, WindowInsetsCompat.Type.statusBars(), SystemWindowInsetsSetter.ApplyMode.MARGIN);
     SystemWindowInsetsSetter.attach(duration, this, WindowInsetsCompat.Type.statusBars(), SystemWindowInsetsSetter.ApplyMode.MARGIN);
+
+    if (this.captionContainer != null) {
+      SystemWindowInsetsSetter.attach(captionContainer, this, WindowInsetsCompat.Type.navigationBars(), SystemWindowInsetsSetter.ApplyMode.PADDING);
+    }
 
     closeButton.setOnClickListener(v -> finish());
 
@@ -115,11 +131,23 @@ public class ViewOnceMessageActivity extends PassphraseRequiredActivity implemen
 
       if (message.isPresent()) {
         displayMedia(uri);
+        displayBody(message.get().getBody());
       } else {
         image.setImageDrawable(null);
         finish();
       }
     });
+  }
+
+  private void displayBody(@Nullable String body) {
+    if (captionContainer != null && captionText != null) {
+      if (!TextUtils.isEmpty(body)) {
+        captionText.setText(body);
+        captionContainer.setVisibility(View.VISIBLE);
+      } else {
+        captionContainer.setVisibility(View.GONE);
+      }
+    }
   }
 
   private void displayMedia(@NonNull Uri uri) {

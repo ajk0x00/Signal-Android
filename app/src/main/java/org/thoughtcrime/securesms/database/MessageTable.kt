@@ -108,6 +108,7 @@ import org.thoughtcrime.securesms.database.model.StoryResult
 import org.thoughtcrime.securesms.database.model.StoryType
 import org.thoughtcrime.securesms.database.model.StoryType.Companion.fromCode
 import org.thoughtcrime.securesms.database.model.StoryViewState
+import org.thoughtcrime.securesms.stories.StoryAppIconManager
 import org.thoughtcrime.securesms.database.model.databaseprotos.AdminDeleteStatus
 import org.thoughtcrime.securesms.database.model.databaseprotos.BodyRangeList
 import org.thoughtcrime.securesms.database.model.databaseprotos.DecryptedGroupV2Context
@@ -1521,12 +1522,13 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       whereArgs = buildArgs(threadId)
     }
 
-    return MmsReader(queryMessages(where, whereArgs, index = INDEX_STORY_TYPE))
+    return MmsReader(queryMessages(where, whereArgs, orderBy = "$TABLE_NAME.$DATE_SENT ASC, $TABLE_NAME.$ID ASC", index = INDEX_STORY_TYPE))
   }
 
   fun getAllOutgoingStories(reverse: Boolean, limit: Int): Reader {
     val where = "$IS_STORY_CLAUSE AND ($outgoingTypeClause)"
-    return MmsReader(queryMessages(where, null, reverse, limit.toLong(), index = INDEX_STORY_TYPE))
+    val order = if (reverse) "$TABLE_NAME.$DATE_SENT DESC, $TABLE_NAME.$ID DESC" else "$TABLE_NAME.$DATE_SENT ASC, $TABLE_NAME.$ID ASC"
+    return MmsReader(queryMessages(where, null, reverse = false, limit = limit.toLong(), orderBy = order, index = INDEX_STORY_TYPE))
   }
 
   fun markAllIncomingStoriesRead(): List<MarkedMessageInfo> {
@@ -1551,7 +1553,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     val threadId = threads.getThreadIdIfExistsFor(recipientId)
     val where = "$IS_STORY_CLAUSE AND $THREAD_ID = ?"
     val whereArgs = buildArgs(threadId)
-    val cursor = queryMessages(where, whereArgs, false, limit.toLong(), index = INDEX_STORY_TYPE)
+    val cursor = queryMessages(where, whereArgs, false, limit.toLong(), orderBy = "$TABLE_NAME.$DATE_SENT ASC, $TABLE_NAME.$ID ASC", index = INDEX_STORY_TYPE)
     return MmsReader(cursor)
   }
 
@@ -1559,7 +1561,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     val threadId = threads.getThreadIdIfExistsFor(recipientId)
     val query = "$IS_STORY_CLAUSE AND NOT ($outgoingTypeClause) AND $THREAD_ID = ? AND $VIEWED_COLUMN = ?"
     val args = buildArgs(threadId, 0)
-    return MmsReader(queryMessages(query, args, false, limit.toLong(), index = INDEX_STORY_TYPE))
+    return MmsReader(queryMessages(query, args, false, limit.toLong(), orderBy = "$TABLE_NAME.$DATE_SENT ASC, $TABLE_NAME.$ID ASC", index = INDEX_STORY_TYPE))
   }
 
   fun getParentStoryIdForGroupReply(messageId: Long): GroupReply? {
@@ -3216,6 +3218,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
 
     if (retrieved.storyType.isStory) {
       AppDependencies.databaseObserver.notifyStoryObservers(threads.getRecipientIdForThreadId(threadId)!!)
+      StoryAppIconManager.update()
     }
 
     return Optional.of(

@@ -306,6 +306,7 @@ android {
     buildConfigField("String", "BADGE_STATIC_ROOT", "\"https://updates2.signal.org/static/badges/\"")
     buildConfigField("String", "STRIPE_BASE_URL", "\"https://api.stripe.com/v1\"")
     buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"pk_live_6cmGZopuTsV8novGgJJW9JpC00vLIgtQ1D\"")
+    buildConfigField("String", "GEMINI_API_KEY", "\"${getGeminiApiKey()}\"")
     buildConfigField("boolean", "TRACING_ENABLED", "false")
     buildConfigField("boolean", "LINK_DEVICE_UX_ENABLED", "false")
 
@@ -938,6 +939,14 @@ fun getMapsKey(): String {
     .gradleProperty("mapsKey")
     .orElse(providers.environmentVariable("MAPS_KEY"))
     .orElse("AIzaSyCSx9xea86GwDKGznCAULE9Y5a8b-TfN9U")
+    .get()
+}
+
+fun getGeminiApiKey(): String {
+  return providers
+    .gradleProperty("geminiApiKey")
+    .orElse(providers.environmentVariable("GEMINI_API_KEY"))
+    .orElse(localProperties?.getProperty("gemini.api.key") ?: "")
     .get()
 }
 

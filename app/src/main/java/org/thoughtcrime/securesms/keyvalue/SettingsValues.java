@@ -77,6 +77,7 @@ public final class SettingsValues extends SignalStoreValues {
   private static final String SCREEN_LOCK_TIMEOUT                     = "settings.screen.lock.timeout";
   private static final String AUTOMATIC_VERIFICATION_ENABLED          = "settings.automatic.verification.enabled";
   private static final String FORCE_WEBSOCKET_MODE                    = "settings.force.websocket.mode.2";
+  public static final  String MIRROR_RECORDED_VIDEOS                  = "settings.mirror.recorded.videos";
 
   public static final int BACKUP_DEFAULT_HOUR   = 2;
   public static final int BACKUP_DEFAULT_MINUTE = 0;
@@ -215,6 +216,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public boolean isPreferSystemContactPhotos() {
     return getBoolean(PREFER_SYSTEM_CONTACT_PHOTOS, false);
+  }
+
+  public boolean isMirrorRecordedVideosEnabled() {
+    return getBoolean(MIRROR_RECORDED_VIDEOS, false);
+  }
+
+  public void setMirrorRecordedVideosEnabled(boolean mirrorRecordedVideos) {
+    putBoolean(MIRROR_RECORDED_VIDEOS, mirrorRecordedVideos);
   }
 
   public @Nullable Uri getSignalBackupDirectory() {

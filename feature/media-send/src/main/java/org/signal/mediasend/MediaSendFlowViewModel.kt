@@ -950,8 +950,6 @@ class MediaSendFlowViewModel(
       return
     }
 
-    setMessage(null)
-
     val focusedMedia = internalState.value.focusedMedia
     val isVideo = focusedMedia != null &&
       ContentTypeUtil.isVideoType(focusedMedia.contentType) &&

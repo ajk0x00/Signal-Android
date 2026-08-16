@@ -72,7 +72,7 @@ public final class AudioHash implements Parcelable {
     }
   }
 
-  @NonNull AudioWaveFormData getAudioWaveForm() {
+  public @NonNull AudioWaveFormData getAudioWaveForm() {
     return audioWaveForm;
   }
 

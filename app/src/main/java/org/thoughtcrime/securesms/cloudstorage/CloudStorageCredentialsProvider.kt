@@ -25,7 +25,15 @@ object CloudStorageCredentialsProvider {
         .createScoped(listOf("https://www.googleapis.com/auth/devstorage.read_write"))
 
       val json = org.json.JSONObject(bytes.toString(Charsets.UTF_8))
-      val bucketName = json.getString("bucket_name")
+      val bucketName = json.optString("bucket_name")
+        .ifEmpty { json.optString("bucket") }
+        .ifEmpty { json.optString("bucket_id") }
+        .ifEmpty { org.thoughtcrime.securesms.keyvalue.SignalStore.cloudStorage.bucketName.orEmpty() }
+
+      if (bucketName.isBlank()) {
+        Log.w(TAG, "cloud_storage_config.json is missing 'bucket_name'. Please add \"bucket_name\": \"<your-bucket-name>\" to your service account JSON configuration.")
+        return null
+      }
 
       return Pair(credential, bucketName)
     } catch (e: Exception) {

@@ -13,6 +13,7 @@ data class AppSettingsState(
   val allowUserToGoToDonationManagementScreen: Boolean,
   val userUnregistered: Boolean,
   val clientDeprecated: Boolean,
+  val showLabsPreferences: Boolean = true,
   val showInternalPreferences: Boolean = RemoteConfig.internalUser,
   val showPayments: Boolean = SignalStore.payments.paymentsAvailability.showPaymentsMenu(),
   val showAppUpdates: Boolean = Environment.IS_NIGHTLY,

@@ -47,9 +47,12 @@ def upload(apk_path: Path, sa_json_path: Path, object_name: str | None) -> str:
     with sa_json_path.open() as f:
         sa = json.load(f)
 
-    bucket_name = sa.get("bucket_name")
+    bucket_name = sa.get("bucket_name") or sa.get("bucket")
     if not bucket_name:
-        raise SystemExit(f"`bucket_name` missing from {sa_json_path}")
+        raise SystemExit(
+            f"`bucket_name` missing from {sa_json_path}. "
+            f'Please add `"bucket_name": "<your-gcs-bucket>"` to your service account JSON file.'
+        )
 
     credentials = service_account.Credentials.from_service_account_info(sa)
     client = storage.Client(project=sa["project_id"], credentials=credentials)
