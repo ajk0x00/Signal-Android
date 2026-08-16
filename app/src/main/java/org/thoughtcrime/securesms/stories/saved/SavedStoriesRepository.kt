@@ -12,7 +12,7 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryDatabase
 import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryMediaType
 import org.thoughtcrime.securesms.stories.cloudstorage.SavedStoryRecord
-import org.thoughtcrime.securesms.util.BitmapUtil
+import org.signal.core.util.bitmaps.BitmapUtil
 import org.thoughtcrime.securesms.util.MediaUtil
 import java.io.File
 import java.io.FileOutputStream

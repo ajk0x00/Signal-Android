@@ -15,7 +15,7 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.mms.PartAuthority
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.stories.StoryTextPostModel
-import org.thoughtcrime.securesms.util.BitmapUtil
+import org.signal.core.util.bitmaps.BitmapUtil
 import org.thoughtcrime.securesms.util.MediaUtil
 import java.io.ByteArrayInputStream
 import java.io.InputStream
