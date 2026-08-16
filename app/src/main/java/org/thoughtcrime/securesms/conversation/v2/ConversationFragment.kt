@@ -287,12 +287,14 @@ import org.thoughtcrime.securesms.jobs.ServiceOutageDetectionJob
 import org.thoughtcrime.securesms.keyboard.KeyboardPage
 import org.thoughtcrime.securesms.keyboard.KeyboardPagerFragment
 import org.thoughtcrime.securesms.keyboard.KeyboardPagerViewModel
+import android.view.HapticFeedbackConstants
 import org.thoughtcrime.securesms.keyboard.KeyboardUtil
 import org.thoughtcrime.securesms.keyboard.emoji.EmojiKeyboardPageFragment
 import org.thoughtcrime.securesms.keyboard.emoji.search.EmojiSearchFragment
 import org.thoughtcrime.securesms.keyboard.gif.GifKeyboardPageFragment
 import org.thoughtcrime.securesms.keyboard.sticker.StickerKeyboardPageFragment
 import org.thoughtcrime.securesms.keyboard.sticker.StickerSearchDialogFragment
+import org.thoughtcrime.securesms.keyvalue.EmojiValues
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.linkpreview.LinkPreview
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewViewModelV2
@@ -3657,20 +3659,21 @@ class ConversationFragment :
 
     override fun onItemDoubleClick(item: MultiselectPart) {
       Log.d(TAG, "onItemDoubleClick")
-      onDoubleTapToEdit(item.conversationMessage)
-    }
+      val conversationMessage = item.conversationMessage
+      val messageRecord = conversationMessage.messageRecord
+      val recipient = viewModel.recipientSnapshot
 
-    private fun onDoubleTapToEdit(conversationMessage: ConversationMessage) {
-      if (!isValidEditMessageSend(conversationMessage.getMessageRecord(), System.currentTimeMillis())) {
-        return
+      if (recipient != null &&
+        messageRecord.isValidReactionTarget() &&
+        !recipient.isBlocked &&
+        !viewModel.hasMessageRequestState &&
+        (!recipient.isGroup || recipient.isActiveGroup) &&
+        adapter.selectedItems.isEmpty()
+      ) {
+        view?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+        val heartEmoji = SignalStore.emoji.getPreferredVariation(EmojiValues.DEFAULT_REACTIONS_LIST[0])
+        disposables += viewModel.updateReaction(messageRecord, heartEmoji).subscribe()
       }
-
-      if (SignalStore.uiHints.hasSeenDoubleTapEditEducationSheet) {
-        onDoubleTapEditEducationSheetNext(conversationMessage)
-        return
-      }
-
-      DoubleTapEditEducationSheet(conversationMessage).show(childFragmentManager, DoubleTapEditEducationSheet.KEY)
     }
 
     override fun onPaymentTombstoneClicked() {
