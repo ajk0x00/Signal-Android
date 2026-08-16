@@ -1,6 +1,9 @@
 name: Build Release APK
 
 on:
+  push:
+    branches:
+      - main
   release:
     types: [published, created]
   workflow_dispatch:
@@ -46,8 +49,31 @@ jobs:
             -x validateScreenshots \
             --no-configuration-cache
 
-      - name: Upload APKs to Release
+      - name: Determine Release Tag
+        id: release_info
+        run: |
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          else
+            VERSION=$(grep "val canonicalVersionName" app/build.gradle.kts | head -n 1 | cut -d'"' -f2)
+            TAG="v${VERSION}"
+          fi
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+
+      - name: Create or Upload to GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" app/build/outputs/apk/websiteProd/release/*.apk --clobber || true
+          TAG="${{ steps.release_info.outputs.tag }}"
+          echo "Publishing release for tag: $TAG"
+          gh release create "$TAG" app/build/outputs/apk/websiteProd/release/*.apk \
+            --title "$TAG" \
+            --generate-notes \
+            --clobber || \
+          gh release upload "$TAG" app/build/outputs/apk/websiteProd/release/*.apk --clobber
+
+      - name: Upload APKs as Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: signal-website-release-apks
+          path: app/build/outputs/apk/websiteProd/release/*.apk
