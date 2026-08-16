@@ -58,7 +58,7 @@ import org.thoughtcrime.securesms.database.SignalDatabase.Companion.attachments
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.recipients
 import org.thoughtcrime.securesms.database.model.GroupRecord
 import org.thoughtcrime.securesms.database.model.IdentityRecord
-import org.thoughtcrime.securesms.jobs.AskGeminiJob
+import org.thoughtcrime.securesms.jobs.AskGroqJob
 import org.thoughtcrime.securesms.database.model.Mention
 import org.thoughtcrime.securesms.database.model.MessageId
 import org.thoughtcrime.securesms.database.model.MessageRecord
@@ -540,7 +540,7 @@ class ConversationRepository(
         val question = if (trimmedBody.length > 4) trimmedBody.substring(4).trim() else ""
         val quotedText = quote?.text?.trim()?.ifEmpty { null }
         if (question.isNotBlank() || quotedText != null) {
-          AskGeminiJob.enqueue(
+          AskGroqJob.enqueue(
             threadId = threadId,
             question = question,
             quotedText = quotedText,
