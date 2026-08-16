@@ -5,6 +5,7 @@
 
 package org.thoughtcrime.securesms.groq
 
+import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
@@ -26,16 +27,9 @@ object GroqApiClient {
   private const val SYSTEM_INSTRUCTION =
     "You are a friendly companion chatting with friends. Keep your responses short, concise, and playful—like chatting casually with friends in a messaging app. Avoid long, robotic, or overly formal answers."
 
-  @WorkerThread
-  @Throws(IOException::class)
-  fun generateContent(question: String): String {
-    val apiKey = BuildConfig.GROQ_API_KEY
-    if (apiKey.isBlank()) {
-      Log.w(TAG, "Groq API key is not configured.")
-      throw IOException("Groq API key is not configured in build.")
-    }
-
-    val requestJson = JSONObject().apply {
+  @VisibleForTesting
+  internal fun buildRequestBodyJson(question: String): JSONObject {
+    return JSONObject().apply {
       put("model", MODEL)
 
       val messagesArray = JSONArray().apply {
@@ -53,18 +47,40 @@ object GroqApiClient {
         )
       }
       put("messages", messagesArray)
+    }
+  }
 
-      // Enable Web Search via built-in tool for compound models
-      val toolsArray = JSONArray().apply {
-        put(
-          JSONObject().apply {
-            put("type", "web_search")
-          }
-        )
-      }
-      put("tools", toolsArray)
+  @VisibleForTesting
+  internal fun parseResponseBodyJson(responseBodyString: String): String {
+    val json = JSONObject(responseBodyString)
+    val choices = json.optJSONArray("choices")
+    if (choices == null || choices.length() == 0) {
+      Log.w(TAG, "Groq API returned no choices.")
+      throw IOException("No choices returned by Groq API")
     }
 
+    val firstChoice = choices.getJSONObject(0)
+    val message = firstChoice.optJSONObject("message")
+    val content = message?.optString("content")?.trim()
+
+    if (content.isNullOrEmpty()) {
+      Log.w(TAG, "Groq API returned empty message content.")
+      throw IOException("Empty response text from Groq API")
+    }
+
+    return content
+  }
+
+  @WorkerThread
+  @Throws(IOException::class)
+  fun generateContent(question: String): String {
+    val apiKey = BuildConfig.GROQ_API_KEY
+    if (apiKey.isBlank()) {
+      Log.w(TAG, "Groq API key is not configured.")
+      throw IOException("Groq API key is not configured in build.")
+    }
+
+    val requestJson = buildRequestBodyJson(question)
     val requestBody = RequestBody.create(JSON_MEDIA_TYPE, requestJson.toString())
     val request = Request.Builder()
       .url(ENDPOINT)
@@ -80,23 +96,7 @@ object GroqApiClient {
         throw IOException("Groq API returned HTTP ${response.code}: $responseBodyString")
       }
 
-      val json = JSONObject(responseBodyString)
-      val choices = json.optJSONArray("choices")
-      if (choices == null || choices.length() == 0) {
-        Log.w(TAG, "Groq API returned no choices.")
-        throw IOException("No choices returned by Groq API")
-      }
-
-      val firstChoice = choices.getJSONObject(0)
-      val message = firstChoice.optJSONObject("message")
-      val content = message?.optString("content")?.trim()
-
-      if (content.isNullOrEmpty()) {
-        Log.w(TAG, "Groq API returned empty message content.")
-        throw IOException("Empty response text from Groq API")
-      }
-
-      return content
+      return parseResponseBodyJson(responseBodyString)
     }
   }
 }
