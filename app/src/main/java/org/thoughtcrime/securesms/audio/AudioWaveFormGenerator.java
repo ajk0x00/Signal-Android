@@ -67,6 +67,7 @@ public final class AudioWaveFormGenerator {
 
       extractor.selectTrack(0);
 
+      long                  maxPresentationTimeUs   = 0;
       long                  kTimeOutUs              = 5000;
       MediaCodec.BufferInfo info                    = new MediaCodec.BufferInfo();
       boolean               extractorDone           = false;
@@ -109,6 +110,9 @@ public final class AudioWaveFormGenerator {
           if (outputBufferIndex >= 0) {
             if (info.size > 0) {
               noOutputCounter = 0;
+              if (info.presentationTimeUs > maxPresentationTimeUs) {
+                maxPresentationTimeUs = info.presentationTimeUs;
+              }
             }
 
             int barIndex = (int) ((wave.length * info.presentationTimeUs) / totalDurationUs);
@@ -157,7 +161,8 @@ public final class AudioWaveFormGenerator {
         bytes[i] = (byte) (255 * normalized);
       }
 
-      return new AudioFileInfo(totalDurationUs, bytes);
+      long finalDurationUs = maxPresentationTimeUs > 0 ? maxPresentationTimeUs : totalDurationUs;
+      return new AudioFileInfo(finalDurationUs, bytes);
     }
   }
 }

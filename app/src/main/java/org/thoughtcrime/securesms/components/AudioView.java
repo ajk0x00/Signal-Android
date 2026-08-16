@@ -215,6 +215,13 @@ public final class AudioView extends FrameLayout {
       waveFormView.setColors(waveFormPlayedBarsColor, waveFormUnplayedBarsColor, waveFormThumbTint);
       if (audioSlide == null || !Objects.equals(audioSlide.getUri(), audio.getUri())) {
         disposable.dispose();
+        if (audio.asAttachment().getAudioHash() != null) {
+          long durationUs = audio.asAttachment().getAudioHash().getAudioWaveForm().durationUs;
+          if (durationUs > 0) {
+            durationMillis = TimeUnit.MICROSECONDS.toMillis(durationUs);
+            updateProgress(0, 0);
+          }
+        }
         disposable = AudioWaveForms.getWaveForm(getContext(), audio.asAttachment())
                                    .observeOn(AndroidSchedulers.mainThread())
                                    .subscribe(
@@ -228,6 +235,8 @@ public final class AudioView extends FrameLayout {
                                        },
                                        t -> waveFormView.setWaveMode(false)
                                    );
+      } else {
+        updateProgress(getProgress(), (long) (durationMillis * getProgress()));
       }
     }
 
