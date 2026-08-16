@@ -449,8 +449,8 @@ public class ConversationItemFooter extends ConstraintLayout {
         showAudioDurationViews();
 
         long durationUs = 0;
-        if (audioSlide.asAttachment().getAudioHash() != null) {
-          durationUs = audioSlide.asAttachment().getAudioHash().getAudioWaveForm().durationUs;
+        if (audioSlide.asAttachment().audioHash != null) {
+          durationUs = audioSlide.asAttachment().audioHash.getAudioWaveForm().durationUs;
         }
 
         if (durationUs > 0) {
