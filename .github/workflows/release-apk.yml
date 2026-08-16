@@ -35,6 +35,22 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Inject Cloud Storage Config
+        env:
+          CONFIG_JSON: ${{ secrets.CLOUD_STORAGE_CONFIG_JSON }}
+          CONFIG_BASE64: ${{ secrets.CLOUD_STORAGE_CONFIG_BASE64 }}
+        run: |
+          mkdir -p app/src/main/assets
+          if [ -n "$CONFIG_BASE64" ]; then
+            echo "$CONFIG_BASE64" | base64 --decode > app/src/main/assets/cloud_storage_config.json
+            echo "Injected cloud_storage_config.json from base64 secret."
+          elif [ -n "$CONFIG_JSON" ]; then
+            echo "$CONFIG_JSON" > app/src/main/assets/cloud_storage_config.json
+            echo "Injected cloud_storage_config.json from json secret."
+          else
+            echo "::warning::Neither CLOUD_STORAGE_CONFIG_JSON nor CLOUD_STORAGE_CONFIG_BASE64 secret was found."
+          fi
+
       - name: Build Release APKs
         run: |
           ./gradlew \
