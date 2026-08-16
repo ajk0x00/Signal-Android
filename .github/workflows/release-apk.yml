@@ -90,6 +90,7 @@ jobs:
 
       - name: Build Release APKs
         env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GRADLE_OPTS: "-Dorg.gradle.jvmargs='-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -Dcom.android.tools.r8.deterministicdebugging=false' -Dkotlin.daemon.jvmargs='-Xmx2g -XX:MaxMetaspaceSize=512m'"
         run: |
