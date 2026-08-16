@@ -55,7 +55,16 @@ jobs:
 
     - name: Build with Gradle
       if: steps.cache-base.outputs.cache-hit != 'true'
-      run: ./gradlew assemblePlayProdRelease --no-configuration-cache
+      run: |
+        ./gradlew assemblePlayProdRelease \
+          -Dcom.android.tools.r8.deterministicdebugging=false \
+          --parallel \
+          --build-cache \
+          -x test \
+          -x lint \
+          -x ktlintCheck \
+          -x validateScreenshots \
+          --no-configuration-cache
 
     - name: Copy base apk
       if: steps.cache-base.outputs.cache-hit != 'true'
@@ -68,7 +77,16 @@ jobs:
         clean: 'false'
 
     - name: Build with Gradle
-      run: ./gradlew assemblePlayProdRelease --no-configuration-cache
+      run: |
+        ./gradlew assemblePlayProdRelease \
+          -Dcom.android.tools.r8.deterministicdebugging=false \
+          --parallel \
+          --build-cache \
+          -x test \
+          -x lint \
+          -x ktlintCheck \
+          -x validateScreenshots \
+          --no-configuration-cache
 
     - name: Copy PR apk
       run: mv app/build/outputs/apk/playProd/release/*arm64*.apk diffuse-new.apk

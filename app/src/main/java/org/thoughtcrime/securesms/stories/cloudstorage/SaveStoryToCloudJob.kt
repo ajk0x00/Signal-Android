@@ -1,7 +1,9 @@
 package org.thoughtcrime.securesms.stories.cloudstorage
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import com.bumptech.glide.load.Options
+import org.signal.core.util.bitmaps.BitmapUtil
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.cloudstorage.CloudStorageCredentialsProvider
 import org.thoughtcrime.securesms.cloudstorage.CloudStorageServiceHelper
@@ -15,7 +17,6 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.mms.PartAuthority
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.stories.StoryTextPostModel
-import org.signal.core.util.bitmaps.BitmapUtil
 import org.thoughtcrime.securesms.util.MediaUtil
 import java.io.ByteArrayInputStream
 import java.io.InputStream
@@ -76,6 +77,7 @@ class SaveStoryToCloudJob private constructor(
     }
   }
 
+  @SuppressLint("ThreadConstraint")
   private fun runUpload(): Result {
     val application = AppDependencies.application
     val messageRecord = SignalDatabase.messages.getMessageRecordOrNull(messageId)?.withAttachments()

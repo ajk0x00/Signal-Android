@@ -33,11 +33,21 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build Release APKs
-        run: ./gradlew assemblePlayProdRelease assembleWebsiteProdRelease --no-configuration-cache
+        run: |
+          ./gradlew \
+            --write-verification-metadata sha256 \
+            assembleWebsiteProdRelease \
+            -Dcom.android.tools.r8.deterministicdebugging=false \
+            --parallel \
+            --build-cache \
+            -x test \
+            -x lint \
+            -x ktlintCheck \
+            -x validateScreenshots \
+            --no-configuration-cache
 
       - name: Upload APKs to Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" app/build/outputs/apk/playProd/release/*.apk --clobber || true
           gh release upload "${{ github.event.release.tag_name }}" app/build/outputs/apk/websiteProd/release/*.apk --clobber || true
