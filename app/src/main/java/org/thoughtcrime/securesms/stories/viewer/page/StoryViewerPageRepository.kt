@@ -57,7 +57,7 @@ open class StoryViewerPageRepository(context: Context, private val storyViewStat
 
         val results = stories.filterNot {
           recipient.isMyStory && it.toRecipient.isGroup
-        }
+        }.sortedBy { it.dateSent }
 
         emitter.onNext(results.withAttachments())
       }
