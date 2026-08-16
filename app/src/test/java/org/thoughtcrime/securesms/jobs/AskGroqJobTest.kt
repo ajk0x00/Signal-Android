@@ -19,11 +19,11 @@ import org.thoughtcrime.securesms.jobmanager.JsonJobData
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, application = Application::class)
-class AskGeminiJobTest {
+class AskGroqJobTest {
 
   @Test
   fun `serialize and deserialize with quotedText`() {
-    val job = AskGeminiJob.Factory().create(
+    val job = AskGroqJob.Factory().create(
       Job.Parameters.Builder().build(),
       JsonJobData.Builder()
         .putLong("thread_id", 123L)
@@ -47,7 +47,7 @@ class AskGeminiJobTest {
 
   @Test
   fun `serialize and deserialize without quotedText`() {
-    val job = AskGeminiJob.Factory().create(
+    val job = AskGroqJob.Factory().create(
       Job.Parameters.Builder().build(),
       JsonJobData.Builder()
         .putLong("thread_id", 123L)

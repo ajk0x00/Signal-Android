@@ -8,7 +8,7 @@ package org.thoughtcrime.securesms.jobs
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.dependencies.AppDependencies
-import org.thoughtcrime.securesms.gemini.GeminiApiClient
+import org.thoughtcrime.securesms.groq.GroqApiClient
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobmanager.JsonJobData
 import org.thoughtcrime.securesms.mms.OutgoingMessage
@@ -20,10 +20,10 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
 
 /**
- * Background job to query Gemini 3.5 Flash-Lite with Google Search Grounding
+ * Background job to query Groq compound-mini with web search
  * and send the response back into the conversation thread as a quote-reply.
  */
-class AskGeminiJob private constructor(
+class AskGroqJob private constructor(
   private val threadId: Long,
   private val question: String,
   private val quotedText: String?,
@@ -33,9 +33,10 @@ class AskGeminiJob private constructor(
 ) : BaseJob(parameters) {
 
   companion object {
-    private val TAG = Log.tag(AskGeminiJob::class.java)
+    private val TAG = Log.tag(AskGroqJob::class.java)
 
-    const val KEY = "AskGeminiJob"
+    const val KEY = "AskGroqJob"
+    private const val MAX_ATTEMPTS = 3
 
     private const val KEY_THREAD_ID = "thread_id"
     private const val KEY_QUESTION = "question"
@@ -53,7 +54,7 @@ class AskGeminiJob private constructor(
       originalBody: String
     ) {
       AppDependencies.jobManager.add(
-        AskGeminiJob(
+        AskGroqJob(
           threadId = threadId,
           question = question,
           quotedText = quotedText,
@@ -77,9 +78,9 @@ class AskGeminiJob private constructor(
     originalSentTimestamp = originalSentTimestamp,
     originalBody = originalBody,
     parameters = Parameters.Builder()
-      .setQueue("AskGeminiJob")
+      .setQueue("AskGroqJob")
       .setLifespan(1.days.inWholeMilliseconds)
-      .setMaxAttempts(3)
+      .setMaxAttempts(MAX_ATTEMPTS)
       .build()
   )
 
@@ -96,7 +97,7 @@ class AskGeminiJob private constructor(
   override fun getFactoryKey(): String = KEY
 
   override fun onRun() {
-    Log.i(TAG, "Executing AskGeminiJob for thread $threadId, question length: ${question.length}, hasQuotedText: ${!quotedText.isNullOrBlank()}")
+    Log.i(TAG, "Executing AskGroqJob for thread $threadId, question length: ${question.length}, hasQuotedText: ${!quotedText.isNullOrBlank()}")
 
     val recipient = SignalDatabase.threads.getRecipientForThreadId(threadId)
     if (recipient == null) {
@@ -114,9 +115,33 @@ class AskGeminiJob private constructor(
       question
     }
 
-    val answer = GeminiApiClient.generateContent(prompt)
-    Log.i(TAG, "Received answer from Gemini, sending quote reply to thread $threadId")
+    val answer = GroqApiClient.generateContent(prompt)
+    Log.i(TAG, "Received answer from Groq, sending quote reply to thread $threadId")
+    sendReply(recipient, "🤖 $answer")
+  }
 
+  override fun onShouldRetry(e: Exception): Boolean {
+    return when (e) {
+      is IllegalStateException -> false // Missing API key or configuration error
+      is IOException -> true            // Network failure / rate limit / 5xx
+      else -> false
+    }
+  }
+
+  override fun onFailure() {
+    Log.w(TAG, "AskGroqJob failed permanently for thread $threadId")
+    val recipient = SignalDatabase.threads.getRecipientForThreadId(threadId)
+    if (recipient != null) {
+      val errorMessage = if (org.thoughtcrime.securesms.BuildConfig.GROQ_API_KEY.isBlank()) {
+        "🤖 Groq API key is not configured. Please set the GROQ_API_KEY build configuration to use /ask."
+      } else {
+        "🤖 Sorry, I couldn't get a response from Groq. Please check your network or try again later."
+      }
+      sendReply(recipient, errorMessage)
+    }
+  }
+
+  private fun sendReply(recipient: Recipient, replyBody: String) {
     val quote = QuoteModel(
       id = originalSentTimestamp,
       author = Recipient.self().id,
@@ -131,7 +156,7 @@ class AskGeminiJob private constructor(
     val outgoingMessage = OutgoingMessage(
       threadRecipient = recipient,
       sentTimeMillis = System.currentTimeMillis(),
-      body = "🤖 $answer",
+      body = replyBody,
       expiresIn = recipient.expiresInSeconds.seconds.inWholeMilliseconds,
       isUrgent = true,
       isSecure = true,
@@ -148,22 +173,10 @@ class AskGeminiJob private constructor(
     )
   }
 
-  override fun onShouldRetry(e: Exception): Boolean {
-    return when (e) {
-      is IllegalStateException -> false // Missing API key or configuration error
-      is IOException -> true            // Network failure / rate limit / 5xx
-      else -> false
-    }
-  }
-
-  override fun onFailure() {
-    Log.w(TAG, "AskGeminiJob failed permanently for thread $threadId")
-  }
-
-  class Factory : Job.Factory<AskGeminiJob> {
-    override fun create(parameters: Parameters, serializedData: ByteArray?): AskGeminiJob {
+  class Factory : Job.Factory<AskGroqJob> {
+    override fun create(parameters: Parameters, serializedData: ByteArray?): AskGroqJob {
       val data = JsonJobData.deserialize(serializedData)
-      return AskGeminiJob(
+      return AskGroqJob(
         threadId = data.getLong(KEY_THREAD_ID),
         question = data.getString(KEY_QUESTION),
         quotedText = data.getStringOrDefault(KEY_QUOTED_TEXT, null),
