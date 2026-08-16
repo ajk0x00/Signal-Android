@@ -27,6 +27,11 @@ object CameraDependencies {
     _provider = provider
   }
 
+  @androidx.annotation.VisibleForTesting
+  fun setProviderForTesting(provider: Provider) {
+    _provider = provider
+  }
+
   val application
     get() = _application
 
@@ -38,10 +43,16 @@ object CameraDependencies {
     return _provider.getMaxVideoBitrateBps()
   }
 
+  fun isVideoMirroringEnabled(): Boolean {
+    return _provider.isVideoMirroringEnabled()
+  }
+
   interface Provider {
     fun isStoriesFeatureEnabled(): Boolean
 
     /** The highest video bitrate, in bits per second, that captured video may be transcoded to. */
     fun getMaxVideoBitrateBps(): Int = DEFAULT_MAX_VIDEO_BITRATE_BPS
+
+    fun isVideoMirroringEnabled(): Boolean = false
   }
 }

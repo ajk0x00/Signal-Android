@@ -64,6 +64,10 @@ class ChatsSettingsFragment : ComposeFragment() {
       viewModel.setGenerateLinkPreviewsEnabled(enabled)
     }
 
+    override fun onMirrorRecordedVideosChanged(enabled: Boolean) {
+      viewModel.setMirrorRecordedVideos(enabled)
+    }
+
     override fun onUseAddressBookChanged(enabled: Boolean) {
       viewModel.setUseAddressBook(enabled)
     }
@@ -121,6 +125,7 @@ class ChatsSettingsFragment : ComposeFragment() {
 private interface ChatsSettingsCallbacks : ChatExportCallbacks {
   fun onNavigationClick() = Unit
   fun onGenerateLinkPreviewsChanged(enabled: Boolean) = Unit
+  fun onMirrorRecordedVideosChanged(enabled: Boolean) = Unit
   fun onUseAddressBookChanged(enabled: Boolean) = Unit
   fun onKeepMutedChatsArchivedChanged(enabled: Boolean) = Unit
   fun onAddAChatFolderClick() = Unit
@@ -169,6 +174,16 @@ private fun ChatsSettingsScreen(
           enabled = state.isRegisteredAndUpToDate(),
           checked = state.generateLinkPreviews,
           onCheckChanged = callbacks::onGenerateLinkPreviewsChanged
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.preferences__mirror_front_camera_videos),
+          label = stringResource(R.string.preferences__mirror_front_camera_videos_description),
+          enabled = state.isRegisteredAndUpToDate(),
+          checked = state.mirrorRecordedVideos,
+          onCheckChanged = callbacks::onMirrorRecordedVideosChanged
         )
       }
 
@@ -292,6 +307,7 @@ private fun ChatsSettingsScreenPreview() {
     ChatsSettingsScreen(
       state = ChatsSettingsState(
         generateLinkPreviews = true,
+        mirrorRecordedVideos = false,
         useAddressBook = true,
         keepMutedChatsArchived = true,
         useSystemEmoji = false,

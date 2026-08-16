@@ -28,6 +28,7 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
   private val store = MutableStateFlow(
     ChatsSettingsState(
       generateLinkPreviews = SignalStore.settings.isLinkPreviewsEnabled,
+      mirrorRecordedVideos = SignalStore.settings.isMirrorRecordedVideosEnabled,
       useAddressBook = SignalStore.settings.isPreferSystemContactPhotos,
       keepMutedChatsArchived = SignalStore.settings.shouldKeepMutedChatsArchived(),
       useSystemEmoji = SignalStore.settings.isPreferSystemEmoji,
@@ -86,6 +87,11 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
     store.update { it.copy(generateLinkPreviews = enabled) }
     SignalStore.settings.isLinkPreviewsEnabled = enabled
     repository.syncLinkPreviewsState()
+  }
+
+  fun setMirrorRecordedVideos(enabled: Boolean) {
+    store.update { it.copy(mirrorRecordedVideos = enabled) }
+    SignalStore.settings.isMirrorRecordedVideosEnabled = enabled
   }
 
   fun setUseAddressBook(enabled: Boolean) {

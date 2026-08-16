@@ -5,6 +5,7 @@ import org.thoughtcrime.securesms.keyvalue.protos.LocalBackupCreationProgress
 
 data class ChatsSettingsState(
   val generateLinkPreviews: Boolean,
+  val mirrorRecordedVideos: Boolean,
   val useAddressBook: Boolean,
   val keepMutedChatsArchived: Boolean,
   val useSystemEmoji: Boolean,

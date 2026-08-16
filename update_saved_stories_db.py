@@ -38,8 +38,13 @@ FILENAME_TS_LEN = len("dd-MM-yyyy_HH-mm-ss")
 def load_sa(sa_json_path: Path) -> dict:
     with sa_json_path.open() as f:
         sa = json.load(f)
-    if not sa.get("bucket_name"):
-        raise SystemExit(f"`bucket_name` missing from {sa_json_path}")
+    bucket_name = sa.get("bucket_name") or sa.get("bucket")
+    if not bucket_name:
+        raise SystemExit(
+            f"`bucket_name` missing from {sa_json_path}. "
+            f'Please add `"bucket_name": "<your-gcs-bucket>"` to your service account JSON file.'
+        )
+    sa["bucket_name"] = bucket_name
     return sa
 
 

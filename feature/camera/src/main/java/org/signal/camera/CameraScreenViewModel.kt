@@ -23,6 +23,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
+import androidx.camera.core.MirrorMode
 import androidx.camera.core.Preview
 import androidx.camera.core.SurfaceOrientedMeteringPointFactory
 import androidx.camera.core.UseCase
@@ -514,7 +515,14 @@ class CameraScreenViewModel : ViewModel() {
       // Recording at the highest transcoding target means no sent-media quality tier is sourced from a lower-bitrate capture.
       .setTargetVideoEncodingBitRate(CameraDependencies.getMaxVideoBitrateBps())
       .build()
-    return VideoCapture.withOutput(recorder)
+    val mirrorMode = if (CameraDependencies.isVideoMirroringEnabled()) {
+      MirrorMode.MIRROR_MODE_ON_FRONT_ONLY
+    } else {
+      MirrorMode.MIRROR_MODE_OFF
+    }
+    return VideoCapture.Builder(recorder)
+      .setMirrorMode(mirrorMode)
+      .build()
   }
 
   private fun buildBindingAttempts(

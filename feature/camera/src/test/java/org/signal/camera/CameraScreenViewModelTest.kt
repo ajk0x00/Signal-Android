@@ -11,6 +11,7 @@ import androidx.camera.core.CameraControl
 import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.MirrorMode
 import androidx.camera.core.Preview
 import androidx.camera.core.ZoomState
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -61,16 +62,18 @@ class CameraScreenViewModelTest {
   private val mockCamera: Camera = mockk(relaxed = true)
 
   private lateinit var viewModel: CameraScreenViewModel
+  private var isVideoMirroringEnabled: Boolean = false
 
   @Before
   fun setUp() {
     Dispatchers.setMain(testDispatcher)
-    CameraDependencies.init(
-      RuntimeEnvironment.getApplication(),
-      object : CameraDependencies.Provider {
-        override fun isStoriesFeatureEnabled(): Boolean = false
-      }
-    )
+    isVideoMirroringEnabled = false
+    val testProvider = object : CameraDependencies.Provider {
+      override fun isStoriesFeatureEnabled(): Boolean = false
+      override fun isVideoMirroringEnabled(): Boolean = this@CameraScreenViewModelTest.isVideoMirroringEnabled
+    }
+    CameraDependencies.init(RuntimeEnvironment.getApplication(), testProvider)
+    CameraDependencies.setProviderForTesting(testProvider)
     viewModel = CameraScreenViewModel()
 
     every { mockCamera.cameraControl } returns mockCameraControl
@@ -134,6 +137,7 @@ class CameraScreenViewModelTest {
   }
 
   private fun List<Any?>.hasVideoCapture() = any { it is VideoCapture<*> }
+  private fun List<Any?>.getVideoCapture() = filterIsInstance<VideoCapture<*>>().firstOrNull()
   private fun List<Any?>.hasImageAnalysis() = any { it is ImageAnalysis }
 
   private fun setupZoomState(minZoom: Float, maxZoom: Float) {
@@ -156,6 +160,31 @@ class CameraScreenViewModelTest {
     assertThat(attempts.size).isEqualTo(1)
     assertThat(attempts[0].hasVideoCapture()).isTrue()
     assertThat(attempts[0].hasImageAnalysis()).isTrue()
+  }
+
+  @Test
+  fun `binding with video capture creates VideoCapture with MIRROR_MODE_OFF by default`() {
+    val attempts = captureBindingAttempts()
+
+    bindCamera(captureMode = CameraCaptureMode.ImageAndVideoSimultaneous, enableQrScanning = false)
+
+    assertThat(attempts.size).isEqualTo(1)
+    val videoCapture = attempts[0].getVideoCapture()
+    assertThat(videoCapture).isNotNull()
+    assertThat(videoCapture!!.mirrorMode).isEqualTo(MirrorMode.MIRROR_MODE_OFF)
+  }
+
+  @Test
+  fun `binding with video mirroring enabled creates VideoCapture with MIRROR_MODE_ON_FRONT_ONLY`() {
+    isVideoMirroringEnabled = true
+    val attempts = captureBindingAttempts()
+
+    bindCamera(captureMode = CameraCaptureMode.ImageAndVideoSimultaneous, enableQrScanning = false)
+
+    assertThat(attempts.size).isEqualTo(1)
+    val videoCapture = attempts[0].getVideoCapture()
+    assertThat(videoCapture).isNotNull()
+    assertThat(videoCapture!!.mirrorMode).isEqualTo(MirrorMode.MIRROR_MODE_ON_FRONT_ONLY)
   }
 
   @Test
