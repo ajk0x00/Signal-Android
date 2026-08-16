@@ -2,3 +2,5 @@
 -dontwarn com.sun.jna.**
 -dontwarn javax.naming.**
 -dontwarn lombok.Generated
+-dontwarn java.net.spi.**
+-dontwarn org.xbill.DNS.spi.DnsjavaInetAddressResolverProvider

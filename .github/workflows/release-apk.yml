@@ -71,13 +71,30 @@ jobs:
             echo "::warning::KEYSTORE_BASE64 secret not found, using default debug keystore."
           fi
 
+      - name: Free Disk Space and Set Up Swap
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          # Create 10GB swap to prevent OOM during R8 minification
+          sudo fallocate -l 10G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=10240
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
       - name: Build Release APKs
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs='-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -Dcom.android.tools.r8.deterministicdebugging=false' -Dkotlin.daemon.jvmargs='-Xmx2g -XX:MaxMetaspaceSize=512m'"
         run: |
           ./gradlew \
             --write-verification-metadata sha256 \
             assembleWebsiteProdRelease \
+            -Dorg.gradle.jvmargs="-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -Dcom.android.tools.r8.deterministicdebugging=false" \
+            -Dkotlin.daemon.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m" \
             -Dcom.android.tools.r8.deterministicdebugging=false \
             --parallel \
             --build-cache \
