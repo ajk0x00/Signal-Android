@@ -4002,6 +4002,19 @@ class ConversationFragment :
       requireActivity().startActivity(MediaIntentFactory.create(requireActivity(), args), options.toBundle())
     }
 
+    private fun onDoubleTapToEdit(conversationMessage: ConversationMessage) {
+      if (!isValidEditMessageSend(conversationMessage.messageRecord, System.currentTimeMillis())) {
+        return
+      }
+
+      if (SignalStore.uiHints.hasSeenDoubleTapEditEducationSheet) {
+        onDoubleTapEditEducationSheetNext(conversationMessage)
+        return
+      }
+
+      DoubleTapEditEducationSheet(conversationMessage).show(childFragmentManager, DoubleTapEditEducationSheet.KEY)
+    }
+
     override fun onEditedIndicatorClicked(conversationMessage: ConversationMessage) {
       val messageRecord = conversationMessage.messageRecord
       if (conversationMessage.messageRecord.isOutgoing) {

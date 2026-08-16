@@ -72,6 +72,8 @@ jobs:
           fi
 
       - name: Build Release APKs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           ./gradlew \
             --write-verification-metadata sha256 \
