@@ -26,6 +26,7 @@ import kotlin.time.Duration.Companion.seconds
 class AskGeminiJob private constructor(
   private val threadId: Long,
   private val question: String,
+  private val quotedText: String?,
   private val originalSentTimestamp: Long,
   private val originalBody: String,
   parameters: Parameters
@@ -38,13 +39,16 @@ class AskGeminiJob private constructor(
 
     private const val KEY_THREAD_ID = "thread_id"
     private const val KEY_QUESTION = "question"
+    private const val KEY_QUOTED_TEXT = "quoted_text"
     private const val KEY_ORIGINAL_SENT_TIMESTAMP = "original_sent_timestamp"
     private const val KEY_ORIGINAL_BODY = "original_body"
 
     @JvmStatic
+    @JvmOverloads
     fun enqueue(
       threadId: Long,
       question: String,
+      quotedText: String? = null,
       originalSentTimestamp: Long,
       originalBody: String
     ) {
@@ -52,6 +56,7 @@ class AskGeminiJob private constructor(
         AskGeminiJob(
           threadId = threadId,
           question = question,
+          quotedText = quotedText,
           originalSentTimestamp = originalSentTimestamp,
           originalBody = originalBody
         )
@@ -62,11 +67,13 @@ class AskGeminiJob private constructor(
   private constructor(
     threadId: Long,
     question: String,
+    quotedText: String?,
     originalSentTimestamp: Long,
     originalBody: String
   ) : this(
     threadId = threadId,
     question = question,
+    quotedText = quotedText,
     originalSentTimestamp = originalSentTimestamp,
     originalBody = originalBody,
     parameters = Parameters.Builder()
@@ -80,6 +87,7 @@ class AskGeminiJob private constructor(
     return JsonJobData.Builder()
       .putLong(KEY_THREAD_ID, threadId)
       .putString(KEY_QUESTION, question)
+      .putString(KEY_QUOTED_TEXT, quotedText)
       .putLong(KEY_ORIGINAL_SENT_TIMESTAMP, originalSentTimestamp)
       .putString(KEY_ORIGINAL_BODY, originalBody)
       .serialize()
@@ -88,7 +96,7 @@ class AskGeminiJob private constructor(
   override fun getFactoryKey(): String = KEY
 
   override fun onRun() {
-    Log.i(TAG, "Executing AskGeminiJob for thread $threadId, question length: ${question.length}")
+    Log.i(TAG, "Executing AskGeminiJob for thread $threadId, question length: ${question.length}, hasQuotedText: ${!quotedText.isNullOrBlank()}")
 
     val recipient = SignalDatabase.threads.getRecipientForThreadId(threadId)
     if (recipient == null) {
@@ -96,7 +104,17 @@ class AskGeminiJob private constructor(
       return
     }
 
-    val answer = GeminiApiClient.generateContent(question)
+    val prompt = if (!quotedText.isNullOrBlank()) {
+      if (question.isNotBlank()) {
+        "Quoted message:\n\"\"\"\n$quotedText\n\"\"\"\n\nQuestion: $question"
+      } else {
+        "Quoted message:\n\"\"\"\n$quotedText\n\"\"\"\n\nPlease explain or answer regarding the quoted message above."
+      }
+    } else {
+      question
+    }
+
+    val answer = GeminiApiClient.generateContent(prompt)
     Log.i(TAG, "Received answer from Gemini, sending quote reply to thread $threadId")
 
     val quote = QuoteModel(
@@ -148,6 +166,7 @@ class AskGeminiJob private constructor(
       return AskGeminiJob(
         threadId = data.getLong(KEY_THREAD_ID),
         question = data.getString(KEY_QUESTION),
+        quotedText = data.getStringOrDefault(KEY_QUOTED_TEXT, null),
         originalSentTimestamp = data.getLong(KEY_ORIGINAL_SENT_TIMESTAMP),
         originalBody = data.getString(KEY_ORIGINAL_BODY),
         parameters = parameters

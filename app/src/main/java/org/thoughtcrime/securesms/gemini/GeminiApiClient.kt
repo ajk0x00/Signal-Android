@@ -23,6 +23,9 @@ object GeminiApiClient {
   private const val BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
   private val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
 
+  private const val SYSTEM_INSTRUCTION =
+    "You are a friendly companion chatting with friends. Keep your responses short, concise, and playful—like chatting casually with friends in a messaging app. Avoid long, robotic, or overly formal answers."
+
   @WorkerThread
   @Throws(IOException::class)
   fun generateContent(question: String): String {
@@ -35,6 +38,14 @@ object GeminiApiClient {
     val url = "$BASE_URL/$MODEL:generateContent?key=$apiKey"
 
     val requestJson = JSONObject().apply {
+      val systemInstructionObj = JSONObject().apply {
+        val partsArray = JSONArray().apply {
+          put(JSONObject().apply { put("text", SYSTEM_INSTRUCTION) })
+        }
+        put("parts", partsArray)
+      }
+      put("system_instruction", systemInstructionObj)
+
       val contentsArray = JSONArray().apply {
         val contentObj = JSONObject().apply {
           val partsArray = JSONArray().apply {
