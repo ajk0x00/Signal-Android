@@ -64,6 +64,8 @@ class DigestingRequestBody(
     }
 
     outputStream.flush()
+    outputStream.close()
+    digestStream.close()
 
     val incrementalDigest: ByteArray? = if (isIncremental) {
       if (contentLength != outputStream.totalBytesWritten) {
@@ -71,11 +73,8 @@ class DigestingRequestBody(
       } else {
         Log.d(TAG, "Wrote the expected number of bytes.")
       }
-      outputStream.close()
-      digestStream.close()
       digestStream.toByteArray()
     } else {
-      outputStream.close()
       null
     }
 

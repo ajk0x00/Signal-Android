@@ -18,6 +18,7 @@ import org.signal.libsignal.net.RequestResult
 import org.signal.libsignal.net.RetryLaterException
 import org.signal.libsignal.net.UploadTooLargeException
 import org.signal.network.api.AttachmentUploadResult
+import org.signal.network.exceptions.NonSuccessfulResponseCodeException
 import org.signal.protos.resumableuploads.ResumableUpload
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.attachments.Attachment
@@ -100,7 +101,7 @@ class AttachmentUploadJob private constructor(
     Parameters.Builder()
       .addConstraint(NetworkConstraint.KEY)
       .setLifespan(TimeUnit.DAYS.toMillis(1))
-      .setMaxAttempts(Parameters.UNLIMITED)
+      .setMaxAttempts(25)
       .build(),
     attachmentId,
     null
@@ -258,10 +259,8 @@ class AttachmentUploadJob private constructor(
 
       throw e
     } catch (e: NonSuccessfulResumableUploadResponseCodeException) {
-      if (e.code == 400) {
-        Log.w(TAG, "[$attachmentId] Failed to upload due to a 400 when getting resumable upload information. Clearing upload spec.", e)
-        uploadSpec = null
-      }
+      Log.w(TAG, "[$attachmentId] Failed to upload due to response code ${e.code} when getting resumable upload information. Clearing upload spec.", e)
+      uploadSpec = null
 
       resetProgressListeners(databaseAttachment)
 
@@ -271,6 +270,17 @@ class AttachmentUploadJob private constructor(
       uploadSpec = null
 
       resetProgressListeners(databaseAttachment)
+
+      throw e
+    } catch (e: NonSuccessfulResponseCodeException) {
+      Log.w(TAG, "[$attachmentId] Non-successful response code ${e.code} during upload. Clearing upload spec.", e)
+      uploadSpec = null
+
+      resetProgressListeners(databaseAttachment)
+
+      if (e.code == 413) {
+        throw UploadTooLargeException(e)
+      }
 
       throw e
     } catch (e: IOException) {
@@ -284,6 +294,9 @@ class AttachmentUploadJob private constructor(
         } else {
           Log.i(TAG, "[$attachmentId] Length was correct. No action needed. Will retry.")
         }
+      } else if (existingSpec != null && runAttempt >= 3) {
+        Log.w(TAG, "[$attachmentId] Resuming upload failed multiple times ($runAttempt). Clearing upload spec to fall back to a fresh upload.", e)
+        uploadSpec = null
       }
 
       resetProgressListeners(databaseAttachment)
