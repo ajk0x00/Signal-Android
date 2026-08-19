@@ -279,7 +279,7 @@ class AttachmentUploadJob private constructor(
       resetProgressListeners(databaseAttachment)
 
       if (e.code == 413) {
-        throw UploadTooLargeException(e)
+        throw UploadTooLargeException(e.message ?: "Upload too large: 413")
       }
 
       throw e
@@ -294,7 +294,7 @@ class AttachmentUploadJob private constructor(
         } else {
           Log.i(TAG, "[$attachmentId] Length was correct. No action needed. Will retry.")
         }
-      } else if (existingSpec != null && runAttempt >= 3) {
+      } else if (uploadSpec != null && runAttempt >= 3) {
         Log.w(TAG, "[$attachmentId] Resuming upload failed multiple times ($runAttempt). Clearing upload spec to fall back to a fresh upload.", e)
         uploadSpec = null
       }
