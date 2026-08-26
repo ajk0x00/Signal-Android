@@ -49,7 +49,7 @@ public class TopicSlashCommandHandler implements SlashCommandHandler {
     }
 
     org.thoughtcrime.securesms.recipients.RecipientId quoteAuthorId = (quote != null) ? quote.getAuthor() : null;
-    AskGroqJob.enqueue(threadId, question, originalSentTimestamp, fullBody, quotedText, quoteAuthorId);
+    AskGroqJob.enqueue(threadId, question, originalSentTimestamp, fullBody, quotedText, quoteAuthorId, true, 0L);
     return true;
   }
 }

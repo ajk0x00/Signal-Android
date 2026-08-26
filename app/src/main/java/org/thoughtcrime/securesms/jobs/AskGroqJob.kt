@@ -160,7 +160,7 @@ class AskGroqJob private constructor(
       val records = if (quotedTimestamp > 0L) {
         SignalDatabase.messages.getMessagesInThreadAfter(threadId, quotedTimestamp, 30)
       } else {
-        SignalDatabase.messages.getRecentMessagesInThread(threadId, 15)
+        SignalDatabase.messages.getRecentMessagesInThread(threadId, 25)
       }
 
       val formattedMessages = records.mapNotNull { msg ->
@@ -178,7 +178,8 @@ class AskGroqJob private constructor(
       }
 
       if (formattedMessages.isNotEmpty()) {
-        "\n\nSubsequent conversation history:\n" + formattedMessages.joinToString("\n")
+        val historyLabel = if (quotedTimestamp > 0L) "Subsequent conversation history" else "Recent conversation history"
+        "\n\n$historyLabel:\n" + formattedMessages.joinToString("\n")
       } else {
         ""
       }
