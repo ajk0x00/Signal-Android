@@ -78,6 +78,8 @@ public final class SettingsValues extends SignalStoreValues {
   private static final String AUTOMATIC_VERIFICATION_ENABLED          = "settings.automatic.verification.enabled";
   private static final String FORCE_WEBSOCKET_MODE                    = "settings.force.websocket.mode.2";
   public static final  String MIRROR_RECORDED_VIDEOS                  = "settings.mirror.recorded.videos";
+  public static final  String AI_MODEL                                = "settings.ai_model";
+  public static final  String DEFAULT_AI_MODEL                        = "openai/gpt-oss-120b";
 
   public static final int BACKUP_DEFAULT_HOUR   = 2;
   public static final int BACKUP_DEFAULT_MINUTE = 0;
@@ -224,6 +226,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setMirrorRecordedVideosEnabled(boolean mirrorRecordedVideos) {
     putBoolean(MIRROR_RECORDED_VIDEOS, mirrorRecordedVideos);
+  }
+
+  public @NonNull String getAiModel() {
+    return getString(AI_MODEL, DEFAULT_AI_MODEL);
+  }
+
+  public void setAiModel(@NonNull String model) {
+    putString(AI_MODEL, model);
   }
 
   public @Nullable Uri getSignalBackupDirectory() {

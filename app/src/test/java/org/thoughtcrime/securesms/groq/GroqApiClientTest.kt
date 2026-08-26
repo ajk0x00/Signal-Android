@@ -25,7 +25,7 @@ class GroqApiClientTest {
   fun `buildRequestBodyJson creates valid payload without tools field`() {
     val requestJson = GroqApiClient.buildRequestBodyJson("What is the capital of France?")
 
-    assertThat(requestJson.getString("model")).isEqualTo("groq/compound-mini")
+    assertThat(requestJson.getString("model")).isEqualTo(GroqApiClient.getSelectedModel())
     assertThat(requestJson.has("tools")).isFalse()
 
     val messages = requestJson.getJSONArray("messages")

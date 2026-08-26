@@ -17,7 +17,10 @@ data class ChatsSettingsState(
   val isPlaintextExportEnabled: Boolean,
   val plaintextExportProgress: LocalBackupCreationProgress = LocalExportProgress.plaintextProgress.value,
   val chatExportState: ChatExportState = ChatExportState.None,
-  val includeMediaInExport: Boolean = false
+  val includeMediaInExport: Boolean = false,
+  val selectedAiModel: String = org.thoughtcrime.securesms.groq.GroqApiClient.DEFAULT_MODEL,
+  val availableAiModels: List<String> = org.thoughtcrime.securesms.groq.GroqApiClient.DEFAULT_MODELS,
+  val showAiModelSelectionDialog: Boolean = false
 ) {
   fun isRegisteredAndUpToDate(): Boolean {
     return !userUnregistered && !clientDeprecated

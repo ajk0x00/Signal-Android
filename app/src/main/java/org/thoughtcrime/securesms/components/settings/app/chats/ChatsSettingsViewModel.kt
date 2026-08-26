@@ -19,6 +19,8 @@ import org.thoughtcrime.securesms.util.ConversationUtil
 import org.thoughtcrime.securesms.util.RemoteConfig
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 
+import org.thoughtcrime.securesms.groq.GroqApiClient
+
 class ChatsSettingsViewModel @JvmOverloads constructor(
   private val repository: ChatsSettingsRepository = ChatsSettingsRepository()
 ) : ViewModel() {
@@ -38,7 +40,9 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
       userUnregistered = TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application) || !SignalStore.account.isRegistered,
       clientDeprecated = SignalStore.misc.isClientDeprecated,
       isPlaintextExportEnabled = RemoteConfig.localPlaintextExport,
-      chatExportState = ChatExportState.None
+      chatExportState = ChatExportState.None,
+      selectedAiModel = GroqApiClient.getSelectedModel(),
+      availableAiModels = GroqApiClient.DEFAULT_MODELS
     )
   )
 
@@ -58,6 +62,11 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
           )
         }
       }
+    }
+
+    viewModelScope.launch(Dispatchers.IO) {
+      val models = GroqApiClient.fetchAvailableModels()
+      store.update { it.copy(availableAiModels = models) }
     }
   }
 
@@ -115,6 +124,15 @@ class ChatsSettingsViewModel @JvmOverloads constructor(
   fun setEnterKeySends(enabled: Boolean) {
     store.update { it.copy(enterKeySends = enabled) }
     SignalStore.settings.isEnterKeySends = enabled
+  }
+
+  fun setSelectedAiModel(model: String) {
+    store.update { it.copy(selectedAiModel = model, showAiModelSelectionDialog = false) }
+    SignalStore.settings.aiModel = model
+  }
+
+  fun setAiModelSelectionDialogVisible(visible: Boolean) {
+    store.update { it.copy(showAiModelSelectionDialog = visible) }
   }
 
   fun refresh() {

@@ -1,16 +1,28 @@
 package org.thoughtcrime.securesms.components.settings.app.chats
 
 import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -119,6 +131,18 @@ class ChatsSettingsFragment : ComposeFragment() {
     }
 
     // endregion
+
+    override fun onSelectAiModelClick() {
+      viewModel.setAiModelSelectionDialogVisible(true)
+    }
+
+    override fun onAiModelSelected(model: String) {
+      viewModel.setSelectedAiModel(model)
+    }
+
+    override fun onDismissAiModelDialog() {
+      viewModel.setAiModelSelectionDialogVisible(false)
+    }
   }
 }
 
@@ -134,6 +158,9 @@ private interface ChatsSettingsCallbacks : ChatExportCallbacks {
   fun onEnterKeySendsChanged(enabled: Boolean) = Unit
   fun onExportPlaintextChatHistoryClick() = Unit
   fun onCancelInFlightExport() = Unit
+  fun onSelectAiModelClick() = Unit
+  fun onAiModelSelected(model: String) = Unit
+  fun onDismissAiModelDialog() = Unit
 
   object Empty : ChatsSettingsCallbacks, ChatExportCallbacks by ChatExportCallbacks.Empty
 }
@@ -289,6 +316,23 @@ private fun ChatsSettingsScreen(
           onCheckChanged = callbacks::onEnterKeySendsChanged
         )
       }
+
+      item {
+        Dividers.Default()
+      }
+
+      item {
+        Texts.SectionHeader("AI Features")
+      }
+
+      item {
+        Rows.TextRow(
+          text = "AI Model",
+          label = state.selectedAiModel,
+          enabled = state.isRegisteredAndUpToDate(),
+          onClick = callbacks::onSelectAiModelClick
+        )
+      }
     }
   }
 
@@ -298,6 +342,60 @@ private fun ChatsSettingsScreen(
       callbacks = callbacks
     )
   }
+
+  if (state.showAiModelSelectionDialog) {
+    AiModelSelectionDialog(
+      selectedModel = state.selectedAiModel,
+      models = state.availableAiModels,
+      onModelSelected = callbacks::onAiModelSelected,
+      onDismiss = callbacks::onDismissAiModelDialog
+    )
+  }
+}
+
+@Composable
+private fun AiModelSelectionDialog(
+  selectedModel: String,
+  models: List<String>,
+  onModelSelected: (String) -> Unit,
+  onDismiss: () -> Unit
+) {
+  AlertDialog(
+    onDismissRequest = onDismiss,
+    title = {
+      Text(text = "Select AI Model")
+    },
+    text = {
+      LazyColumn {
+        items(models.size) { index ->
+          val model = models[index]
+          Row(
+            modifier = Modifier
+              .fillMaxWidth()
+              .clickable { onModelSelected(model) }
+              .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+          ) {
+            RadioButton(
+              selected = (model == selectedModel),
+              onClick = { onModelSelected(model) }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+              text = model,
+              style = MaterialTheme.typography.bodyMedium
+            )
+          }
+        }
+      }
+    },
+    confirmButton = {},
+    dismissButton = {
+      TextButton(onClick = onDismiss) {
+        Text(text = stringResource(android.R.string.cancel))
+      }
+    }
+  )
 }
 
 @DayNightPreviews
