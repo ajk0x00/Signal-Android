@@ -33,6 +33,18 @@ public class AskSlashCommandHandler implements SlashCommandHandler {
       return false;
     }
 
+    android.content.Context context = org.thoughtcrime.securesms.dependencies.AppDependencies.getApplication();
+    String participantDetails;
+    try {
+      participantDetails = context.getString(org.thoughtcrime.securesms.R.string.participant_details).trim();
+    } catch (Exception e) {
+      participantDetails = "";
+    }
+
+    if (!participantDetails.isEmpty()) {
+      question = question.isEmpty() ? "Additional context:\n" + participantDetails : question + "\n\nAdditional context:\n" + participantDetails;
+    }
+
     AskGroqJob.enqueue(threadId, question, quotedText, originalSentTimestamp, fullBody);
     return true;
   }

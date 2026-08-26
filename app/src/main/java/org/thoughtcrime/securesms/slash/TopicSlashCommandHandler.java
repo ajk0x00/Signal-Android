@@ -43,6 +43,17 @@ public class TopicSlashCommandHandler implements SlashCommandHandler {
       question = topicInstruction;
     }
 
+    String participantDetails;
+    try {
+      participantDetails = context.getString(R.string.participant_details).trim();
+    } catch (Exception e) {
+      participantDetails = "";
+    }
+
+    if (!participantDetails.isEmpty()) {
+      question = question + "\n\nAdditional context:\n" + participantDetails;
+    }
+
     String quotedText = (quote != null && quote.getText() != null) ? quote.getText().trim() : null;
     if (quotedText != null && quotedText.isEmpty()) {
       quotedText = null;
