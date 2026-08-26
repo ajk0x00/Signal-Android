@@ -5,6 +5,7 @@
 
 package org.thoughtcrime.securesms.components.settings.conversation
 
+import androidx.compose.ui.unit.IntRect
 import org.thoughtcrime.securesms.badges.models.Badge
 import org.thoughtcrime.securesms.database.MediaTable
 import org.thoughtcrime.securesms.database.model.IdentityRecord
@@ -85,7 +86,7 @@ sealed interface ConversationSettingsAction {
   data class OpenChatWallpaper(val recipientId: RecipientId) : ConversationSettingsAction
 
   /** Open the sounds and notifications screen. */
-  data class NavigateToSoundsAndNotifications(val recipientId: RecipientId, val useInternalScreen: Boolean) : ConversationSettingsAction
+  data class NavigateToSoundsAndNotifications(val recipientId: RecipientId) : ConversationSettingsAction
 
   /** Open the list of starred messages in this chat. */
   data class OpenStarredMessages(val threadId: Long) : ConversationSettingsAction
@@ -105,8 +106,8 @@ sealed interface ConversationSettingsAction {
     override fun toString(): String = "ShowSafetyNumber(hasIdentityRecord=${identityRecord != null})"
   }
 
-  /** Open the media viewer on the item the user tapped in the shared media rail. */
-  data class ShowMediaPreview(val mediaRecord: MediaTable.MediaRecord, val isLtr: Boolean) : ConversationSettingsAction {
+  /** Open the media viewer on the item the user tapped in the shared media rail, scaling up out of [bounds]. */
+  data class ShowMediaPreview(val mediaRecord: MediaTable.MediaRecord, val isLtr: Boolean, val bounds: IntRect) : ConversationSettingsAction {
     override fun toString(): String = "ShowMediaPreview(messageId=${mediaRecord.messageId}, isLtr=$isLtr)"
   }
 

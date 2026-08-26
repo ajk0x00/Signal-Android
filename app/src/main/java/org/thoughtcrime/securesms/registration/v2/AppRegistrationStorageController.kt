@@ -758,7 +758,7 @@ class AppRegistrationStorageController(private val context: Context) : StorageCo
 
     val aci = ACI.parseOrThrow(accountData.aci)
     val pni = PNI.parseOrNull(accountData.pni)
-    val e164 = accountData.e164.nullIfBlank()
+    val e164 = accountData.e164?.nullIfBlank()
     val isAciChanged = SignalStore.account.aci != aci
 
     if (pni == null) {
@@ -792,6 +792,7 @@ class AppRegistrationStorageController(private val context: Context) : StorageCo
     recipientTable.markRegisteredOrThrow(selfId, aci)
     recipientTable.linkIdsForSelf(aci, pni, e164)
     recipientTable.setProfileKey(selfId, profileKey)
+    SignalStore.account.notSyncedRotatedSelfProfileKey = null
 
     AppDependencies.recipientCache.clearSelf()
 
@@ -818,6 +819,10 @@ class AppRegistrationStorageController(private val context: Context) : StorageCo
       // Registering releases any username we previously held, so it has to be re-reserved once storage service tells us what it was.
       Log.i(TAG, "[applyAccountData] Re-registration. Marking that we need to reclaim our username and link.")
       SignalStore.misc.needsUsernameRestore = true
+    }
+
+    accountData.authCredentialSalt?.let {
+      SignalStore.account.authCredentialSalt = it.toByteArray()
     }
 
     SignalStore.account.setServicePassword(accountData.servicePassword)

@@ -65,7 +65,6 @@ fun IndividualSettingsScreen(
   onEvent: (IndividualSettingsEvent) -> Unit,
   onNavigationClick: () -> Unit,
   onAvatarViewCreated: (View) -> Unit,
-  onSharedMediaViewClicked: (View) -> Unit,
   modifier: Modifier = Modifier
 ) {
   val context = LocalContext.current
@@ -147,7 +146,6 @@ fun IndividualSettingsScreen(
 
     item {
       SoundsAndNotificationsRow(
-        isInternalUser = state.isInternalUser,
         enabled = !state.isDeprecatedOrUnregistered,
         onClick = { onEvent(IndividualSettingsEvent.SoundsAndNotificationsClicked) }
       )
@@ -189,11 +187,8 @@ fun IndividualSettingsScreen(
     }
 
     sharedMediaSection(
-      media = state.sharedMedia,
-      loaded = state.sharedMediaLoaded,
-      onMediaClick = { mediaRecord, isLtr -> onEvent(IndividualSettingsEvent.SharedMediaClicked(mediaRecord, isLtr)) },
-      onMediaViewClicked = onSharedMediaViewClicked,
-      onSeeAllClick = { onEvent(IndividualSettingsEvent.SeeAllSharedMediaClicked) }
+      state = state.mediaRail,
+      onEvent = { onEvent(IndividualSettingsEvent.MediaRailEvent(it)) }
     )
 
     badgeSection(state, onEvent)
@@ -360,7 +355,6 @@ private fun IndividualSettingsScreenPreview() {
       state = IndividualSettingsState(
         recipient = previewRecipient(1L, profileName = ProfileName.fromParts("Miles", "Morales"), about = "Just hanging around"),
         threadId = 1L,
-        sharedMediaLoaded = true,
         canModifyBlockedState = true,
         starredMessagesEnabled = true,
         selfHasGroups = true,
@@ -375,8 +369,7 @@ private fun IndividualSettingsScreenPreview() {
       ),
       onEvent = {},
       onNavigationClick = {},
-      onAvatarViewCreated = {},
-      onSharedMediaViewClicked = {}
+      onAvatarViewCreated = {}
     )
   }
 }

@@ -167,13 +167,18 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     refresh()
   }
 
-  fun setUseConversationItemV2Media(enabled: Boolean) {
-    SignalStore.internal.useConversationItemV2Media = enabled
+  fun setInternalCallingEnableSvc(enabled: Boolean) {
+    preferenceDataStore.putBoolean(InternalValues.CALLING_ENABLE_SVC, enabled)
     refresh()
   }
 
-  fun setUseNewMediaActivity(enabled: Boolean) {
-    SignalStore.internal.useNewMediaActivity = enabled
+  fun setInternalCallingStatsIntervalSecs(intervalSecs: Int) {
+    preferenceDataStore.putInt(InternalValues.CALLING_STATS_INTERVAL_SECS, intervalSecs)
+    refresh()
+  }
+
+  fun setUseConversationItemV2Media(enabled: Boolean) {
+    SignalStore.internal.useConversationItemV2Media = enabled
     refresh()
   }
 
@@ -258,6 +263,8 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     callingUseHardwareVp9Decode = SignalStore.internal.callingUseHardwareVp9Decode,
     callingUseSoftwareVp9Encode = SignalStore.internal.callingUseSoftwareVp9Encode,
     callingUseSoftwareVp9Decode = SignalStore.internal.callingUseSoftwareVp9Decode,
+    callingEnableSvc = SignalStore.internal.callingEnableSvc,
+    callingStatsIntervalSecs = SignalStore.internal.callingStatsIntervalSecs,
     useBuiltInEmojiSet = SignalStore.internal.forceBuiltInEmoji,
     emojiVersion = null,
     removeSenderKeyMinimium = SignalStore.internal.removeSenderKeyMinimum,
@@ -269,7 +276,6 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
     hasPendingOneTimeDonation = SignalStore.inAppPayments.getPendingOneTimeDonation() != null,
     forceSplitPane = SignalStore.internal.forceSplitPane,
     forceSinglePane = SignalStore.internal.forceSinglePane,
-    useNewMediaActivity = SignalStore.internal.useNewMediaActivity,
     disableInternalUser = RemoteConfig.internalUserDisabled
   )
 

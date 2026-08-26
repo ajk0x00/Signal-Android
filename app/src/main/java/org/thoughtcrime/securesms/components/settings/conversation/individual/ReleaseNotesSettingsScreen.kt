@@ -27,7 +27,6 @@ import org.thoughtcrime.securesms.components.settings.conversation.shared.Intern
 import org.thoughtcrime.securesms.components.settings.conversation.shared.SoundsAndNotificationsRow
 import org.thoughtcrime.securesms.components.settings.conversation.shared.UnmuteDialog
 import org.thoughtcrime.securesms.components.settings.conversation.shared.previewRecipient
-import org.thoughtcrime.securesms.components.settings.conversation.shared.sharedMediaSection
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient
 
@@ -40,7 +39,6 @@ fun ReleaseNotesSettingsScreen(
   onEvent: (IndividualSettingsEvent) -> Unit,
   onNavigationClick: () -> Unit,
   onAvatarViewCreated: (View) -> Unit,
-  onSharedMediaViewClicked: (View) -> Unit,
   modifier: Modifier = Modifier
 ) {
   val context = LocalContext.current
@@ -108,19 +106,10 @@ fun ReleaseNotesSettingsScreen(
 
     item {
       SoundsAndNotificationsRow(
-        isInternalUser = state.isInternalUser,
         enabled = !state.isDeprecatedOrUnregistered,
         onClick = { onEvent(IndividualSettingsEvent.SoundsAndNotificationsClicked) }
       )
     }
-
-    sharedMediaSection(
-      media = state.sharedMedia,
-      loaded = state.sharedMediaLoaded,
-      onMediaClick = { mediaRecord, isLtr -> onEvent(IndividualSettingsEvent.SharedMediaClicked(mediaRecord, isLtr)) },
-      onMediaViewClicked = onSharedMediaViewClicked,
-      onSeeAllClick = { onEvent(IndividualSettingsEvent.SeeAllSharedMediaClicked) }
-    )
 
     item { Dividers.Default() }
 
@@ -194,14 +183,12 @@ private fun ReleaseNotesSettingsScreenPreview() {
       state = IndividualSettingsState(
         recipient = previewRecipient(1L, profileName = ProfileName.fromParts("Signal", null), isReleaseNotes = true),
         threadId = 1L,
-        sharedMediaLoaded = true,
         canModifyBlockedState = true,
         callBar = CallBarState(isMuteAvailable = true, isSearchAvailable = true)
       ),
       onEvent = {},
       onNavigationClick = {},
-      onAvatarViewCreated = {},
-      onSharedMediaViewClicked = {}
+      onAvatarViewCreated = {}
     )
   }
 }

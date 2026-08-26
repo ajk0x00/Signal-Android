@@ -5,10 +5,10 @@
 
 package org.thoughtcrime.securesms.components.settings.conversation.individual
 
+import org.signal.uicomponents.recentmediarail.RecentMediaRailState
 import org.thoughtcrime.securesms.components.settings.conversation.shared.CallBarState
 import org.thoughtcrime.securesms.components.settings.conversation.shared.CallEntry
 import org.thoughtcrime.securesms.components.settings.conversation.shared.CollapsibleList
-import org.thoughtcrime.securesms.database.MediaTable
 import org.thoughtcrime.securesms.database.model.IdentityRecord
 import org.thoughtcrime.securesms.database.model.StoryViewState
 import org.thoughtcrime.securesms.recipients.Recipient
@@ -20,7 +20,6 @@ data class IndividualSettingsState(
   val threadId: Long = -1L,
   val storyViewState: StoryViewState = StoryViewState.NONE,
   val isDeprecatedOrUnregistered: Boolean = false,
-  val isInternalUser: Boolean = false,
   val displayInternalRecipientDetails: Boolean = false,
   val starredMessagesEnabled: Boolean = false,
   val disappearingMessagesLifespan: Int = 0,
@@ -30,8 +29,7 @@ data class IndividualSettingsState(
   val allGroupsInCommon: List<Recipient> = emptyList(),
   val selfHasGroups: Boolean = false,
   val groupsInCommonExpanded: Boolean = false,
-  val sharedMedia: List<MediaTable.MediaRecord> = emptyList(),
-  val sharedMediaLoaded: Boolean = false,
+  val mediaRail: RecentMediaRailState = RecentMediaRailState(),
   val calls: List<CallEntry> = emptyList(),
   val callBar: CallBarState = CallBarState(),
   val dialog: Dialog = Dialog.None
