@@ -22,11 +22,13 @@
             height: 160cm
             Likes: Abhi, Chai, Panipuri, Dahipuri, Dance, Travel, Gossips.
             Dislikes: Coffee
+            Location: Calicut or Kannur, Kerala, India
         Abhijith:
             nickname: Abhi
             height: 180cm
             Likes: Deepu, Trekking, Bike rides, 
             Dislikes: Panipuri, Dahipuri
+            Location: Calicut or Kannur, Kerala, India
     </string>
     <string name="topic_instruction">
         Help two people find something interesting, engaging, or fun to talk about when the conversation naturally runs dry.
