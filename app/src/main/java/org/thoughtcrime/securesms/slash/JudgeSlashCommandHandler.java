@@ -66,12 +66,12 @@ public class JudgeSlashCommandHandler implements SlashCommandHandler {
     AskGroqJob.enqueue(
         threadId,
         question,
+        originalSentTimestamp,
+        fullBody,
         quotedText,
         quoteAuthorId,
         true,
-        quotedTimestamp,
-        originalSentTimestamp,
-        fullBody
+        quotedTimestamp
     );
 
     return true;

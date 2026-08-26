@@ -62,7 +62,7 @@ public class RapAboutSlashCommandHandler implements SlashCommandHandler {
 
     RecipientId quoteAuthorId = (quote != null) ? quote.getAuthor() : null;
 
-    AskGroqJob.enqueue(threadId, question, quotedText, quoteAuthorId, originalSentTimestamp, fullBody);
+    AskGroqJob.enqueue(threadId, question, originalSentTimestamp, fullBody, quotedText, quoteAuthorId);
     return true;
   }
 }

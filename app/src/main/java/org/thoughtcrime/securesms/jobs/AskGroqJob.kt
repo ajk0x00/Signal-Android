@@ -56,12 +56,12 @@ class AskGroqJob private constructor(
     fun enqueue(
       threadId: Long,
       question: String,
+      originalSentTimestamp: Long,
+      originalBody: String,
       quotedText: String? = null,
       quoteAuthorId: RecipientId? = null,
       includeThreadContext: Boolean = false,
-      quotedTimestamp: Long = 0L,
-      originalSentTimestamp: Long,
-      originalBody: String
+      quotedTimestamp: Long = 0L
     ) {
       AppDependencies.jobManager.add(
         AskGroqJob(
