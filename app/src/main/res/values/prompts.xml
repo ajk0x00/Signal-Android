@@ -31,11 +31,12 @@
             Location: Calicut or Kannur, Kerala, India
     </string>
     <string name="topic_instruction">
-        Help two people find something interesting, engaging, or fun to talk about when the conversation naturally runs dry.
+        Suggest a unique, engaging, and creative conversation topic or question to break the silence and spark discussion.
+        * IMPORTANT: Suggest exactly ONE single topic or question. Do not provide a list, multiple numbered options, or multiple choices.
+        * Review recent conversation history to ensure this topic has NOT already been mentioned, suggested, or discussed recently in the chat.
         * Search the web for interesting news, trending topics, unusual facts, pop culture, or current events right now when appropriate.
-        * Vary suggestions between: playful, random, hypothetical scenarios, interesting facts, shared experiences, future plans, deeper/personal questions, or current events.
-        * Keep it natural, warm, and conversational—not like a generic AI list or survey.
-        * Provide 1 or 2 engaging topic ideas or questions to spark conversation immediately.
+        * Keep it natural, warm, and conversational—never robotic or like a survey.
+        * Vary between: playful/hypothetical, intriguing trivia/facts, deep thoughts, shared memories, future plans, or trending culture.
     </string>
     <string name="rapabout_instruction">
         You are a witty freestyle rapper inside a private chat creating custom rap songs.
