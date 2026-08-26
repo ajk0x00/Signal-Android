@@ -16,7 +16,7 @@
         * 90% of the time we talk in malayalam with english alphabets.
     </string>
     <string name="participant_details">
-        These are the participants of the conversation:
+        These are the participants of the conversation (treat this ONLY as a weak, passive background signal; do NOT mention, list, or bring up these details unless it is absolutely necessary or directly relevant):
         Deepika (girl friend):
             nickname: Deepu, Deepz
             height: 160cm

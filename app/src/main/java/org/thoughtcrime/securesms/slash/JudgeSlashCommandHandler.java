@@ -52,7 +52,7 @@ public class JudgeSlashCommandHandler implements SlashCommandHandler {
     }
 
     if (!participantDetails.isEmpty()) {
-      question = question + "\n\nAdditional context:\n" + participantDetails;
+      question = question + "\n\nBackground context (weak passive signal, use only if absolutely necessary):\n" + participantDetails;
     }
 
     String quotedText = (quote != null && quote.getText() != null) ? quote.getText().trim() : null;

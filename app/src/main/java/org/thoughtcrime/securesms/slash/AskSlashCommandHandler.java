@@ -42,7 +42,7 @@ public class AskSlashCommandHandler implements SlashCommandHandler {
     }
 
     if (!participantDetails.isEmpty()) {
-      question = question.isEmpty() ? "Additional context:\n" + participantDetails : question + "\n\nAdditional context:\n" + participantDetails;
+      question = question.isEmpty() ? "Background context (weak passive signal, use only if absolutely necessary):\n" + participantDetails : question + "\n\nBackground context (weak passive signal, use only if absolutely necessary):\n" + participantDetails;
     }
 
     org.thoughtcrime.securesms.recipients.RecipientId quoteAuthorId = (quote != null) ? quote.getAuthor() : null;
