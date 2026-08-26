@@ -45,7 +45,8 @@ public class AskSlashCommandHandler implements SlashCommandHandler {
       question = question.isEmpty() ? "Additional context:\n" + participantDetails : question + "\n\nAdditional context:\n" + participantDetails;
     }
 
-    AskGroqJob.enqueue(threadId, question, quotedText, originalSentTimestamp, fullBody);
+    org.thoughtcrime.securesms.recipients.RecipientId quoteAuthorId = (quote != null) ? quote.getAuthor() : null;
+    AskGroqJob.enqueue(threadId, question, quotedText, quoteAuthorId, originalSentTimestamp, fullBody);
     return true;
   }
 }

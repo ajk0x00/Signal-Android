@@ -15,6 +15,7 @@ import org.thoughtcrime.securesms.mms.OutgoingMessage
 import org.thoughtcrime.securesms.mms.QuoteModel
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.sms.MessageSender
+import org.thoughtcrime.securesms.recipients.RecipientId
 import java.io.IOException
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
@@ -27,6 +28,7 @@ class AskGroqJob private constructor(
   private val threadId: Long,
   private val question: String,
   private val quotedText: String?,
+  private val quoteAuthorId: RecipientId?,
   private val originalSentTimestamp: Long,
   private val originalBody: String,
   parameters: Parameters
@@ -41,6 +43,7 @@ class AskGroqJob private constructor(
     private const val KEY_THREAD_ID = "thread_id"
     private const val KEY_QUESTION = "question"
     private const val KEY_QUOTED_TEXT = "quoted_text"
+    private const val KEY_QUOTE_AUTHOR_ID = "quote_author_id"
     private const val KEY_ORIGINAL_SENT_TIMESTAMP = "original_sent_timestamp"
     private const val KEY_ORIGINAL_BODY = "original_body"
 
@@ -50,6 +53,7 @@ class AskGroqJob private constructor(
       threadId: Long,
       question: String,
       quotedText: String? = null,
+      quoteAuthorId: RecipientId? = null,
       originalSentTimestamp: Long,
       originalBody: String
     ) {
@@ -58,6 +62,7 @@ class AskGroqJob private constructor(
           threadId = threadId,
           question = question,
           quotedText = quotedText,
+          quoteAuthorId = quoteAuthorId,
           originalSentTimestamp = originalSentTimestamp,
           originalBody = originalBody
         )
@@ -69,12 +74,14 @@ class AskGroqJob private constructor(
     threadId: Long,
     question: String,
     quotedText: String?,
+    quoteAuthorId: RecipientId?,
     originalSentTimestamp: Long,
     originalBody: String
   ) : this(
     threadId = threadId,
     question = question,
     quotedText = quotedText,
+    quoteAuthorId = quoteAuthorId,
     originalSentTimestamp = originalSentTimestamp,
     originalBody = originalBody,
     parameters = Parameters.Builder()
@@ -85,13 +92,18 @@ class AskGroqJob private constructor(
   )
 
   override fun serialize(): ByteArray? {
-    return JsonJobData.Builder()
+    val builder = JsonJobData.Builder()
       .putLong(KEY_THREAD_ID, threadId)
       .putString(KEY_QUESTION, question)
       .putString(KEY_QUOTED_TEXT, quotedText)
       .putLong(KEY_ORIGINAL_SENT_TIMESTAMP, originalSentTimestamp)
       .putString(KEY_ORIGINAL_BODY, originalBody)
-      .serialize()
+
+    if (quoteAuthorId != null) {
+      builder.putLong(KEY_QUOTE_AUTHOR_ID, quoteAuthorId.toLong())
+    }
+
+    return builder.serialize()
   }
 
   override fun getFactoryKey(): String = KEY
@@ -106,10 +118,25 @@ class AskGroqJob private constructor(
     }
 
     val prompt = if (!quotedText.isNullOrBlank()) {
-      if (question.isNotBlank()) {
-        "Quoted message:\n\"\"\"\n$quotedText\n\"\"\"\n\nQuestion: $question"
+      val senderName = if (quotedText.trim().startsWith("🤖")) {
+        "AI Assistant"
+      } else if (quoteAuthorId != null) {
+        val authorRecipient = Recipient.resolved(quoteAuthorId)
+        authorRecipient.getDisplayName(context)
       } else {
-        "Quoted message:\n\"\"\"\n$quotedText\n\"\"\"\n\nPlease explain or answer regarding the quoted message above."
+        null
+      }
+
+      val header = if (senderName != null) {
+        "Quoted message (from $senderName):"
+      } else {
+        "Quoted message:"
+      }
+
+      if (question.isNotBlank()) {
+        "$header\n\"\"\"\n$quotedText\n\"\"\"\n\nQuestion: $question"
+      } else {
+        "$header\n\"\"\"\n$quotedText\n\"\"\"\n\nPlease explain or answer regarding the quoted message above."
       }
     } else {
       question
@@ -175,10 +202,13 @@ class AskGroqJob private constructor(
   class Factory : Job.Factory<AskGroqJob> {
     override fun create(parameters: Parameters, serializedData: ByteArray?): AskGroqJob {
       val data = JsonJobData.deserialize(serializedData)
+      val quoteAuthorId = if (data.hasField(KEY_QUOTE_AUTHOR_ID)) RecipientId.from(data.getLong(KEY_QUOTE_AUTHOR_ID)) else null
+
       return AskGroqJob(
         threadId = data.getLong(KEY_THREAD_ID),
         question = data.getString(KEY_QUESTION),
         quotedText = data.getStringOrDefault(KEY_QUOTED_TEXT, null),
+        quoteAuthorId = quoteAuthorId,
         originalSentTimestamp = data.getLong(KEY_ORIGINAL_SENT_TIMESTAMP),
         originalBody = data.getString(KEY_ORIGINAL_BODY),
         parameters = parameters

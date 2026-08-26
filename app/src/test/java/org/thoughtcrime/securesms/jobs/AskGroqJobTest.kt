@@ -29,6 +29,7 @@ class AskGroqJobTest {
         .putLong("thread_id", 123L)
         .putString("question", "what is this?")
         .putString("quoted_text", "hello world")
+        .putLong("quote_author_id", 789L)
         .putLong("original_sent_timestamp", 456L)
         .putString("original_body", "/ask what is this?")
         .serialize()
@@ -41,6 +42,7 @@ class AskGroqJobTest {
     assertThat(deserialized.getLong("thread_id")).isEqualTo(123L)
     assertThat(deserialized.getString("question")).isEqualTo("what is this?")
     assertThat(deserialized.getStringOrDefault("quoted_text", null)).isEqualTo("hello world")
+    assertThat(deserialized.getLong("quote_author_id")).isEqualTo(789L)
     assertThat(deserialized.getLong("original_sent_timestamp")).isEqualTo(456L)
     assertThat(deserialized.getString("original_body")).isEqualTo("/ask what is this?")
   }
