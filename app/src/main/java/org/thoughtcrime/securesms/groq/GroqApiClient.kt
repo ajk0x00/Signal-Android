@@ -36,8 +36,13 @@ object GroqApiClient {
     "gemma2-9b-it"
   )
 
-  private const val SYSTEM_INSTRUCTION =
-    "You are a friendly companion chatting with friends. Keep your responses short, concise, and playful—like chatting casually with friends in a messaging app. Avoid long, robotic, or overly formal answers."
+  fun getSystemInstruction(): String {
+    return try {
+      AppDependencies.application.getString(org.thoughtcrime.securesms.R.string.groq_ai_system_instruction)
+    } catch (e: Exception) {
+      "You are a friendly companion chatting with friends. Keep your responses short, concise, and playful—like chatting casually with friends in a messaging app. Avoid long, robotic, or overly formal answers."
+    }
+  }
 
   fun getSelectedModel(): String {
     return SignalStore.settings.aiModel.ifBlank { DEFAULT_MODEL }
@@ -52,7 +57,7 @@ object GroqApiClient {
         put(
           JSONObject().apply {
             put("role", "system")
-            put("content", SYSTEM_INSTRUCTION)
+            put("content", getSystemInstruction())
           }
         )
         put(
