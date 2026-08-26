@@ -44,16 +44,6 @@ public class RapAboutSlashCommandHandler implements SlashCommandHandler {
       question = rapInstruction;
     }
 
-    String participantDetails;
-    try {
-      participantDetails = context.getString(R.string.participant_details).trim();
-    } catch (Exception e) {
-      participantDetails = "";
-    }
-
-    if (!participantDetails.isEmpty()) {
-      question = question + "\n\nBackground context (weak passive signal, use only if absolutely necessary):\n" + participantDetails;
-    }
 
     String quotedText = (quote != null && quote.getText() != null) ? quote.getText().trim() : null;
     if (quotedText != null && quotedText.isEmpty()) {
