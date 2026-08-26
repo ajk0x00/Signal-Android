@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.signal.core.ui.compose.EventDrivenViewModel
 import org.signal.core.util.logging.Log
+import org.signal.uicomponents.recentmediarail.RecentMediaRailEvents
+import org.signal.uicomponents.recentmediarail.RecentMediaRailPresenter
 import org.thoughtcrime.securesms.components.settings.conversation.ConversationSettingsAction
 import org.thoughtcrime.securesms.components.settings.conversation.ConversationSettingsKind
 import org.thoughtcrime.securesms.components.settings.conversation.ConversationSettingsRepository
@@ -28,7 +30,7 @@ import org.thoughtcrime.securesms.components.settings.conversation.individual.In
 import org.thoughtcrime.securesms.components.settings.conversation.shared.BlockAndSpamHandler
 import org.thoughtcrime.securesms.components.settings.conversation.shared.CallBarState
 import org.thoughtcrime.securesms.components.settings.conversation.shared.SharedMediaLoader
-import org.thoughtcrime.securesms.components.settings.conversation.shared.sharedMediaClickAction
+import org.thoughtcrime.securesms.components.settings.conversation.shared.toConversationSettingsAction
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
 
@@ -50,11 +52,13 @@ class IndividualSettingsViewModel(
   /** Whether we're the call-info variant of this screen, which shows a message button in place of search. */
   private val isCallInfoVariant: Boolean = callMessageIds.isNotEmpty()
 
+  /** The release notes chat doesn't show a media rail, so there's no reason to go load one. */
+  private val showsSharedMedia: Boolean = kind != ConversationSettingsKind.RELEASE_NOTES
+
   private val _state = MutableStateFlow(
     IndividualSettingsState(
       isDeprecatedOrUnregistered = repository.isDeprecatedOrUnregistered(),
       starredMessagesEnabled = repository.isStarredMessagesEnabled(),
-      isInternalUser = repository.isInternalUser(),
       displayInternalRecipientDetails = repository.isInternalRecipientDetailsEnabled()
     )
   )
@@ -65,6 +69,7 @@ class IndividualSettingsViewModel(
   val actions: Flow<ConversationSettingsAction> = _actions.receiveAsFlow()
 
   private val sharedMediaLoader = SharedMediaLoader(repository)
+  private val mediaRailPresenter = RecentMediaRailPresenter(viewModelScope, sharedMediaLoader)
 
   init {
     require(kind != ConversationSettingsKind.GROUP) { "Groups belong to GroupSettingsViewModel" }
@@ -79,9 +84,14 @@ class IndividualSettingsViewModel(
       .onEach { onEvent(IndividualSettingsEvent.StoryViewStateChanged(it)) }
       .launchIn(viewModelScope)
 
-    sharedMediaLoader
-      .observe()
-      .onEach { onEvent(IndividualSettingsEvent.SharedMediaChanged(it)) }
+    mediaRailPresenter
+      .state
+      .onEach { onEvent(IndividualSettingsEvent.MediaRailStateChanged(it)) }
+      .launchIn(viewModelScope)
+
+    mediaRailPresenter
+      .actions
+      .onEach { onEvent(IndividualSettingsEvent.MediaRailAction(it)) }
       .launchIn(viewModelScope)
 
     if (callMessageIds.isNotEmpty()) {
@@ -165,7 +175,7 @@ class IndividualSettingsViewModel(
         _actions.send(ConversationSettingsAction.OpenChatWallpaper(recipientId))
       }
       IndividualSettingsEvent.SoundsAndNotificationsClicked -> {
-        _actions.send(ConversationSettingsAction.NavigateToSoundsAndNotifications(recipientId, state.isInternalUser))
+        _actions.send(ConversationSettingsAction.NavigateToSoundsAndNotifications(recipientId))
       }
       IndividualSettingsEvent.StarredMessagesClicked -> {
         _actions.send(ConversationSettingsAction.OpenStarredMessages(state.threadId))
@@ -180,12 +190,6 @@ class IndividualSettingsViewModel(
         val identityRecord = repository.getIdentity(recipientId)
         _state.update { it.copy(identityRecord = identityRecord) }
         _actions.send(ConversationSettingsAction.ShowSafetyNumber(identityRecord))
-      }
-      is IndividualSettingsEvent.SharedMediaClicked -> {
-        _actions.send(sharedMediaClickAction(event.mediaRecord, event.isLtr))
-      }
-      IndividualSettingsEvent.SeeAllSharedMediaClicked -> {
-        _actions.send(ConversationSettingsAction.ShowMediaOverview(state.threadId))
       }
       IndividualSettingsEvent.SupportCenterClicked -> {
         _actions.send(ConversationSettingsAction.OpenSupportCenter)
@@ -233,9 +237,6 @@ class IndividualSettingsViewModel(
       IndividualSettingsEvent.DialogDismissed -> {
         _state.update { it.copy(dialog = Dialog.None) }
       }
-      IndividualSettingsEvent.SharedMediaRefreshRequested -> {
-        sharedMediaLoader.refresh()
-      }
       IndividualSettingsEvent.RecipientRefreshRequested -> {
         repository.refreshRecipient(recipientId)
       }
@@ -245,15 +246,14 @@ class IndividualSettingsViewModel(
       is IndividualSettingsEvent.StoryViewStateChanged -> {
         _state.update { it.copy(storyViewState = event.storyViewState) }
       }
-      is IndividualSettingsEvent.SharedMediaChanged -> {
-        _state.update { it.copy(sharedMedia = event.media, sharedMediaLoaded = true) }
-      }
       is IndividualSettingsEvent.CallsChanged -> {
         _state.update { it.copy(calls = event.calls) }
       }
       is IndividualSettingsEvent.ThreadIdLoaded -> {
         _state.update { it.copy(threadId = event.threadId) }
-        sharedMediaLoader.onThreadIdLoaded(event.threadId)
+        if (showsSharedMedia) {
+          mediaRailPresenter.onEvent(RecentMediaRailEvents.SourceChanged(event.threadId))
+        }
       }
       is IndividualSettingsEvent.GroupsInCommonChanged -> {
         _state.update { it.copy(allGroupsInCommon = event.groupsInCommon) }
@@ -263,6 +263,15 @@ class IndividualSettingsViewModel(
       }
       is IndividualSettingsEvent.IdentityRecordLoaded -> {
         _state.update { it.copy(identityRecord = event.identityRecord) }
+      }
+      is IndividualSettingsEvent.MediaRailEvent -> {
+        mediaRailPresenter.onEvent(event.event)
+      }
+      is IndividualSettingsEvent.MediaRailStateChanged -> {
+        _state.update { it.copy(mediaRail = event.railState) }
+      }
+      is IndividualSettingsEvent.MediaRailAction -> {
+        event.action.toConversationSettingsAction(sharedMediaLoader, state.threadId)?.let { _actions.send(it) }
       }
     }
   }

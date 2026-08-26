@@ -7,9 +7,12 @@ package org.thoughtcrime.securesms.jobs
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
+import io.mockk.CapturingSlot
 import io.mockk.every
 import io.mockk.mockkObject
+import io.mockk.slot
 import io.mockk.unmockkObject
+import io.mockk.verify
 import okio.ByteString.Companion.toByteString
 import org.junit.After
 import org.junit.Assert.assertArrayEquals
@@ -31,9 +34,14 @@ import org.signal.core.util.Util
 import org.signal.core.util.logging.Log
 import org.signal.core.util.update
 import org.signal.core.util.withinTransaction
+import org.signal.libsignal.zkgroup.profiles.ProfileKey
+import org.thoughtcrime.securesms.backup.v2.MessageBackupTier
+import org.thoughtcrime.securesms.database.IssueReporter
 import org.thoughtcrime.securesms.database.RecipientTable
 import org.thoughtcrime.securesms.database.SignalDatabase
+import org.thoughtcrime.securesms.database.model.IssuePriority
 import org.thoughtcrime.securesms.database.model.StickerPackId
+import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groups.GroupId
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobs.StorageSyncJobTest.Companion.BASE_MANIFEST_VERSION
@@ -47,6 +55,7 @@ import org.thoughtcrime.securesms.testutil.SystemOutLogger
 import org.thoughtcrime.securesms.util.RemoteConfig
 import org.whispersystems.signalservice.api.storage.SignalStorageRecord
 import org.whispersystems.signalservice.api.storage.StorageId
+import org.whispersystems.signalservice.internal.storage.protos.AccountRecord
 import org.whispersystems.signalservice.internal.storage.protos.ContactRecord
 import org.whispersystems.signalservice.internal.storage.protos.GroupV1Record
 import org.whispersystems.signalservice.internal.storage.protos.StickerPackRecord
@@ -91,6 +100,7 @@ class StorageSyncJobTest {
   @After
   fun tearDown() {
     unmockkObject(RemoteConfig)
+    unmockkObject(IssueReporter)
   }
 
   @Test
@@ -368,6 +378,81 @@ class StorageSyncJobTest {
   }
 
   @Test
+  fun `given a linked device with a tier, when I write our account record, then I include our tier`() {
+    stubLinkedDevice()
+    every { recipients.signalStore.backup.areBackupsEnabled } returns true
+    every { recipients.signalStore.backup.backupTier } returns MessageBackupTier.PAID
+
+    markSelfNeedsSync()
+
+    val result = runJob(StorageSyncJob.forLocalChange())
+
+    assertTrue(result.isSuccess)
+    assertEquals(MessageBackupTier.PAID.toBackupLevel(), remoteAccountRecord().backupTier)
+  }
+
+  @Test
+  fun `given a linked device and a remote record with a higher tier, when I run, then I apply it`() {
+    stubLinkedDevice()
+
+    remoteStorage.setRemoteState(listOf(accountRecordWithBackupTier(MessageBackupTier.PAID.toBackupLevel())), version = BASE_MANIFEST_VERSION + 1)
+
+    val jobManager = AppDependencies.jobManager
+    val result = runJob(StorageSyncJob.forRemoteChange())
+
+    assertTrue(result.isSuccess)
+    verify { recipients.signalStore.backup.backupTier = MessageBackupTier.PAID }
+    verify(exactly = 0) { jobManager.add(ofType<BackupTierDowngradeCheckJob>()) }
+  }
+
+  @Test
+  fun `given a linked device and a remote record without a tier, when I run, then I keep our tier and confirm with the service`() {
+    stubLinkedDevice()
+    every { recipients.signalStore.backup.areBackupsEnabled } returns true
+    every { recipients.signalStore.backup.backupTier } returns MessageBackupTier.PAID
+
+    remoteStorage.setRemoteState(listOf(accountRecordWithBackupTier(null)), version = BASE_MANIFEST_VERSION + 1)
+
+    val jobManager = AppDependencies.jobManager
+    val result = runJob(StorageSyncJob.forRemoteChange())
+
+    assertTrue(result.isSuccess)
+    verify(exactly = 0) { recipients.signalStore.backup.backupTier = null }
+    verify { jobManager.add(ofType<BackupTierDowngradeCheckJob>()) }
+  }
+
+  @Test
+  fun `given a linked device on paid and a remote record on free, when I run, then I keep our tier and confirm with the service`() {
+    stubLinkedDevice()
+    every { recipients.signalStore.backup.areBackupsEnabled } returns true
+    every { recipients.signalStore.backup.backupTier } returns MessageBackupTier.PAID
+
+    remoteStorage.setRemoteState(listOf(accountRecordWithBackupTier(MessageBackupTier.FREE.toBackupLevel())), version = BASE_MANIFEST_VERSION + 1)
+
+    val jobManager = AppDependencies.jobManager
+    val result = runJob(StorageSyncJob.forRemoteChange())
+
+    assertTrue(result.isSuccess)
+    verify(exactly = 0) { recipients.signalStore.backup.backupTier = MessageBackupTier.FREE }
+    verify { jobManager.add(ofType<BackupTierDowngradeCheckJob>()) }
+  }
+
+  @Test
+  fun `given a primary with a tier and a remote record without one, when I run, then I write our tier back and confirm nothing`() {
+    every { recipients.signalStore.backup.areBackupsEnabled } returns true
+    every { recipients.signalStore.backup.backupTier } returns MessageBackupTier.PAID
+
+    remoteStorage.setRemoteState(listOf(accountRecordWithBackupTier(null)), version = BASE_MANIFEST_VERSION + 1)
+
+    val jobManager = AppDependencies.jobManager
+    val result = runJob(StorageSyncJob.forRemoteChange())
+
+    assertTrue(result.isSuccess)
+    assertEquals(MessageBackupTier.PAID.toBackupLevel(), remoteAccountRecord().backupTier)
+    verify(exactly = 0) { jobManager.add(ofType<BackupTierDowngradeCheckJob>()) }
+  }
+
+  @Test
   fun `given a contact was unregistered long ago, when I run, then I remove their storage id`() {
     val contact = recipients.createRecipient("Local Contact")
     SignalDatabase.recipients.rotateStorageId(contact)
@@ -382,6 +467,167 @@ class StorageSyncJobTest {
     assertTrue(result.isSuccess)
     assertNull(storageIdOf(contact))
     assertEquals(0, remoteStorage.records.count { it.proto.contact != null })
+  }
+
+  @Test
+  fun `given a contact was unregistered recently, when I run, then I keep their storage id`() {
+    val contact = recipients.createRecipient("Local Contact")
+    SignalDatabase.recipients.rotateStorageId(contact)
+    check(runJob(StorageSyncJob.forLocalChange()).isSuccess)
+    check(remoteStorage.records.count { it.proto.contact != null } == 1)
+
+    SignalDatabase.recipients.markUnregistered(contact)
+    Recipient.live(contact).refresh()
+    remoteStorage.resetCounters()
+
+    val result = runJob(StorageSyncJob.forLocalChange())
+
+    assertTrue(result.isSuccess)
+    assertNotNull(storageIdOf(contact))
+    assertEquals(1, remoteStorage.records.count { it.proto.contact != null })
+  }
+
+  @Test
+  fun `given another device keeps undoing my write, when I run again, then I stop writing`() {
+    stubIssueReporter()
+
+    val throttledRun = loopWritesUntilThrottled()
+
+    assertTrue(throttledRun.isSuccess)
+    assertEquals(0, remoteStorage.writeCount)
+    assertEquals(0, remoteStorage.records.count { it.proto.contact?.givenName == "Loop" })
+  }
+
+  @Test
+  fun `given another device keeps undoing my write, when I throttle it, then I report it at high priority`() {
+    val priority = stubIssueReporter()
+
+    loopWritesUntilThrottled()
+
+    verify { IssueReporter.report(any(), any(), any(), any(), any(), any()) }
+    assertEquals(IssuePriority.HIGH, priority.captured)
+  }
+
+  @Test
+  fun `given a local-only contact the other device leaves alone, when I run repeatedly, then I keep writing`() {
+    stubIssueReporter()
+    every { recipients.signalStore.account.isMultiDevice } returns true
+    SignalDatabase.recipients.rotateStorageId(recipients.createRecipient("Local Contact"))
+
+    check(runJob(StorageSyncJob.forLocalChange()).isSuccess)
+
+    repeat(4) {
+      SignalDatabase.recipients.rotateStorageId(recipients.createRecipient("Local Contact ${it + 2}"))
+      remoteStorage.resetCounters()
+
+      assertTrue(runJob(StorageSyncJob.forLocalChange()).isSuccess)
+      assertEquals(1, remoteStorage.writeCount)
+    }
+  }
+
+  @Test
+  fun `given I just rotated my profile key, when a newer remote manifest still has the old one, then I keep mine`() {
+    val rotated = rotateSelfProfileKey()
+
+    bumpRemoteManifestWithoutTouchingAccountRecord()
+
+    assertTrue(runJob(StorageSyncJob.forRemoteChange()).isSuccess)
+    assertArrayEquals(rotated.serialize(), SignalDatabase.recipients.getRecord(recipients.self).profileKey)
+  }
+
+  @Test
+  fun `given I just rotated my profile key, when a newer remote manifest still has the old one, then I publish mine`() {
+    val rotated = rotateSelfProfileKey()
+
+    bumpRemoteManifestWithoutTouchingAccountRecord()
+
+    assertTrue(runJob(StorageSyncJob.forRemoteChange()).isSuccess)
+
+    val accounts = remoteStorage.records.mapNotNull { it.proto.account }
+    assertEquals(1, accounts.size)
+    assertArrayEquals(rotated.serialize(), accounts[0].profileKey.toByteArray())
+    assertNull(recipients.signalStore.account.notSyncedRotatedSelfProfileKey)
+  }
+
+  @Test
+  fun `given no rotation of mine is pending, when remote has a different profile key, then I take theirs`() {
+    val remoteKey = SignalDatabase.recipients.getRecord(recipients.self).profileKey
+
+    // Registration always leaves us a locally generated key, so this must still defer to remote.
+    SignalDatabase.recipients.setProfileKey(recipients.self, ProfileKey(Util.getSecretBytes(32)))
+    Recipient.self().live().refresh()
+
+    bumpRemoteManifestWithoutTouchingAccountRecord()
+
+    assertTrue(runJob(StorageSyncJob.forRemoteChange()).isSuccess)
+    assertArrayEquals(remoteKey, SignalDatabase.recipients.getRecord(recipients.self).profileKey)
+  }
+
+  @Test
+  fun `given a recorded rotation that no longer matches my profile key, when remote has a different one, then I take theirs`() {
+    recipients.signalStore.account.notSyncedRotatedSelfProfileKey = Util.getSecretBytes(32)
+
+    val remoteKey = SignalDatabase.recipients.getRecord(recipients.self).profileKey
+    SignalDatabase.recipients.setProfileKey(recipients.self, ProfileKey(Util.getSecretBytes(32)))
+    Recipient.self().live().refresh()
+
+    bumpRemoteManifestWithoutTouchingAccountRecord()
+
+    assertTrue(runJob(StorageSyncJob.forRemoteChange()).isSuccess)
+    assertArrayEquals(remoteKey, SignalDatabase.recipients.getRecord(recipients.self).profileKey)
+  }
+
+  @Test
+  fun `given I just rotated my profile key, when their account record has an avatar path, then I do not fetch it`() {
+    SignalDatabase.recipients.setProfileAvatar(recipients.self, "avatar-path-for-the-old-key")
+    Recipient.self().live().refresh()
+    check(runJob(StorageSyncJob.forLocalChange()).isSuccess)
+    check(remoteStorage.records.mapNotNull { it.proto.account }.single().avatarUrlPath == "avatar-path-for-the-old-key")
+
+    SignalDatabase.recipients.setProfileAvatar(recipients.self, null)
+    rotateSelfProfileKey()
+
+    bumpRemoteManifestWithoutTouchingAccountRecord()
+
+    val jobManager = AppDependencies.jobManager
+
+    assertTrue(runJob(StorageSyncJob.forRemoteChange()).isSuccess)
+    verify(exactly = 0) { jobManager.add(ofType(RetrieveProfileAvatarJob::class)) }
+  }
+
+  /**
+   * Writes the same contact, with the other device deleting it again after each, until a run gets throttled. Returns
+   * that run, leaving [FakeStorageServiceRule.writeCount] counting only it. Driven by observation rather than a fixed
+   * count because the record's payload settles after its first sync, so the number of passes isn't fixed.
+   */
+  private fun loopWritesUntilThrottled(): Job.Result {
+    every { recipients.signalStore.account.isMultiDevice } returns true
+    SignalDatabase.recipients.rotateStorageId(recipients.createRecipient("Loop Contact"))
+
+    repeat(12) { pass ->
+      remoteStorage.resetCounters()
+
+      val result = runJob(StorageSyncJob.forRemoteChange())
+      check(result.isSuccess) { "Loop write ${pass + 1} failed!" }
+
+      if (remoteStorage.writeCount == 0) {
+        return result
+      }
+
+      val withoutLoopContact = remoteStorage.records.filterNot { record -> record.proto.contact?.givenName == "Loop" }
+      remoteStorage.setRemoteState(withoutLoopContact, version = remoteStorage.manifest!!.version + 1)
+    }
+
+    throw AssertionError("Writes were never throttled!")
+  }
+
+  private fun stubIssueReporter(): CapturingSlot<IssuePriority> {
+    val priority = slot<IssuePriority>()
+
+    mockkObject(IssueReporter)
+    every { IssueReporter.report(any(), any(), any(), capture(priority), any(), any()) } returns Unit
+
+    return priority
   }
 
   /**
@@ -483,5 +729,46 @@ class StorageSyncJobTest {
   private fun runJob(job: StorageSyncJob): Job.Result {
     job.setContext(ApplicationProvider.getApplicationContext())
     return job.run()
+  }
+
+  /** Rotates our own profile key the way [RotateProfileKeyJob] does, and returns the new key. */
+  private fun rotateSelfProfileKey(): ProfileKey {
+    val rotated = ProfileKey(Util.getSecretBytes(32))
+
+    recipients.signalStore.account.notSyncedRotatedSelfProfileKey = rotated.serialize()
+    SignalDatabase.recipients.setProfileKey(recipients.self, rotated)
+    Recipient.self().live().refresh()
+
+    return rotated
+  }
+
+  /** Mimics another device writing an unrelated record, which bumps the manifest but leaves our account record stale. */
+  private fun bumpRemoteManifestWithoutTouchingAccountRecord() {
+    remoteStorage.addRemoteRecords(listOf(contactRecord(ACI.from(UUID.randomUUID()), ProfileName.fromParts("Remote", "Contact"))))
+  }
+
+  private fun markSelfNeedsSync() {
+    SignalDatabase.recipients.markNeedsSync(recipients.self)
+    Recipient.self().live().refresh()
+  }
+
+  private fun remoteAccountRecord(): AccountRecord {
+    return remoteStorage.records.mapNotNull { it.proto.account }.single()
+  }
+
+  private fun stubLinkedDevice() {
+    every { recipients.signalStore.account.isLinkedDevice } returns true
+    every { recipients.signalStore.account.isPrimaryDevice } returns false
+    every { recipients.signalStore.account.restoredAccountEntropyPoolFromPrimary } returns true
+  }
+
+  /** Our account record as another device would have rewritten it: same contents, [backupTier] swapped in, under a fresh storage id so that we see it as remote-only. */
+  private fun accountRecordWithBackupTier(backupTier: Long?): SignalStorageRecord {
+    val record = StorageSyncHelper.buildAccountRecord(ApplicationProvider.getApplicationContext(), Recipient.self())
+
+    return record.copy(
+      id = StorageId.forAccount(StorageSyncHelper.generateKey()),
+      proto = record.proto.copy(account = record.proto.account!!.copy(backupTier = backupTier))
+    )
   }
 }

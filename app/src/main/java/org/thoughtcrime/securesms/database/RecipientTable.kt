@@ -247,7 +247,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         $SEALED_SENDER_MODE INTEGER DEFAULT 0, 
         $STORAGE_SERVICE_ID TEXT UNIQUE DEFAULT NULL, 
         $STORAGE_SERVICE_PROTO TEXT DEFAULT NULL,
-        $MENTION_SETTING INTEGER DEFAULT ${NotificationSetting.ALWAYS_NOTIFY.id},
+        $MENTION_SETTING INTEGER DEFAULT ${NotificationSetting.SYSTEM_DEFAULT.id},
         $CAPABILITIES INTEGER DEFAULT 0,
         $LAST_SESSION_RESET BLOB DEFAULT NULL,
         $WALLPAPER BLOB DEFAULT NULL,
@@ -271,8 +271,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         $NOTE TEXT DEFAULT NULL,
         $MESSAGE_EXPIRATION_TIME_VERSION INTEGER DEFAULT 1 NOT NULL,
         $KEY_TRANSPARENCY_DATA BLOB DEFAULT NULL,
-        $CALL_NOTIFICATION_SETTING INTEGER DEFAULT ${NotificationSetting.ALWAYS_NOTIFY.id},
-        $REPLY_NOTIFICATION_SETTING INTEGER DEFAULT ${NotificationSetting.ALWAYS_NOTIFY.id},
+        $CALL_NOTIFICATION_SETTING INTEGER DEFAULT ${NotificationSetting.SYSTEM_DEFAULT.id},
+        $REPLY_NOTIFICATION_SETTING INTEGER DEFAULT ${NotificationSetting.SYSTEM_DEFAULT.id},
         $BLOCKED_AT INTEGER DEFAULT 0
       )
       """
@@ -427,6 +427,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       var value: Long = 0
       value = Bitmask.update(value, Capabilities.STORAGE_SERVICE_ENCRYPTION_V2, Capabilities.BIT_LENGTH, Recipient.Capability.fromBoolean(capabilities.isStorageServiceEncryptionV2).serialize().toLong())
       value = Bitmask.update(value, Capabilities.USERNAME_SYNC_MESSAGES, Capabilities.BIT_LENGTH, Recipient.Capability.fromBoolean(capabilities.isUsernameSyncMessages).serialize().toLong())
+      value = Bitmask.update(value, Capabilities.OPTIONAL_PHONE_NUMBER, Capabilities.BIT_LENGTH, Recipient.Capability.fromBoolean(capabilities.isOptionalPhoneNumber).serialize().toLong())
       return value
     }
   }
@@ -1143,18 +1144,18 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   }
 
   /**
-   * Removes storageIds from unregistered recipients who were unregistered more than [RemoteConfig.messageQueueTime] ago.
+   * Removes storageIds from unregistered recipients who were unregistered before [unregisteredBefore].
    *
    * Never touches self: our own storageId backs the ACCOUNT record, so it always needs to be present. If self ever ends up with a stale
    * [UNREGISTERED_TIMESTAMP], clearing it here would leave us regenerating our storageId on every single storage sync.
    *
    * @return The number of rows affected.
    */
-  fun removeStorageIdsFromOldUnregisteredRecipients(now: Long): Int {
+  fun removeStorageIdsFromOldUnregisteredRecipients(unregisteredBefore: Long): Int {
     return writableDatabase
       .update(TABLE_NAME)
       .values(STORAGE_SERVICE_ID to null)
-      .where("$STORAGE_SERVICE_ID NOT NULL AND $ID != ${Recipient.self().id.toLong()} AND $UNREGISTERED_TIMESTAMP > 0 AND $UNREGISTERED_TIMESTAMP < ?", now - RemoteConfig.messageQueueTime)
+      .where("$STORAGE_SERVICE_ID NOT NULL AND $ID != ${Recipient.self().id.toLong()} AND $UNREGISTERED_TIMESTAMP > 0 AND $UNREGISTERED_TIMESTAMP < ?", unregisteredBefore)
       .run()
   }
 
@@ -1976,8 +1977,13 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   /**
    * Applies multiple profile fields in a single UPDATE statement. Calls [rotateStorageId] and
    * [notifyRecipientChanged] at most once. Designed for bulk profile fetches.
+   *
+   * Of these fields, only the profile name and username live on the storage service contact record, so
+   * the storage id is only rotated when one of those actually changes.
    */
   fun applyProfileUpdate(id: RecipientId, update: ProfileUpdate) {
+    val clearsUsername = update.clearUsername && hasUsername(id)
+
     val contentValues = ContentValues().apply {
       update.profileName?.let {
         put(PROFILE_GIVEN_NAME, it.givenName.nullIfBlank())
@@ -2008,7 +2014,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
           .build()
         put(EXPIRING_PROFILE_KEY_CREDENTIAL, Base64.encodeWithPadding(columnData.encode()))
       }
-      if (update.clearUsername) {
+      if (clearsUsername) {
         putNull(USERNAME)
       }
     }
@@ -2018,12 +2024,19 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     }
 
     if (update(id, contentValues)) {
-      val needsStorageRotation = update.profileName != null || update.clearUsername
+      val needsStorageRotation = update.profileName != null || clearsUsername
       if (needsStorageRotation) {
         rotateStorageId(id)
       }
       AppDependencies.databaseObserver.notifyRecipientChanged(id)
     }
+  }
+
+  private fun hasUsername(id: RecipientId): Boolean {
+    return readableDatabase
+      .exists(TABLE_NAME)
+      .where("$ID = ? AND $USERNAME NOT NULL", id.serialize())
+      .run()
   }
 
   fun setProfileName(id: RecipientId, profileName: ProfileName) {
@@ -3786,7 +3799,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   /**
    * Queries all contacts without an active thread.
    */
-  fun getAllContactsWithoutThreads(inputQuery: String): Cursor {
+  fun getAllContactsWithoutThreads(inputQuery: String, limit: Int): Cursor {
     val query = SqlUtil.buildCaseInsensitiveGlobPattern(inputQuery)
 
     //language=sql
@@ -3794,14 +3807,15 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       SELECT ${searchProjection(IncludeSelfMode.Exclude).joinToString(", ")} FROM $TABLE_NAME
       WHERE $BLOCKED = ? AND $HIDDEN = ? AND $REGISTERED != ? AND NOT EXISTS (SELECT 1 FROM ${ThreadTable.TABLE_NAME} WHERE ${ThreadTable.TABLE_NAME}.${ThreadTable.ACTIVE} = 1 AND ${ThreadTable.TABLE_NAME}.${ThreadTable.RECIPIENT_ID} = $TABLE_NAME.$ID LIMIT 1)
       AND (
-          $SORT_NAME GLOB ? OR 
-          $USERNAME GLOB ? OR 
-          ${ContactSearchSelection.E164_SEARCH} OR 
+          $SORT_NAME GLOB ? OR
+          $USERNAME GLOB ? OR
+          ${ContactSearchSelection.E164_SEARCH} OR
           $EMAIL GLOB ?
       )
+      LIMIT ?
     """
 
-    return readableDatabase.query(subquery, SqlUtil.buildArgs(0, 0, RegisteredState.NOT_REGISTERED.id, query, query, query, query))
+    return readableDatabase.query(subquery, SqlUtil.buildArgs(0, 0, RegisteredState.NOT_REGISTERED.id, query, query, query, query, limit))
   }
 
   @JvmOverloads
@@ -4445,7 +4459,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       put(USERNAME, if (TextUtils.isEmpty(username)) null else username)
       put(PROFILE_SHARING, contact.proto.whitelisted.toInt())
       put(BLOCKED, contact.proto.blocked.toInt())
-      put(BLOCKED_AT, contact.proto.blockedTimestamp)
+      put(BLOCKED_AT, contact.proto.blockedAtTimestamp)
       put(MUTE_UNTIL, contact.proto.mutedUntilTimestamp)
       put(STORAGE_SERVICE_ID, Base64.encodeWithPadding(contact.id.raw))
       put(HIDDEN, contact.proto.hidden)
@@ -4487,7 +4501,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       put(TYPE, RecipientType.GV2.id)
       put(PROFILE_SHARING, if (groupV2.proto.whitelisted) "1" else "0")
       put(BLOCKED, if (groupV2.proto.blocked) "1" else "0")
-      put(BLOCKED_AT, groupV2.proto.blockedTimestamp)
+      put(BLOCKED_AT, groupV2.proto.blockedAtTimestamp)
       put(MUTE_UNTIL, groupV2.proto.mutedUntilTimestamp)
       put(STORAGE_SERVICE_ID, Base64.encodeWithPadding(groupV2.id.raw))
       put(MENTION_SETTING, if (groupV2.proto.dontNotifyForMentionsIfMuted) NotificationSetting.DO_NOT_NOTIFY.id else NotificationSetting.ALWAYS_NOTIFY.id)
@@ -4577,9 +4591,9 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       MESSAGE_EXPIRATION_TIME_VERSION to 1,
       SEALED_SENDER_MODE to 0,
       STORAGE_SERVICE_PROTO to null,
-      MENTION_SETTING to NotificationSetting.ALWAYS_NOTIFY.id,
-      CALL_NOTIFICATION_SETTING to NotificationSetting.ALWAYS_NOTIFY.id,
-      REPLY_NOTIFICATION_SETTING to NotificationSetting.ALWAYS_NOTIFY.id,
+      MENTION_SETTING to NotificationSetting.SYSTEM_DEFAULT.id,
+      CALL_NOTIFICATION_SETTING to NotificationSetting.SYSTEM_DEFAULT.id,
+      REPLY_NOTIFICATION_SETTING to NotificationSetting.SYSTEM_DEFAULT.id,
       CAPABILITIES to 0,
       LAST_SESSION_RESET to null,
       WALLPAPER to null,
@@ -5094,6 +5108,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 //    const val VERSIONED_EXPIRATION_TIMER = 10
     const val STORAGE_SERVICE_ENCRYPTION_V2 = 11
     const val USERNAME_SYNC_MESSAGES = 12
+    const val OPTIONAL_PHONE_NUMBER = 13
 
     // IMPORTANT: We cannot store more than 32 capabilities in the bitmask.
   }
@@ -5171,12 +5186,21 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   }
 
   enum class NotificationSetting(val id: Int) {
-    ALWAYS_NOTIFY(0),
-    DO_NOT_NOTIFY(1);
+    SYSTEM_DEFAULT(0),
+    DO_NOT_NOTIFY(1),
+    ALWAYS_NOTIFY(2);
 
     companion object {
       fun fromId(id: Int): NotificationSetting {
         return entries[id]
+      }
+
+      fun resolve(setting: NotificationSetting, allowedByDefault: Boolean): NotificationSetting {
+        return if (setting == SYSTEM_DEFAULT) {
+          if (allowedByDefault) ALWAYS_NOTIFY else DO_NOT_NOTIFY
+        } else {
+          setting
+        }
       }
     }
   }

@@ -32,5 +32,9 @@ class LabsValues internal constructor(store: KeyValueStore) : SignalStoreValues(
 
   var muteBreakthroughNotifications by booleanValue(MUTE_BREAKTHROUGH_NOTIFICATIONS, true)
 
-  var improvedMessageDeletion by booleanValue(IMPROVED_MESSAGE_DELETION, true)
+  var improvedMessageDeletion by booleanValue(IMPROVED_MESSAGE_DELETION, true).falseForExternalUsers()
+
+  private fun SignalStoreValueDelegate<Boolean>.falseForExternalUsers(): SignalStoreValueDelegate<Boolean> {
+    return this.map { actualValue -> RemoteConfig.internalUser && actualValue }
+  }
 }

@@ -124,8 +124,10 @@ include(":lib:blurhash")
 include(":lib:apng")
 include(":lib:emoji")
 include(":lib:archive")
+include(":lib:ui-components")
 
 // Feature modules
+include(":feature:app-settings")
 include(":feature:registration")
 include(":feature:camera")
 include(":feature:media-send")

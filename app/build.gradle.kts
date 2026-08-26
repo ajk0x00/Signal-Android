@@ -2,6 +2,7 @@
 
 import com.android.build.api.artifact.ArtifactTransformationRequest
 import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.variant.BuiltArtifactsLoader
 import com.android.build.api.variant.HasAndroidTest
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -29,8 +30,8 @@ plugins {
 val staticIps = Properties().apply { file("static-ips.properties").reader().use { load(it) } }
 staticIps.stringPropertyNames().forEach { rootProject.extra[it] = staticIps.getProperty(it) }
 
-val canonicalVersionCode = 1736
-val canonicalVersionName = "8.23.2"
+val canonicalVersionCode = 1740
+val canonicalVersionName = "8.24.2"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -631,6 +632,7 @@ androidComponents {
 
       appApkDirectory.set(variant.artifacts.get(SingleArtifact.APK))
       testApkDirectory.set(androidTest.artifacts.get(SingleArtifact.APK))
+      builtArtifactsLoader.set(variant.artifacts.getBuiltArtifactsLoader())
 
       val deviceOverride = project.providers.gradleProperty("ftl.devices").orNull
       devices.set(
@@ -687,30 +689,34 @@ dependencies {
   ktlintRuleset(libs.ktlint.twitter.compose)
   coreLibraryDesugaring(libs.android.tools.desugar)
 
-  implementation(project(":lib:archive"))
-  implementation(project(":lib:libsignal-service"))
-  implementation(project(":lib:network"))
-  implementation(project(":lib:paging"))
-  implementation(project(":core:util"))
-  implementation(project(":lib:glide"))
-  implementation(project(":lib:video"))
-  implementation(project(":lib:device-transfer"))
-  implementation(project(":lib:image-editor"))
-  implementation(project(":lib:donations"))
-  implementation(project(":lib:debuglogs-viewer"))
-  implementation(project(":lib:contacts"))
-  implementation(project(":lib:qr"))
-  implementation(project(":lib:sticky-header-grid"))
-  implementation(project(":lib:photoview"))
-  implementation(project(":lib:blurhash"))
-  implementation(project(":core:ui"))
   implementation(project(":core:models"))
   implementation(project(":core:models-jvm"))
   implementation(project(":core:serialization"))
+  implementation(project(":core:ui"))
+  implementation(project(":core:util"))
+
+  implementation(project(":lib:apng"))
+  implementation(project(":lib:archive"))
+  implementation(project(":lib:contacts"))
+  implementation(project(":lib:blurhash"))
+  implementation(project(":lib:debuglogs-viewer"))
+  implementation(project(":lib:device-transfer"))
+  implementation(project(":lib:donations"))
+  implementation(project(":lib:emoji"))
+  implementation(project(":lib:glide"))
+  implementation(project(":lib:image-editor"))
+  implementation(project(":lib:libsignal-service"))
+  implementation(project(":lib:network"))
+  implementation(project(":lib:paging"))
+  implementation(project(":lib:photoview"))
+  implementation(project(":lib:qr"))
+  implementation(project(":lib:sticky-header-grid"))
+  implementation(project(":lib:ui-components"))
+  implementation(project(":lib:video"))
+
+  implementation(project(":feature:app-settings"))
   implementation(project(":feature:camera"))
   implementation(project(":feature:registration"))
-  implementation(project(":lib:apng"))
-  implementation(project(":lib:emoji"))
 
   implementation(libs.androidx.fragment.ktx)
   implementation(libs.androidx.appcompat)
@@ -1119,10 +1125,13 @@ constructor(
   @get:Input
   abstract val extraArgs: ListProperty<String>
 
+  @get:Internal
+  abstract val builtArtifactsLoader: Property<BuiltArtifactsLoader>
+
   @TaskAction
   fun run() {
-    val appApk = findApk(appApkDirectory.get().asFile, "app")
-    val testApk = findApk(testApkDirectory.get().asFile, "instrumentation test")
+    val appApk = findApk(appApkDirectory.get(), "app")
+    val testApk = findApk(testApkDirectory.get(), "instrumentation test")
 
     val arguments = mutableListOf(
       gcloudExecutable.get(),
@@ -1160,9 +1169,19 @@ constructor(
     }
   }
 
-  private fun findApk(directory: File, label: String): File {
-    return directory.walkTopDown().firstOrNull { it.isFile && it.extension == "apk" }
-      ?: throw GradleException("No $label APK found under ${directory.absolutePath}. Was the assemble task run?")
+  /**
+   * Resolves the APK this build produced from the variant's own output metadata. The directory listing can't be
+   * trusted: APKs are named per version and ABI, so it also holds every earlier build's, plus this build's other
+   * splits.
+   */
+  private fun findApk(directory: Directory, label: String): File {
+    val elements = builtArtifactsLoader.get().load(directory)?.elements?.takeIf { it.isNotEmpty() }
+      ?: throw GradleException("No $label APK found under ${directory.asFile.absolutePath}. Was the assemble task run?")
+
+    val element = elements.firstOrNull { it.filters.isEmpty() }
+      ?: throw GradleException("The $label APK is split by ${elements.flatMap { it.filters }.joinToString { it.filterType.name }} with no universal output to run on Test Lab.")
+
+    return File(element.outputFile)
   }
 }
 

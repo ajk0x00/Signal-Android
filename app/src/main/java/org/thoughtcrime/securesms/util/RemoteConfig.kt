@@ -1413,15 +1413,6 @@ object RemoteConfig {
     hotSwappable = true
   )
 
-  /** Whether to utilize the new media-send feature module */
-  @JvmStatic
-  @get:JvmName("useNewMediaSendFlow")
-  val useNewMediaSendFlow: Boolean by remoteBoolean(
-    key = "android.useNewMediaSendFlow.2",
-    defaultValue = false,
-    hotSwappable = true
-  )
-
   /** Whether to enable Jetpack telecom integration for 1:1 calls */
   @JvmStatic
   @get:JvmName("useJetPackTelecom")
@@ -1438,5 +1429,40 @@ object RemoteConfig {
     hotSwappable = false
   )
 
+  /** Whether to enable SVC in group calls. */
+  @JvmStatic
+  @get:JvmName("enableSvc")
+  val enableSvc: Boolean by remoteBoolean(
+    key = "android.calling.enableSvc",
+    defaultValue = false,
+    hotSwappable = true
+  )
+
+  /** The SVC mode to use in group calls. */
+  @JvmStatic
+  @get:JvmName("svcMode")
+  val svcMode: String by remoteString(
+    key = "android.calling.svcMode",
+    defaultValue = "L3T3_KEY",
+    hotSwappable = true
+  )
+
+  /** The screenshare SVC mode to use in group calls. */
+  @JvmStatic
+  @get:JvmName("svcModeForScreenshare")
+  val svcModeForScreenshare: String by remoteString(
+    key = "android.calling.svcModeForScreenshare",
+    defaultValue = "L1T3",
+    hotSwappable = true
+  )
+
+  /** Maximum bitrate to use in SVC group calls. */
+  @JvmStatic
+  @get:JvmName("svcMaxBitrateBps")
+  val svcMaxBitrateBps: Int by remoteInt(
+    key = "android.calling.svcMaxBitrateBps",
+    defaultValue = 0,
+    hotSwappable = true
+  )
   // endregion
 }
