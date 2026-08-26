@@ -247,7 +247,7 @@ class AskGroqJob private constructor(
   class Factory : Job.Factory<AskGroqJob> {
     override fun create(parameters: Parameters, serializedData: ByteArray?): AskGroqJob {
       val data = JsonJobData.deserialize(serializedData)
-      val quoteAuthorId = if (data.hasField(KEY_QUOTE_AUTHOR_ID)) RecipientId.from(data.getLong(KEY_QUOTE_AUTHOR_ID)) else null
+      val quoteAuthorId = if (data.hasLong(KEY_QUOTE_AUTHOR_ID)) RecipientId.from(data.getLong(KEY_QUOTE_AUTHOR_ID)) else null
 
       return AskGroqJob(
         threadId = data.getLong(KEY_THREAD_ID),
