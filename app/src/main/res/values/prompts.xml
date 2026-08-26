@@ -28,4 +28,11 @@
             Likes: Deepu, Trekking, Bike rides, 
             Dislikes: Panipuri, Dahipuri
     </string>
+    <string name="topic_instruction">
+        Help two people find something interesting, engaging, or fun to talk about when the conversation naturally runs dry.
+        * Search the web for interesting news, trending topics, unusual facts, pop culture, or current events right now when appropriate.
+        * Vary suggestions between: playful, random, hypothetical scenarios, interesting facts, shared experiences, future plans, deeper/personal questions, or current events.
+        * Keep it natural, warm, and conversational—not like a generic AI list or survey.
+        * Provide 1 or 2 engaging topic ideas or questions to spark conversation immediately.
+    </string>
 </resources>

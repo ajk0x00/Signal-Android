@@ -535,6 +535,8 @@ class ConversationRepository(
       val trimmedBody = body.trim()
       val isAsk = trimmedBody.startsWith("/ask", ignoreCase = true) &&
         (trimmedBody.length == 4 || trimmedBody[4].isWhitespace())
+      val isTopic = trimmedBody.startsWith("/topic", ignoreCase = true) &&
+        (trimmedBody.length == 6 || trimmedBody[6].isWhitespace())
 
       if (isAsk) {
         val question = if (trimmedBody.length > 4) trimmedBody.substring(4).trim() else ""
@@ -548,6 +550,27 @@ class ConversationRepository(
             originalBody = body
           )
         }
+      } else if (isTopic) {
+        val hint = if (trimmedBody.length > 6) trimmedBody.substring(6).trim() else ""
+        val topicInstruction = try {
+          AppDependencies.application.getString(org.thoughtcrime.securesms.R.string.topic_instruction)
+        } catch (e: Exception) {
+          "Suggest a fun, engaging, and unique conversation topic to break the silence and spark discussion."
+        }
+
+        val question = if (hint.isNotBlank()) {
+          "$topicInstruction\n\nSpecific category/focus requested by user: \"$hint\""
+        } else {
+          topicInstruction
+        }
+
+        AskGroqJob.enqueue(
+          threadId = threadId,
+          question = question,
+          quotedText = quote?.text?.trim()?.ifEmpty { null },
+          originalSentTimestamp = message.sentTimeMillis,
+          originalBody = body
+        )
       }
     }
 
