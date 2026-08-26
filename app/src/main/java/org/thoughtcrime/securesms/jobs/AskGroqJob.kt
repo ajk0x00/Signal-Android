@@ -105,7 +105,7 @@ class AskGroqJob private constructor(
       return
     }
 
-    val prompt = if (!quotedText.isNullOrBlank()) {
+    val basePrompt = if (!quotedText.isNullOrBlank()) {
       if (question.isNotBlank()) {
         "Quoted message:\n\"\"\"\n$quotedText\n\"\"\"\n\nQuestion: $question"
       } else {
@@ -115,7 +115,19 @@ class AskGroqJob private constructor(
       question
     }
 
-    val answer = GroqApiClient.generateContent(prompt)
+    val participantDetails = try {
+      context.getString(org.thoughtcrime.securesms.R.string.participant_details)
+    } catch (e: Exception) {
+      ""
+    }
+
+    val fullPrompt = if (participantDetails.isNotBlank()) {
+      "$basePrompt\n\nAdditional context:\n$participantDetails"
+    } else {
+      basePrompt
+    }
+
+    val answer = GroqApiClient.generateContent(fullPrompt)
     Log.i(TAG, "Received answer from Groq, sending quote reply to thread $threadId")
     sendReply(recipient, "🤖 $answer")
   }
