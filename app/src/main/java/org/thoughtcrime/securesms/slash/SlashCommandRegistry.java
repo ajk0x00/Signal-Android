@@ -18,6 +18,7 @@ public final class SlashCommandRegistry {
     registerHandler(new AskSlashCommandHandler());
     registerHandler(new TopicSlashCommandHandler());
     registerHandler(new RapAboutSlashCommandHandler());
+    registerHandler(new JudgeSlashCommandHandler());
   }
 
   private SlashCommandRegistry() {

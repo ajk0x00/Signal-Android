@@ -4536,6 +4536,24 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     OptimizeMessageSearchIndexJob.enqueue()
   }
 
+  fun getMessagesInThreadAfter(threadId: Long, timestamp: Long, limit: Long = 30): List<MessageRecord> {
+    val where = "$TABLE_NAME.$THREAD_ID = ? AND ($TABLE_NAME.$DATE_RECEIVED > ? OR $TABLE_NAME.$DATE_SENT > ?) AND $TABLE_NAME.$SCHEDULED_DATE = -1 AND $TABLE_NAME.$LATEST_REVISION_ID IS NULL"
+    val args = buildArgs(threadId, timestamp, timestamp)
+
+    return mmsReaderFor(queryMessages(where, args, false, limit)).use { reader ->
+      reader.filterNotNull()
+    }
+  }
+
+  fun getRecentMessagesInThread(threadId: Long, limit: Int = 15): List<MessageRecord> {
+    val where = "$TABLE_NAME.$THREAD_ID = ? AND $TABLE_NAME.$SCHEDULED_DATE = -1 AND $TABLE_NAME.$LATEST_REVISION_ID IS NULL"
+    val args = buildArgs(threadId)
+
+    return mmsReaderFor(queryMessages(where, args, true, limit.toLong())).use { reader ->
+      reader.filterNotNull().reversed()
+    }
+  }
+
   private fun getMessagesInThreadAfterInclusive(threadId: Long, timestamp: Long, limit: Long): List<MessageRecord> {
     val where = "$TABLE_NAME.$THREAD_ID = ? AND $TABLE_NAME.$DATE_RECEIVED >= ? AND $TABLE_NAME.$SCHEDULED_DATE = -1 AND $TABLE_NAME.$LATEST_REVISION_ID IS NULL"
     val args = buildArgs(threadId, timestamp)

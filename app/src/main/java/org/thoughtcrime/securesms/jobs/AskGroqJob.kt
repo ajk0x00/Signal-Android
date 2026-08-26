@@ -29,6 +29,8 @@ class AskGroqJob private constructor(
   private val question: String,
   private val quotedText: String?,
   private val quoteAuthorId: RecipientId?,
+  private val includeThreadContext: Boolean,
+  private val quotedTimestamp: Long,
   private val originalSentTimestamp: Long,
   private val originalBody: String,
   parameters: Parameters
@@ -44,6 +46,8 @@ class AskGroqJob private constructor(
     private const val KEY_QUESTION = "question"
     private const val KEY_QUOTED_TEXT = "quoted_text"
     private const val KEY_QUOTE_AUTHOR_ID = "quote_author_id"
+    private const val KEY_INCLUDE_THREAD_CONTEXT = "include_thread_context"
+    private const val KEY_QUOTED_TIMESTAMP = "quoted_timestamp"
     private const val KEY_ORIGINAL_SENT_TIMESTAMP = "original_sent_timestamp"
     private const val KEY_ORIGINAL_BODY = "original_body"
 
@@ -54,6 +58,8 @@ class AskGroqJob private constructor(
       question: String,
       quotedText: String? = null,
       quoteAuthorId: RecipientId? = null,
+      includeThreadContext: Boolean = false,
+      quotedTimestamp: Long = 0L,
       originalSentTimestamp: Long,
       originalBody: String
     ) {
@@ -63,6 +69,8 @@ class AskGroqJob private constructor(
           question = question,
           quotedText = quotedText,
           quoteAuthorId = quoteAuthorId,
+          includeThreadContext = includeThreadContext,
+          quotedTimestamp = quotedTimestamp,
           originalSentTimestamp = originalSentTimestamp,
           originalBody = originalBody
         )
@@ -75,6 +83,8 @@ class AskGroqJob private constructor(
     question: String,
     quotedText: String?,
     quoteAuthorId: RecipientId?,
+    includeThreadContext: Boolean,
+    quotedTimestamp: Long,
     originalSentTimestamp: Long,
     originalBody: String
   ) : this(
@@ -82,6 +92,8 @@ class AskGroqJob private constructor(
     question = question,
     quotedText = quotedText,
     quoteAuthorId = quoteAuthorId,
+    includeThreadContext = includeThreadContext,
+    quotedTimestamp = quotedTimestamp,
     originalSentTimestamp = originalSentTimestamp,
     originalBody = originalBody,
     parameters = Parameters.Builder()
@@ -96,6 +108,8 @@ class AskGroqJob private constructor(
       .putLong(KEY_THREAD_ID, threadId)
       .putString(KEY_QUESTION, question)
       .putString(KEY_QUOTED_TEXT, quotedText)
+      .putBoolean(KEY_INCLUDE_THREAD_CONTEXT, includeThreadContext)
+      .putLong(KEY_QUOTED_TIMESTAMP, quotedTimestamp)
       .putLong(KEY_ORIGINAL_SENT_TIMESTAMP, originalSentTimestamp)
       .putString(KEY_ORIGINAL_BODY, originalBody)
 
@@ -142,7 +156,38 @@ class AskGroqJob private constructor(
       question
     }
 
-    val answer = GroqApiClient.generateContent(prompt)
+    val threadMessagesContext = if (includeThreadContext) {
+      val records = if (quotedTimestamp > 0L) {
+        SignalDatabase.messages.getMessagesInThreadAfter(threadId, quotedTimestamp, 30)
+      } else {
+        SignalDatabase.messages.getRecentMessagesInThread(threadId, 15)
+      }
+
+      val formattedMessages = records.mapNotNull { msg ->
+        val text = msg.body?.trim()
+        if (text.isNullOrBlank() || text.startsWith("/")) {
+          null
+        } else {
+          val sender = if (text.startsWith("🤖")) {
+            "AI Assistant"
+          } else {
+            msg.fromRecipient.getDisplayName(context)
+          }
+          "- [$sender]: $text"
+        }
+      }
+
+      if (formattedMessages.isNotEmpty()) {
+        "\n\nSubsequent conversation history:\n" + formattedMessages.joinToString("\n")
+      } else {
+        ""
+      }
+    } else {
+      ""
+    }
+
+    val fullPrompt = prompt + threadMessagesContext
+    val answer = GroqApiClient.generateContent(fullPrompt)
     Log.i(TAG, "Received answer from Groq, sending quote reply to thread $threadId")
     sendReply(recipient, "🤖 $answer")
   }
@@ -209,6 +254,8 @@ class AskGroqJob private constructor(
         question = data.getString(KEY_QUESTION),
         quotedText = data.getStringOrDefault(KEY_QUOTED_TEXT, null),
         quoteAuthorId = quoteAuthorId,
+        includeThreadContext = data.getBooleanOrDefault(KEY_INCLUDE_THREAD_CONTEXT, false),
+        quotedTimestamp = data.getLongOrDefault(KEY_QUOTED_TIMESTAMP, 0L),
         originalSentTimestamp = data.getLong(KEY_ORIGINAL_SENT_TIMESTAMP),
         originalBody = data.getString(KEY_ORIGINAL_BODY),
         parameters = parameters
