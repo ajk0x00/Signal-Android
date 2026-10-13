@@ -7,6 +7,7 @@ package org.thoughtcrime.securesms.jobs
 
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.database.SignalDatabase
+import org.thoughtcrime.securesms.database.model.MessageRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groq.GroqApiClient
 import org.thoughtcrime.securesms.jobmanager.Job
@@ -163,7 +164,7 @@ class AskGroqJob private constructor(
         SignalDatabase.messages.getRecentMessagesInThread(threadId, 25)
       }
 
-      val formattedMessages = records.mapNotNull { msg ->
+      val formattedMessages = records.mapNotNull { msg: MessageRecord ->
         val text = msg.body?.trim()
         if (text.isNullOrBlank() || text.startsWith("/")) {
           null
