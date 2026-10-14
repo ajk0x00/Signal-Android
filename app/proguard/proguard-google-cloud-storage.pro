@@ -29,3 +29,47 @@
 
 -dontwarn io.opentelemetry.**
 -dontwarn org.xbill.DNS.spi.DnsjavaInetAddressResolverProvider
+
+# =================================================================
+# Google Cloud Storage & Google Auth / API Client Keep Rules
+# =================================================================
+
+# Retain reflection attributes and annotations
+-keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+
+# Keep Google Auth library
+-keep class com.google.auth.** { *; }
+
+# Keep Google Cloud Storage and Cloud Core
+-keep class com.google.cloud.** { *; }
+
+# Keep Google API Client classes, JSON parsing, and HTTP transport
+-keep class com.google.api.client.** { *; }
+-keep class com.google.api.services.** { *; }
+
+# Keep GenericJson, GenericData, and all subclasses (DTOs / response models) with constructors
+-keep class com.google.api.client.json.GenericJson {
+    <init>();
+    *;
+}
+-keep class com.google.api.client.util.GenericData {
+    <init>();
+    *;
+}
+-keep class * extends com.google.api.client.json.GenericJson {
+    <init>();
+    <fields>;
+    <methods>;
+}
+-keep class * extends com.google.api.client.util.GenericData {
+    <init>();
+    <fields>;
+    <methods>;
+}
+
+# Preserve fields and methods annotated with @Key used by Google JSON parser reflection
+-keepclassmembers class * {
+    @com.google.api.client.util.Key <fields>;
+    @com.google.api.client.util.Key <methods>;
+    @com.google.api.client.util.Value <fields>;
+}
