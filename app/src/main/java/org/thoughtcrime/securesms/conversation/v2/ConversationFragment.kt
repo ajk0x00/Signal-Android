@@ -313,11 +313,10 @@ import org.thoughtcrime.securesms.groups.v2.GroupAddMembersResult
 import org.thoughtcrime.securesms.groups.v2.GroupBlockJoinRequestResult
 import org.thoughtcrime.securesms.jobs.AttachmentBackfill
 import org.thoughtcrime.securesms.jobs.ServiceOutageDetectionJob
-import org.thoughtcrime.securesms.keyboard.KeyboardPage
 import android.view.HapticFeedbackConstants
 import org.thoughtcrime.securesms.keyboard.KeyboardUtil
 import org.thoughtcrime.securesms.keyboard.sticker.StickerSearchDialogFragment
-import org.thoughtcrime.securesms.keyvalue.EmojiValues
+import org.signal.storage.keyvalue.EmojiValues
 import org.thoughtcrime.securesms.keyvalue.SettingsValues.MediaKeyboardMode
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.linkpreview.LinkPreview
@@ -4278,7 +4277,8 @@ class ConversationFragment :
         adapter.selectedItems.isEmpty()
       ) {
         view?.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-        val heartEmoji = SignalStore.emoji.getPreferredVariation(EmojiValues.DEFAULT_REACTIONS_LIST[0])
+        val defaultHeart = EmojiValues.DEFAULT_REACTIONS_LIST[0]
+        val heartEmoji = SignalStore.emoji.getPreferredVariation(defaultHeart, defaultHeart)
         disposables += viewModel.updateReaction(messageRecord, heartEmoji).subscribe()
       }
     }
