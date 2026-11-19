@@ -22,7 +22,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
-import org.greenrobot.eventbus.EventBus
 import org.signal.archive.proto.BackupDebugInfo
 import org.signal.archive.proto.BackupInfo
 import org.signal.archive.proto.Frame
@@ -32,6 +31,13 @@ import org.signal.archive.stream.EncryptedBackupReader
 import org.signal.archive.stream.EncryptedBackupWriter
 import org.signal.archive.stream.PlainTextBackupReader
 import org.signal.archive.stream.PlainTextBackupWriter
+import org.signal.core.database.forceForeignKeyConstraintsEnabled
+import org.signal.core.database.fullWalCheckpoint
+import org.signal.core.database.getAllIndexDefinitions
+import org.signal.core.database.getAllTableDefinitions
+import org.signal.core.database.getAllTriggerDefinitions
+import org.signal.core.database.getForeignKeyViolations
+import org.signal.core.database.withinTransaction
 import org.signal.core.models.AccountEntropyPool
 import org.signal.core.models.ServiceId.ACI
 import org.signal.core.models.ServiceId.PNI
@@ -41,6 +47,7 @@ import org.signal.core.models.backup.MediaName
 import org.signal.core.models.backup.MediaRootBackupKey
 import org.signal.core.models.backup.MessageBackupKey
 import org.signal.core.models.database.AttachmentId
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.Base64.decodeBase64OrThrow
 import org.signal.core.util.CursorUtil
 import org.signal.core.util.DiskUtil
@@ -54,12 +61,7 @@ import org.signal.core.util.concurrent.SignalDispatchers
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.crypto.AttachmentSecretProvider
 import org.signal.core.util.decodeOrNull
-import org.signal.core.util.forceForeignKeyConstraintsEnabled
-import org.signal.core.util.fullWalCheckpoint
-import org.signal.core.util.getAllIndexDefinitions
-import org.signal.core.util.getAllTableDefinitions
-import org.signal.core.util.getAllTriggerDefinitions
-import org.signal.core.util.getForeignKeyViolations
+import org.signal.core.util.eventbus.EventBus
 import org.signal.core.util.logging.Log
 import org.signal.core.util.logging.logW
 import org.signal.core.util.money.FiatMoney
@@ -68,7 +70,7 @@ import org.signal.core.util.requireIntOrNull
 import org.signal.core.util.requireNonNullString
 import org.signal.core.util.requireString
 import org.signal.core.util.stream.NonClosingOutputStream
-import org.signal.core.util.withinTransaction
+import org.signal.core.util.toMillis
 import org.signal.libsignal.messagebackup.BackupForwardSecrecyToken
 import org.signal.libsignal.net.DeleteBackupMediaItem
 import org.signal.libsignal.net.RequestResult
@@ -81,6 +83,10 @@ import org.signal.network.exceptions.NonSuccessfulResponseCodeException
 import org.signal.network.service.ArchiveError
 import org.signal.network.service.ArchiveService
 import org.signal.network.service.toArchiveResult
+import org.signal.remoteconfig.RemoteConfig
+import org.signal.storage.database.DatabaseSecretProvider
+import org.signal.storage.keyvalue.KeyValueDatabase
+import org.signal.storage.keyvalue.KeyValueStore
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.attachments.Cdn
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment
@@ -93,18 +99,18 @@ import org.thoughtcrime.securesms.backup.v2.processor.AdHocCallArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.ChatArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.ChatFolderArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.ChatItemArchiveProcessor
+import org.thoughtcrime.securesms.backup.v2.processor.FavoriteStickerArchiveProcessor
+import org.thoughtcrime.securesms.backup.v2.processor.HiddenStickerPackArchiveProcessor
+import org.thoughtcrime.securesms.backup.v2.processor.InstalledStickerPackArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.NotificationProfileArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.RecipientArchiveProcessor
-import org.thoughtcrime.securesms.backup.v2.processor.StickerArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlert
 import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsType
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
 import org.thoughtcrime.securesms.crypto.AppAttachmentSecretStore
-import org.thoughtcrime.securesms.crypto.DatabaseSecretProvider
 import org.thoughtcrime.securesms.database.AttachmentTable
 import org.thoughtcrime.securesms.database.BackupMediaSnapshotTable.ArchiveMediaItem
-import org.thoughtcrime.securesms.database.KeyValueDatabase
 import org.thoughtcrime.securesms.database.KyberPreKeyTable
 import org.thoughtcrime.securesms.database.OneTimePreKeyTable
 import org.thoughtcrime.securesms.database.SearchTable
@@ -136,7 +142,6 @@ import org.thoughtcrime.securesms.jobs.StorageForcePushJob
 import org.thoughtcrime.securesms.jobs.Svr2MirrorJob
 import org.thoughtcrime.securesms.jobs.UploadAttachmentToArchiveJob
 import org.thoughtcrime.securesms.keyvalue.BackupValues
-import org.thoughtcrime.securesms.keyvalue.KeyValueStore
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.keyvalue.protos.ArchiveUploadProgressState
 import org.thoughtcrime.securesms.logsubmit.SubmitDebugLogRepository
@@ -144,12 +149,10 @@ import org.thoughtcrime.securesms.net.SignalNetwork
 import org.thoughtcrime.securesms.notifications.NotificationChannels
 import org.thoughtcrime.securesms.notifications.NotificationIds
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.recipients.RecipientIds
 import org.thoughtcrime.securesms.service.BackupMediaRestoreService
 import org.thoughtcrime.securesms.service.BackupProgressService
 import org.thoughtcrime.securesms.storage.StorageSyncHelper
-import org.thoughtcrime.securesms.util.RemoteConfig
-import org.thoughtcrime.securesms.util.toMillis
 import org.whispersystems.signalservice.api.link.TransferArchiveResponse
 import org.whispersystems.signalservice.api.messages.AttachmentTransferProgress
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachment.ProgressListener
@@ -240,7 +243,10 @@ object BackupRepository {
     BackupMessagesJob.enqueue()
   }
 
-  private fun refreshMasterKeyDependents() {
+  /**
+   * Re-uploads everything keyed by the master key (SVR2, linked device keys, storage service). Call after the AEP changes.
+   */
+  fun refreshMasterKeyDependents() {
     val jobs = buildList {
       add(Svr2MirrorJob())
       if (SignalStore.account.isMultiDevice) {
@@ -979,11 +985,11 @@ object BackupRepository {
             return@export
           }
 
-          progressEmitter?.onSticker()
-          StickerArchiveProcessor.export(dbSnapshot) { frame ->
+          progressEmitter?.onInstalledStickerPack()
+          InstalledStickerPackArchiveProcessor.export(dbSnapshot) { frame ->
             writer.write(frame)
             extraFrameOperation?.invoke(frame)
-            eventTimer.emit("sticker-pack")
+            eventTimer.emit("installed-sticker-pack")
             frameCount++
           }
           if (cancellationSignal()) {
@@ -1008,6 +1014,30 @@ object BackupRepository {
             writer.write(frame)
             extraFrameOperation?.invoke(frame)
             eventTimer.emit("chat-folder")
+            frameCount++
+          }
+          if (cancellationSignal()) {
+            Log.w(TAG, "[export] Cancelled! Stopping")
+            return@export
+          }
+
+          progressEmitter?.onHiddenStickerPack()
+          HiddenStickerPackArchiveProcessor.export(dbSnapshot) { frame ->
+            writer.write(frame)
+            extraFrameOperation?.invoke(frame)
+            eventTimer.emit("hidden-sticker-pack")
+            frameCount++
+          }
+          if (cancellationSignal()) {
+            Log.w(TAG, "[export] Cancelled! Stopping")
+            return@export
+          }
+
+          progressEmitter?.onFavoriteStickerList()
+          FavoriteStickerArchiveProcessor.export(dbSnapshot) { frame ->
+            writer.write(frame)
+            extraFrameOperation?.invoke(frame)
+            eventTimer.emit("favorite-sticker-list")
             frameCount++
           }
           if (cancellationSignal()) {
@@ -1254,7 +1284,7 @@ object BackupRepository {
         SignalDatabase.writableDatabase.execSQL(table.statement)
       }
 
-      RecipientId.clearCache()
+      RecipientIds.clearCache()
       SignalDatabase.remappedRecords.clearCache()
       AppDependencies.recipientCache.clear()
       AppDependencies.recipientCache.clearSelf()
@@ -1285,10 +1315,12 @@ object BackupRepository {
         val frameRecipient = frame.recipient
         val frameChat = frame.chat
         val frameAdHocCall = frame.adHocCall
-        val frameStickerPack = frame.stickerPack
+        val frameInstalledStickerPack = frame.installedStickerPack
         val frameNotificationProfile = frame.notificationProfile
         val frameChatFolder = frame.chatFolder
         val frameChatItem = frame.chatItem
+        val frameHiddenStickerPack = frame.hiddenStickerPack
+        val frameFavoriteStickerList = frame.favoriteStickerList
         when {
           frameAccount != null -> {
             AccountDataArchiveProcessor.import(frameAccount, selfId, importState)
@@ -1314,9 +1346,9 @@ object BackupRepository {
             frameCount++
           }
 
-          frameStickerPack != null -> {
-            StickerArchiveProcessor.import(frameStickerPack)
-            eventTimer.emit("sticker-pack")
+          frameInstalledStickerPack != null -> {
+            InstalledStickerPackArchiveProcessor.import(frameInstalledStickerPack)
+            eventTimer.emit("installed-sticker-pack")
             frameCount++
           }
 
@@ -1329,6 +1361,18 @@ object BackupRepository {
           frameChatFolder != null -> {
             ChatFolderArchiveProcessor.import(frameChatFolder, importState)
             eventTimer.emit("chat-folder")
+            frameCount++
+          }
+
+          frameHiddenStickerPack != null -> {
+            HiddenStickerPackArchiveProcessor.import(frameHiddenStickerPack)
+            eventTimer.emit("hidden-sticker-pack")
+            frameCount++
+          }
+
+          frameFavoriteStickerList != null -> {
+            FavoriteStickerArchiveProcessor.import(frameFavoriteStickerList)
+            eventTimer.emit("favorite-sticker-list")
             frameCount++
           }
 
@@ -1348,14 +1392,14 @@ object BackupRepository {
 
           else -> Log.w(TAG, "Unrecognized frame")
         }
-        EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_RESTORE, frameReader.getBytesRead().bytes, totalLength.bytes))
+        EventBus.default.post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_RESTORE, frameReader.getBytesRead().bytes, totalLength.bytes))
       }
 
       if (chatItemInserter.flush()) {
         eventTimer.emit("chatItem")
       }
 
-      EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_FINALIZING, 0.bytes, 0.bytes))
+      EventBus.default.post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_FINALIZING, 0.bytes, 0.bytes))
 
       if (!importState.importedChatFolders) {
         // Add back default All Chats chat folder after clearing data if missing
@@ -1422,7 +1466,7 @@ object BackupRepository {
       AppDependencies.jobManager.add(ResetSvrGuessCountJob())
     }
 
-    val stickerJobs = SignalDatabase.stickers.getAllStickerPacks().use { cursor ->
+    val installedStickerJobs = SignalDatabase.stickers.getAllStickerPacks().use { cursor ->
       val reader = StickerTables.StickerPackRecordReader(cursor)
       reader
         .filter { it.isInstalled }
@@ -1430,7 +1474,12 @@ object BackupRepository {
           StickerPackDownloadJob.forInstall(it.packId, it.packKey, false)
         }
     }
-    AppDependencies.jobManager.addAll(stickerJobs)
+
+    val favoriteStickerJobs = SignalDatabase.stickers.getFavoritesFromUninstalledPacks().use { cursor ->
+      StickerTables.StickerRecordReader(cursor).map { StickerPackDownloadJob.forFavoriteSticker(it.packId, it.packKey, it.stickerId) }
+    }
+    AppDependencies.jobManager.addAll(installedStickerJobs + favoriteStickerJobs)
+
     stopwatch.split("sticker-jobs")
 
     val recipientIds = SignalDatabase.threads.getRecentConversationList(
@@ -1496,12 +1545,18 @@ object BackupRepository {
 
   fun enablePaidBackupTier() {
     Log.i(TAG, "Setting backup tier to PAID", true)
+    val previousTier = SignalStore.backup.backupTier
     resetInitializedStateAndAuthCredentials()
     SignalStore.backup.backupTier = MessageBackupTier.PAID
     SignalStore.backup.lastCheckInMillis = System.currentTimeMillis()
     SignalStore.backup.lastCheckInSnoozeMillis = 0
     SignalStore.backup.clearDownloadNotifierState()
-    scheduleSyncForAccountChange()
+
+    if (previousTier != MessageBackupTier.PAID) {
+      scheduleSyncForAccountChange()
+    } else {
+      Log.i(TAG, "Backup tier was already PAID, skipping account record sync.", true)
+    }
   }
 
   fun downloadBackupFile(destination: File, listener: ProgressListener? = null): Either<ArchiveError.BackupFileError, Unit> {
@@ -1787,7 +1842,7 @@ object BackupRepository {
           progress = progress.value,
           indeterminate = false
         )
-        EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_DOWNLOAD, progress.transmitted, progress.total))
+        EventBus.default.post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_DOWNLOAD, progress.transmitted, progress.total))
       }
 
       override fun shouldCancel() = cancellationSignal()
@@ -1919,7 +1974,7 @@ object BackupRepository {
           progress = progress.value,
           indeterminate = false
         )
-        EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_DOWNLOAD, progress.transmitted, progress.total))
+        EventBus.default.post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_DOWNLOAD, progress.transmitted, progress.total))
       }
 
       override fun shouldCancel() = cancellationSignal()
@@ -2105,9 +2160,11 @@ object BackupRepository {
     fun onRecipient()
     fun onThread()
     fun onCall()
-    fun onSticker()
+    fun onInstalledStickerPack()
     fun onNotificationProfile()
     fun onChatFolder()
+    fun onHiddenStickerPack()
+    fun onFavoriteStickerList()
     fun onMessage(currentProgress: Long, approximateCount: Long)
     fun onAttachment(currentProgress: Long, totalCount: Long)
   }

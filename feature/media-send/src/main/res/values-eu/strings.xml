@@ -44,10 +44,6 @@
   <string name="AddAMessageRow__view_once_media">Behin ikusteko multimedia-elementua</string>
   <!-- Accessibility label for the button at the end of the add-a-message row that turns view-once mode on and off. -->
   <string name="AddAMessageRow__toggle_view_once">Aktibatu eta desaktibatu behin bakarrik ikusteko aukera</string>
-  <!-- Setting option that can be selected to default media to be sent as high quality by default -->
-  <string name="SentMediaQuality__high">Altua</string>
-  <!-- Setting option that can be selected to default media to be sent as standard quality by default -->
-  <string name="SentMediaQuality__standard">Estandarra</string>
   <!-- Label for our standard quality media conversion. -->
   <string name="QualitySelectorBottomSheetDialog__standard">Estandarra</string>
   <!-- Description for our standard quality media conversion. -->
@@ -169,6 +165,8 @@
   <string name="CameraXFragment_photo_processing_failed">Ezin izan da prozesatu argazkia. Saiatu berriro.</string>
   <!-- Label shown below the elapsed time while a video recording is paused -->
   <string name="CameraXFragment_paused">Pausatuta</string>
+  <!-- Accessibility label for the camera toggle that keeps the camera open after each capture so several photos or videos can be taken in a row -->
+  <string name="CameraXFragment_multi_capture">Multikaptura</string>
   <!-- Displayed in a permissions dialog when the user has denied access to hardware for image and video capture. -->
   <string name="CameraXFragment_signal_needs_the_recording_permissions_to_capture_video">Signal aplikazioak bideoak grabatu ahal izateko mikrofonorako baimenak behar ditu, baina ukatu egin dira. Mesedez, joan zaitez aplikazioaren ezarpenetara, aukeratu \"Baimenak\" eta gaitu \"Mikrofonoa\" eta \"Kamera\".</string>
 

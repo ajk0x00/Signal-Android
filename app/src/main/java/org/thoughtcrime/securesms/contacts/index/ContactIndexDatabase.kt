@@ -11,9 +11,11 @@ import android.database.Cursor
 import androidx.sqlite.db.SupportSQLiteDatabase
 import net.zetetic.database.sqlcipher.SQLiteDatabase
 import net.zetetic.database.sqlcipher.SQLiteOpenHelper
-import org.signal.core.util.SqlUtil
+import org.signal.core.database.SqlUtil
+import org.signal.core.database.getTableRowCount
+import org.signal.core.database.withinTransaction
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.Util
-import org.signal.core.util.getTableRowCount
 import org.signal.core.util.logging.Log
 import org.signal.core.util.readToList
 import org.signal.core.util.requireBoolean
@@ -23,12 +25,10 @@ import org.signal.core.util.requireLongOrNull
 import org.signal.core.util.requireNonNullString
 import org.signal.core.util.requireString
 import org.signal.core.util.toInt
-import org.signal.core.util.withinTransaction
-import org.thoughtcrime.securesms.crypto.DatabaseSecret
-import org.thoughtcrime.securesms.database.SqlCipherDatabaseHook
+import org.signal.storage.database.DatabaseSecret
+import org.signal.storage.database.SqlCipherDatabaseHook
+import org.signal.storage.database.SqlCipherLibraryLoader
 import org.thoughtcrime.securesms.database.SqlCipherDeletingErrorHandler
-import org.thoughtcrime.securesms.database.SqlCipherLibraryLoader
-import org.thoughtcrime.securesms.recipients.RecipientId
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -61,7 +61,7 @@ class ContactIndexDatabase private constructor(
 ) : SQLiteOpenHelper(
   application,
   indexFileName,
-  databaseSecret.asString(),
+  databaseSecret.asHex(),
   null,
   DATABASE_VERSION,
   0,
@@ -96,6 +96,7 @@ class ContactIndexDatabase private constructor(
 
     /** Drives the fallback glyph: a company or bare phone number has no initials worth showing. */
     const val HAS_PERSONAL_NAME = "has_personal_name"
+    const val IS_ORG_ONLY = "is_org_only"
     const val HAS_PHOTO = "has_photo"
 
     /** Ordering columns, present only while staging. */
@@ -104,11 +105,11 @@ class ContactIndexDatabase private constructor(
     /** Sorts ahead of [SORT_KEY] so that "#" cannot land among the letters and split a section. */
     private const val SORT_RANK = "sort_rank"
 
-    private val INSERT_COLUMNS = arrayOf(SORT_RANK, SORT_KEY, TYPE, SECTION, DISPLAY_NAME, SEARCH_TEXT, RECIPIENT_ID, LOOKUP_KEY, CONTACT_ID, HAS_PERSONAL_NAME, HAS_PHOTO)
+    private val INSERT_COLUMNS = arrayOf(SORT_RANK, SORT_KEY, TYPE, SECTION, DISPLAY_NAME, SEARCH_TEXT, RECIPIENT_ID, LOOKUP_KEY, CONTACT_ID, HAS_PERSONAL_NAME, IS_ORG_ONLY, HAS_PHOTO)
 
-    private val COPY_COLUMNS = listOf(TYPE, SECTION, DISPLAY_NAME, SEARCH_TEXT, RECIPIENT_ID, LOOKUP_KEY, CONTACT_ID, HAS_PERSONAL_NAME, HAS_PHOTO)
+    private val COPY_COLUMNS = listOf(TYPE, SECTION, DISPLAY_NAME, SEARCH_TEXT, RECIPIENT_ID, LOOKUP_KEY, CONTACT_ID, HAS_PERSONAL_NAME, IS_ORG_ONLY, HAS_PHOTO)
 
-    private val ROW_COLUMNS = arrayOf(ID, TYPE, SECTION, DISPLAY_NAME, RECIPIENT_ID, LOOKUP_KEY, CONTACT_ID, HAS_PERSONAL_NAME, HAS_PHOTO)
+    private val ROW_COLUMNS = arrayOf(ID, TYPE, SECTION, DISPLAY_NAME, RECIPIENT_ID, LOOKUP_KEY, CONTACT_ID, HAS_PERSONAL_NAME, IS_ORG_ONLY, HAS_PHOTO)
 
     private val CREATE_TABLE = """
       CREATE TABLE $TABLE_NAME (
@@ -121,6 +122,7 @@ class ContactIndexDatabase private constructor(
         $LOOKUP_KEY TEXT DEFAULT NULL,
         $CONTACT_ID INTEGER DEFAULT NULL,
         $HAS_PERSONAL_NAME INTEGER NOT NULL DEFAULT 1,
+        $IS_ORG_ONLY INTEGER NOT NULL DEFAULT 0,
         $HAS_PHOTO INTEGER NOT NULL DEFAULT 0
       )
     """
@@ -137,6 +139,7 @@ class ContactIndexDatabase private constructor(
         $LOOKUP_KEY TEXT DEFAULT NULL,
         $CONTACT_ID INTEGER DEFAULT NULL,
         $HAS_PERSONAL_NAME INTEGER NOT NULL DEFAULT 1,
+        $IS_ORG_ONLY INTEGER NOT NULL DEFAULT 0,
         $HAS_PHOTO INTEGER NOT NULL DEFAULT 0
       )
     """
@@ -155,7 +158,7 @@ class ContactIndexDatabase private constructor(
 
       val name = "$FILE_PREFIX$RUN_ID-${instanceCounter.incrementAndGet()}$FILE_SUFFIX"
 
-      return ContactIndexDatabase(application, name, DatabaseSecret(Util.getSecretBytes(KEY_SIZE)))
+      return ContactIndexDatabase(application, name, DatabaseSecret.fromBytes(Util.getSecretBytes(KEY_SIZE)))
     }
 
     private fun deleteDatabaseFile(application: Application, databaseName: String) {
@@ -252,6 +255,7 @@ class ContactIndexDatabase private constructor(
         put(LOOKUP_KEY, entry.lookupKey)
         put(CONTACT_ID, entry.contactId)
         put(HAS_PERSONAL_NAME, entry.hasPersonalName.toInt())
+        put(IS_ORG_ONLY, entry.isOrgOnly.toInt())
         put(HAS_PHOTO, entry.hasPhoto.toInt())
       }
     }
@@ -338,6 +342,7 @@ class ContactIndexDatabase private constructor(
       lookupKey = requireString(LOOKUP_KEY),
       contactId = requireLongOrNull(CONTACT_ID),
       hasPersonalName = requireBoolean(HAS_PERSONAL_NAME),
+      isOrgOnly = requireBoolean(IS_ORG_ONLY),
       hasPhoto = requireBoolean(HAS_PHOTO)
     )
   }

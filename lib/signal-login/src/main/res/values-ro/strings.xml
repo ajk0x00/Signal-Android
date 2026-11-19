@@ -38,11 +38,21 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginViewDetailsScreen__no_password_manager_available">Nu ți-ai configurat un manager de parole.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Salvează credențialele doar într-un manager de parole în care ai încredere că este sigur. Signal nu oferă recomandări cu privire la managerul de parole potrivit pentru tine.</string>
     <!-- Toast shown when saving the Signal Login PDF fails. -->
     <string name="SignalLoginViewDetailsScreen__unable_to_save_pdf">Nu s-a putut salva PDF-ul. Încearcă din nou.</string>
     <!-- Toast shown when the location the user picked for the Signal Login PDF refuses the write. -->
     <string name="SignalLoginViewDetailsScreen__cant_save_pdf_to_the_selected_location">Nu s-a putut salva PDF-ul în locația selectată.</string>
+
+    <!-- Do not share warning sheet, shown before the user copies or saves their Signal Login -->
+    <!-- Title of the sheet warning the user not to share their Signal Login. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login">Nu distribui Login-ul Signal</string>
+    <!-- Body of the warning sheet. The text inside the <b> tags is shown in bold; keep the tags around the equivalent phrase. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login_with_anyone">Nu trimite Login-ul tău Signal nimănui. Altfel, cineva ar putea să îți preia contul. <b>Signal nu îți va da niciodată mesaj să îți ceară</b> ID-ul contului sau codul de recuperare. Nu răspunde niciodată la o conversație în care persoana pretinde că e Signal.</string>
+    <!-- Button acknowledging the warning and continuing with the copy or save the user started. -->
+    <string name="DoNotShareLoginBottomSheet__got_it">Am înțeles</string>
+    <!-- Button opening a help article with more information about keeping the Signal Login safe. -->
+    <string name="DoNotShareLoginBottomSheet__learn_more">Află mai multe</string>
 
     <!-- Signal Login PDF -->
     <!-- Title at the top of the PDF that holds the user\'s Signal Login. -->

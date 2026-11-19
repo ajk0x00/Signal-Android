@@ -19,8 +19,10 @@ import assertk.assertions.isFalse
 import assertk.assertions.isTrue
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -33,12 +35,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.signal.core.models.recipients.RecipientId
 import org.thoughtcrime.securesms.contacts.index.ContactIndexBuildResult
 import org.thoughtcrime.securesms.contacts.index.ContactIndexRecord
 import org.thoughtcrime.securesms.contacts.index.ContactIndexType
 import org.thoughtcrime.securesms.contactshare.SharedContactSource
 import org.thoughtcrime.securesms.contactshare.screens.selectcontact.SelectContactState.ContactsPermissionState
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.testing.CoroutineDispatcherRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -68,6 +70,12 @@ class SelectContactViewModelTest {
   }
 
   @Test
+  fun `the prefer system contact photos setting is published for the rows`() = runTest(testDispatcher) {
+    assertThat(SelectContactViewModel(fakeSource(preferSystemContactPhotos = true)).state.value.preferSystemContactPhotos).isTrue()
+    assertThat(SelectContactViewModel(fakeSource(preferSystemContactPhotos = false)).state.value.preferSystemContactPhotos).isFalse()
+  }
+
+  @Test
   fun `changing the query is published so the pager can restart`() = runTest(testDispatcher) {
     val viewModel = SelectContactViewModel(fakeSource(buildResult = ContactIndexBuildResult.Success(2)))
 
@@ -78,11 +86,24 @@ class SelectContactViewModelTest {
 
   @Test
   fun `selecting a contact shows loading, since the handoff reads the provider`() = runTest(testDispatcher) {
-    val viewModel = SelectContactViewModel(fakeSource(buildResult = ContactIndexBuildResult.Success(1)))
+    val resolution = CompletableDeferred<SharedContactSource?>()
+    val source = fakeSource(buildResult = ContactIndexBuildResult.Success(1))
+    coEvery { source.resolve(any()) } coAnswers { resolution.await() }
+    val viewModel = SelectContactViewModel(source)
 
     viewModel.onEvent(SelectContactEvent.ContactClicked(contactRow(1, "Andrew Bell")))
 
     assertThat(viewModel.state.value.isLoading).isTrue()
+    resolution.complete(null)
+  }
+
+  @Test
+  fun `a resolved selection stops loading before handing off, so the list is ready to come back to`() = runTest(testDispatcher) {
+    val viewModel = SelectContactViewModel(fakeSource(contacts = contacts("Andrew Bell")))
+
+    viewModel.onEvent(SelectContactEvent.ContactClicked(contacts("Andrew Bell").first()))
+
+    assertThat(viewModel.state.value.isLoading).isFalse()
   }
 
   @Test
@@ -348,6 +369,7 @@ class SelectContactViewModelTest {
       lookupKey = "lookup-$position",
       contactId = position,
       hasPersonalName = true,
+      isOrgOnly = false,
       hasPhoto = false
     )
   }
@@ -355,9 +377,12 @@ class SelectContactViewModelTest {
   private fun fakeSource(
     buildResult: ContactIndexBuildResult = ContactIndexBuildResult.Success(0),
     contacts: List<ContactIndexRecord> = emptyList(),
-    resolvesTo: SharedContactSource? = SharedContactSource.SignalContact(RecipientId.from(1))
+    resolvesTo: SharedContactSource? = SharedContactSource.SignalContact(RecipientId.from(1)),
+    preferSystemContactPhotos: Boolean = false
   ): ContactIndexSource {
     val source: ContactIndexSource = mockk(relaxUnitFun = true)
+
+    every { source.preferSystemContactPhotos } returns preferSystemContactPhotos
 
     coEvery { source.build() } returns buildResult
     coEvery { source.count() } returns contacts.size

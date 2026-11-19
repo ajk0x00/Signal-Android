@@ -30,14 +30,16 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.signal.core.database.update
+import org.signal.core.database.withinTransaction
 import org.signal.core.models.ServiceId.ACI
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.AppForegroundObserver
 import org.signal.core.util.Hex
 import org.signal.core.util.Util
 import org.signal.core.util.logging.Log
-import org.signal.core.util.update
-import org.signal.core.util.withinTransaction
 import org.signal.libsignal.zkgroup.profiles.ProfileKey
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.backup.v2.MessageBackupTier
 import org.thoughtcrime.securesms.database.IssueReporter
 import org.thoughtcrime.securesms.database.RecipientTable
@@ -48,20 +50,19 @@ import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groups.GroupId
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobs.StorageSyncJobTest.Companion.BASE_MANIFEST_VERSION
+import org.thoughtcrime.securesms.keyvalue.manifest
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.storage.StorageSyncHelper
 import org.thoughtcrime.securesms.testutil.FakeStorageServiceRule
 import org.thoughtcrime.securesms.testutil.RecipientTestRule
 import org.thoughtcrime.securesms.testutil.SystemOutLogger
-import org.thoughtcrime.securesms.util.RemoteConfig
 import org.whispersystems.signalservice.api.storage.SignalStorageRecord
 import org.whispersystems.signalservice.api.storage.StorageId
 import org.whispersystems.signalservice.internal.storage.protos.AccountRecord
 import org.whispersystems.signalservice.internal.storage.protos.ContactRecord
 import org.whispersystems.signalservice.internal.storage.protos.GroupV1Record
-import org.whispersystems.signalservice.internal.storage.protos.StickerPackRecord
+import org.whispersystems.signalservice.internal.storage.protos.InstalledStickerPackRecord
 import org.whispersystems.signalservice.internal.storage.protos.StorageRecord
 import java.util.UUID
 import kotlin.time.Duration.Companion.hours
@@ -351,7 +352,7 @@ class StorageSyncJobTest {
     assertTrue(result.isSuccess)
     assertTrue(SignalDatabase.unknownStorageIds.allUnknownIds.isEmpty())
 
-    val pack = SignalDatabase.stickers.getPackForStorageSync(StickerPackId(Hex.toStringCondensed(packId)))
+    val pack = SignalDatabase.stickers.getInstalledPackForStorageSync(StickerPackId(Hex.toStringCondensed(packId)))
     assertNotNull(pack)
     assertArrayEquals(record.id.raw, pack!!.storageServiceId!!.raw)
   }
@@ -800,7 +801,7 @@ class StorageSyncJobTest {
     return SignalStorageRecord(
       id = StorageId.forStickerPack(Util.getSecretBytes(16)),
       proto = StorageRecord(
-        stickerPack = StickerPackRecord(
+        installedStickerPack = InstalledStickerPackRecord(
           packId = packId.toByteString(),
           packKey = Util.getSecretBytes(32).toByteString(),
           position = 1

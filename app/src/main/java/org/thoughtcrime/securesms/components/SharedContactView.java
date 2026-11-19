@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.View;
@@ -24,6 +23,7 @@ import androidx.core.widget.ImageViewCompat;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.signal.core.models.recipients.RecipientId;
 import org.signal.glide.decryptableuri.DecryptableUri;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.contactshare.Contact;
@@ -36,8 +36,7 @@ import org.thoughtcrime.securesms.database.RecipientTable;
 import org.thoughtcrime.securesms.recipients.LiveRecipient;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientForeverObserver;
-import org.thoughtcrime.securesms.recipients.RecipientId;
-import org.thoughtcrime.securesms.util.ViewUtil;
+import org.signal.core.ui.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -277,14 +276,14 @@ public class SharedContactView extends LinearLayout implements RecipientForeverO
 
   /**
    * Initials when the card carries a personal name, matching how the app draws recipients without a
-   * photo. A company name has no initials worth showing, so those keep the person glyph.
+   * photo. A company name has no initials worth showing, so those get the building glyph.
    */
   private @NonNull Drawable buildFallbackAvatar(@NonNull Contact contact) {
     // No recipient to derive a colour from, so every shared card uses the same one.
     FallbackAvatar fallbackAvatar;
 
-    if (contact.getName().isEmpty() && !TextUtils.isEmpty(contact.getOrganization())) {
-      fallbackAvatar = new FallbackAvatar.Resource.Person(AvatarColor.A100);
+    if (contact.isOrgOnly()) {
+      fallbackAvatar = new FallbackAvatar.Resource.Organization(AvatarColor.A100);
     } else {
       fallbackAvatar = FallbackAvatar.forTextOrDefault(ContactUtil.getDisplayName(contact), AvatarColor.A100);
     }

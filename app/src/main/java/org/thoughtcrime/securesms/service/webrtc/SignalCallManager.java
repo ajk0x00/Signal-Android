@@ -12,12 +12,13 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.greenrobot.eventbus.EventBus;
 import org.signal.core.models.ServiceId.ACI;
+import org.signal.core.models.recipients.RecipientId;
 import org.signal.core.util.AppForegroundObserver;
 import org.signal.core.util.Util;
 import org.signal.core.util.concurrent.KeyedSerialMonoLifoExecutor;
 import org.signal.core.util.concurrent.SignalExecutors;
+import org.signal.core.util.eventbus.EventBus;
 import org.signal.core.util.logging.Log;
 import org.signal.libsignal.protocol.NoSessionException;
 import org.signal.libsignal.zkgroup.GenericServerPublicParams;
@@ -27,6 +28,7 @@ import org.signal.libsignal.zkgroup.calllinks.CallLinkAuthCredentialPresentation
 import org.signal.libsignal.zkgroup.calllinks.CallLinkSecretParams;
 import org.signal.libsignal.zkgroup.groups.GroupIdentifier;
 import org.signal.network.NetworkResult;
+import org.signal.network.crypto.SealedSenderAccess;
 import org.signal.ringrtc.CallException;
 import org.signal.ringrtc.CallId;
 import org.signal.ringrtc.CallLinkRootKey;
@@ -64,7 +66,7 @@ import org.thoughtcrime.securesms.net.SignalNetwork;
 import org.thoughtcrime.securesms.notifications.v2.ConversationId;
 import org.thoughtcrime.securesms.ratelimit.ProofRequiredExceptionHandler;
 import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.recipients.RecipientId;
+import org.thoughtcrime.securesms.recipients.RecipientIds;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
 import org.thoughtcrime.securesms.ringrtc.CameraEventListener;
 import org.thoughtcrime.securesms.ringrtc.CameraState;
@@ -80,7 +82,6 @@ import org.thoughtcrime.securesms.webrtc.audio.SignalAudioManager;
 import org.thoughtcrime.securesms.webrtc.locks.LockManager;
 import org.webrtc.PeerConnection;
 import org.whispersystems.signalservice.api.NetworkResultUtil;
-import org.whispersystems.signalservice.api.crypto.SealedSenderAccess;
 import org.whispersystems.signalservice.api.crypto.UntrustedIdentityException;
 import org.whispersystems.signalservice.api.messages.SendMessageResult;
 import org.whispersystems.signalservice.api.messages.calls.CallingResponse;
@@ -403,7 +404,11 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
   }
 
   public void dropCall(long callId) {
-    process((s, p) -> p.handleDropCall(s, callId));
+    dropCall(callId, false);
+  }
+
+  public void dropCall(long callId, boolean busy) {
+    process((s, p) -> p.handleDropCall(s, callId, busy));
   }
 
   public void setCallLinkJoinRequestAccepted(@NonNull RecipientId participant) {
@@ -902,7 +907,7 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
     SignalServiceCallMessage callMessage   = SignalServiceCallMessage.forOpaque(opaqueMessage, null);
 
     SignalExecutors.BOUNDED_IO.execute(() -> {
-      Recipient recipient = Recipient.resolved(RecipientId.from(ACI.from(aciUuid)));
+      Recipient recipient = Recipient.resolved(RecipientIds.from(ACI.from(aciUuid)));
       if (recipient.isBlocked()) {
         return;
       }
@@ -1145,10 +1150,10 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
   }
 
   public void insertMissedCall(@NonNull RemotePeer remotePeer, long timestamp, boolean isVideoOffer, @NonNull CallTable.Event missedEvent) {
-    CallTable.Call call = SignalDatabase.calls()
-                                        .updateOneToOneCall(remotePeer.getCallId().longValue(), missedEvent);
+    CallTable.OneToOneCallUpdate update = SignalDatabase.calls()
+                                                        .updateOneToOneCall(remotePeer.getCallId().longValue(), missedEvent);
 
-    if (call == null) {
+    if (update instanceof CallTable.OneToOneCallUpdate.NotFound) {
       CallTable.Type type = isVideoOffer ? CallTable.Type.VIDEO_CALL : CallTable.Type.AUDIO_CALL;
 
       SignalDatabase.calls()
@@ -1157,10 +1162,10 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
   }
 
   public void insertReceivedCall(@NonNull RemotePeer remotePeer, boolean isVideoOffer) {
-    CallTable.Call call = SignalDatabase.calls()
-                                        .updateOneToOneCall(remotePeer.getCallId().longValue(), CallTable.Event.ACCEPTED);
+    CallTable.OneToOneCallUpdate update = SignalDatabase.calls()
+                                                        .updateOneToOneCall(remotePeer.getCallId().longValue(), CallTable.Event.ACCEPTED);
 
-    if (call == null) {
+    if (update instanceof CallTable.OneToOneCallUpdate.NotFound) {
       CallTable.Type type = isVideoOffer ? CallTable.Type.VIDEO_CALL : CallTable.Type.AUDIO_CALL;
 
       SignalDatabase.calls()
@@ -1370,9 +1375,13 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
   }
 
   public void sendAcceptedCallEventSyncMessage(@NonNull RemotePeer remotePeer, boolean isOutgoing, boolean isVideoCall) {
-    SignalDatabase
-        .calls()
-        .updateOneToOneCall(remotePeer.getCallId().longValue(), CallTable.Event.ACCEPTED);
+    long                         callId = remotePeer.getCallId().longValue();
+    CallTable.OneToOneCallUpdate update = SignalDatabase.calls().updateOneToOneCall(callId, CallTable.Event.ACCEPTED);
+
+    if (update instanceof CallTable.OneToOneCallUpdate.Rejected rejected) {
+      Log.i(TAG, "Call " + callId + " is " + rejected.getCall().getEvent() + ", not sending accepted sync message");
+      return;
+    }
 
     if (SignalStore.account().isMultiDevice()) {
       SignalExecutors.BOUNDED_IO.execute(() -> {
@@ -1387,9 +1396,13 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
   }
 
   public void sendNotAcceptedCallEventSyncMessage(@NonNull RemotePeer remotePeer, boolean isOutgoing, boolean isVideoCall) {
-    SignalDatabase
-        .calls()
-        .updateOneToOneCall(remotePeer.getCallId().longValue(), CallTable.Event.NOT_ACCEPTED);
+    long                         callId = remotePeer.getCallId().longValue();
+    CallTable.OneToOneCallUpdate update = SignalDatabase.calls().updateOneToOneCall(callId, CallTable.Event.NOT_ACCEPTED);
+
+    if (update instanceof CallTable.OneToOneCallUpdate.Rejected rejected) {
+      Log.i(TAG, "Call " + callId + " is " + rejected.getCall().getEvent() + ", not sending not accepted sync message");
+      return;
+    }
 
     if (SignalStore.account().isMultiDevice()) {
       SignalExecutors.BOUNDED_IO.execute(() -> {

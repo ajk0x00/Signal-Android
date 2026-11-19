@@ -9,26 +9,33 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,20 +47,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import org.signal.core.ui.compose.CollapsingBarsState
 import org.signal.core.ui.compose.DayNightPreviews
+import org.signal.core.ui.compose.IconButtons
 import org.signal.core.ui.compose.SignalIcons
 import org.signal.core.ui.compose.SignalPreviewWrapper
+import org.signal.core.ui.compose.plus
 import org.signal.mediakeyboard.R
 import org.signal.mediakeyboard.data.EmojiCategoryPage
 import org.signal.mediakeyboard.data.EmojiKeyboardCategory
@@ -77,6 +89,11 @@ private val EMOJI_CELL_MIN_SIZE = 48.dp
  * @param onSearchClicked Opens search in place, which the host owns since it needs the system keyboard.
  * @param onSearchFieldRevealedChange Reports whether the grid is scrolled far enough up to show the
  *   search field, so the top bar can drop its now-redundant search icon.
+ * @param barsState For a host with its own chrome and search field, which collapse with the category rail.
+ * @param contentPadding Padding the grid scrolls behind, clear of the host's chrome.
+ * @param gridState The emoji grid's scroll state.
+ * @param searchResultsGridState The search results grid's scroll state.
+ * @param railLeadingContent Shown at the start of the category rail.
  */
 @Composable
 fun EmojiPageScreen(
@@ -85,7 +102,12 @@ fun EmojiPageScreen(
   modifier: Modifier = Modifier,
   getEmojiDrawable: (String) -> Drawable? = { null },
   onSearchClicked: () -> Unit = {},
-  onSearchFieldRevealedChange: (Boolean) -> Unit = {}
+  onSearchFieldRevealedChange: (Boolean) -> Unit = {},
+  barsState: CollapsingBarsState? = null,
+  contentPadding: PaddingValues = PaddingValues(),
+  gridState: LazyGridState = rememberLazyGridState(),
+  searchResultsGridState: LazyGridState = rememberLazyGridState(),
+  railLeadingContent: (@Composable () -> Unit)? = null
 ) {
   val searching = state.searchResults != null
 
@@ -93,15 +115,18 @@ fun EmojiPageScreen(
     rail = if (searching) {
       null
     } else {
-      { EmojiCategoryRail(state = state, onEvent = onEvent) }
+      { EmojiCategoryRail(state = state, onEvent = onEvent, leadingContent = railLeadingContent) }
     },
-    modifier = modifier
-  ) {
+    modifier = modifier,
+    barsState = barsState
+  ) { railPadding ->
     if (searching) {
       EmojiSearchResults(
         state = state,
         onEvent = onEvent,
-        getEmojiDrawable = getEmojiDrawable
+        getEmojiDrawable = getEmojiDrawable,
+        contentPadding = contentPadding + railPadding,
+        gridState = searchResultsGridState
       )
     } else {
       EmojiGrid(
@@ -109,7 +134,10 @@ fun EmojiPageScreen(
         onEvent = onEvent,
         getEmojiDrawable = getEmojiDrawable,
         onSearchClicked = onSearchClicked,
-        onSearchFieldRevealedChange = onSearchFieldRevealedChange
+        onSearchFieldRevealedChange = onSearchFieldRevealedChange,
+        hostOwnsSearch = barsState != null,
+        contentPadding = contentPadding + railPadding,
+        gridState = gridState
       )
     }
   }
@@ -118,20 +146,29 @@ fun EmojiPageScreen(
 @Composable
 private fun EmojiCategoryRail(
   state: EmojiPageState,
-  onEvent: (EmojiPageScreenEvents) -> Unit
+  onEvent: (EmojiPageScreenEvents) -> Unit,
+  leadingContent: (@Composable () -> Unit)?
 ) {
-  LazyRow(
+  Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = Modifier
       .fillMaxWidth()
-      .padding(horizontal = 8.dp, vertical = 2.dp)
+      .padding(horizontal = 8.dp)
   ) {
-    items(state.pages, key = { it.category.key }) { page ->
-      CategoryButton(
-        category = page.category,
-        selected = page.category == state.selectedCategory,
-        onClick = { onEvent(EmojiPageScreenEvents.CategorySelected(page.category)) }
-      )
+    leadingContent?.invoke()
+
+    LazyRow(
+      horizontalArrangement = Arrangement.spacedBy(4.dp),
+      verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier.weight(1f)
+    ) {
+      items(state.pages, key = { it.category.key }) { page ->
+        CategoryButton(
+          category = page.category,
+          selected = page.category == state.selectedCategory,
+          onClick = { onEvent(EmojiPageScreenEvents.CategorySelected(page.category)) }
+        )
+      }
     }
   }
 }
@@ -142,18 +179,22 @@ private fun CategoryButton(
   selected: Boolean,
   onClick: () -> Unit
 ) {
-  IconButton(onClick = onClick) {
+  IconButtons.IconToggleButton(
+    checked = selected,
+    onCheckedChange = { onClick() },
+    size = 36.dp,
+    shape = RoundedCornerShape(12.dp),
+    modifier = Modifier.padding(vertical = 8.dp).size(32.dp),
+    colors = IconButtons.iconToggleButtonColors(
+      checkedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+      checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+      containerColor = Color.Transparent,
+      contentColor = MaterialTheme.colorScheme.onSurface
+    )
+  ) {
     Icon(
       imageVector = category.icon(),
-      contentDescription = stringResource(category.label),
-      tint = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-      modifier = if (selected) {
-        Modifier
-          .background(MaterialTheme.colorScheme.secondaryContainer, CircleShape)
-          .padding(6.dp)
-      } else {
-        Modifier
-      }
+      contentDescription = stringResource(category.label)
     )
   }
 }
@@ -165,10 +206,11 @@ private fun EmojiGrid(
   getEmojiDrawable: (String) -> Drawable?,
   onSearchClicked: () -> Unit,
   onSearchFieldRevealedChange: (Boolean) -> Unit,
+  hostOwnsSearch: Boolean,
+  contentPadding: PaddingValues,
+  gridState: LazyGridState,
   modifier: Modifier = Modifier
 ) {
-  val gridState = rememberLazyGridState()
-
   val headerIndices = remember(state.pages) {
     var index = 0
     buildMap {
@@ -180,9 +222,9 @@ private fun EmojiGrid(
   }
 
   // Start scrolled just past the first section header so more content is visible; scrolling up
-  // still reveals it.
+  // still reveals it. A host with its own chrome has room to show it.
   LaunchedEffect(state.pages.isNotEmpty()) {
-    if (state.pages.isNotEmpty()) {
+    if (state.pages.isNotEmpty() && !hostOwnsSearch) {
       gridState.scrollToItem(1)
     }
   }
@@ -208,11 +250,13 @@ private fun EmojiGrid(
 
   CollapsingHeaderLayout(
     header = {
-      MediaKeyboardSearchField(
-        hint = stringResource(R.string.MediaKeyboard__search_emoji),
-        onClick = onSearchClicked,
-        modifier = Modifier.padding(bottom = SEARCH_FIELD_SPACING)
-      )
+      if (!hostOwnsSearch) {
+        MediaKeyboardSearchField(
+          hint = stringResource(R.string.MediaKeyboard__search_emoji),
+          onClick = onSearchClicked,
+          modifier = Modifier.padding(bottom = SEARCH_FIELD_SPACING)
+        )
+      }
     },
     onRevealedChange = onSearchFieldRevealedChange,
     modifier = modifier
@@ -220,7 +264,7 @@ private fun EmojiGrid(
     LazyVerticalGrid(
       columns = GridCells.Adaptive(minSize = EMOJI_CELL_MIN_SIZE),
       state = gridState,
-      contentPadding = GRID_CONTENT_PADDING,
+      contentPadding = GRID_CONTENT_PADDING + contentPadding,
       modifier = Modifier.fillMaxWidth()
     ) {
       state.pages.forEach { page ->
@@ -256,14 +300,22 @@ private fun EmojiGrid(
 private fun EmojiSearchResults(
   state: EmojiPageState,
   onEvent: (EmojiPageScreenEvents) -> Unit,
-  getEmojiDrawable: (String) -> Drawable?
+  getEmojiDrawable: (String) -> Drawable?,
+  contentPadding: PaddingValues,
+  gridState: LazyGridState
 ) {
   val results = state.searchResults ?: return
+
+  LaunchedEffect(results) {
+    gridState.requestScrollToItem(0)
+  }
 
   if (results.isEmpty()) {
     Box(
       contentAlignment = Alignment.Center,
-      modifier = Modifier.fillMaxSize()
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(contentPadding)
     ) {
       if (state.searchQuery.isNotBlank()) {
         Text(
@@ -277,7 +329,8 @@ private fun EmojiSearchResults(
   } else {
     LazyVerticalGrid(
       columns = GridCells.Adaptive(minSize = EMOJI_CELL_MIN_SIZE),
-      contentPadding = GRID_CONTENT_PADDING,
+      state = gridState,
+      contentPadding = GRID_CONTENT_PADDING + contentPadding,
       modifier = Modifier.fillMaxSize()
     ) {
       results.forEachIndexed { index, emoji ->
@@ -291,6 +344,57 @@ private fun EmojiSearchResults(
             onEvent = onEvent,
             getEmojiDrawable = getEmojiDrawable,
             modifier = Modifier.aspectRatio(1f)
+          )
+        }
+      }
+    }
+  }
+}
+
+/**
+ * A single row of emoji search results, for a search that shares the screen with the system keyboard. With nothing
+ * searched for yet, offers recents instead.
+ */
+@Composable
+internal fun EmojiSearchResultsRow(
+  state: EmojiPageState,
+  onEvent: (EmojiPageScreenEvents) -> Unit,
+  getEmojiDrawable: (String) -> Drawable?,
+  modifier: Modifier = Modifier
+) {
+  val results = state.searchResults ?: state.pages.firstOrNull { it.category == EmojiKeyboardCategory.RECENTS }?.emoji.orEmpty()
+
+  Box(
+    contentAlignment = Alignment.CenterStart,
+    modifier = modifier
+      .fillMaxWidth()
+      .height(EMOJI_CELL_MIN_SIZE + 8.dp)
+  ) {
+    if (results.isEmpty()) {
+      if (state.searchQuery.isNotBlank()) {
+        Text(
+          text = stringResource(R.string.MediaKeyboard__no_results_found),
+          style = MaterialTheme.typography.bodyMedium,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          textAlign = TextAlign.Center,
+          modifier = Modifier.fillMaxWidth()
+        )
+      }
+    } else {
+      LazyRow(
+        contentPadding = PaddingValues(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        itemsIndexed(results, key = { index, _ -> "search-row:$index" }) { index, emoji ->
+          val cellKey = "search-row:$index"
+          EmojiCell(
+            emoji = emoji,
+            display = state.displayEmoji(emoji),
+            cellKey = cellKey,
+            showVariationSelector = state.variationSelector?.cellKey == cellKey,
+            onEvent = onEvent,
+            getEmojiDrawable = getEmojiDrawable,
+            modifier = Modifier.size(EMOJI_CELL_MIN_SIZE)
           )
         }
       }
@@ -393,17 +497,36 @@ private fun EmojiImage(
   } else {
     val isEmoticon = remember(emoji) { emoji.isEmoticon() }
 
-    Text(
-      text = emoji,
-      color = MaterialTheme.colorScheme.onSurface,
-      maxLines = 1,
-      softWrap = false,
-      autoSize = TextAutoSize.StepBased(
-        minFontSize = 6.sp,
-        maxFontSize = if (isEmoticon) 13.sp else 22.sp
-      ),
-      modifier = modifier.padding(horizontal = 2.dp)
-    )
+    if (isEmoticon) {
+      Text(
+        text = emoji,
+        color = MaterialTheme.colorScheme.onSurface,
+        maxLines = 1,
+        softWrap = false,
+        autoSize = TextAutoSize.StepBased(
+          minFontSize = 6.sp,
+          maxFontSize = 13.sp
+        ),
+        modifier = modifier.padding(horizontal = 2.dp)
+      )
+    } else {
+      // Fit to the same box as a drawn emoji, sized off the dp rather than the font scale, as the drawn ones are.
+      val maxFontSize = with(LocalDensity.current) { EMOJI_SIZE.toSp() }
+
+      Text(
+        text = emoji,
+        color = MaterialTheme.colorScheme.onSurface,
+        maxLines = 1,
+        softWrap = false,
+        textAlign = TextAlign.Center,
+        style = LocalTextStyle.current.copy(lineHeight = TextUnit.Unspecified),
+        autoSize = TextAutoSize.StepBased(
+          minFontSize = 6.sp,
+          maxFontSize = maxFontSize
+        ),
+        modifier = modifier.size(EMOJI_SIZE).wrapContentHeight()
+      )
+    }
   }
 }
 
@@ -421,6 +544,7 @@ private fun String.isEmoticon(): Boolean {
 @Composable
 private fun EmojiKeyboardCategory.icon(): ImageVector {
   return when (this) {
+    EmojiKeyboardCategory.THIS_MESSAGE -> SignalIcons.Heart.imageVector
     EmojiKeyboardCategory.RECENTS -> SignalIcons.Recent.imageVector
     EmojiKeyboardCategory.PEOPLE -> SignalIcons.EmojiPeople.imageVector
     EmojiKeyboardCategory.NATURE -> SignalIcons.EmojiAnimal.imageVector
@@ -455,4 +579,26 @@ private fun EmojiPageScreenPreview() {
     ),
     onEvent = {}
   )
+}
+
+@PreviewWrapper(SignalPreviewWrapper::class)
+@DayNightPreviews
+@Composable
+private fun EmojiImageSystemEmojiPreview() {
+  Row(
+    horizontalArrangement = Arrangement.spacedBy(8.dp),
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier.padding(8.dp)
+  ) {
+    listOf("😀", "👍🏽", "🇨🇦", "🐶", ":-)", "¯\\_(ツ)_/¯").forEach { emoji ->
+      Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+          .size(EMOJI_CELL_MIN_SIZE)
+          .border(1.dp, MaterialTheme.colorScheme.outlineVariant)
+      ) {
+        EmojiImage(emoji = emoji, getEmojiDrawable = { null })
+      }
+    }
+  }
 }

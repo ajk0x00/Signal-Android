@@ -44,11 +44,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx3.await
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.AllDevicePreviews
 import org.signal.core.ui.compose.Dialogs
 import org.signal.core.ui.compose.DropdownMenus
 import org.signal.core.ui.compose.Previews
+import org.signal.core.ui.compose.Scaffolds
 import org.signal.core.ui.compose.theme.SignalTheme
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.BlockUnblockDialog
 import org.thoughtcrime.securesms.PassphraseRequiredActivity
 import org.thoughtcrime.securesms.R
@@ -58,12 +61,10 @@ import org.thoughtcrime.securesms.groups.ui.creategroup.CreateGroupActivity
 import org.thoughtcrime.securesms.profiles.manage.EditProfileActivity
 import org.thoughtcrime.securesms.profiles.username.SetUpUsernameBanner
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.recipients.ui.RecipientLookupFailureMessage
 import org.thoughtcrime.securesms.recipients.ui.RecipientPicker
 import org.thoughtcrime.securesms.recipients.ui.RecipientPicker.DisplayMode
 import org.thoughtcrime.securesms.recipients.ui.RecipientPickerCallbacks
-import org.thoughtcrime.securesms.recipients.ui.RecipientPickerScaffold
 import org.thoughtcrime.securesms.recipients.ui.RecipientSelection
 import org.thoughtcrime.securesms.recipients.ui.findby.FindByActivity
 import org.thoughtcrime.securesms.recipients.ui.findby.FindByMode
@@ -203,7 +204,7 @@ private fun NewConversationScreenUi(
 ) {
   val snackbarHostState = remember { SnackbarHostState() }
 
-  RecipientPickerScaffold(
+  Scaffolds.TitlePane(
     title = stringResource(R.string.NewConversationActivity__new_message),
     onNavigateUpClick = callbacks::onBackPressed,
     topAppBarActions = { TopAppBarActions(callbacks) },
@@ -367,7 +368,10 @@ private fun UserMessagesHost(
 
     is UserMessage.Info.RecipientRemoved -> LaunchedEffect(userMessage) {
       snackbarHostState.showSnackbar(
-        message = resources.getString(R.string.NewConversationActivity__s_has_been_removed, userMessage.recipient.getDisplayName(context))
+        message = resources.getString(
+          if (RemoteConfig.contactDelete) R.string.NewConversationActivity__s_has_been_hidden else R.string.NewConversationActivity__s_has_been_removed,
+          userMessage.recipient.getDisplayName(context)
+        )
       )
       onDismiss(userMessage)
     }
@@ -407,9 +411,12 @@ private fun UserMessagesHost(
     }
 
     is UserMessage.Prompt.ConfirmRemoveRecipient -> Dialogs.SimpleAlertDialog(
-      title = stringResource(R.string.NewConversationActivity__remove_s, userMessage.recipient.getShortDisplayName(context)),
-      body = stringResource(R.string.NewConversationActivity__you_wont_see_this_person),
-      confirm = stringResource(R.string.NewConversationActivity__remove),
+      title = stringResource(
+        if (RemoteConfig.contactDelete) R.string.NewConversationActivity__hide_s else R.string.NewConversationActivity__remove_s,
+        userMessage.recipient.getShortDisplayName(context)
+      ),
+      body = stringResource(if (RemoteConfig.contactDelete) R.string.NewConversationActivity__this_person_wont_appear else R.string.NewConversationActivity__you_wont_see_this_person),
+      confirm = stringResource(if (RemoteConfig.contactDelete) R.string.NewConversationActivity__hide else R.string.NewConversationActivity__remove),
       dismiss = stringResource(android.R.string.cancel),
       onConfirm = { onRemoveConfirmed(userMessage.recipient) },
       onDismiss = { onDismiss(userMessage) }

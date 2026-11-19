@@ -16,7 +16,6 @@
   <!-- Removed by excludeNonTranslatables <string name="google_pay_url" translatable="false">https://pay.google.com</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
   <!-- Removed by excludeNonTranslatables <string name="pending_transfer_url" translatable="false">https://support.signal.org/hc/articles/360031949872#pending</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_faq_url" translatable="false">https://support.signal.org/hc/articles/360031949872#donate</string> -->
   <!-- Removed by excludeNonTranslatables <string name="inactive_primary_support" translatable="false">https://support.signal.org/hc/articles/9021007554074</string> -->
@@ -31,15 +30,6 @@
     <string name="save">Зачувај</string>
     <string name="note_to_self">Белешка за себе</string>
 
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a weather/climate application. -->
-    <string name="app_icon_label_weather">Време</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a note-taking application.-->
-    <string name="app_icon_label_notes">Белешки</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a news/journalism application. -->
-    <string name="app_icon_label_news">Вести</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in waves of the ocean. -->
-    <string name="app_icon_label_waves">Бранови</string>
-
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
 
@@ -47,23 +37,7 @@
     <string name="ApplicationMigrationActivity__signal_is_updating">Signal се ажурира…</string>
 
     <!-- ApplicationPreferencesActivity -->
-    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Сѐ уште не сте поставиле лозинка!</string>
-    <string name="ApplicationPreferencesActivity_disable_passphrase">Да ја исклучам лозинката?</string>
-    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Ова трајно ќе ги отклучи известувањата за Signal.</string>
-    <string name="ApplicationPreferencesActivity_disable">Исклучи</string>
     <string name="ApplicationPreferencesActivity_error_connecting_to_server">Грешка при поврзување со серверот!</string>
-    <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">PIN-от е потребен за заклучување на регистрацијата. За да го исклучите PIN-от, ве молиме прво исклучете го заклучувањето на регистрацијата.</string>
-    <string name="ApplicationPreferencesActivity_pin_created">PIN-от е создаден.</string>
-    <string name="ApplicationPreferencesActivity_pin_disabled">PIN-от е исклучен.</string>
-    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Запиши резервна фраза на плаќањата</string>
-    <string name="ApplicationPreferencesActivity_record_phrase">Сними фраза</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Пред да го исклучите PIN-от, морате да ја запишете резервната фраза на Вашите плаќања за да се осигурате дека можете да ја вратите Вашата сметка.</string>
-    <!-- The title of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_title">Создајте нов клуч за враќање резервни копии</string>
-    <!-- The body of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_body">Мора да создадете и да зачувате нов клуч за враќање резервни копии пред да можете да го оневозможите вашиот PIN.</string>
-    <!-- The confirmation button for a dialog letting the user know they have to rotate their recovery key if they want to disable PINs. If they click the button, they will be taken to a flow to rotate their key. -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_positive_button">Создајте клуч</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -387,8 +361,6 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s ја избриша оваа порака</string>
     <string name="ConversationItem_you_deleted_this_message">Ја избришавте оваа порака</string>
-    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
-    <string name="ConversationItem_delete_for_everyone_question">Да се избрише за сите?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Администраторот %1$s ја избриша оваа порака</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -498,6 +470,8 @@
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">Signal повеќе не поддржува SMS пораки. Испратете покана на %1$s за користење Signal за да продолжите со разговорот тука.</string>
     <!-- Message shown when opening a conversation with an unregistered user who used to be on Signal -->
     <string name="ConversationActivity__this_person_is_no_longer_using_signal">Оваа личност повеќе не користи Signal. Поканете ја на Signal за да продолжите со разговорот тука.</string>
+    <!-- Message shown when opening a conversation with an unregistered user who is not on Signal -->
+    <string name="ConversationActivity__this_person_is_not_using_signal">Оваа личност не користи Signal. Поканете ја на Signal за да продолжите со разговорот тука.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__invite_to_signal">Испрати покана за Signal</string>
     <!-- Toast message shown when trying to record a voice message during an ongoing call -->
@@ -516,6 +490,8 @@
     <string name="ChatStickerConfirmation__reply_to_yourself">Одговорете си на себеси</string>
     <!-- Content description for the button that closes the sticker confirmation without sending -->
     <string name="ChatStickerConfirmation__go_back">Оди назад</string>
+    <!-- Content description for the button that opens the sticker\'s pack, where it can be managed -->
+    <string name="ChatStickerConfirmation__manage_pack">Управувајте со пакетот налепници</string>
 
     <!-- ConversationFragment -->
     <!-- Toast text when contacts activity is not found -->
@@ -539,6 +515,8 @@
     <string name="ConversationFragment_deleting_messages">Бришење на пораките…</string>
     <string name="ConversationFragment_delete_for_me">Избриши за мене</string>
     <string name="ConversationFragment_delete_for_everyone">Избриши за сите</string>
+    <!-- Snackbar text shown after the user deletes one or more messages only for themselves -->
+    <string name="ConversationFragment__deleted_for_me">Избришано за мене</string>
     <!-- Title of dialog confirming whether to delete the message -->
     <plurals name="ConversationFragment_delete_selected_title">
         <item quantity="one">Да ја избришам избраната порака?</item>
@@ -845,7 +823,6 @@
     <string name="CreateProfileActivity_error_setting_profile_photo">Грешка при поставување на профилната слика</string>
     <string name="CreateProfileActivity_problem_setting_profile">Проблем со поставување на профилот</string>
     <string name="CreateProfileActivity_set_up_your_profile">Поставете го Вашиот профил</string>
-    <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Вашиот профил и промените на профилот ќе бидат видливи за луѓето со кои се допишувате, вашите контакти и групи.</string>
     <string name="CreateProfileActivity_set_avatar_description">Постави аватар</string>
 
     <!-- ProfileCreateFragment -->
@@ -987,7 +964,7 @@
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Допишувањето на поврзаните уреди е приватно</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
-    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Signal пораките се синхрoнизираат со Signal на вашиот телефон откако ќе се поврзе. Нема да се појави претходната историја на разговори.</string>
+    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Signal пораките се синхрoнизираат со Signal на вашиот телефон откако ќе се поврзе.</string>
     <!-- Bottom sheet description explaining that for non-desktop/iPad devices, they should go to %s to download Signal where %s is Signal\'s website -->
     <string name="LinkDeviceFragment__on_other_device_visit_signal">Посетете ја %1$s на уредот којшто сакате да го поврзете за да инсталирате Signal</string>
   <!-- Removed by excludeNonTranslatables <string name="LinkDeviceFragment__signal_download_url" translatable="false">signal.org/download</string> -->
@@ -1243,6 +1220,14 @@
         <item quantity="other">Не може да се додадат членови.</item>
     </plurals>
 
+    <!-- LanguagePackReadyBanner -->
+    <!-- Banner shown after a language finished downloading in the background. %1$s is the language\'s name written in that language, for example "Deutsch". -->
+    <string name="LanguagePackReadyBanner__body">"The app language %1$s is ready to use. Restart Signal to switch to it."</string>
+    <!-- Button on the banner shown after a language finished downloading. Restarts the app so the language takes effect. -->
+    <string name="LanguagePackReadyBanner__restart">Restart</string>
+    <!-- Button on the banner shown after a language finished downloading. Hides the banner without restarting and applying the new language. -->
+    <string name="LanguagePackReadyBanner__not_now">Not now</string>
+
     <!-- LeaveGroupDialog -->
     <string name="LeaveGroupDialog_leave_group">Напушти група?</string>
     <string name="LeaveGroupDialog_you_will_no_longer_be_able_to_send_or_receive_messages_in_this_group">Повеќе нема да можете да испраќате и примате пораки во оваа група.</string>
@@ -1351,17 +1336,13 @@
 
     <!-- AddGroupDetailsFragment -->
     <string name="AddGroupDetailsFragment__name_this_group">Именувајте ја оваа група</string>
-    <string name="AddGroupDetailsFragment__create_group">Создадете група</string>
     <string name="AddGroupDetailsFragment__create">Создај</string>
     <string name="AddGroupDetailsFragment__members">Членови</string>
     <string name="AddGroupDetailsFragment__you_can_add_or_invite_friends_after_creating_this_group">Можете да додадете или да поканите пријатели откако ќе ја создадете оваа група.</string>
     <string name="AddGroupDetailsFragment__group_name_required">Име на група (задолжително)</string>
-    <string name="AddGroupDetailsFragment__group_name_optional">Име на група (опционално)</string>
-    <string name="AddGroupDetailsFragment__this_field_is_required">Ова поле е задолжително.</string>
     <string name="AddGroupDetailsFragment__group_creation_failed">Создавањето на групата е неуспешно.</string>
     <string name="AddGroupDetailsFragment__try_again_later">Обидете се повторно подоцна.</string>
     <string name="AddGroupDetailsFragment__remove">Отстрани</string>
-    <string name="AddGroupDetailsFragment__sms_contact">SMS контакт</string>
     <string name="AddGroupDetailsFragment__remove_s_from_this_group">Да го/ја отстранам %1$s од оваа група?</string>
     <!-- Title of the dialog shown when tapping an existing group while creating a new group, confirming the user wants to leave and discard their in-progress group -->
     <string name="AddGroupDetailsFragment__discard_group">Да се отфрли групата?</string>
@@ -1369,8 +1350,6 @@
     <string name="AddGroupDetailsFragment__if_you_continue_to_the_group_s_your_changes_wont_be_saved">Ако продолжите до групата „%1$s“, вашите промени нема да бидат зачувани.</string>
     <!-- Label for the button that confirms discarding the in-progress group and navigating to an existing group -->
     <string name="AddGroupDetailsFragment__discard">Откажи</string>
-    <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Избравте контакт кој не поддржува Signal групи, па во оваа група ќе се испраќаат MMS пораки. Само вам ќе ви бидат видливи персонализираните имиња и слики на MMS групи. Наскоро ќе ја отстраниме поддршката на MMS групи за да се фокусираме на целосно шифрирани разговори.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_who_can_add_new_members">Кој може да додава нови членови?</string>
@@ -1403,34 +1382,7 @@
     <!-- RemoteRestoreActivity -->
 
     <!-- ManageProfileFragment -->
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc -->
-    <string name="ManageProfileFragment__your_username">Вашето корисничко име, QR код и линк не се видливи на вашиот профил. Споделувајте го вашето корисничко име само со луѓе на кои им верувате.</string>
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc, shown when you have no username -->
-    <string name="ManageProfileFragment__username_footer_no_username">Луѓето ќе можат да ви пишуваат користејќи го вашето опционално корисничко име наместо телефонскиот број. Корисничките имиња имаат единствен QR код и линк коишто можете да ги споделите со вашите пријатели.</string>
-    <string name="ManageProfileFragment_profile_name">Име на профил</string>
-    <string name="ManageProfileFragment_username">Корисничко име</string>
-    <string name="ManageProfileFragment_about">За</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">Не успеа да се постави аватар</string>
     <string name="ManageProfileFragment_badges">Беџови</string>
-    <!-- Text for a button that will take the user to the screen to manage their username link and QR code -->
-    <string name="ManageProfileFragment_link_setting_text">QR код или линк</string>
-    <string name="ManageProfileFragment__edit_photo">Уреди фотографија</string>
-    <!-- Title of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_title">Споделете го вашето корисничко име</string>
-    <!-- Body of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_body">Овозможете останатите да започнат разговор со вас, со споделување на вашиот единствен QR код или линк.</string>
-    <!-- Snackbar message after creating username -->
-    <string name="ManageProfileFragment__username_created">Корисничкото име е создадено</string>
-    <!-- Snackbar message after copying username -->
-    <string name="ManageProfileFragment__username_copied">Корисничкото име е копирано</string>
-    <!-- Snackbar message after network failure while trying to delete username -->
-    <string name="ManageProfileFragment__couldnt_delete_username">Бришењето на корисничкото име е неуспешно. Обидете се повторно подоцна.</string>
-    <!-- Snackbar message after successful deletion of username -->
-    <string name="ManageProfileFragment__username_deleted">Корисничкото име е избришано</string>
-    <!-- The title of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_title">Да се избрише корисничкото име?</string>
-    <!-- The body of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_body">"Ова ќе го отстрани вашето корисничко име и ќе ги оневозможи вашите QR код и линк. Корисничкото име „%1$s“ ќе биде достапно за останатите корисници. Дали сте сигурни?"</string>
 
     <!-- UsernameOutOfSyncReminder -->
     <!-- Displayed above the conversation list when a user needs to address an issue with their username -->
@@ -1556,11 +1508,6 @@
     <string name="InputPanel__this_action_cant_be_undone">Ова дејство е неповратно.</string>
     <!-- Button inside an alert dialog confirming the deletion of their draft -->
     <string name="InputPanel__discard">Откажи</string>
-
-    <!-- LearnMoreTextView -->
-    <string name="LearnMoreTextView_learn_more">Дознајте повеќе</string>
-
-    <string name="SpanUtil__read_more">Прочитај повеќе</string>
 
     <!-- LongMessageActivity -->
     <string name="LongMessageActivity_unable_to_find_message">Не успеав да ја најдам пораката</string>
@@ -2612,6 +2559,12 @@
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_failed_to_submit" translatable="false">Failed to submit :(</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_success" translatable="false">Success!</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_share" translatable="false">Share</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting" translatable="false">Submitting debug log</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting_body" translatable="false">Collecting and uploading logs. This can take a minute.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_retry" translatable="false">Retry</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_close" translatable="false">Close</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copy" translatable="false">Copy</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copied" translatable="false">Copied to clipboard</string> -->
 
     <!-- SharedContactView -->
     <string name="SharedContactView_add_to_contacts">Додај во контакти</string>
@@ -2621,7 +2574,7 @@
     <!-- Button on a contact card shared in a group chat that adds the person on the card to that group -->
     <string name="SharedContactView_add_to_group">Додај во група</string>
     <!-- Confirmation dialog body when adding the person on a shared contact card to the current group. %1$s is the person\'s name, %2$s is the group name -->
-    <string name="SharedContactView_add_s_to_s">Add %1$s to “%2$s”?</string>
+    <string name="SharedContactView_add_s_to_s">Да се додаде %1$s во „%2$s“?</string>
 
     <!-- SignalBottomActionBar -->
     <!-- Text to describe a button that will show more options -->
@@ -2710,6 +2663,16 @@
     </plurals>
     <!-- Message shown after copying a sticker pack link. -->
     <string name="StickerManagement_copied">Линкот е копиран</string>
+    <!-- Title of the confirmation dialog shown before hiding a sticker pack. -->
+    <string name="StickerManagement_hide_pack_confirmation">Да се скрие пакетот налепници?</string>
+    <!-- Body of the confirmation dialog shown before hiding a sticker pack that is not installed. -->
+    <string name="StickerManagement_hide_pack_confirmation_body">Со ова ќе се скрие овој пакет налепници од вашите достапни пакети. Нема да можете да го додадете пак без линк или порака со налепница.</string>
+    <!-- Body of the confirmation dialog shown before hiding an installed sticker pack, which also removes it. -->
+    <string name="StickerManagement_hide_installed_pack_confirmation_body">Со ова ќе се отстрани овој пакет налепници од вашите достапни пакети. Нема да можете да го додадете пак без линк или порака со налепница.</string>
+    <!-- Snackbar shown when a pack is hidden -->
+    <string name="StickerManagement_hidden_pack">Пакетот со налепници е скриен</string>
+    <!-- Snackbar action label to undo hiding a sticker pack. -->
+    <string name="StickerManagement_undo">Врати</string>
 
     <!-- Sticker pack list dropdown menu label for the button to forward a sticker pack to another user. -->
     <string name="StickerManagement_menu_forward_pack">Препрати</string>
@@ -2719,6 +2682,8 @@
     <string name="StickerManagement_menu_install_pack">Инсталирај</string>
     <!-- Sticker pack list dropdown menu label for the button to uninstall a sticker pack. -->
     <string name="StickerManagement_menu_remove_pack">Отстрани</string>
+    <!-- Sticker pack list dropdown menu label for the button to hide an uninstalled sticker pack from the list of available packs. -->
+    <string name="StickerManagement_menu_hide_pack">Сокриј</string>
     <!-- Sticker management screen dropdown menu label for the button to enter multi-select mode. -->
     <string name="StickerManagement_menu_select_packs">Изберете пакети со налепници</string>
     <!-- Sticker pack list dropdown menu label for sending a sticker pack. -->
@@ -2761,7 +2726,6 @@
     <string name="StickerManagement_accessibility_clear_search">Исчисти пребарување</string>
 
     <!-- StickerManagementAdapter -->
-    <string name="StickerManagementAdapter_untitled">Без наслов</string>
 
     <!-- StickerPackPreviewActivity -->
     <string name="StickerPackPreviewActivity_untitled">Без наслов</string>
@@ -2775,16 +2739,18 @@
     <string name="StickerPreviewBottomSheet__title_author">%1$s · %2$s</string>
     <!-- Bottom sheet option that opens the pack the sticker belongs to -->
     <string name="StickerPreviewBottomSheet__view_pack">Видете го пакетот</string>
+    <!-- Bottom sheet label for sending a sticker. -->
+    <string name="StickerPreviewBottomSheet__send_sticker">Испратете ја налепницата</string>
     <!-- Snackbar shown after a sticker was successfully added to the user\'s favorite stickers -->
-    <string name="StickerFavorites__added_to_favorites">Sticker added to Favorites</string>
+    <string name="StickerFavorites__added_to_favorites">Налепницата е додадена во Омилени</string>
     <!-- Snackbar shown when the user tries to favorite a sticker but already has the maximum number of favorite stickers. Placeholder is 500. -->
-    <string name="StickerFavorites__favorites_limit_reached">You can only add %1$d stickers to Favorites</string>
+    <string name="StickerFavorites__favorites_limit_reached">Можете да додадете само %1$d налепници во Омилени</string>
     <!-- Snackbar shown when we are unable to add or remove a sticker. -->
-    <string name="StickerFavorites__unknown_error">Unknown error. Try again later.</string>
+    <string name="StickerFavorites__unknown_error">Непозната грешка. Обидете се повторно подоцна.</string>
     <!-- Snackbar shown after a sticker was successfully removed from the user\'s favorite stickers -->
-    <string name="StickerFavorites__removed_from_favorites">Sticker removed from Favorites</string>
+    <string name="StickerFavorites__removed_from_favorites">Налепницата е отстранета од Омилени</string>
     <!-- Snackbar shown when the user opens their favorite stickers but has not favorited any yet -->
-    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Press and hold a sticker to add to Favorites</string>
+    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Допрете и задржете ја налепницата за да ја додадете во Омилени</string>
 
     <!-- Menu option to save a debug log file to disk. -->
     <string name="SubmitDebugLogActivity_save">Зачувај</string>
@@ -2912,52 +2878,14 @@
     <string name="UnverifiedSendDialog_send">Испрати</string>
 
     <!-- UsernameEditFragment -->
-    <!-- Placeholder text for custom discriminator -->
-    <string name="UsernameEditFragment__00">00</string>
-    <!-- Instructional text at the top of the username edit screen -->
-    <string name="UsernameEditFragment__choose_your_username">Одберете го вашете корисничко име</string>
-    <string name="UsernameEditFragment_username">Корисничко име</string>
-    <string name="UsernameEditFragment_delete">Избриши</string>
+    <!-- Toast shown after your username is deleted -->
     <string name="UsernameEditFragment_successfully_removed_username">Успешно отстрането корисничко име.</string>
-    <string name="UsernameEditFragment_encountered_a_network_error">Се случи мрежна грешка.</string>
-    <!-- Toast message shown if user exceeds the rate limit for reserving usernames -->
-    <string name="UsernameEditFragment_rate_limit_exceeded_error">Направивте премногу обиди, ве молиме обидете се повторно подоцна.</string>
-    <string name="UsernameEditFragment_this_username_is_taken">Корисничкото име е веќе во употреба.</string>
-    <string name="UsernameEditFragment_usernames_can_only_include">Корисничките имиња можат да се состојат од а-Ш, 0-9 и долни цртички.</string>
-    <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Корисничкото име не може да започне со број.</string>
-    <string name="UsernameEditFragment_username_is_invalid">Корисничкото име е неважечко.</string>
-    <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Корисничкото име мора да биде помеѓу %1$d и %2$d знаци.</string>
-    <!-- Explanation about what usernames provide -->
-    <string name="UsernameEditFragment__usernames_let_others_message">Луѓето ќе можат да ви пишуваат користејќи го вашето опционално корисничко име наместо телефонскиот број. Корисничките имиња се спаруваат со низа бројки.</string>
-    <!-- Button to allow user to skip -->
-    <string name="UsernameEditFragment__skip">Прескокни</string>
-    <!-- Content description for done button -->
-    <string name="UsernameEditFragment__done">Готово</string>
-    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
-    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">Ова корисничко име не е достапно, обидете се со друг број.</string>
-    <!-- Displayed when the chosen discriminator is too short -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">Неважечко корисничко име, внесете најмалку %1$d знаци.</string>
-    <!-- Displayed when the chosen discriminator is too long -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Неважечко корисничко име, внесете најмногу %1$d знаци.</string>
-    <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">Овој број не може да биде 00. Внесете цифра од 1 до 9</string>
-    <!-- Displayed when the chosen discriminator starts with 0 and has a length > 2 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_0">Броевите со повеќе од 2 цифри не може да почнуваат со 0</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
-    <string name="UsernameEditFragment_recovery_dialog_confirmation">Менувањето на вашето корисничко име ќе ги ресетира вашите постоечки QR код и линк. Дали сте сигурни?</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to change their username, even if it resets their link -->
-    <string name="UsernameEditFragment_change_confirmation_message">Менувањето на вашето корисничко име ќе ги ресетира вашите постоечки QR код и линк. Дали сте сигурни?</string>
-    <!-- Text for a button in a dialog asking if the user would like to continue the operation of changing their username -->
-    <string name="UsernameEditFragment_continue">Продолжи</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%1$d контакт е на Signal!</item>
         <item quantity="other">%1$d контакти се на Signal!</item>
     </plurals>
 
-    <!-- UsernameShareBottomSheet -->
-    <!-- Explanation of what the sheet enables the user to do -->
-    <string name="UsernameShareBottomSheet__copy_or_share_a_username_link">Копирај или сподели линк за корисничко име</string>
 
     <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Скенираниот QR код не е правилно форматиран код за проверка на безбедносниот број. Ве молиме скенирајте го повторно.</string>
     <string name="VerifyIdentityActivity_share_safety_number_via">Сподели  безбедносен број преку…</string>
@@ -3005,28 +2933,15 @@
     <string name="KeyCachingService_lock">Заклучи го Signal</string>
 
     <!-- MediaPreviewActivity -->
-    <string name="MediaPreviewActivity_you">Вие</string>
-    <string name="MediaPreviewActivity_unssuported_media_type">Неподдржан тип на медиумска датотека</string>
-    <string name="MediaPreviewActivity_draft">Нацрт</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_title">Да се избрише пораката?</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_message">Ова трајно ќе ја избрише оваа порака.</string>
-    <string name="MediaPreviewActivity_s_to_s">%1$s до %2$s</string>
-    <!-- All media preview title when viewing media send by you to another recipient (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_you_to_s">Вие до %1$s</string>
-    <!-- All media preview title when viewing media sent by another recipient to you (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_s_to_you">%1$s до Вас</string>
     <string name="MediaPreviewActivity_media_no_longer_available">Медијата повеќе не е достапна.</string>
     <!-- Notifying the user that the device has encountered a technical issue and is unable to render a video. -->
     <string name="MediaPreviewActivity_unable_to_play_media">Не може да се пушти медиумската датотека.</string>
     <!-- Toast shown when there is an error finding a media-based message -->
     <string name="MediaPreviewActivity_error_finding_message">Грешка при пронаоѓање на пораката.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Не е пронајдена апликација која може да го сподели овој тип на медиумска датотека.</string>
-    <string name="MediaPreviewActivity_dismiss_due_to_error">Затвори</string>
     <string name="MediaPreviewFragment_edit_media_error">Грешка во медијата</string>
     <!-- This is displayed as a toast notification when we encounter an error deleting a message, including potentially on other people\'s devices -->
     <string name="MediaPreviewFragment_media_delete_error">Грешка при бришење на пораката, пораката може сè уште да постои</string>
-    <!-- A suffix to be attached to truncated captions that the user may tap onto to view the entire text caption -->
-    <string name="MediaPreviewFragment_read_more_overflow_text">Прочитај повеќе</string>
     <string name="MediaPreviewFragment_share">Сподели</string>
 
     <!-- MessageNotifier -->
@@ -3159,6 +3074,8 @@
 
     <!-- Message explaining that it is not possible to save media to the device storage after the user denied the system save to storage permission. -->
     <string name="AttachmentSaver__unable_to_write_to_external_storage_without_permission">Не може да се зачува на надворешен склад без дозвола</string>
+    <!-- Toast shown when media can\'t be saved to the device storage because its data is no longer on the device and can\'t be downloaded again. -->
+    <string name="AttachmentSaver__media_no_longer_available">Оваа медиумска датотека повеќе не е достапна</string>
 
     <!-- Dialog title shown when attempting to save media that has been offloaded from the device by the storage optimization feature. -->
     <string name="AttachmentSaver__cant_save_media">Не може да се зачува медиумската датотека</string>
@@ -3229,7 +3146,7 @@
 
     <!-- SetUpUsernameBanner -->
     <!-- Body of a banner on the new message screen prompting the user to create a username -->
-    <string name="SetUpUsernameBanner__choose_a_username_so_others_can_connect_with_you">Одберете корисничко име за да можат другите да се поврзат со вас.</string>
+    <string name="SetUpUsernameBanner__choose_a_username">Одберете корисничко име</string>
     <!-- Button label that takes the user to the username creation screen -->
     <string name="SetUpUsernameBanner__set_up">Поставете</string>
     <!-- Accessibility label for the button that permanently dismisses the banner -->
@@ -3527,45 +3444,6 @@
 
     <string name="device_list_fragment__link_new_device">Поврзи нов уред</string>
 
-    <!-- expiration -->
-    <string name="expiration_off">Исклучено</string>
-
-    <plurals name="expiration_seconds">
-        <item quantity="one">%1$d секунда</item>
-        <item quantity="other">%1$d секунди</item>
-    </plurals>
-
-    <string name="expiration_seconds_abbreviated">%1$dс</string>
-
-    <plurals name="expiration_minutes">
-        <item quantity="one">%1$d минута</item>
-        <item quantity="other">%1$d минути</item>
-    </plurals>
-
-    <string name="expiration_minutes_abbreviated">%1$dм</string>
-
-    <plurals name="expiration_hours">
-        <item quantity="one">%1$d час</item>
-        <item quantity="other">%1$d часа</item>
-    </plurals>
-
-    <string name="expiration_hours_abbreviated">%1$dч</string>
-
-    <plurals name="expiration_days">
-        <item quantity="one">%1$d ден</item>
-        <item quantity="other">%1$d дена</item>
-    </plurals>
-
-    <string name="expiration_days_abbreviated">%1$dд</string>
-
-    <plurals name="expiration_weeks">
-        <item quantity="one">%1$d недела</item>
-        <item quantity="other">%1$d недели</item>
-    </plurals>
-
-    <string name="expiration_weeks_abbreviated">%1$dн</string>
-    <string name="expiration_combined">%1$s %2$s</string>
-
     <!-- unverified safety numbers -->
     <string name="IdentityUtil_unverified_banner_one">Вашиот  безбедносен број со %1$s е променет и повеќе не е проверен</string>
     <string name="IdentityUtil_unverified_banner_two">Вашите сигурносни броеви со %1$s и %2$s повеќе не се проверени</string>
@@ -3627,42 +3505,14 @@
     <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Сопствените имиња на MMS групите и сликите ќе Ви бидат достапни само на Вас.</string>
     <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Описот на групата ќе биде видлив на членовите на оваа група и луѓето кои се поканети.</string>
 
-    <!-- EditAboutFragment -->
-    <string name="EditAboutFragment_about">Опис</string>
-    <string name="EditAboutFragment_write_a_few_words_about_yourself">Напишете неколку зборови за себе…</string>
-    <string name="EditAboutFragment_count">%1$d/%2$d</string>
-    <string name="EditAboutFragment_speak_freely">Тука сум, кажи</string>
-    <string name="EditAboutFragment_encrypted">Шифрирано</string>
-    <string name="EditAboutFragment_be_kind">Бидете љубезни</string>
-    <string name="EditAboutFragment_coffee_lover">Љубител/ка на кафе</string>
-    <string name="EditAboutFragment_free_to_chat">Слободно за муабет</string>
-    <string name="EditAboutFragment_taking_a_break">На пауза</string>
-    <string name="EditAboutFragment_working_on_something_new">Работам на нешто ново</string>
-
     <!-- EditProfileFragment -->
     <string name="EditProfileFragment__edit_group">Уреди група</string>
     <string name="EditProfileFragment__group_name">Име на група</string>
     <string name="EditProfileFragment__group_description">Опис на група</string>
   <!-- Removed by excludeNonTranslatables <string name="EditProfileFragment__support_link" translatable="false">https://support.signal.org/hc/articles/360007459591</string> -->
-    <!-- The title of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_title">Ажурирај го Signal</string>
-    <!-- The body of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_body">Оваа верзија на Signal е истечена. Ажурирајте веднаш за да продолжите со користење на Signal.</string>
-    <!-- The button on a dialog prompting user to update to the latest version of Signal. When clicked, the user will be taken to the store to update their app. -->
-    <string name="EditProfileFragment_deprecated_dialog_update_button">Aжурирај</string>
-    <!-- The title of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_title">Уредот не е регистриран</string>
-    <!-- The body of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_body">Уредот повеќе не е регистриран. Регистрирајте го повторно за да можете да правите промени на вашата корисничка сметка.</string>
-    <!-- The button on a dialog informing the user that they cannot use this app feature when they are unregistered. When clicked, the user will be taken to a screen to help them re-register. -->
-    <string name="EditProfileFragment_unregistered_dialog_reregister_button">Повторно регистрирање</string>
 
     <!-- EditProfileNameFragment -->
-    <string name="EditProfileNameFragment_your_name">Вашето име</string>
-    <string name="EditProfileNameFragment_first_name">Име</string>
-    <string name="EditProfileNameFragment_last_name_optional">Презиме (опционално)</string>
     <string name="EditProfileNameFragment_save">Зачувај</string>
-    <string name="EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later">Не успеа да се зачува поради проблеми со мрежата. Обидете се повторно подоцна.</string>
 
     <!-- recipient_preferences_activity -->
     <string name="recipient_preference_activity__shared_media">Споделена медиумска датотека</string>
@@ -3810,19 +3660,8 @@
     <string name="DebugLogsPromptDialogFragment__no_thanks">Не, благодарам</string>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Скорешни</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Оваа порака</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Скорешни</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Не се пронајдени резултати</string>
 
-    <string name="GifQuickSearchOption__trending">Во тренд</string>
-    <string name="GifQuickSearchOption__celebrate">Прослави</string>
-    <string name="GifQuickSearchOption__love">Љубов</string>
-    <string name="GifQuickSearchOption__thumbs_up">Палци горе</string>
-    <string name="GifQuickSearchOption__surprised">Изненадени</string>
-    <string name="GifQuickSearchOption__excited">Возбудени</string>
-    <string name="GifQuickSearchOption__sad">Тажни</string>
-    <string name="GifQuickSearchOption__angry">Лути</string>
 
     <!-- arrays.xml -->
     <string name="arrays__use_default">Користи стандардно</string>
@@ -3838,24 +3677,9 @@
     <string name="arrays__enabled">Вклучено</string>
     <string name="arrays__disabled">Исклучено</string>
 
-    <string name="arrays__name_and_message">Име и порака</string>
-    <string name="arrays__name_only">Само име</string>
-    <string name="arrays__no_name_or_message">Без име и порака</string>
 
-    <string name="arrays__images">Слики</string>
-    <string name="arrays__audio">Аудио</string>
-    <string name="arrays__video">Видео</string>
-    <string name="arrays__documents">Документи</string>
 
-    <string name="arrays__small">Мала</string>
-    <string name="arrays__normal">Нормална</string>
-    <string name="arrays__large">Голема</string>
-    <string name="arrays__extra_large">Многу голема</string>
 
-    <string name="arrays__default">Стандардно</string>
-    <string name="arrays__high">Високо</string>
-    <!-- Setting title that represent an abstract priority to assign to notifications as the max/highest priority a notification can be within the system. -->
-    <string name="arrays__max">Максимално</string>
 
     <!-- plurals.xml -->
     <plurals name="hours_ago">
@@ -3863,205 +3687,32 @@
         <item quantity="other">%1$dч</item>
     </plurals>
 
-    <string name="preferences__change_passphrase">Промена на лозинка</string>
-    <string name="preferences__change_your_passphrase">Променете ја Вашата лозинка</string>
-    <!-- Legacy preference menu item to enable a passphrase screen lock that is only available to those who have previously had a passphrase -->
-    <string name="preferences__enable_passphrase">Вклучи заклучување на екран со лозинка</string>
-    <string name="preferences__lock_signal_and_message_notifications_with_a_passphrase">Заклучи ги екранот и известувањата со лозинка</string>
-    <string name="preferences__screen_security">Безбедност на екранот</string>
-    <string name="preferences__auto_lock_signal_after_a_specified_time_interval_of_inactivity">Автоматски заклучи го Signal по одредено време на неактивност</string>
-    <!-- Legacy preference menu item to enable locking of app after inactivity -->
-    <string name="preferences__inactivity_timeout_passphrase">Лозинка за тајмаут на неактивност</string>
-    <!-- Legacy preference menu item to choose the interval of inactivity before lockout -->
-    <string name="preferences__inactivity_timeout_interval">Интервал за тајмаут на неактивност</string>
+    <!-- Bottom sheet message shown after an assistant app requested the contents of the screen, explaining that screenshots were automatically disabled -->
+    <string name="AssistantScreenSecurityBottomSheet__body">Асистентите кои користат вештачка интелигенција како Gemini ќе можат да ја скенираат вашата содржина на Signal. За да се спречи ова, овозможена е безбедност на екранот. Ова исто така ќе оневозможи слики од екранот.</string>
+    <!-- Bottom sheet title shown after an assistant app requested the contents of the screen and screen security was automatically turned on -->
+    <string name="AssistantScreenSecurityBottomSheet__title">Безбедноста на екранот е вклучена</string>
+    <!-- Bottom sheet button that turns screen security back off -->
+    <string name="AssistantScreenSecurityBottomSheet__turn_off_screen_security">Исклучете ја безбедноста на екранот</string>
+    <!-- Title of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__title">Да се исклучи безбедноста на екранот?</string>
+    <!-- Body of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__body">Ако оваа опција е исклучена, асистентите кои користат вештачка интелигенција како Google Gemini ќе можат да ја скенираат вашата содржина на Signal и да ја користат за функции кои можеби нема да бидат приватни.</string>
+    <!-- Dialog button that confirms turning off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__turn_off">Исклучи</string>
+    <!-- Snackbar shown after the user turns off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__screen_security_is_off">Безбедноста на екранот е исклучена</string>
     <string name="preferences__notifications">Известувања</string>
-    <!-- Preference item menu to enable notifications -->
-    <string name="preferences__enable_notifications">Овозможи известувања</string>
-    <!-- Preference header for call notifications -->
-    <string name="preferences__call_notifications">Известувања за повици</string>
-    <string name="preferences__led_color">LED боја</string>
     <string name="preferences__led_color_unknown">Непознато</string>
-    <string name="preferences__pref_led_blink_title">LED шема за трепкање</string>
-    <string name="preferences__customize">Прилагоди</string>
-    <string name="preferences__change_sound_and_vibration">Промена на звук и вибрација</string>
-    <!-- Preference menu item to control the sound of notifications -->
-    <string name="preferences__sound">Звук</string>
     <string name="preferences__silent">Тивко</string>
-    <!-- Preference menu item to use the default sound for notifications -->
-    <string name="preferences__default">Стандардно</string>
-    <string name="preferences__repeat_alerts">Повтори известувања</string>
-    <string name="preferences__never">Никогаш</string>
-    <string name="preferences__one_time">Еднаш</string>
-    <string name="preferences__two_times">Два пати</string>
-    <string name="preferences__three_times">Три пати</string>
-    <string name="preferences__five_times">Пет пати</string>
-    <string name="preferences__ten_times">Десет пати</string>
-    <string name="preferences__vibrate">Вибрации</string>
-    <string name="preferences__green">Зелена</string>
-    <string name="preferences__red">Црвена</string>
-    <string name="preferences__blue">Сина</string>
-    <string name="preferences__orange">Портокалова</string>
-    <string name="preferences__cyan">Синозелена</string>
-    <string name="preferences__magenta">Магента</string>
-    <string name="preferences__white">Бела</string>
-    <!-- Text shown when no preference label has been selected -->
-    <string name="preferences__none">Ниедна</string>
-    <string name="preferences__fast">Брзо</string>
-    <string name="preferences__normal">Нормална</string>
-    <string name="preferences__slow">Бавно</string>
-    <string name="preferences__help">Помош</string>
-    <string name="preferences__advanced">Напредно</string>
     <string name="preferences__donate_to_signal">Донирајте на Signal</string>
-    <!-- Preference label for making one-time donations to Signal -->
-    <string name="preferences__privacy">Приватност</string>
     <!-- Preference label for stories -->
     <string name="preferences__stories">Приказни</string>
-    <string name="preferences__data_and_storage">Податоци и складирање</string>
-    <string name="preferences__storage">Склад</string>
     <string name="preferences__payments">Плаќања</string>
-    <!-- Privacy settings payments section description -->
-    <string name="preferences__payment_lock">Заклучување за плаќање</string>
-    <string name="preferences__conversation_length_limit">Максимална должина на разговор</string>
-    <string name="preferences__keep_messages">Задржи пораки</string>
     <string name="preferences__linked_devices">Поврзани уреди</string>
-    <string name="preferences__light_theme">Светла</string>
-    <string name="preferences__dark_theme">Темна</string>
-    <string name="preferences__appearance">Изглед</string>
-    <string name="preferences__theme">Тема</string>
-    <string name="preferences__chat_color_and_wallpaper">Боја и позадина за разговор</string>
-    <!-- Clickable settings text allowing the user to change the icon visible on their phone\'s home screen. -->
-    <string name="preferences__app_icon">Икона на апликација</string>
-    <!-- Approval for changing the app icon. -->
-    <string name="preferences__app_icon_dialog_ok">Во ред</string>
-    <!-- Cancelling the operation of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_cancel">Откажи</string>
-    <!-- Title for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_title">Смени ги иконата и името на апликацијата на „%1$s“</string>
-    <!-- Description for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_description">Треба да се затвори Signal за да се променат иконата и името на апликацијата. Известувањата секогаш ќе ги прикажуваат стандардните икона и име на Signal.</string>
-    <!-- Visible warning label for the limitations of changing the app icon with learn more call to action. -->
-    <string name="preferences__app_icon_warning_learn_more">Изберете икона и име на апликацијата кои ќе бидат видливи на почетниот екран на вашиот телефон и фиоката за апликации. Известувањата секогаш ќе ги прикажуваат стандардните икона и име на Signal. Дознајте повеќе</string>
-    <!-- Visible warning label for the limitations of changing the app icon. -->
-    <string name="preferences__app_icon_warning">Иконите и имињата на апликациите се видливи на почетниот екран и фиоката за апликации.</string>
-    <!-- Visible warning label explaining that changing the app icon and name does not affect notifications. -->
-    <string name="preferences__app_icon_notification_warning">Известувањата секогаш ќе ги прикажуваат стандардните икона и име на Signal.</string>
-    <!--Call to action to get more information about the limitations of the change app icon functionality. -->
-    <string name="preferences__app_icon_learn_more">Дознајте повеќе</string>
-    <!--Text description of a graphic illustrating the limitations of the app icon change. -->
-    <string name="preferences__graphic_illustrating_where_the_replacement_app_icon_will_be_visible">Графички приказ на тоа каде ќе биде видлива замената на иконата на апликацијата.</string>
-    <string name="preferences__disable_pin">Исклучи PIN</string>
-    <string name="preferences__enable_pin">Вклучи PIN</string>
-    <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">Ако го исклучите PIN-от, ќе ги изгубите сите податоци кога повторно ќе се регистрирате на Signal, освен ако рачно направите резервна копија и ги вратите податоците. Не можете да вклучите „Заклучување на регистрација“ додека PIN-от е исклучен.</string>
-    <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">PIN кодовите ги чуваат информациите складирани на Signal шифрирани, така што само Вие можете да им пристапите. Вашиот профил, поставувања и конакти ќе бидат вратени кога ќе го реинсталирате Signal. PIN кодот не Ви е потребен за да ја отворите апликацијата.</string>
-    <string name="preferences__system_default">Стандардно</string>
-    <string name="preferences__language">Јазик</string>
-    <!-- Title of toolbar for the advanced pin settings screen -->
-    <string name="preferences__advanced_pin_settings_title">Напредни поставувања за PIN</string>
     <string name="preferences__submit_debug_log">Испрати запис за отстранување грешки</string>
-    <string name="preferences__incognito_keyboard">Инкогнито тастатура</string>
-    <string name="preferences__read_receipts">Потврди за прочитани пораки</string>
-    <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">Ако се исклучени потврдите за прочитани пораки, нема да видите кога некој ќе ги прочита Вашите пораки.</string>
-    <string name="preferences__typing_indicators">Индикатори за куцање</string>
-    <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">Ако се исклучени индикаторите за куцање нема да можете да ги гледате од други луѓе.</string>
-    <string name="preferences__request_keyboard_to_disable">Побарајте тастатурата да го исклучи персонализираното учење.</string>
-    <string name="preferences__this_setting_is_not_a_guarantee">Ова поставување не е гаранција и Вашата тастатура може да го игнорира.</string>
-  <!-- Removed by excludeNonTranslatables <string name="preferences__incognito_keyboard_learn_more" translatable="false">https://support.signal.org/hc/articles/360055276112</string> -->
-    <string name="preferences_chats__when_using_mobile_data">Кога користам мобилен интернет</string>
-    <string name="preferences_chats__when_using_wifi">Кога користам Wi-Fi</string>
-    <string name="preferences_chats__when_roaming">Кога сум во роаминг</string>
-    <string name="preferences_chats__media_auto_download">Автоматско преземање на медиумски датотеки</string>
-    <string name="preferences_storage__storage_usage">Искористеност на склад</string>
-    <string name="preferences_storage__photos">Слики</string>
-    <string name="preferences_storage__videos">Видео</string>
-    <string name="preferences_storage__files">Датотеки</string>
-    <string name="preferences_storage__audio">Аудио</string>
-    <!-- Storage usage legend label for the size of the main message database -->
-    <string name="preferences_storage__messages">Пораки</string>
-    <!-- Storage usage legend label for the size of downloaded sticker packs -->
-    <string name="preferences_storage__stickers">Налепници</string>
-    <!-- Storage usage legend label for all remaining app storage, such as other databases, caches and temporary files -->
-    <string name="preferences_storage__other">Друго</string>
-    <!-- Shown in place of the total storage size while usage is still being computed -->
-    <string name="preferences_storage__calculating">Се пресметува…</string>
-    <string name="preferences_storage__review_storage">Прегледај склад</string>
-    <string name="preferences_storage__delete_older_messages">Да ги избришам старите пораки?</string>
-    <!-- Dialog title shown when selecting delete message history from manage storage -->
-    <string name="preferences_storage__delete_message_history">Да се избрише историјата на пораки?</string>
-    <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">Ова трајно ќе ја избрише цела историја на пораки и медиумски датотеки од вашиот уред постари од %1$s.</string>
-    <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
-    <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
-        <item quantity="one">Ова трајно ќе ги скрати сите разговори до најскорешната порака.</item>
-        <item quantity="other">Ова трајно ќе ги скрати сите разговори до најскорешните %1$s пораки.</item>
-    </plurals>
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device">Ова трајно ќе ја избрише цела историја на пораки и медиумски датотеки од вашиот уред.</string>
-    <!-- Dialog message warning about delete chat message history will delete everything everywhere including linked devices -->
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device_linked_device">Ова трајно ќе ја избрише цела историја на пораки и медиумски датотеки од овој и сите поврзани уреди.</string>
-    <string name="preferences_storage__are_you_sure_you_want_to_delete_all_message_history">Дали сте сигурни дека сакате да ја избришете цела историја на пораки?</string>
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone">Целата историја на пораки ќе биде трајно отстранета. Ова дејство е неповратно.</string>
-    <!-- Secondary warning dialog message about deleting all chat message history from everything everywhere including linked devices -->
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone_linked_device">Целата историја на пораки ќе биде трајно отстранета од сите уреди. Ова дејство е неповратно.</string>
-    <string name="preferences_storage__delete_all_now">Избриши сѐ веднаш</string>
-    <!-- Option for keeping messages forever when managing storage -->
-    <string name="preferences_storage__forever">Засекогаш</string>
-    <string name="preferences_storage__one_year">1 година</string>
-    <string name="preferences_storage__six_months">6 месеци</string>
-    <string name="preferences_storage__thirty_days">30 дена</string>
-    <!-- Option for setting no limit of the length of chat messages -->
-    <string name="preferences_storage__none">Нема</string>
-    <plurals name="preferences_storage__s_messages_plural">
-        <item quantity="one">%1$s порака</item>
-        <item quantity="other">%1$s пораки</item>
-    </plurals>
 
-    <string name="preferences_storage__custom">Прилагодена</string>
-    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Префрлај ги повиците преку сервер на Signal за да се избегне откривање на Вашата IP адреса на Вашите контакти. Вклучувањето ќе го намали квалитетот на повикот.</string>
-    <string name="preferences_advanced__always_relay_calls">Секогаш префрлај повици</string>
-    <!-- Privacy settings payments section title -->
-    <string name="preferences_app_protection__payments">Плаќања</string>
-    <string name="preferences_data_and_storage__manage_storage">Управување со склад</string>
-    <string name="preferences_data_and_storage__use_less_data_for_calls">Користи помалку податоци за повици</string>
-    <string name="preferences_data_and_storage__never">Никогаш</string>
-    <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi и податоци преку мобилен</string>
-    <string name="preferences_data_and_storage__mobile_data_only">Податоци само преку мобилен</string>
-    <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Користење на помалку податоци може да ги подобри повиците на лоши мрежи.</string>
-    <string name="preferences_notifications__in_chat_sounds">Звуци во разговор</string>
-    <string name="preferences_notifications__show">Прикажи</string>
-    <!-- Preference item to set notification settings when chats are muted -->
-    <string name="preferences_notifications__while_muted">Додека се исклучени известувањата</string>
-    <!-- Option in settings to turn on reaction notifications -->
-    <string name="preferences_notifications__reaction">Известувања за реакции</string>
-    <!-- Body option in settings to turn on reaction notifications    -->
-    <string name="preferences_notifications__notify_reaction">Се прикажуваат известувања за реакции на пораките кои ги испраќате</string>
     <!-- Option in settings to turn on unread reminders -->
     <string name="preferences_notifications__unread">Потсетници за непрочитани пораки</string>
-    <!-- Body option to turn on unread reminders -->
-    <string name="preferences_notifications__notify_unread">Повремено известувај кога има непрочитани пораки во разговори со исклучени известувања</string>
-    <string name="preferences_notifications__ringtone">Звук за ѕвонење</string>
-    <string name="preferences_chats__message_text_size">Големина на фонт за пораки</string>
-    <!-- Option in settings that will provide a shortcut to notification system settings to control the priority of Signal notifications -->
-    <string name="preferences_notifications__priority">Приоритет</string>
-    <!-- Option in settings to trouble shoot delayed notifications -->
-    <string name="preferences_notifications__troubleshoot">Решете проблеми со известувањата</string>
-    <!-- Heading for the \'censorship circumvention\' section of privacy preferences -->
-    <string name="preferences_communication__category_censorship_circumvention">Заобиколување на цензура</string>
-    <!-- Title of the \'censorship circumvention\' toggle switch -->
-    <string name="preferences_communication__censorship_circumvention">Заобиколување на цензура</string>
-    <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Ако е вклучено, Signal ќе се обиде да ја заобиколи цензурата. Вклучете ја оваа опција само ако сте на локација каде Signal е цензуриран.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Заобиколување на цензурата е активирано врз основа на телефонскиот број на Вашата сметка.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Рачно го исклучивте заобиколувањето на цензурата.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service -->
-    <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Заобиколување на цензурата не е потребно; веќе сте поврзани со Signal услугата.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet -->
-    <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Заобиколувањето на цензурата може да се активира само кога сте поврзани на интернет.</string>
-    <string name="preferences_communication__category_sealed_sender">Запечатен испраќач</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone">Дозволи од секого</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone_description">Овозможете запечатен испраќач за дојдовни пораки од луѓе кои не се во Вашите контакти и луѓе со кои не сте го споделиле Вашиот профил.</string>
-    <string name="preferences_proxy">Proxy</string>
-    <string name="preferences_use_proxy">Користи proxy</string>
-    <string name="preferences_off">Исклучено</string>
-    <string name="preferences_on">Вклучено</string>
     <string name="preferences_proxy_address">Proxy адреса</string>
     <string name="preferences_only_use_a_proxy_if">Користете proxy ако не можете да се поврзете на Signal преку мобилни податоци или Wi-Fi.</string>
     <string name="preferences_share">Сподели</string>
@@ -4075,18 +3726,6 @@
     <string name="preferences_success">Успешно се поврзав</string>
     <string name="preferences_failed_to_connect">Не успеав да се поврзам</string>
     <string name="preferences_enter_proxy_address">Внесете proxy адреса</string>
-    <!-- Preference title for changing navigation (bottom) bar size -->
-    <string name="preferences_navigation_bar_size">Големина на лентата за навигација</string>
-    <!-- Preference summary for normal navigation bar size -->
-    <string name="preferences_normal">Нормална</string>
-    <!-- Preference summary for compact navigation bar size -->
-    <string name="preferences_compact">Компактна</string>
-    <!-- Dialog message body explaining that we have to restart the app in order to apply the user\'s new language setting.  -->
-    <string name="preferences_language_change_confirmation_message">Апликацијата ќе се рестартира за да се примени новото поставување за јазик.</string>
-    <!-- Preference title for automatic key verification -->
-    <string name="preferences_automatic_key_verification">Автоматска верификација на клучот</string>
-    <!-- Preference summary for automatic key verification -->
-    <string name="preferences_automatic_key_verification_body">Кога е овозможено, Signal ќе се обиде автоматски да го потврди шифрирањето на разговорите еден на еден.</string>
 
 
     <!-- Internal only preferences -->
@@ -4467,11 +4106,6 @@
     <!-- Label for a button in a banner to learn more about why we cannot process the user\'s contacts -->
     <string name="reminder_cds_permanent_error_learn_more">Дознајте повеќе</string>
 
-    <!-- media_preview -->
-    <string name="media_preview__save_title">Зачувај</string>
-    <string name="media_preview__edit_title">Уреди</string>
-
-
     <!-- media_preview_activity -->
     <!-- Content description of images or videos when viewing media -->
     <string name="media_preview_activity__media_content_description">Преглед на медиумска датотека</string>
@@ -4600,6 +4234,12 @@
     <string name="CallNotificationBuilder__ongoing_signal_group_call">Тековен Signal групен повик</string>
 
     <string name="CallNotificationBuilder_connecting">Поврзува…</string>
+    <!-- Notification title shown when Signal needs to be opened to use the microphone during a call -->
+    <string name="CallNotificationBuilder__open_signal">Open Signal</string>
+    <!-- Notification body shown when a call was answered from a watch or other device but Signal needs microphone permission before it can connect -->
+    <string name="CallNotificationBuilder__to_answer_this_call_allow_signal_access_to_your_microphone">To answer this call, allow Signal access to your microphone.</string>
+    <!-- Notification body shown during a call when Android blocked microphone access because Signal was in the background -->
+    <string name="CallNotificationBuilder__the_other_person_cant_hear_you_until_you_open_signal">The other person can\'t hear you until you open Signal.</string>
     <string name="enter_backup_passphrase_dialog__backup_passphrase">Лозинка за резервната копија</string>
     <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Резервните копии ќе бидат зачувани на надворешен склад и шифрирани со лозинката подолу. Морате да ја имате оваа лозинка за да ја вратите резервната копија.</string>
     <string name="backup_enable_dialog__you_must_have_this_passphrase">Мора да ја имате оваа лозинка за да ја вратите резервната копија.</string>
@@ -4645,39 +4285,6 @@
     <string name="BackupUtil_never">Никогаш</string>
     <!-- Subtext below last backup time when we do not know when the last backup was -->
     <string name="BackupUtil_unknown">Непознато</string>
-    <!-- Phone number heading displayed as a screen title -->
-    <string name="preferences_app_protection__phone_number">Телефонски број</string>
-    <!-- Subtext below option to launch into phone number privacy settings screen -->
-    <string name="preferences_app_protection__choose_who_can_see">Одберете кој може да го види вашиот телефонски број и да ве контактира на Signal со тој број.</string>
-    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_see_my_number_heading">Кој може да го види мојот број</string>
-    <!-- Subtext below radio buttons when who can see my number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_on_description">Вашиот телефонски број ќе биде видлив за луѓето и групите на кои им испраќате порака.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_on_description">Вашиот телефонски број нема да биде видлив за никој освен за лицата кои го имаат вашиот број во контактите на телефонот.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_off_description">Вашиот телефонски број нема да биде видллив за никој.</string>
-    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_find_me_by_number_heading">Кој може да ме пронајде со мојот телефонски број</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_on_description">Сите кои го имаат зачувано вашиот телефонски број ќе можат да ве видат на Signal и да започнат разговори со вас.</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_off_description">Никој нема да може да види дека сте на Signal освен ако не им испратите порака или имате постоечки разговор со нив.</string>
-    <!-- Snackbar text when pressing invalid radio item -->
-    <string name="PhoneNumberPrivacySettingsFragment__to_change_this_setting">"За да го промените ова поставување, сменето го поставувањето за „Кој може да го види мојот број“ на „Никој“."</string>
-    <!-- Dialog title shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_title">Дали сте сигурни?</string>
-    <!-- Dialog warning message shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_message">Ќе биде потешко да ве пронајдат на Signal доколку ја поставите опцијата „Кој може да ме пронајде со мојот телефонски број“ на „Никој“.</string>
-    <!-- Dialog button text for canceling change action -->
-    <string name="PhoneNumberPrivacySettingsFragment__cancel">Откажи</string>
-    <string name="PhoneNumberPrivacy_everyone">Сите</string>
-    <string name="PhoneNumberPrivacy_nobody">Никој</string>
-    <string name="preferences_app_protection__screen_lock">Заклучување на екранот</string>
-    <!-- Snackbar text shown when trying to enable screen lock but the user does not have a password or biometrics enabled -->
-    <string name="preferences_app_protection__to_use_screen_lock">За да користите заклучување на екранот, поставете PIN, шема или лозинка на овој уред.</string>
-    <string name="preferences_app_protection__failed_to_enable_registration_lock">Не успеа да се вклучи заклучување на регистрацијата.</string>
-    <string name="preferences_app_protection__failed_to_disable_registration_lock">Не успеа да се исклучи заклучување на регистрацијата.</string>
     <string name="RegistrationActivity_you_must_enter_your_registration_lock_PIN">Морате да го внесете Вашиот PIN за заклучување на регистрацијата</string>
     <string name="RegistrationActivity_your_pin_has_at_least_d_digits_or_characters">Вашиот PIN содржи најмалку %1$d цифри или знаци</string>
     <string name="RegistrationActivity_too_many_attempts">Премногу пробувања</string>
@@ -4698,26 +4305,6 @@
     <string name="prompt_passphrase_activity__try_again">Обидете се повторно</string>
 
     <!-- ScreenLockSettingsFragment -->
-    <!-- Text shown when screen lock is not enabled -->
-    <string name="ScreenLockSettingsFragment__off">Исклучено</string>
-    <!-- Text shown with toggle that when switched on will enable screen lock -->
-    <string name="ScreenLockSettingsFragment__use_screen_lock">Користи заклучување на екранот</string>
-    <!-- Description of what screen locking will do and how notification content will not be shown when screen is locked -->
-    <string name="ScreenLockSettingsFragment__your_android_device">За отклучување на Signal ќе бидат побарани поставувањата на Android за заклучување на уредот кога ќе ја напуштите апликацијата или кога ќе отворите друга апликација. Кога апликацијата е заклучена, нема да се прикажува содржината на пораките во известувањата.</string>
-    <!-- Title text explaining when users should start the screen lock -->
-    <string name="ScreenLockSettingsFragment__start_screen_lock">Заклучување на екранот</string>
-    <!-- Option text explaining that screen lock should start after 1 minute of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_1_min">По 1 минута</string>
-    <!-- Option text explaining that screen lock should start after 5 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_5_min">По 5 минути</string>
-    <!-- Option text explaining that screen lock should start after 30 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_30_min">По 30 минути</string>
-    <!-- Option text explaining that screen lock should start at a custom time set by the user -->
-    <string name="ScreenLockSettingsFragment__custom_time">Прилагоди време</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn on screen lock -->
-    <string name="ScreenLockSettingsFragment__use_signal_screen_lock">Користи заклучување на екранот на Signal</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn off screen lock -->
-    <string name="ScreenLockSettingsFragment__turn_off_signal_lock">Исклучете заклучување на екранот на Signal</string>
 
     <string name="Recipient_unknown">Непознато</string>
     <!-- Name to use for a user across the UI when they are unregistered and have no other name available -->
@@ -5174,61 +4761,8 @@
     <string name="GroupDescriptionDialog__group_description">Опис на групата</string>
 
     <!-- AppSettingsFragment -->
-    <!-- String alerting user that something is wrong with their backups subscription -->
-    <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Обновете ја вашата претплата на Безбедни резервни копии на Signal</string>
-    <!-- String alerting user that backup failed -->
-    <string name="AppSettingsFragment__couldnt_complete_backup">Не можеше да се направи резервна копија</string>
     <!-- String alerting user that backup redemption -->
     <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Не можеше да се врати вашата претплата на резервни копии</string>
-    <!-- String alerting user that backup storage limit has been reached -->
-    <string name="AppSettingsFragment__backup_storage_limit_reached">Достигнато е ограничувањето за складирање резервни копии</string>
-    <!-- String displayed telling user to invite their friends to Signal -->
-    <string name="AppSettingsFragment__invite_your_friends">Покани ги пријателите</string>
-    <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">Идентификацискиот број на претплатникот донатор е копиран</string>
-    <!-- String displayed in a toast when we successfully copy the backups subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">Идентификацискиот број на претплатникот на резервни копии е копиран</string>
-
-    <!-- ExportAccountDataFragment -->
-    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Податоци за вашата сметка</string>
-    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Извезете извештај од податоците за вашата сметка на Signal. Овој извештај не вклучува пораки или медиумски датотеки. %1$s</string>
-    <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Дознајте повеќе</string>
-    <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Извези извештај</string>
-
-    <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Извези како TXT</string>
-    <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Текстуална датотека која е лесна за читање</string>
-    <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Извези како JSON</string>
-    <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Датотека која се чита компјутерски</string>
-
-    <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Откажи</string>
-
-    <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">Во ред</string>
-    <!-- Title of dialog shown when report fails to generate -->
-    <string name="ExportAccountDataFragment__report_generation_failed">Не можеше да се генерира извештај</string>
-    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
-    <string name="ExportAccountDataFragment__check_network">Проверете ја интернет врската и обидете се повторно.</string>
-
-    <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Сакате да се извезат податоците?</string>
-    <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Споделувајте ги податоците за вашата Signal сметка само со лица или апликации на кои им верувате.</string>
-    <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Извези</string>
-
-    <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Се генерира извештај…</string>
-    <!-- Explanation that the report is only generated on export and is not saved on the device -->
-    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Вашиот извештај се генерира само за време на извозот и Signal не го зачувува на вашиот уред.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Користете го ова за да го промените сегашниот телефонски број во нов телефонски број. Не можете да ја поништите оваа промена.\n\nПред да продолжите, проверете дали Вашиот нов број може да прима SMS или повици.</string>
@@ -5426,45 +4960,15 @@
     <!-- Done button label to save selected chats to folder -->
     <string name="ChooseChatsFragment__done">Готово</string>
 
-    <string name="NotificationsSettingsFragment__calls">Повици</string>
-    <!-- Notification header for sounds -->
-    <string name="NotificationsSettingsFragment__sounds">Звуци</string>
-    <string name="NotificationsSettingsFragment__contact_joins_signal">Кога контакт ќе се приклучи на Signal</string>
-    <!-- Notification body to get notified when someone joins Signal -->
-    <string name="NotificationsSettingsFragment__notify_contact">Се прикажува известување кога ваш телефонски контакт се приклучува на Signal</string>
-    <!-- Option to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset">Ресетираjте ги поставувањата за известувања</string>
-    <!-- Option body to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_notifications">Се ресетираат известувањата на стандардните поставувања, вклучувајќи и прилагодени поставувања за вашите разговори</string>
-    <!-- Dialog to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_body">Да се ресетираат известувањата на стандардните поставувања за сите разговори?</string>
-    <!-- Confirmation button to reset dialog -->
-    <string name="NotificationsSettingsFragment__reset_confirm">Ресетираj</string>
     <!-- Notification preference header -->
     <string name="NotificationsSettingsFragment__notification_profiles">Профили за известување</string>
-    <!-- Notification preference summary text -->
-    <string name="NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose">Создајте профил за да примате известувања само од луѓе и групи што ќе ги изберете.</string>
 
-    <!-- Header to describe screen that shows while muted settings -->
-    <string name="MutedNotificationsFragment__while">Додека се исклучени известувањата</string>
     <!-- Title for toggle row to control call settings while muted -->
     <string name="MutedNotificationsFragment__calls">Повици</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body_global">Ѕвонење или известување кога ќе започне повик во разговори со исклучени известувња.</string>
     <!-- Title for toggle row to control mentions settings while muted -->
     <string name="MutedNotificationsFragment__mentions">Спомнувања</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body_global">Известувања кога некој ќе ве спомне во разговори со исклучени известувања.</string>
     <!-- Title for toggle row to control replies settings while muted -->
     <string name="MutedNotificationsFragment__replies">Одговори</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body_global">Известување кога некој ќе одговори на вашите пораки во разговори со исклучени известувања.</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body">Ѕвонење или известување кога ќе започне повик додека се исклучени известувањата за овој разговор.</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body">Известување кога ќе ве спомнат додека се исклучени известувањата на овој разговор.</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body">Известување кога некој ќе одговори на ваша порака додека се исклучени известувањата на овој разговор.</string>
     <!-- Description for toggle row to control unread reminders while muted -->
     <string name="MutedNotificationsFragment__unread_body">Повремено известувај кога има непрочитани пораки додека се исклучени известувањата за овој разговор.</string>
 
@@ -5475,88 +4979,14 @@
     <string name="NotificationProfilesFragment__create_profile">Создај профил</string>
 
     <!-- PrivacySettingsFragment -->
-    <string name="PrivacySettingsFragment__blocked">Барањето е блокирано</string>
-    <!-- Settings label that shows the number blocked contacts -->
-    <plurals name="PrivacySettingsFragment__d_contacts">
-        <item quantity="one">%1$d контакт или група</item>
-        <item quantity="other">%1$d контакти или групи</item>
-    </plurals>
-    <string name="PrivacySettingsFragment__messaging">Пораки</string>
     <string name="PrivacySettingsFragment__disappearing_messages">Исчезнувачки пораки</string>
-    <string name="PrivacySettingsFragment__app_security">Безбедност на апликацијата</string>
-    <!-- This refers to the multi-tasking overview (recent apps) from the Android operating system.-->
-    <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Блокирај слики од екранот во листата на неодамнешни разговори и во самата апликација</string>
-    <string name="PrivacySettingsFragment__signal_message_and_calls">Signal пораки и повици. Секогаш префрлај повици и запечатен испраќач.</string>
-    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Стандарден тајмер за нови разговори</string>
-    <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Поставете стандарден тајмер за пораки што исчезнуваат за сите нови разговори започнати од Вас.</string>
-    <!-- Summary for stories preference to launch into story privacy settings -->
-    <string name="PrivacySettingsFragment__payment_lock_require_lock">Барајте заклучување на екранот на Android или отпечаток од прст за префрлање средства.</string>
-    <!-- Alert dialog title when payment lock cannot be enabled -->
-    <string name="PrivacySettingsFragment__cant_enable_title">Не може да се овозможи заклучување за плаќање</string>
-    <!-- Alert dialog description to setup screen lock or fingerprint in phone settings -->
-    <string name="PrivacySettingsFragment__cant_enable_description">За да користите Заклучување за плаќање мора прво да овозможите заклучување на екранот или идентификација со отпечаток од прст во поставувањата на телефонот.</string>
-    <!-- Shown in a toast when we can\'t navigate to the user\'s system fingerprint settings -->
-    <string name="PrivacySettingsFragment__failed_to_navigate_to_system_settings">Навигацијата до системските поставувања не е успешна</string>
     <!-- Alert dialog button to go to phone settings -->
     <!-- Alert dialog button to cancel the dialog -->
 
     <!-- AdvancedPrivacySettingsFragment -->
   <!-- Removed by excludeNonTranslatables <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string> -->
-    <string name="AdvancedPrivacySettingsFragment__show_status_icon">Прикажи статусна икона</string>
-    <string name="AdvancedPrivacySettingsFragment__show_an_icon">Прикажи икона во детали за порака кога пораката е доставена со користење на запечатен испраќач.</string>
 
-    <!-- ExpireTimerSettingsFragment -->
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Кога е овозможено, новите пораки испратени и примени во нови разговори започнати од Вас ќе исчезнат откако ќе бидат видени.</string>
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Кога е овозможено, новите пораки испратени и примени во овој разговор ќе исчезнат откако ќе бидат видени.</string>
-    <string name="ExpireTimerSettingsFragment__off">Исклучено</string>
-    <string name="ExpireTimerSettingsFragment__4_weeks">4 недели</string>
-    <string name="ExpireTimerSettingsFragment__1_week">1 недела</string>
-    <string name="ExpireTimerSettingsFragment__1_day">1 ден</string>
-    <string name="ExpireTimerSettingsFragment__8_hours">8 часа</string>
-    <string name="ExpireTimerSettingsFragment__1_hour">1 час</string>
-    <string name="ExpireTimerSettingsFragment__5_minutes">5 минути</string>
-    <string name="ExpireTimerSettingsFragment__30_seconds">30 секунди</string>
-    <string name="ExpireTimerSettingsFragment__custom_time">Прилагоди време</string>
-    <string name="ExpireTimerSettingsFragment__set">Постави</string>
-    <string name="ExpireTimerSettingsFragment__save">Зачувај</string>
 
-    <string name="CustomExpireTimerSelectorView__seconds">секунди</string>
-    <string name="CustomExpireTimerSelectorView__minutes">минути</string>
-    <string name="CustomExpireTimerSelectorView__hours">часа</string>
-    <string name="CustomExpireTimerSelectorView__days">дена</string>
-    <string name="CustomExpireTimerSelectorView__weeks">недели</string>
-
-    <!-- HelpSettingsFragment -->
-    <string name="HelpSettingsFragment__support_center">Центар за поддршка</string>
-    <string name="HelpSettingsFragment__contact_us">Контактирајте нѐ</string>
-    <string name="HelpSettingsFragment__version">Верзија</string>
-    <!-- Displayed when copying help screen text to the clipboard -->
-    <string name="HelpSettingsFragment__copied_to_clipboard">Копирано на таблата со исечоци</string>
-    <string name="HelpSettingsFragment__debug_log">Запис за отстранување грешки</string>
-    <!--    Header for the screen that displays the licenses of the open-source software dependencies of the Signal app-->
-    <string name="HelpSettingsFragment__licenses">Лиценци</string>
-    <string name="HelpSettingsFragment__terms_amp_privacy_policy">Услови и Политика на приватност</string>
-    <string name="HelpFragment__copyright_signal_messenger">Авторски права Signal Messenger</string>
-    <string name="HelpFragment__licenced_under_the_agplv3">Лиценцирано под GNU AGPLv3</string>
-    <!-- Non-English translations should use "Signal is a nonprofit." instead, dropping the 501c3 reference. -->
-    <string name="HelpSettingsFragment__signal_is_a_501c3">Signal е непрофитна организација</string>
-
-    <!-- DataAndStorageSettingsFragment -->
-    <string name="DataAndStorageSettingsFragment__media_quality">Квалитет на медиумски датотеки</string>
-    <!-- Label shown on the manage storage row while total storage usage is still being computed -->
-    <string name="DataAndStorageSettingsFragment__calculating">Се пресметува…</string>
-    <!-- Category title for the quality of the media to be sent -->
-    <string name="DataAndStorageSettingsFragment__sent_media_quality">Квалитет на испратена медиумска датотека</string>
-    <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Испраќањето на висококвалитетна медиумска датотека ќе користи повеќе податоци.</string>
-    <!-- Disclaimer shown under the media auto-download settings. Placeholder is a formatted size like "100 KB". -->
-    <string name="DataAndStorageSettingsFragment__voice_messages_and_stickers_under_size_are_always_auto_downloaded">Гласовните пораки и налепниците (под %1$s) секогаш се преземаат автоматски.</string>
-    <string name="DataAndStorageSettingsFragment__calls">Повици</string>
-    <!-- Title of a toggle that keeps Signal connected in the background via a persistent foreground service instead of using FCM push messages -->
-    <string name="DataAndStorageSettingsFragment__stay_connected_in_background">Останете поврзани во позадина</string>
-    <!-- Body of a confirmation dialog shown when a user tries to enable the "Stay connected in background" setting -->
-    <string name="DataAndStorageSettingsFragment__staying_connected_while_in_the_background_will_likely_result_in_increased_battery_usage">Ако останете поврзани во позадина, ќе има зголемено трошење на батеријата. Ова не е потребно на повеќето уреди. Овозможете ја оваа опција само ако имате проблеми со известувањата.</string>
-    <!-- Button label that enables the "Stay connected in background" setting from a confirmation dialog -->
-    <string name="DataAndStorageSettingsFragment__enable">Овозможи</string>
 
     <!-- ChatColorSelectionFragment -->
     <!-- Text shown on a circle button to indicate the app will automatically select a color for conversation bubbles for this chat. -->
@@ -5607,23 +5037,8 @@
     <string name="BecomeASustainerMegaphone__become_a_sustainer">Станете поддржувач</string>
 
     <!-- KeyboardPagerFragment -->
-    <string name="KeyboardPagerFragment_emoji">Емоџи</string>
-    <string name="KeyboardPagerFragment_open_emoji_search">Отвори пребарување на емоџи</string>
-    <string name="KeyboardPagerFragment_open_sticker_search">Отвори пребарување на налепници</string>
-    <string name="KeyboardPagerFragment_open_gif_search">Отвори пребарување на GIF-ови</string>
-    <string name="KeyboardPagerFragment_stickers">Стикери</string>
-    <string name="KeyboardPagerFragment_backspace">Backspace</string>
-    <string name="KeyboardPagerFragment_gifs">Gif-ови</string>
-    <string name="KeyboardPagerFragment_search_emoji">Пребарувај емоџи</string>
-    <string name="KeyboardPagerfragment_back_to_emoji">Назад на емоџи</string>
-    <string name="KeyboardPagerfragment_clear_search_entry">Исчисти ги записите од барањето</string>
     <string name="KeyboardPagerFragment_search_giphy">Пребарувај на GIPHY</string>
 
-    <!-- StickerSearchDialogFragment -->
-    <string name="StickerSearchDialogFragment_search_stickers">Пребарувај стикери</string>
-    <string name="StickerSearchDialogFragment_no_results_found">Не се пронајдени резултати</string>
-    <string name="EmojiSearchFragment__no_results_found">Не се пронајдени резултати</string>
-    <string name="NotificationsSettingsFragment__unknown_ringtone">Непознат звук</string>
 
     <!-- ConversationSettingsFragment -->
     <!-- Dialog title displayed when non-admin tries to add a story to an audience group -->
@@ -5732,6 +5147,8 @@
     <string name="NewConversationActivity__video_call">Видео повик</string>
     <!-- Context menu item remove -->
     <string name="NewConversationActivity__remove">Отстрани</string>
+    <!-- Context menu item that hides a contact -->
+    <string name="NewConversationActivity__hide">Hide</string>
     <!-- Context menu item block -->
     <string name="NewConversationActivity__block">Блокирај</string>
     <!-- Dialog title when removing a contact -->
@@ -5740,6 +5157,12 @@
     <string name="NewConversationActivity__you_wont_see_this_person">Нема да ја видите оваа личност кога ќе пребарувате. Ќе добиете барање за разговор доколку ви пишат во иднина.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s беше отстранет</string>
+    <!-- Dialog title when hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__hide_s">Hide %1$s?</string>
+    <!-- Dialog body when hiding a contact -->
+    <string name="NewConversationActivity__this_person_wont_appear">This person won\'t appear in your contact list and search. If they message you in the future, you\'ll receive a message request. You can manage people you\'ve hidden in settings.</string>
+    <!-- Snackbar message after hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__s_has_been_hidden">%1$s has been hidden</string>
     <!-- Snackbar message after blocking a contact -->
     <string name="NewConversationActivity__s_has_been_blocked">Корисникот %1$s е блокиран</string>
     <!-- Error message shown when looking up a person by phone number and that phone number is not associated with a signal account -->
@@ -5792,6 +5215,10 @@
 
     <!-- VectorAvatarCreationFragment -->
     <string name="VectorAvatarCreationFragment__select_a_color">Избери боја</string>
+
+    <!-- AvatarColorGrid -->
+    <!-- Accessibility label for one of the colors an avatar can be drawn in. %1$d is the color\'s position in the list, %2$d is how many colors there are. -->
+    <string name="AvatarColorGrid__color_d_of_d">Боја %1$d од %2$d</string>
 
     <!-- Displayed in the toolbar when externally sharing text to multiple recipients -->
     <string name="ShareInterstitialActivity__share">Сподели</string>
@@ -5863,15 +5290,9 @@
     <string name="MediaReviewImagePageFragment__discard_changes">Да ги откажам промените?</string>
     <string name="MediaReviewImagePageFragment__youll_lose_any_changes">Ќе ги изгубите сите промени направени на оваа фотографија.</string>
 
-    <string name="BadgesOverviewFragment__my_badges">Мои беџови</string>
     <string name="BadgesOverviewFragment__featured_badge">Истакнат беџ</string>
-    <string name="BadgesOverviewFragment__display_badges_on_profile">Прикажи беџови на профил</string>
-    <string name="BadgesOverviewFragment__failed_to_update_profile">Не успеав да го ажурирам профилот</string>
 
 
-    <string name="SelectFeaturedBadgeFragment__select_a_badge">Изберете беџ</string>
-    <string name="SelectFeaturedBadgeFragment__you_must_select_a_badge">Мора да изберете беџ</string>
-    <string name="SelectFeaturedBadgeFragment__failed_to_update_profile">Не успеав да го ажурирам профилот</string>
 
     <!-- Displayed on primary button in the bottom sheet as a call-to-action to launch into the donation flow -->
     <string name="ViewBadgeBottomSheetDialogFragment__donate_now">Донирајте</string>
@@ -5919,9 +5340,6 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Поставете како истакнат беџ</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Продолжи</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Кога имате повеќе од еден беџ, можете да изберете еден беџ што ќе го истакнете за другите да го видат на вашиот профил.</string>
-
-    <string name="BecomeASustainerFragment__get_badges">Добијте беџ за вашиот профил со поддршка на Signal.</string>
-    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal е непрофитна организација без реклами и инвеститори, поддржана само од луѓе како Вас.</string>
 
     <!-- Button label for creating a donation -->
     <string name="ManageDonationsFragment__donate_to_signal">Донирајте на Signal</string>
@@ -6161,6 +5579,10 @@
     <string name="EditNotificationProfileFragment__focus">Фокусиран/а</string>
     <!-- Error message shown when attempting to next/save without a profile name -->
     <string name="EditNotificationProfileFragment__profile_must_have_a_name">Мора да има име</string>
+    <!-- Accessibility label for the button beside the profile name that opens the emoji picker to choose the profile\'s emoji -->
+    <string name="EditNotificationProfileFragment__choose_emoji">Одберете емотикон</string>
+    <!-- Accessibility label for the button that clears both the profile name and its emoji -->
+    <string name="EditNotificationProfileFragment__clear_name_and_emoji">Избришете го името и емотиконот</string>
 
     <!-- Title for add recipients to notification profile screen in create flow -->
     <string name="AddAllowedMembers__allowed_notifications">Дозволени известувања</string>
@@ -6175,8 +5597,6 @@
     <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
     <string name="AddAllowedMembers__notify_for_all_mentions">Извести секогаш кога некој ќе ме спомне</string>
 
-    <!-- Call to action button on contact picker for adding to profile -->
-    <string name="SelectRecipientsFragment__add">Додај</string>
 
     <!-- Notification profiles home fragment, shown when no profiles have been created yet -->
     <string name="NotificationProfilesFragment__create_a_profile_to_receive_notifications_and_calls_only_from_the_people_and_groups_you_want_to_hear_from">Создајте профил за да примате пораки и повици само од луѓето и групите што ќе ги изберете.</string>
@@ -6228,20 +5648,6 @@
     <string name="EditNotificationProfileSchedule__start">Започни</string>
     <!-- Label for showing the end time for the schedule -->
     <string name="EditNotificationProfileSchedule__end">Крај</string>
-    <!-- First letter of Sunday -->
-    <string name="EditNotificationProfileSchedule__sunday_first_letter">Н</string>
-    <!-- First letter of Monday -->
-    <string name="EditNotificationProfileSchedule__monday_first_letter">П</string>
-    <!-- First letter of Tuesday -->
-    <string name="EditNotificationProfileSchedule__tuesday_first_letter">В</string>
-    <!-- First letter of Wednesday -->
-    <string name="EditNotificationProfileSchedule__wednesday_first_letter">С</string>
-    <!-- First letter of Thursday -->
-    <string name="EditNotificationProfileSchedule__thursday_first_letter">Ч</string>
-    <!-- First letter of Friday -->
-    <string name="EditNotificationProfileSchedule__friday_first_letter">П</string>
-    <!-- First letter of Saturday -->
-    <string name="EditNotificationProfileSchedule__saturday_first_letter">С</string>
     <!-- Title of select time dialog shown when setting start time for schedule -->
     <string name="EditNotificationProfileSchedule__set_start_time">Постави време за почеток</string>
     <!-- Title of select time dialog shown when setting end time for schedule -->
@@ -6255,17 +5661,6 @@
     <!-- Error message shown if trying to save/use a schedule with no days selected -->
     <string name="EditNotificationProfileSchedule__schedule_must_have_at_least_one_day">Распоредот мора да има барем еден ден</string>
 
-    <!-- Title for final screen shown after completing a profile creation -->
-    <string name="NotificationProfileCreated__profile_created">Профилот е создаден</string>
-    <!-- Call to action button to press to close the created screen and move to the profile details screen -->
-    <string name="NotificationProfileCreated__done">Готово</string>
-    <!-- Descriptor text shown to indicate how to manually turn a profile on/off -->
-    <string name="NotificationProfileCreated__you_can_turn_your_profile_on_or_off_manually_via_the_menu_on_the_chat_list">Можете да го вклучите Вашиот профил рачно преку менито во листата за разговори.</string>
-    <!-- Descriptor text shown to indicate you can add a schedule later since you did not add one during create flow -->
-    <string name="NotificationProfileCreated__add_a_schedule_in_settings_to_automate_your_profile">Додајте распоред во поставувања за да го автоматизирате Вашиот профил.</string>
-    <!-- Descriptor text shown to indicate your profile will follow the schedule set during create flow -->
-    <string name="NotificationProfileCreated__your_profile_will_turn_on_and_off_automatically_according_to_your_schedule">Вашиот профил автоматски ќе се вклучува и исклучува според Вашиот распоред.</string>
-
     <!-- Button text shown in profile selection bottom sheet to create a new profile -->
     <string name="NotificationProfileSelection__new_profile">Нов профил</string>
     <!-- Manual enable option to manually enable a profile for 1 hour -->
@@ -6277,12 +5672,6 @@
     <!-- Descriptor text indicating how long a profile will be on when there is a time component associated with it -->
     <string name="NotificationProfileSelection__on_until_s">Вклучен до %1$s</string>
 
-    <!-- Displayed in a toast when we fail to open the ringtone picker -->
-    <string name="NotificationSettingsFragment__failed_to_open_picker">Не успеа да се отвори менито за избор.</string>
-    <!-- Banner title when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__to_enable_notifications">За да се овозможат известувања, треба да се даде дозвола на Signal за приказ.</string>
-    <!-- Banner action when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__turn_on">Вклучи</string>
 
     <!-- Text description in Signal Release channel details explaining that it is the only chat from Signal -->
     <string name="ReleaseNotes__this_is_official_chat">Ова е официјалниот и единствен разговор со Signal</string>
@@ -6710,6 +6099,8 @@
     <string name="GiftFlowStartFragment__next">Следно</string>
     <!-- Title text on choose recipient page for badge gifting -->
     <string name="GiftFlowRecipientSelectionFragment__choose_recipient">Изберете примач</string>
+    <!-- Hint text that shows in the recipient search bar on the choose recipient page for badge gifting -->
+    <string name="GiftFlowRecipientSelectionFragment__search">Барај</string>
     <!-- Title text on confirm gift page -->
     <string name="GiftFlowConfirmationFragment__confirm_donation">Потврдете ја донацијата</string>
     <!-- Heading text specifying who the gift will be sent to -->
@@ -6935,7 +6326,7 @@
     <string name="ChooseANewDefaultSmsAppFragment__bullet_2">2</string>
     <!-- BackupSchedulePermission Megaphone -->
     <!-- The title on an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
-    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Improve backup scheduling</string>
+    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Подобри го закажувањето на автоматските резервни копии</string>
     <!-- The body text of an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
     <string name="BackupSchedulePermissionMegaphone__allow_the_alarms_permission_to_improve_automatic_daily_backups">Овозможете дозволи за „аларми“ за да се подобрат дневните автоматски резервни копии.</string>
     <!-- The text on a button in an alert window that, when clicked, will take the user to a screen to grant the alarms permission -->
@@ -7197,11 +6588,6 @@
     <!-- Popup menu label for clearing applied formatting -->
     <string name="TextFormatting_clear_formatting">Отстрани го форматирањето</string>
 
-    <!-- Username edit dialog -->
-    <!-- Option to open username editor displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__edit_username">Сменете го корисничкото име</string>
-    <!-- Option to delete username displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__delete_username">Избришете го корисничкото име</string>
 
     <!-- Time duration picker -->
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
@@ -7406,12 +6792,6 @@
     <string name="EditCallLinkNameDialogFragment__call_name">Име на повикот</string>
 
     <!-- ChooseNavigationBarStyleFragment -->
-    <!-- Dialog title, displayed below the header image -->
-    <string name="ChooseNavigationBarStyleFragment__navigation_bar_size">Големина на лентата за навигација</string>
-    <!-- Toggle button label for normal size -->
-    <string name="ChooseNavigationBarStyleFragment__normal">Нормална</string>
-    <!-- Toggle button label for compact size -->
-    <string name="ChooseNavigationBarStyleFragment__compact">Компактна</string>
 
     <!-- Title shown at top of bottom sheet dialog for displaying a message\'s edit history -->
     <string name="EditMessageHistoryDialog_title">Историја на измени</string>
@@ -7440,69 +6820,11 @@
     <!-- Displayed as body in dialog when user attempts to delete the link -->
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">Овој линк повеќе нема да функционира за тие кои го имаат.</string>
 
-    <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Линк</string>
-    <!-- Button label for the share button in the username link settings -->
-    <string name="UsernameLinkSettings_share_button_label">Сподели</string>
-    <!-- Button label for the color selector button in the username link settings -->
-    <string name="UsernameLinkSettings_color_button_label">Боја</string>
-    <!-- Description text for QR code and links in the username link settings -->
-    <string name="UsernameLinkSettings_qr_description">Споделувајте го вашиот QR код и линк само со лица на кои им верувате. При споделување, останатите ќе можат да го видат вашето корисничко име и да започнат разговор со вас.</string>
-    <!-- Content of a toast that will show after the username is copied to the clipboard -->
-    <string name="UsernameLinkSettings_username_copied_toast">Корисничкото име е копирано</string>
-    <!-- Content of a toast that will show after the username link is copied to the clipboard -->
-    <string name="UsernameLinkSettings_link_copied_toast">Линкот е копиран</string>
-    <!-- Content of a text field that is shown when the user has not yet set a username link -->
-    <string name="UsernameLinkSettings_link_not_set_label">Нема поставен линк</string>
-    <!-- Content of a text field that is shown when the user is actively resetting the username link and waiting for the operation to finish -->
-    <string name="UsernameLinkSettings_resetting_link_label">Линкот се ресетира…</string>
-    <!-- Title of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_title">Да се ресетира QR кодот?</string>
-    <!-- Body of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_body">Доколку го ресетирате вашиот QR код, вашите постоечки QR код и линк повеќе нема да функционираат.</string>
-    <!-- Label for the confirmation button on a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_confirm_button">Ресетираj</string>
-    <!-- Button label for a button that will reset your username and give you a new link -->
-    <string name="UsernameLinkSettings_reset_button_label">Ресетираj</string>
-    <!-- Button label for a button that indicates that the user is done changing the current setting -->
-    <string name="UsernameLinkSettings_done_button_label">Готово</string>
-    <!-- Label for a tab that shows a screen to view your username QR code -->
-    <string name="UsernameLinkSettings_code_tab_name">Код</string>
-    <!-- Label for a tab that shows a screen to scan a QR code -->
-    <string name="UsernameLinkSettings_scan_tab_name">Скенирај</string>
-    <!-- Description text shown underneath the username QR code scanner -->
-    <string name="UsernameLinkSettings_qr_scan_description">Скенирајте го QR кодот на уредот на вашиот контакт.</string>
-    <!-- App bar title for the username QR code color picker screen -->
-    <string name="UsernameLinkSettings_color_picker_app_bar_title">Боја</string>
-    <!-- Body of a dialog that is displayed when we failed to read a username QR code. -->
-    <string name="UsernameLinkSettings_qr_result_invalid">QR кодот е невалиден.</string>
-    <!-- Body of a dialog that is displayed when the username we looked up could not be found. -->
-    <string name="UsernameLinkSettings_qr_result_not_found">Не е пронајден корисник со корисничкото име %1$s.</string>
     <!-- Body of a dialog that is displayed when the username we looked up could not be found and we also could not parse the username. -->
     <string name="UsernameLinkSettings_qr_result_not_found_no_username">Не можеше да се пронајде овој корисник.</string>
-    <!-- Body of a dialog that is displayed when we experienced a network error when looking up a username. -->
-    <string name="UsernameLinkSettings_qr_result_network_error">Се случи мрежна грешка. Ве молиме обидете се повторно.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because you had no internet. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_unavailable">Немате пристап до мрежа. Вашиот линк не беше ресетиран. Обидете се повторно подоцна.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_error">Се јави мрежна грешка додека се обидувавте да го ресетирате вашиот линк. Обидете се повторно подоцна.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of an unknown error. -->
-    <string name="UsernameLinkSettings_reset_link_result_unknown_error">Додека се обидувавте да го ресетирате вашиот линк се јави неочекувана грешка. Обидете се повторно подоцна.</string>
-    <!-- Body of a dialog that is displayed when we successfully reset you username link. -->
-    <string name="UsernameLinkSettings_reset_link_result_success">Вашиот QR код и линк беа ресетирани и создадени се нов QR код и линк.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
     <string name="UsernameLinkSettings_scan_this_qr_code">Скенирај го овој QR код со твојот телефон за да разговараме на Signal.</string>
-    <!-- Dialog title shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_qr_code_not_found">Не е пронајден QR код</string>
-    <!-- Dialog message shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_try_scanning_another_image_containing_a_signal_qr_code">Обидете се да скенирарате друга слика која содржи Signal QR код.</string>
 
-    <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
-    <string name="UsernameLinkShareBottomSheet_title">Секој што го има линкот може да го види вашето корисничко име и да започне разговор со вас. Споделете го со луѓе на кои им верувате.</string>
-    <!-- A button label for a button that, when pressed, will copy your username link to the clipboard -->
-    <string name="UsernameLinkShareBottomSheet_copy_link">Копирајте го линк</string>
-    <!-- A button label for a button that, when pressed, will open a share sheet for sharing your username link -->
-    <string name="UsernameLinkShareBottomSheet_share">Сподели</string>
 
     <!-- PendingParticipantsView -->
     <!-- Displayed in the popup card when a remote user attempts to join a call link -->
@@ -7632,6 +6954,30 @@
     <string name="VerifyBackupKey__backup_key_correct">Клучот за враќање резервни копии е точен. Чувајте го клучот на безбедно место.</string>
     <!-- Snackbar text shown when the user chooses to snooze the recovery key reminder. -->
     <string name="VerifyBackupKey__we_will_ask_again">Ќе ве прашаме повторно за една недела.</string>
+
+    <!-- Title of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__verify_your_two_factor_method">Верифицирајте го вашиот начин за двофакторска автентикација</string>
+    <!-- Body of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__well_occasionally_ask_you_to_verify">Повремено ќе бараме да го верифицирате начинот за двофакторска автентикација за да се осигураме дека е правилно поставен.</string>
+    <!-- Button of a megaphone that will take users to the screen where they verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__verify">Верифицирај</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__not_now">Не сега</string>
+    <!-- Snackbar text shown after the user verified their authenticator app from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_authenticator_app">Ви благодариме што ја потврдивте вашата апликација за автентикација.</string>
+    <!-- Snackbar text shown after the user verified their passkey from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_passkey">Ви благодариме што го потврдивте вашиот клуч за пристап.</string>
+
+    <!-- Title of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login (their account ID and recovery key) -->
+    <string name="SignalLoginReminderMegaphone__verify_your_signal_login">Верифицирајте го вашиот Signal Login</string>
+    <!-- Body of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login -->
+    <string name="SignalLoginReminderMegaphone__well_occasionally_ask_you_to_verify">Повремено ќе бараме да ги верифицирате информациите за најава за да се осигураме дека сè уште ги знаете.</string>
+    <!-- Button of a megaphone that will take users to the screen where they enter their Signal Login to verify it -->
+    <string name="SignalLoginReminderMegaphone__verify">Верифицирај</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify the Signal Login -->
+    <string name="SignalLoginReminderMegaphone__not_now">Не сега</string>
+    <!-- Snackbar text shown after the user verified their Signal Login from the reminder -->
+    <string name="SignalLoginReminderMegaphone__thanks_for_confirming_your_signal_login">Ви благодариме што го потврдивте вашиот Signal Login.</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
     <string name="GrantFullScreenIntentPermission_megaphone_title">Сакате да се вклучат известувања на цел екран?</string>
@@ -7953,34 +7299,6 @@
     <!-- Dialog message shown when Google Play services is invalid and subscriptions are not available -->
     <string name="GooglePlayServicesAvailability__service_invalid_message">Не можете да се претплатите на Безбедни резервни копии зашто вашиот телефон не ги поддржува услугите на Google Play. Контактирајте го производителот на телефонот за помош.</string>
 
-    <!-- ManageStorageSettingsFragment -->
-    <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
-    <string name="ManageStorageSettingsFragment_chat_limit">Максимален број на пораки во разговор</string>
-    <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
-    <string name="ManageStorageSettingsFragment_delete_message_history">Избриши историја на пораки</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
-    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Пораките постари од избраниот период ќе бидат трајно избришани.</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
-    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Пораките што ја надминуваат избраната должина ќе бидат трајно избришани.</string>
-    <!-- Setting title for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_title">Примени ги ограничувањата на поврзани уреди</string>
-    <!-- Setting description for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_description">Кога ограничувањето за максимален број на пораки во разговор е овозможено, ќе се бришат и пораките од поврзаните уреди.</string>
-    <!-- Setting section title header for storage optimization -->
-    <string name="ManageStorageSettingsFragment__on_device_storage">Signal складирање</string>
-    <!-- Setting row title for storage optimization -->
-    <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Оптимизирај го Signal складирањето</string>
-    <!-- Setting row explanation for storage optimization -->
-    <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Медиумските датотеки кои не се користат ќе бидат отстранети, но ќе може да се преземат од вашата резервна копија во кое било време.</string>
-    <!-- Dialog message for paid tier pending dialog -->
-    <string name="ManageStorageSettingsFragment__storage_optimization_can_only_be_used">Оптимизацијата на складирање може да се користи само со платена претплата на Безбедни резервни копии на Signal. Вашата претплата на резервни копии сè уште се обработува и сè уште не е активна. Обидете се повторно подоцна.</string>
-    <!-- Title of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__media_will_be_removed_from_your_on_device_backup">Медиумските датотеки ќе бидат отстранети од вашата резервна копија на уредот</string>
-    <!-- Body of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__turning_on_optimize_signal_storage_will_offload">Вклучувањето на „„Оптимизирај го Signal складирањето“ ќе ги премести старите медиумски датотеки од вашиот уред во резервна копија. Ќе можете да ги преземете пак во кое било време. Исто така ќе ги отстрани старите медиумски датотеки од вашата резервна копија на уредот.</string>
-    <!-- Dialog action to confirm turning on "Optimize Signal storage" -->
-    <string name="ManageStorageSettingsFragment__turn_on">Вклучи</string>
-
     <!-- UpgradeToEnableOptimizedStorageSheet -->
     <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
     <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">Надградете за да ја овозможите оваа функција</string>
@@ -8025,11 +7343,11 @@
     <!-- Retry button shown when ending a group fails -->
     <string name="EndGroupDialog__try_again">Обидете се повторно</string>
 
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, with admin name. %1$s is the admin\'s display name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, with admin name. %1$s is the admin\'s display name -->
     <string name="TerminatedGroupBottomSheet__s_ended_the_group">%1$s ја затвори групата</string>
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, without admin name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, without admin name -->
     <string name="TerminatedGroupBottomSheet__the_group_has_been_ended">Оваа група е затворена.</string>
-    <!-- Body of bottom sheet shown when opening a terminated group -->
+    <!-- Body of bottom sheet shown when a group is ended while the user has the conversation open -->
     <string name="TerminatedGroupBottomSheet__you_can_no_longer_send_and_receive">Повеќе не можете да испраќате и примате пораки или повици во оваа група.</string>
 
     <!-- NoManualBackupBottomSheet -->
@@ -8328,6 +7646,12 @@
     <string name="MessageBackupsFlowFragment__a_network_failure_occurred">Имаше проблем со мрежата. Обидете се повторно подоцна.</string>
     <!-- Toast message if this fragment encounters an in progress deletion -->
     <string name="MessageBackupsFlowFragment__a_backup_deletion_is_in_progress">Во тек е бришење на резервна копија.</string>
+    <!-- Title of the device screen lock prompt shown before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__unlock_to_set_up_secure_backups">Отклучете за да поставите Безбедни резервни копии</string>
+    <!-- Title of the sheet explaining that the device screen lock is needed before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__to_set_up_secure_backups_confirm_its_you">За да поставите Безбедни резервни копии, потврдете дека сте вие</string>
+    <!-- Toast shown when the device screen lock wasn\'t confirmed, so backup setup didn\'t continue -->
+    <string name="MessageBackupsFlowFragment__authentication_required">Потребна е автентикација</string>
 
     <!-- MessageBackupsEducationScreen -->
     <!-- Screen subtitle underneath large headline title -->
@@ -8620,6 +7944,8 @@
     <string name="MainToolbar__notification_profile_content_description">Профил за известување</string>
     <!-- Accessibility label for more options button in MainToolbar -->
     <string name="MainToolbar__proxy_content_description">Proxy</string>
+    <!-- Overflow menu item in MainToolbar that opens donation settings -->
+    <string name="MainToolbar__donate">Донирајте</string>
     <!-- Accessibility label for search filter button in MainToolbar -->
   <!-- Removed by excludeNonTranslatables <string name="MainToolbar__search_filter_content_description" translatable="false">Search filter</string> -->
 
@@ -8641,9 +7967,6 @@
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__clear" translatable="false">Clear</string> -->
     <!-- SearchFilterBottomSheet: Select date dialog title -->
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__select_date" translatable="false">Select date</string> -->
-
-    <!-- Accessibility label for a button displayed in the toolbar to return to the previous screen. -->
-    <string name="DefaultTopAppBar__navigate_up_content_description">Оди нагоре</string>
 
     <!-- Accessibility label describing the action that occurs when clicking a checkbox. -->
     <string name="SignalCheckbox_accessibility_on_click_label">Смени</string>
@@ -8942,6 +8265,9 @@
 
     <!-- Body of the sheet shown when a local backup restore could not be completed, explaining how to try again -->
     <string name="CouldNotCompleteBackupRestoreSheet__body_retry">За да се обидете повторно, деинсталирајте и одново инсталирајте Signal на овој уред, па изберете „Врати или пренеси“.</string>
+
+    <!-- Button on the sheet shown when a local backup restore could not be completed, opening a support article about it -->
+    <string name="CouldNotCompleteBackupRestoreSheet__learn_more">Дознајте повеќе</string>
 
     <!-- Title of the sheet shown when the server reports a verification code was requested for the user\'s phone number -->
     <string name="VerificationCodeRequestedBottomSheet__title">Пратено е барање за код за верификација</string>

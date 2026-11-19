@@ -83,12 +83,24 @@ class BiometricsAuthentication internal constructor(
  *
  * - `val biometrics = rememberBiometricsAuthentication(...)`
  * - `onClick = { biometrics.withBiometricsAuthentication { performAction() } }`
+ *
+ * When the device can't show a prompt at all, the action runs anyway unless [proceedWhenUnavailable] is false. Pass
+ * false for actions that must never happen without authenticating, such as turning off a lock.
+ *
+ * [deviceCredentialTitle] titles the device credential screen shown when biometrics aren't available, and defaults to
+ * [promptTitle].
+ *
+ * [fallbackToDeviceCredentialOnCancel] shows the device credential screen instead of failing when the system cancels
+ * the prompt ([BiometricPrompt.ERROR_CANCELED]), rather than the user.
  */
 @Composable
 fun rememberBiometricsAuthentication(
   promptTitle: String? = null,
   educationSheetMessage: String? = null,
-  onAuthenticationFailed: (() -> Unit)? = null
+  onAuthenticationFailed: (() -> Unit)? = null,
+  proceedWhenUnavailable: Boolean = true,
+  deviceCredentialTitle: String? = null,
+  fallbackToDeviceCredentialOnCancel: Boolean = false
 ): BiometricsAuthentication {
   if (LocalInspectionMode.current) {
     return remember {
@@ -125,7 +137,7 @@ fun rememberBiometricsAuthentication(
 
   val biometricManager = remember(context) { BiometricManager.from(context) }
 
-  val biometricPrompt = remember(host.activity, host.fragment, context, pendingHolder) {
+  val biometricPrompt = remember(host.activity, host.fragment, context, pendingHolder, fallbackToDeviceCredentialOnCancel) {
     val executor = ContextCompat.getMainExecutor(context)
     val callback = object : BiometricPrompt.AuthenticationCallback() {
       override fun onAuthenticationFailed() {
@@ -137,7 +149,11 @@ fun rememberBiometricsAuthentication(
       }
 
       override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-        pendingHolder.take()?.onAuthenticationFailed?.invoke()
+        if (errorCode == BiometricPrompt.ERROR_CANCELED && fallbackToDeviceCredentialOnCancel && pendingHolder.peek() != null) {
+          deviceCredentialLauncher.launch(deviceCredentialTitle?.takeIf { it.isNotBlank() } ?: resolvedTitle)
+        } else {
+          pendingHolder.take()?.onAuthenticationFailed?.invoke()
+        }
       }
     }
 
@@ -166,12 +182,15 @@ fun rememberBiometricsAuthentication(
     biometricDeviceAuthentication.updatePromptInfo(promptInfo)
 
     if (!biometricDeviceAuthentication.authenticate(context, true) {
-        deviceCredentialLauncher.launch(promptTitleForPrompt)
+        deviceCredentialLauncher.launch(deviceCredentialTitle?.takeIf { it.isNotBlank() } ?: promptTitleForPrompt)
       }
     ) {
-      // If we cannot authenticate at all, preserve existing call-site behavior and just proceed.
       pendingHolder.take()
-      pending.onAuthenticated()
+      if (proceedWhenUnavailable) {
+        pending.onAuthenticated()
+      } else {
+        pending.onAuthenticationFailed?.invoke()
+      }
     }
   }
 
@@ -195,8 +214,12 @@ fun rememberBiometricsAuthentication(
         host.fragmentManager.setFragmentResultListener(
           DevicePinAuthEducationSheet.REQUEST_KEY,
           host.resultLifecycleOwner
-        ) { _, _ ->
-          authenticateOrFallback(resolvedTitle)
+        ) { _, result ->
+          if (result.getBoolean(DevicePinAuthEducationSheet.RESULT_CONTINUE)) {
+            authenticateOrFallback(resolvedTitle)
+          } else {
+            pendingHolder.clearIf(pending)
+          }
         }
       } else {
         authenticateOrFallback(resolvedTitle)

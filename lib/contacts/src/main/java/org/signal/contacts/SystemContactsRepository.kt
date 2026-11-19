@@ -13,7 +13,7 @@ import android.net.Uri
 import android.os.RemoteException
 import android.provider.BaseColumns
 import android.provider.ContactsContract
-import org.signal.core.util.SqlUtil
+import org.signal.core.database.SqlUtil
 import org.signal.core.util.logging.Log
 import org.signal.core.util.requireInt
 import org.signal.core.util.requireLong
@@ -106,6 +106,7 @@ object SystemContactsRepository {
       ContactsContract.CommonDataKinds.Phone.LABEL,
       ContactsContract.CommonDataKinds.Phone.PHOTO_URI,
       ContactsContract.CommonDataKinds.Phone._ID,
+      ContactsContract.Data.CONTACT_ID,
       ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
       ContactsContract.CommonDataKinds.Phone.TYPE,
       ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
@@ -147,6 +148,7 @@ object SystemContactsRepository {
       ContactsContract.CommonDataKinds.Phone.LABEL,
       ContactsContract.CommonDataKinds.Phone.PHOTO_URI,
       ContactsContract.CommonDataKinds.Phone._ID,
+      ContactsContract.Data.CONTACT_ID,
       ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY,
       ContactsContract.CommonDataKinds.Phone.TYPE,
       ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
@@ -211,7 +213,11 @@ object SystemContactsRepository {
    */
   @JvmStatic
   fun currentContactUri(context: Context, lookupKey: String, contactId: Long): Uri? {
-    val lookupUri = ContactsContract.Contacts.getLookupUri(contactId, lookupKey)
+    return currentContactUri(context, ContactsContract.Contacts.getLookupUri(contactId, lookupKey))
+  }
+
+  @JvmStatic
+  fun currentContactUri(context: Context, lookupUri: Uri): Uri? {
     return ContactsContract.Contacts.lookupContact(context.contentResolver, lookupUri)
   }
 
@@ -251,12 +257,17 @@ object SystemContactsRepository {
     }
   }
 
+  @JvmStatic
+  fun isOrganizationDisplayName(displayNameSource: Int): Boolean {
+    return displayNameSource == ContactsContract.DisplayNameSources.ORGANIZATION
+  }
+
   /**
    * Pulls the lookup key out of a contact lookup URI.
    *
-   * Note this reads the segment after "lookup" rather than the last segment. [readAllPhones] builds
-   * these URIs with a Data row id in the trailing position instead of a contact id, so the trailing
-   * segment cannot be trusted, while the lookup key is both correct and stable across contact edits.
+   * Note this reads the segment after "lookup" rather than the last segment. Older stored URIs carry a
+   * Data row id in the trailing position instead of a contact id, and even a contact id goes stale when
+   * the provider re-aggregates, while the lookup key is stable across contact edits.
    */
   @JvmStatic
   fun lookupKeyFromLookupUri(uri: String?): String? {
@@ -268,6 +279,26 @@ object SystemContactsRepository {
     val lookupIndex = segments.indexOf("lookup")
 
     return if (lookupIndex >= 0 && lookupIndex + 1 < segments.size) segments[lookupIndex + 1] else null
+  }
+
+  /** Every phone number on one contact, as entered rather than E164 formatted. */
+  @JvmStatic
+  fun getDisplayNumbersForContact(context: Context, contactId: Long): List<String> {
+    val results: MutableList<String> = mutableListOf()
+
+    context.contentResolver.query(
+      ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+      arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+      "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
+      arrayOf(contactId.toString()),
+      null
+    ).use { cursor ->
+      while (cursor != null && cursor.moveToNext()) {
+        cursor.requireString(ContactsContract.CommonDataKinds.Phone.NUMBER)?.takeIf { it.isNotEmpty() }?.let { results += it }
+      }
+    }
+
+    return results
   }
 
   /**
@@ -813,6 +844,12 @@ object SystemContactsRepository {
   }
 
   interface ContactIterator : Iterator<ContactDetails>, Closeable {
+    /**
+     * True if reading failed partway through, meaning some contacts were never returned. Check before [close].
+     */
+    val stoppedEarly: Boolean
+      get() = false
+
     @Throws
     override fun close() {
     }
@@ -853,7 +890,7 @@ object SystemContactsRepository {
    * - Read the best name entry for that lookup key and store it. See [readStructuredName].
    * - Skip all other rows for that lookup key. This will ensure that you're on the correct row for the next call to [next]
    */
-  private class CursorContactIterator(
+  internal class CursorContactIterator(
     private val cursor: Cursor,
     private val ownAccountType: String,
     private val e164Formatter: (String) -> String?
@@ -861,16 +898,19 @@ object SystemContactsRepository {
 
     private val hasNameSourceColumns: Boolean = cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID) >= 0
 
+    override val stoppedEarly: Boolean
+      get() = cursor.position < 0
+
     init {
       cursor.moveToFirst()
     }
 
     override fun hasNext(): Boolean {
-      return !cursor.isAfterLast && cursor.position >= 0
+      return cursor.hasValidPosition()
     }
 
     override fun next(): ContactDetails {
-      if (cursor.isAfterLast || cursor.position < 0) {
+      if (!cursor.hasValidPosition()) {
         throw NoSuchElementException()
       }
 
@@ -878,7 +918,7 @@ object SystemContactsRepository {
       val phoneDetails: List<ContactPhoneDetails> = readAllPhones(cursor, lookupKey)
       val structuredName: StructuredName? = readStructuredName(cursor, lookupKey)
 
-      while (!cursor.isAfterLast && cursor.position >= 0 && cursor.getLookupKey() == lookupKey) {
+      while (cursor.hasValidPosition() && cursor.getLookupKey() == lookupKey) {
         cursor.moveToNext()
       }
 
@@ -896,13 +936,13 @@ object SystemContactsRepository {
     fun readAllPhones(cursor: Cursor, lookupKey: String): List<ContactPhoneDetails> {
       val phoneDetails: MutableList<ContactPhoneDetails> = mutableListOf()
 
-      while (!cursor.isAfterLast && lookupKey == cursor.getLookupKey() && cursor.isPhoneMimeType()) {
+      while (cursor.hasValidPosition() && lookupKey == cursor.getLookupKey() && cursor.isPhoneMimeType()) {
         val displayNumber: String? = cursor.requireString(ContactsContract.CommonDataKinds.Phone.NUMBER)
         val formattedNumber: String? = displayNumber?.let { e164Formatter(it) }
 
         if (!displayNumber.isNullOrEmpty() && !formattedNumber.isNullOrEmpty()) {
           phoneDetails += ContactPhoneDetails(
-            contactUri = ContactsContract.Contacts.getLookupUri(cursor.requireLong(ContactsContract.CommonDataKinds.Phone._ID), lookupKey),
+            contactUri = ContactsContract.Contacts.getLookupUri(cursor.requireLong(ContactsContract.Data.CONTACT_ID), lookupKey),
             displayName = cursor.requireString(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
             photoUri = cursor.requireString(ContactsContract.CommonDataKinds.Phone.PHOTO_URI),
             number = formattedNumber,
@@ -930,14 +970,14 @@ object SystemContactsRepository {
     /**
      * Skips our own name rows since the provider re-splits them on display name updates. Returns null if only ours exist, and callers then use the display name.
      */
-    fun readStructuredName(cursor: Cursor, lookupKey: String): StructuredName? {
+    private fun readStructuredName(cursor: Cursor, lookupKey: String): StructuredName? {
       if (!hasNameSourceColumns) {
-        return if (!cursor.isAfterLast && cursor.getLookupKey() == lookupKey && cursor.isNameMimeType()) cursor.toStructuredName() else null
+        return if (cursor.hasValidPosition() && cursor.getLookupKey() == lookupKey && cursor.isNameMimeType()) cursor.toStructuredName() else null
       }
 
       var firstFound: StructuredName? = null
 
-      while (!cursor.isAfterLast && cursor.getLookupKey() == lookupKey && cursor.isNameMimeType()) {
+      while (cursor.hasValidPosition() && cursor.getLookupKey() == lookupKey && cursor.isNameMimeType()) {
         if (cursor.requireString(ContactsContract.RawContacts.ACCOUNT_TYPE) != ownAccountType) {
           val name = cursor.toStructuredName()
 
@@ -961,6 +1001,13 @@ object SystemContactsRepository {
         givenName = requireString(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME),
         familyName = requireString(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME)
       )
+    }
+
+    /**
+     * A failed move (e.g. the provider died) resets the position to -1, where [Cursor.isAfterLast] is still false but column reads throw.
+     */
+    private fun Cursor.hasValidPosition(): Boolean {
+      return !isAfterLast && position >= 0
     }
 
     fun Cursor.getLookupKey(): String {

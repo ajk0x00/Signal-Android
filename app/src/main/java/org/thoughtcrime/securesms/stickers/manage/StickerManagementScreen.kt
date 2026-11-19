@@ -33,23 +33,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -63,19 +57,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -91,6 +82,7 @@ import org.signal.core.ui.compose.Previews
 import org.signal.core.ui.compose.Scaffolds
 import org.signal.core.ui.compose.SignalIcons
 import org.signal.core.ui.compose.Snackbars
+import org.signal.core.ui.compose.TabbedPager
 import org.signal.core.ui.compose.TextFields
 import org.signal.core.ui.compose.horizontalGutters
 import org.signal.core.ui.compose.list.ReorderListEvent
@@ -154,6 +146,9 @@ interface StickerManagementContentCallbacks {
   fun onInstallClick(pack: StickerPack)
   fun onShowPreviewClick(pack: StickerPack)
   fun onCopyClick(pack: StickerPack)
+  fun onHideClick(pack: StickerPack)
+  fun onHideStickerPackConfirmed(pack: StickerPack)
+  fun onHideStickerPackCanceled()
   fun onRemoveClick(packIds: Set<StickerPackId>)
   fun onRemoveStickerPacksConfirmed(packIds: Set<StickerPackId>)
   fun onRemoveStickerPacksCanceled()
@@ -166,6 +161,9 @@ interface StickerManagementContentCallbacks {
     override fun onInstallClick(pack: StickerPack) = Unit
     override fun onShowPreviewClick(pack: StickerPack) = Unit
     override fun onCopyClick(pack: StickerPack) = Unit
+    override fun onHideClick(pack: StickerPack) = Unit
+    override fun onHideStickerPackConfirmed(pack: StickerPack) = Unit
+    override fun onHideStickerPackCanceled() = Unit
     override fun onRemoveClick(packIds: Set<StickerPackId>) = Unit
     override fun onRemoveStickerPacksConfirmed(packIds: Set<StickerPackId>) = Unit
     override fun onRemoveStickerPacksCanceled() = Unit
@@ -192,6 +190,7 @@ fun StickerManagementScreen(
   onSetSearchModeEnabled: (Boolean) -> Unit = {},
   onSearchQueryChange: (String) -> Unit = {},
   onSnackbarDismiss: () -> Unit = {},
+  onUndoHideClick: (StickerPackId) -> Unit = {},
   callbacks: StickerManagementContentCallbacks = StickerManagementContentCallbacks.Empty,
   modifier: Modifier = Modifier
 ) {
@@ -262,52 +261,54 @@ fun StickerManagementScreen(
     snackbarHost = {
       SnackbarHost(
         actionConfirmation = uiState.actionConfirmation,
-        onSnackbarDismiss = onSnackbarDismiss
+        onSnackbarDismiss = onSnackbarDismiss,
+        onUndoHideClick = onUndoHideClick
       )
     }
   ) { padding ->
-    if (uiState.userPrompt != null) {
-      val packCount = uiState.userPrompt.packIds.size
+    when (val prompt = uiState.userPrompt) {
+      is StickerManagementPrompt.ConfirmRemovePacks -> {
+        val packCount = prompt.packIds.size
 
-      Dialogs.SimpleAlertDialog(
-        title = pluralStringResource(R.plurals.StickerManagement_delete_n_packs_confirmation, packCount, NumberFormat.getInstance().format(packCount)),
-        body = pluralStringResource(R.plurals.StickerManagement_delete_n_packs_confirmation_body, packCount, NumberFormat.getInstance().format(packCount)),
-        confirm = stringResource(R.string.StickerManagement_menu_remove_pack),
-        dismiss = stringResource(android.R.string.cancel),
-        onConfirm = { callbacks.onRemoveStickerPacksConfirmed(uiState.userPrompt.packIds) },
-        onDeny = { callbacks.onRemoveStickerPacksCanceled() },
-        onDismissRequest = { callbacks.onRemoveStickerPacksCanceled() }
-      )
+        Dialogs.SimpleAlertDialog(
+          title = pluralStringResource(R.plurals.StickerManagement_delete_n_packs_confirmation, packCount, NumberFormat.getInstance().format(packCount)),
+          body = pluralStringResource(R.plurals.StickerManagement_delete_n_packs_confirmation_body, packCount, NumberFormat.getInstance().format(packCount)),
+          confirm = stringResource(R.string.StickerManagement_menu_remove_pack),
+          dismiss = stringResource(android.R.string.cancel),
+          confirmColor = MaterialTheme.colorScheme.error,
+          onConfirm = { callbacks.onRemoveStickerPacksConfirmed(prompt.packIds) },
+          onDeny = { callbacks.onRemoveStickerPacksCanceled() },
+          onDismissRequest = { callbacks.onRemoveStickerPacksCanceled() }
+        )
+      }
+
+      is StickerManagementPrompt.ConfirmHidePack -> {
+        Dialogs.SimpleAlertDialog(
+          title = stringResource(R.string.StickerManagement_hide_pack_confirmation),
+          body = if (prompt.pack.isInstalled) {
+            stringResource(R.string.StickerManagement_hide_installed_pack_confirmation_body)
+          } else {
+            stringResource(R.string.StickerManagement_hide_pack_confirmation_body)
+          },
+          confirm = stringResource(R.string.StickerManagement_menu_hide_pack),
+          dismiss = stringResource(android.R.string.cancel),
+          confirmColor = MaterialTheme.colorScheme.error,
+          onConfirm = { callbacks.onHideStickerPackConfirmed(prompt.pack) },
+          onDeny = { callbacks.onHideStickerPackCanceled() },
+          onDismissRequest = { callbacks.onHideStickerPackCanceled() }
+        )
+      }
+
+      null -> Unit
     }
 
-    Column(
+    TabbedPager(
+      tabTitles = pages.map { it.title },
+      pagerState = pagerState,
+      beyondViewportPageCount = 1,
       modifier = modifier.padding(padding)
-    ) {
-      SecondaryTabRow(
-        selectedTabIndex = pagerState.currentPage,
-        indicator = {
-          TabRowDefaults.SecondaryIndicator(
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.tabIndicatorOffset(pagerState.currentPage)
-          )
-        }
-      ) {
-        repeat(pages.size) { pageIndex ->
-          PagerTab(
-            title = pages[pageIndex].title,
-            selected = pagerState.currentPage == pageIndex,
-            onClick = { coroutineScope.launch { pagerState.animateScrollToPage(pageIndex) } },
-            modifier = Modifier.weight(1f)
-          )
-        }
-      }
-
-      HorizontalPager(
-        state = pagerState,
-        beyondViewportPageCount = 1
-      ) { pageIndex ->
-        pages[pageIndex].getContent()
-      }
+    ) { pageIndex ->
+      pages[pageIndex].getContent()
     }
   }
 }
@@ -332,7 +333,7 @@ private fun TopAppBar(
         ) {
           Icon(
             imageVector = SignalIcons.ArrowStart.imageVector,
-            contentDescription = stringResource(R.string.DefaultTopAppBar__navigate_up_content_description)
+            contentDescription = stringResource(CoreUiR.string.DefaultTopAppBar__navigate_up_content_description)
           )
         }
       } else {
@@ -410,9 +411,10 @@ private fun SearchTopAppBar(
       .background(MaterialTheme.colorScheme.surface)
       .windowInsetsPadding(TopAppBarDefaults.windowInsets)
   ) {
-    TextFields.TextField(
+    TextFields.SearchField(
       value = query,
       onValueChange = onQueryChange,
+      placeholder = stringResource(R.string.StickerManagement_search),
       leadingIcon = {
         IconButton(onClick = onCloseClick) {
           Icon(
@@ -431,18 +433,7 @@ private fun SearchTopAppBar(
           }
         }
       },
-      placeholder = { Text(text = stringResource(R.string.StickerManagement_search)) },
-      textStyle = MaterialTheme.typography.bodyLarge,
-      singleLine = true,
-      shape = RoundedCornerShape(50),
-      contentPadding = PaddingValues(0.dp),
-      colors = TextFieldDefaults.colors(
-        unfocusedIndicatorColor = Color.Transparent,
-        focusedIndicatorColor = Color.Transparent,
-        focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant
-      ),
       modifier = Modifier
-        .height(dimensionResource(R.dimen.signal_m3_toolbar_height))
         .padding(horizontal = 16.dp, vertical = 10.dp)
         .fillMaxWidth()
         .focusRequester(focusRequester)
@@ -452,28 +443,6 @@ private fun SearchTopAppBar(
   LaunchedEffect(Unit) {
     focusRequester.requestFocus()
   }
-}
-
-@Composable
-private fun PagerTab(
-  title: String,
-  selected: Boolean,
-  onClick: () -> Unit,
-  modifier: Modifier = Modifier
-) {
-  Tab(
-    text = {
-      Text(
-        text = title,
-        style = MaterialTheme.typography.bodyLarge,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis
-      )
-    },
-    selected = selected,
-    onClick = onClick,
-    modifier = modifier
-  )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -588,6 +557,7 @@ private fun AllStickersContent(
             onForwardClick = callbacks::onForwardClick,
             onInstallClick = callbacks::onInstallClick,
             onCopyClick = callbacks::onCopyClick,
+            onHideClick = callbacks::onHideClick,
             onRemoveClick = { callbacks.onRemoveClick(setOf(it.id)) },
             modifier = Modifier
               .animateItem()
@@ -742,6 +712,7 @@ private fun InstalledStickersContent(
 private fun SnackbarHost(
   actionConfirmation: StickerManagementConfirmation?,
   onSnackbarDismiss: () -> Unit = {},
+  onUndoHideClick: (StickerPackId) -> Unit = {},
   modifier: Modifier = Modifier
 ) {
   val hostState = remember { SnackbarHostState() }
@@ -757,20 +728,26 @@ private fun SnackbarHost(
       NumberFormat.getInstance().format(actionConfirmation.numPacksUninstalled)
     )
 
+    is StickerManagementConfirmation.HiddenPack -> stringResource(R.string.StickerManagement_hidden_pack)
     is StickerManagementConfirmation.CopiedPack -> stringResource(R.string.StickerManagement_copied)
     null -> null
   }
 
+  val undoLabel = stringResource(R.string.StickerManagement_undo)
+
   LaunchedEffect(actionConfirmation) {
     if (snackbarMessage != null) {
+      val isHiddenPack = actionConfirmation is StickerManagementConfirmation.HiddenPack
       val result = hostState.showSnackbar(
         message = snackbarMessage,
-        duration = Snackbars.Duration.SHORT,
+        actionLabel = if (isHiddenPack) undoLabel else null,
+        duration = Snackbars.Duration.LONG,
         withDismissAction = false
       )
 
-      if (result == SnackbarResult.Dismissed) {
-        onSnackbarDismiss()
+      when (result) {
+        SnackbarResult.ActionPerformed -> if (isHiddenPack) onUndoHideClick(actionConfirmation.packId)
+        SnackbarResult.Dismissed -> onSnackbarDismiss()
       }
     }
   }

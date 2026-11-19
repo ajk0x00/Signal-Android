@@ -39,6 +39,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.signal.core.models.media.Media
+import org.signal.core.models.media.SentMediaQuality
 import org.signal.core.ui.compose.DialogController
 import org.signal.core.ui.compose.DialogResult
 import org.signal.core.ui.compose.SignalIcons
@@ -57,6 +58,7 @@ import org.signal.mediasend.screens.edit.image.BrushTool
 import org.signal.mediasend.screens.edit.image.BrushWidthsState
 import org.signal.mediasend.screens.edit.video.VideoTrimData
 import org.signal.mediasend.util.MeteredConnectivity
+import org.signal.remoteconfig.RemoteConfig
 import kotlin.coroutines.resume
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.microseconds
@@ -90,7 +92,7 @@ class MediaSendFlowViewModel(
     isStory = args.isStory,
     isReply = args.isReply,
     isAddToGroupStoryFlow = args.isAddToGroupStoryFlow,
-    maxSelection = args.maxSelection,
+    maxSelection = RemoteConfig.maxAttachmentCount,
     message = if (args.asTextStory) null else normalizeMessageBody(args.initialMessage),
     isContactSelectionRequired = args.mode == MediaSendFlowActivityContract.Mode.ChooseAfterMediaSelection,
     sendType = args.sendType
@@ -249,6 +251,7 @@ class MediaSendFlowViewModel(
       is MediaSendFlowEvent.ShowSnackbar -> internalSnackbarEvents.trySend(event.snackbar)
       MediaSendFlowEvent.SelectionRejectionShown -> updateState { copy(isSelectionRejected = false) }
       is MediaSendFlowEvent.MediaCaptured -> onMediaCaptured(event.media, event.recordingDuration)
+      MediaSendFlowEvent.ToggleMultiCapture -> updateState { copy(isMultiCaptureEnabled = !isMultiCaptureEnabled) }
       is MediaSendFlowEvent.QrCodeScanned -> qrCheckRequest.trySend(event.data)
       MediaSendFlowEvent.CloseRequested -> onCloseRequested()
 
@@ -267,7 +270,7 @@ class MediaSendFlowViewModel(
 
       is MediaSendFlowEvent.AddMessageRequested -> onAddMessageRequested(event.startWithEmojiKeyboard)
       is MediaSendFlowEvent.ScheduleSendRequested -> onScheduleSendClick(event.option)
-      MediaSendFlowEvent.StickerRequested -> sendHudCommand(MediaSendFlowHudCommand.SelectSticker)
+      MediaSendFlowEvent.StickerRequested -> backStack.goToStickerSelect()
       MediaSendFlowEvent.NextRequested -> onNextClick()
 
       is MediaSendFlowEvent.NavigateToFiles -> backStack.goToFiles(event.mediaFolder)
@@ -329,10 +332,14 @@ class MediaSendFlowViewModel(
   }
 
   /**
-   * Result of the picker opened for [MediaSendFlowHudCommand.SelectSticker], applied to the focused image. A null [renderer] means
+   * Result of the picker shown for [MediaSendRoute.StickerSelect], applied to the focused image. A null [renderer] means
    * the picker was dismissed.
    */
   fun onStickerSelected(renderer: Renderer?) {
+    if (backStack.lastOrNull() == MediaSendRoute.StickerSelect) {
+      backStack.pop()
+    }
+
     val controller = focusedImageController() ?: return
 
     if (renderer != null) {
@@ -374,7 +381,7 @@ class MediaSendFlowViewModel(
   }
 
   /**
-   * Takes on media the camera captured and moves the user along to edit it.
+   * Takes on media the camera captured and, unless multi-capture is on, moves the user along to edit it.
    *
    * @param recordingDuration How long the capture ran, for the captures that were recorded.
    */
@@ -387,7 +394,9 @@ class MediaSendFlowViewModel(
       addMedia(setOf(media), focusNewlyAdded = true)
     }
 
-    backStack.goToEdit()
+    if (!internalState.value.isMultiCaptureEnabled) {
+      backStack.goToEdit()
+    }
   }
 
   private fun sendHudCommand(hudCommand: MediaSendFlowHudCommand) {

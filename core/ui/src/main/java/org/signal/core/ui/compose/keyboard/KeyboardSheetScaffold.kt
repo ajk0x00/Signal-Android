@@ -5,6 +5,7 @@
 
 package org.signal.core.ui.compose.keyboard
 
+import android.os.Build
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -18,7 +19,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -54,7 +54,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.RectangleShape
@@ -65,12 +64,15 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -82,6 +84,7 @@ import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.signal.core.ui.compose.BottomSheets
+import org.signal.core.ui.compose.LEGACY_INSET_SDK
 import org.signal.core.ui.compose.safeDrawingCompat
 import org.signal.core.ui.compose.systemBarsCompat
 import org.signal.core.ui.getWindowSizeClass
@@ -122,9 +125,6 @@ private enum class SheetAnchor {
   Expanded
 }
 
-/** How far an expandable sheet dims what is behind it once at full height. */
-private const val EXPANDED_SCRIM_ALPHA = 0.32f
-
 /** How much taller than a keyboard an expandable sheet grows, short of what it is allowed to cover. */
 private const val EXPANDED_HEIGHT_MULTIPLIER = 2f
 
@@ -135,8 +135,8 @@ private const val EXPANDED_HEIGHT_MULTIPLIER = 2f
  * handing [content] an already-inset space to lay out in.
  *
  * A keyboard declared expandable can be dragged past keyboard height to fill the window; the
- * scaffold gives it a drag handle and dims [content] behind it as it grows. [content] keeps the size
- * it had at keyboard height throughout, so nothing reflows while the sheet moves. Once expanded, a
+ * scaffold gives it a drag handle, and [content] behind it stays interactive. [content] keeps the
+ * size it had at keyboard height throughout, so nothing reflows while the sheet moves. Once expanded, a
  * downward drag the keyboard's own scrolling content has no room for brings it back to keyboard height.
  *
  * @param controller Requests which keyboard is up. Stable, so view code may hold one.
@@ -176,15 +176,25 @@ fun KeyboardSheetScaffold(
 
   val activeKey = controller.current?.takeIf { registry.isEnabled(it) }
 
+  // Legacy APIs only deliver the IME target here, measured from the window bottom rather than ours.
+  val isLegacyInsets = Build.VERSION.SDK_INT <= LEGACY_INSET_SDK
+  val view = LocalView.current
+  var windowBottomGapPx by remember { mutableIntStateOf(0) }
+  val imeInsetMissing = { isLegacyInsets && imeInsets.getBottom(density) == 0 }
+  val imeTargetBottomPx = {
+    val gapPx = if (isLegacyInsets) windowBottomGapPx else 0
+    (imeAnimationTarget.getBottom(density) - gapPx).coerceAtLeast(0)
+  }
+
   // The target, so a hide reads as gone the moment it is asked for rather than a whole animation later.
-  val systemKeyboardVisible = imeAnimationTarget.getBottom(density) > 0
+  val systemKeyboardVisible = imeTargetBottomPx() > 0
 
   // Whether the live inset has yet to catch up with the target. Deliberately not imeAnimationSource,
   // which the platform leaves behind whenever an animation ends without a duration to run down, and
   // which would then read as animating until the next keyboard came and went. Derived, so the frames
   // the live inset walks through are not each a recomposition.
   val systemKeyboardAnimating by remember(imeInsets, imeAnimationTarget, density) {
-    derivedStateOf { imeInsets.getBottom(density) != imeAnimationTarget.getBottom(density) }
+    derivedStateOf { !imeInsetMissing() && imeInsets.getBottom(density) != imeAnimationTarget.getBottom(density) }
   }
 
   SideEffect {
@@ -220,7 +230,7 @@ fun KeyboardSheetScaffold(
       return@LaunchedEffect
     }
 
-    snapshotFlow { imeAnimationTarget.getBottom(density) }
+    snapshotFlow { imeTargetBottomPx() }
       .filter { it > minimumHeightPx }
       .distinctUntilChanged()
       .collect {
@@ -362,12 +372,6 @@ fun KeyboardSheetScaffold(
     }
   }
 
-  /** 0 at keyboard height, 1 at full height. */
-  val expansionFraction = {
-    val travelPx = sheetHeightPx - heightPx
-    if (!expandable || travelPx <= 0) 0f else ((visibleSheetHeightPx() - heightPx).toFloat() / travelPx).coerceIn(0f, 1f)
-  }
-
   /**
    * Where the sheet belongs, from what has been asked for rather than from where it happens to be.
    * Every request folds into this one value: a keyboard shown, swapped or put away, and an expansion
@@ -391,6 +395,13 @@ fun KeyboardSheetScaffold(
 
       // A gesture may already have carried it off screen; hold that until the hide completes.
       handingOverFromSystemKeyboard = false
+
+      // An expanded sheet comes down to where the system keyboard is expected first, so the content
+      // above it eases into place rather than dropping there.
+      if (controller.awaitingSystemKeyboard && sheetState.offset < sheetState.anchors.positionOf(SheetAnchor.PartiallyExpanded)) {
+        sheetState.animateTo(SheetAnchor.PartiallyExpanded, SHEET_MOTION)
+      }
+
       sheetState.animateTo(SheetAnchor.Hidden, SHEET_HIDE_MOTION)
       backProgress.snapTo(0f)
       visibleKey = null
@@ -470,11 +481,14 @@ fun KeyboardSheetScaffold(
     }
   }
 
-  val systemKeyboardTakingOverSpace = activeKey == null &&
-    (controller.awaitingSystemKeyboard || (systemKeyboardVisible && systemKeyboardAnimating))
+  val systemKeyboardTakingOverSpace = activeKey == null && controller.awaitingSystemKeyboard
 
   val claimedBottomPx = {
-    if (systemKeyboardTakingOverSpace || handingOverFromSystemKeyboard) {
+    if (activeKey == null && systemKeyboardVisible && imeInsetMissing()) {
+      imeTargetBottomPx()
+    } else if (systemKeyboardTakingOverSpace) {
+      maxOf(heightPx, visibleSheetHeightPx())
+    } else if (handingOverFromSystemKeyboard) {
       heightPx
     } else if (activeKey != null || visibleKey != null) {
       // Tracks the sheet rather than its resting height, so content rides along with a drag.
@@ -494,14 +508,11 @@ fun KeyboardSheetScaffold(
   }
 
   val containerColor = registry.containerColorFor(visibleKey).takeOrElse { MaterialTheme.colorScheme.surfaceContainerLow }
-  val scrimColor = MaterialTheme.colorScheme.scrim
   val sheetShape = if (expandable) {
     MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0.dp), bottomEnd = CornerSize(0.dp))
   } else {
     RectangleShape
   }
-  // Keyed, because expansionFraction closes over this composition's heights and visible key; an
-  // unkeyed remember would hold the first composition's, from before anything was up.
   val dragRegion = if (expandable) {
     Modifier.anchoredDraggable(state = sheetState, orientation = Orientation.Vertical, flingBehavior = sheetFlingBehavior)
   } else {
@@ -566,14 +577,17 @@ fun KeyboardSheetScaffold(
     }
   }
 
-  val scrimShowing by remember(expandable, heightPx, sheetHeightPx, layoutHeightPx, visibleKey) {
-    derivedStateOf { expansionFraction() > 0f }
-  }
-
   Box(
     modifier = modifier
       .fillMaxSize()
       .onSizeChanged { scaffoldHeightPx = it.height }
+      .then(
+        if (isLegacyInsets) {
+          Modifier.onGloballyPositioned { windowBottomGapPx = (view.rootView.height - it.boundsInWindow().bottom.roundToInt()).coerceAtLeast(0) }
+        } else {
+          Modifier
+        }
+      )
   ) {
     Box(
       modifier = Modifier
@@ -593,25 +607,6 @@ fun KeyboardSheetScaffold(
         }
     ) {
       content()
-    }
-
-    if (expandable) {
-      Box(
-        modifier = Modifier
-          .fillMaxSize()
-          .drawBehind { drawRect(color = scrimColor, alpha = EXPANDED_SCRIM_ALPHA * expansionFraction()) }
-          .then(
-            if (scrimShowing) {
-              // Collapses rather than dismisses: the dim means the sheet has grown past keyboard
-              // height, and keyboard height is where it belongs the rest of the time, so undoing
-              // the growth is what the gesture is for. Dismissing would also be indiscriminate,
-              // since this covers the whole of [content] -- a host's own text field included.
-              Modifier.pointerInput(Unit) { detectTapGestures { controller.collapse() } }
-            } else {
-              Modifier
-            }
-          )
-      )
     }
 
     Box(

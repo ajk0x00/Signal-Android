@@ -44,10 +44,6 @@
   <string name="AddAMessageRow__view_once_media">بىرلا قېتىم كۆرۈلىدىغان مېدىيا</string>
   <!-- Accessibility label for the button at the end of the add-a-message row that turns view-once mode on and off. -->
   <string name="AddAMessageRow__toggle_view_once">«بىر قېتىملا كۆرۈش»كە ئالماشتۇرۇش</string>
-  <!-- Setting option that can be selected to default media to be sent as high quality by default -->
-  <string name="SentMediaQuality__high">يۇقىرى</string>
-  <!-- Setting option that can be selected to default media to be sent as standard quality by default -->
-  <string name="SentMediaQuality__standard">ئۆلچەملىك</string>
   <!-- Label for our standard quality media conversion. -->
   <string name="QualitySelectorBottomSheetDialog__standard">ئۆلچەملىك</string>
   <!-- Description for our standard quality media conversion. -->
@@ -169,6 +165,8 @@
   <string name="CameraXFragment_photo_processing_failed">رەسىمنى بىر تەرەپ قىلىش مەغلۇب بولدى. قايتا سىناڭ.</string>
   <!-- Label shown below the elapsed time while a video recording is paused -->
   <string name="CameraXFragment_paused">ۋاقىتلىق توختىتىلدى</string>
+  <!-- Accessibility label for the camera toggle that keeps the camera open after each capture so several photos or videos can be taken in a row -->
+  <string name="CameraXFragment_multi_capture">كۆپ قېتىم سۈرەتكە تارتىش</string>
   <!-- Displayed in a permissions dialog when the user has denied access to hardware for image and video capture. -->
   <string name="CameraXFragment_signal_needs_the_recording_permissions_to_capture_video">سىنغا ئېلىش ئۈچۈن Signal مىكروفون ھوقۇقىغا موھتاج ، ئەمما ئۇلار رەت قىلىندى. ئەپ تەڭشەكلىرىدىن «ھوقۇقلار» نى تاللاپ ۋە «مىكروفون» ۋە «كامېرا» نى قوزغىتىڭ.</string>
 

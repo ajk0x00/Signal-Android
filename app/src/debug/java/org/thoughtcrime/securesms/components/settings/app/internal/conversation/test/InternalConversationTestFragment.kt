@@ -10,12 +10,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.concurrent.LifecycleDisposable
 import org.signal.core.util.logging.Log
 import org.signal.ringrtc.CallLinkRootKey
@@ -47,7 +48,6 @@ import org.thoughtcrime.securesms.mms.StickerSlide
 import org.thoughtcrime.securesms.polls.PollOption
 import org.thoughtcrime.securesms.polls.PollRecord
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.util.doAfterNextLayout
 
 class InternalConversationTestFragment : Fragment(R.layout.conversation_test_fragment) {
@@ -59,7 +59,7 @@ class InternalConversationTestFragment : Fragment(R.layout.conversation_test_fra
   private val binding by ViewBinderDelegate(ConversationTestFragmentBinding::bind)
   private val viewModel: InternalConversationTestViewModel by viewModels()
   private val lifecycleDisposable = LifecycleDisposable()
-  private val springboardViewModel: InternalConversationSpringboardViewModel by navGraphViewModels(R.id.app_settings)
+  private val springboardViewModel: InternalConversationSpringboardViewModel by activityViewModels()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val adapter = ConversationAdapterV2(

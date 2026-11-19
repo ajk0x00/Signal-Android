@@ -45,9 +45,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.BottomSheetUtil
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.util.DeviceProperties
@@ -56,8 +54,12 @@ import org.signal.core.util.ThreadUtil
 import org.signal.core.util.ThrottledDebouncer
 import org.signal.core.util.concurrent.LifecycleDisposable
 import org.signal.core.util.concurrent.SignalExecutors
+import org.signal.core.util.eventbus.EventBus
+import org.signal.core.util.eventbus.RestartableSubscription
+import org.signal.core.util.eventbus.ThreadMode
 import org.signal.core.util.isInMultiWindowModeCompat
 import org.signal.core.util.logging.Log
+import org.signal.remoteconfig.RemoteConfig
 import org.signal.ringrtc.CallManager
 import org.thoughtcrime.securesms.BaseActivity
 import org.thoughtcrime.securesms.R
@@ -80,13 +82,12 @@ import org.thoughtcrime.securesms.ratelimit.RecaptchaProofBottomSheetFragment
 import org.thoughtcrime.securesms.ratelimit.RecaptchaRequiredEvent
 import org.thoughtcrime.securesms.reactions.any.ReactWithAnyEmojiBottomSheetDialogFragment
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.safety.SafetyNumberBottomSheet
+import org.thoughtcrime.securesms.service.webrtc.ActiveCallManager
 import org.thoughtcrime.securesms.service.webrtc.CallLinkDisconnectReason
 import org.thoughtcrime.securesms.service.webrtc.SignalCallManager
 import org.thoughtcrime.securesms.sms.MessageSender
 import org.thoughtcrime.securesms.util.FullscreenHelper
-import org.thoughtcrime.securesms.util.RemoteConfig
 import org.thoughtcrime.securesms.util.VibrateUtil
 import org.thoughtcrime.securesms.webrtc.CallParticipantsViewState
 import org.thoughtcrime.securesms.webrtc.audio.SignalAudioManager
@@ -113,6 +114,11 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
       WebRtcViewModel.State.CALL_CONNECTED
     )
 
+    private val PHONE_STATE_PERMISSION_STATES = setOf(
+      WebRtcViewModel.State.CALL_OUTGOING,
+      WebRtcViewModel.State.CALL_CONNECTED
+    )
+
     /**
      * The system rejects picture-in-picture aspect ratios outside of [1/2.39, 2.39] with an
      * IllegalArgumentException. We stay a hair inside those bounds so that rounding when converting
@@ -130,6 +136,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   private var hasWarnedAboutBluetooth: Boolean = false
   private var hasWarnedAboutBackgroundRestriction: Boolean = false
   private var hasWarnedAboutMicrophoneSilenced: Boolean = false
+  private var hasRequestedPhoneStatePermission: Boolean = false
   private lateinit var windowLayoutInfoConsumer: WindowLayoutInfoConsumer
   private lateinit var windowInfoTrackerCallbackAdapter: WindowInfoTrackerCallbackAdapter
   private lateinit var requestNewSizesThrottle: ThrottledDebouncer
@@ -142,9 +149,13 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   private var lastProcessedIntentTimestamp = 0L
   private var previousEvent: WebRtcViewModel? = null
   private var answeredFromNotification: Boolean = false
+  private var acceptCallOnAudioGranted: Boolean = false
   private var ephemeralStateDisposable = Disposable.empty()
   private val callPermissionsDialogController = CallPermissionsDialogController()
-  private val eventBusSubscriber = EventBusSubscriber()
+  private val eventSubscriptions = listOf(
+    RestartableSubscription { EventBus.default.subscribe<RecaptchaRequiredEvent>(ThreadMode.MAIN, ::onRecaptchaRequiredEvent) },
+    RestartableSubscription { EventBus.default.subscribeSticky<WebRtcViewModel>(ThreadMode.MAIN, ::onEventMainThread) }
+  )
   private val mediaProjectionLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
     if (result.resultCode == RESULT_OK && result.data != null) {
       AppDependencies.signalCallManager.startScreenShare(result.data!!)
@@ -202,7 +213,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
 
       if (callIntent.action == CallIntent.Action.ANSWER_VIDEO) {
         enableVideoIfAvailable = true
-      } else if (callIntent.action == CallIntent.Action.ANSWER_AUDIO || callIntent.isStartedFromFullScreen) {
+      } else if (callIntent.action == CallIntent.Action.ANSWER_AUDIO || callIntent.action == CallIntent.Action.SHOW_ANSWERING || callIntent.isStartedFromFullScreen) {
         enableVideoIfAvailable = false
       } else {
         enableVideoIfAvailable = callIntent.shouldEnableVideoIfAvailable
@@ -281,15 +292,13 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
 
     initializeScreenshotSecurity()
 
-    if (!EventBus.getDefault().isRegistered(eventBusSubscriber)) {
-      EventBus.getDefault().register(eventBusSubscriber)
-    }
+    subscribeToEvents()
 
-    val rtcViewModel = EventBus.getDefault().getStickyEvent(WebRtcViewModel::class.java)
+    val rtcViewModel = EventBus.default.getStickyEvent<WebRtcViewModel>()
     if (rtcViewModel == null) {
       Log.w(TAG, "Activity resumed without service event, perform delay destroy")
       ThreadUtil.runOnMainDelayed({
-        val delayedViewModel = EventBus.getDefault().getStickyEvent(WebRtcViewModel::class.java)
+        val delayedViewModel = EventBus.default.getStickyEvent<WebRtcViewModel>()
         if (delayedViewModel == null) {
           Log.w(TAG, "Activity still without service event, finishing activity")
           finish()
@@ -318,6 +327,14 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     val callIntent = getCallIntent()
     Log.i(TAG, "onNewIntent(${callIntent.isStartedFromFullScreen})")
     logIntent(callIntent)
+
+    val isAnswer = callIntent.action == CallIntent.Action.ANSWER_AUDIO || callIntent.action == CallIntent.Action.ANSWER_VIDEO || callIntent.action == CallIntent.Action.SHOW_ANSWERING
+    val callState = previousEvent?.state
+    if (isAnswer && callState != null && callState != WebRtcViewModel.State.CALL_INCOMING) {
+      Log.w(TAG, "Ignoring ${callIntent.action} intent, call state is $callState")
+      return
+    }
+
     processIntent(callIntent)
   }
 
@@ -328,7 +345,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     disableIncomingRingingVanity()
 
     if (!isInPipMode() || isFinishing) {
-      EventBus.getDefault().unregister(eventBusSubscriber)
+      unsubscribeFromEvents()
     }
 
     if (!callPermissionsDialogController.isAskingForPermission && !viewModel.isCallStarting && !isChangingConfigurations) {
@@ -350,7 +367,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     ephemeralStateDisposable.dispose()
 
     if (!isInPipMode() || isFinishing) {
-      EventBus.getDefault().unregister(eventBusSubscriber)
+      unsubscribeFromEvents()
       requestNewSizesThrottle.clear()
     }
 
@@ -372,7 +389,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     Log.d(TAG, "onDestroy")
     super.onDestroy()
     windowInfoTrackerCallbackAdapter.removeWindowLayoutInfoListener(windowLayoutInfoConsumer)
-    EventBus.getDefault().unregister(eventBusSubscriber)
+    unsubscribeFromEvents()
   }
 
   @SuppressLint("MissingSuperCall")
@@ -525,6 +542,24 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     }
 
     maybeWarnAboutBackgroundRestriction(event)
+    maybeRequestPhoneStatePermission(event)
+  }
+
+  private fun maybeRequestPhoneStatePermission(event: WebRtcViewModel) {
+    if (Build.VERSION.SDK_INT < 31 || hasRequestedPhoneStatePermission || isFinishing || isInPipMode()) {
+      return
+    }
+
+    if (event.state !in PHONE_STATE_PERMISSION_STATES || !hasAudioPermission() || callPermissionsDialogController.isAskingForPermission) {
+      return
+    }
+
+    hasRequestedPhoneStatePermission = true
+    if (!Permissions.hasAll(this, Manifest.permission.READ_PHONE_STATE)) {
+      callPermissionsDialogController.requestPhoneStatePermission(this) {
+        ActiveCallManager.onPhoneStatePermissionGranted()
+      }
+    }
   }
 
   private fun maybeWarnAboutBackgroundRestriction(event: WebRtcViewModel) {
@@ -655,9 +690,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
       if (info.isInPictureInPictureMode) {
         callScreen.maybeDismissAudioPicker()
 
-        if (!EventBus.getDefault().isRegistered(eventBusSubscriber)) {
-          EventBus.getDefault().register(eventBusSubscriber)
-        }
+        subscribeToEvents()
       }
       viewModel.setIsLandscapeEnabled(info.isInPictureInPictureMode)
     }
@@ -792,6 +825,10 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
       }
       CallIntent.Action.DENY -> handleDenyCall()
       CallIntent.Action.END_CALL -> handleEndCall()
+      CallIntent.Action.SHOW_ANSWERING -> {
+        answeredFromNotification = true
+        callScreen.setStatus(getString(R.string.RedPhone_answering))
+      }
       else -> Unit
     }
 
@@ -856,11 +893,22 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   }
 
   private fun askCameraAudioPermissions(onGranted: () -> Unit) {
+    val alreadyGranted = hasCameraPermission() && hasAudioPermission()
     callPermissionsDialogController.requestCameraAndAudioPermission(
       activity = this,
-      onAllGranted = onGranted,
+      onAllGranted = {
+        if (!alreadyGranted) {
+          ActiveCallManager.onCallPermissionsGranted(this)
+        }
+        acceptCallIfPending()
+        onGranted()
+      },
       onCameraGranted = { callScreen.hideMissingPermissionsNotice() },
-      onAudioDenied = this::handleDenyCall
+      onAudioGranted = {
+        ActiveCallManager.onCallPermissionsGranted(this)
+        acceptCallIfPending()
+      },
+      onAudioDenied = this::handlePermissionsDenied
     )
   }
 
@@ -872,10 +920,17 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   }
 
   private fun askAudioPermissions(onGranted: () -> Unit) {
+    val alreadyGranted = hasAudioPermission()
     callPermissionsDialogController.requestAudioPermission(
       activity = this,
-      onGranted = onGranted,
-      onDenied = this::handleDenyCall
+      onGranted = {
+        if (!alreadyGranted) {
+          ActiveCallManager.onCallPermissionsGranted(this)
+        }
+        acceptCallIfPending()
+        onGranted()
+      },
+      onDenied = this::handlePermissionsDenied
     )
   }
 
@@ -914,7 +969,13 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   }
 
   private fun handleAnswerWithAudio() {
-    askAudioPermissions {
+    acceptCallOnAudioGranted = true
+    askAudioPermissions {}
+  }
+
+  private fun acceptCallIfPending() {
+    if (acceptCallOnAudioGranted) {
+      acceptCallOnAudioGranted = false
       callScreen.setStatus(getString(R.string.RedPhone_answering))
       AppDependencies.signalCallManager.acceptCall(false)
     }
@@ -924,7 +985,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     val onGranted: () -> Unit = {
       callScreen.setStatus(getString(R.string.RedPhone_answering))
       AppDependencies.signalCallManager.acceptCall(true)
-      handleSetMuteVideo(false)
+      AppDependencies.signalCallManager.setEnableVideo(true)
     }
 
     if (!hasCameraPermission() && !hasAudioPermission()) {
@@ -940,6 +1001,25 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     val recipient = viewModel.recipient.get()
     if (recipient != Recipient.UNKNOWN) {
       AppDependencies.signalCallManager.denyCall()
+
+      callScreen.setRecipient(recipient)
+      callScreen.setStatus(getString(R.string.RedPhone_ending_call))
+      delayedFinish()
+    }
+  }
+
+  private fun handlePermissionsDenied() {
+    acceptCallOnAudioGranted = false
+    val recipient = viewModel.recipient.get()
+    if (recipient != Recipient.UNKNOWN) {
+      val callState = viewModel.callParticipantsStateSnapshot.callState
+      if (callState == WebRtcViewModel.State.CALL_INCOMING && recipient.isGroup) {
+        Log.i(TAG, "Permissions denied on an incoming group ring, denying")
+        AppDependencies.signalCallManager.denyCall()
+      } else {
+        Log.i(TAG, "Permissions denied, hanging up")
+        AppDependencies.signalCallManager.localHangup()
+      }
 
       callScreen.setRecipient(recipient)
       callScreen.setStatus(getString(R.string.RedPhone_ending_call))
@@ -972,7 +1052,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
 
     callScreen.setStatusFromHangupType(this, hangupType)
 
-    EventBus.getDefault().removeStickyEvent(WebRtcViewModel::class.java)
+    EventBus.default.removeStickyEvent<WebRtcViewModel>()
 
     if (hangupType == HangupMessage.Type.NEED_PERMISSION) {
       startActivity(CalleeMustAcceptMessageRequestActivity.createIntent(this, recipient.id))
@@ -991,7 +1071,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   }
 
   private fun handleCallBusy() {
-    EventBus.getDefault().removeStickyEvent(WebRtcViewModel::class.java)
+    EventBus.default.removeStickyEvent<WebRtcViewModel>()
     callScreen.setStatus(getString(R.string.RedPhone_busy))
     delayedFinish(SignalCallManager.BUSY_TONE_LENGTH.toLong())
   }
@@ -1019,13 +1099,13 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
   }
 
   private fun handleRecipientUnavailable() {
-    EventBus.getDefault().removeStickyEvent(WebRtcViewModel::class.java)
+    EventBus.default.removeStickyEvent<WebRtcViewModel>()
     callScreen.setStatus(getString(R.string.RedPhone_recipient_unavailable))
     delayedFinish()
   }
 
   private fun handleServerFailure() {
-    EventBus.getDefault().removeStickyEvent(WebRtcViewModel::class.java)
+    EventBus.default.removeStickyEvent<WebRtcViewModel>()
     callScreen.setStatus(getString(R.string.RedPhone_network_failed))
   }
 
@@ -1396,6 +1476,7 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     }
 
     override fun onMicChanged(isMicEnabled: Boolean) {
+      Log.i(TAG, "onMicChanged(): user set mic enabled=$isMicEnabled")
       askAudioPermissions {
         callScreen.onCallStateUpdate(if (isMicEnabled) CallControlsChange.MIC_ON else CallControlsChange.MIC_OFF)
         handleSetMuteAudio(!isMicEnabled)
@@ -1505,15 +1586,11 @@ class WebRtcCallActivity : BaseActivity(), SafetyNumberChangeDialog.Callback, Re
     }
   }
 
-  private inner class EventBusSubscriber {
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onRecaptchaRequiredEvent(recaptchaRequiredEvent: RecaptchaRequiredEvent) {
-      this@WebRtcCallActivity.onRecaptchaRequiredEvent(recaptchaRequiredEvent)
-    }
+  private fun subscribeToEvents() {
+    eventSubscriptions.forEach { it.start() }
+  }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun onEventMainThread(event: WebRtcViewModel) {
-      this@WebRtcCallActivity.onEventMainThread(event)
-    }
+  private fun unsubscribeFromEvents() {
+    eventSubscriptions.forEach { it.stop() }
   }
 }

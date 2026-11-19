@@ -44,10 +44,6 @@
   <string name="AddAMessageRow__view_once_media">Мултимедия за еднократно гледане</string>
   <!-- Accessibility label for the button at the end of the add-a-message row that turns view-once mode on and off. -->
   <string name="AddAMessageRow__toggle_view_once">Превключване на еднократния преглед</string>
-  <!-- Setting option that can be selected to default media to be sent as high quality by default -->
-  <string name="SentMediaQuality__high">Високо</string>
-  <!-- Setting option that can be selected to default media to be sent as standard quality by default -->
-  <string name="SentMediaQuality__standard">Стандартно</string>
   <!-- Label for our standard quality media conversion. -->
   <string name="QualitySelectorBottomSheetDialog__standard">Стандартно</string>
   <!-- Description for our standard quality media conversion. -->
@@ -169,6 +165,8 @@
   <string name="CameraXFragment_photo_processing_failed">Неуспешно обработване на снимката. Моля, опитайте пак.</string>
   <!-- Label shown below the elapsed time while a video recording is paused -->
   <string name="CameraXFragment_paused">На пауза</string>
+  <!-- Accessibility label for the camera toggle that keeps the camera open after each capture so several photos or videos can be taken in a row -->
+  <string name="CameraXFragment_multi_capture">Заснемане на няколко</string>
   <!-- Displayed in a permissions dialog when the user has denied access to hardware for image and video capture. -->
   <string name="CameraXFragment_signal_needs_the_recording_permissions_to_capture_video">Signal се нуждае от достъп до микрофон, за да заснеме видео, но той е отказан. Моля, отидете в настройки и изберете \"Достъп\" и активирайте \"Микрофон\" и \"Камера\".</string>
 
@@ -238,8 +236,8 @@
 
     <!-- Gif label displayed in a pill in the editor specifying the type of media being sent. -->
     <plurals name="MediaEditScreen__gif">
-        <item quantity="one">%1$d Gif</item>
-        <item quantity="other">%1$d Gif-а</item>
+        <item quantity="one">%1$d GIF</item>
+        <item quantity="other">%1$d GIF-а</item>
     </plurals>
     <!-- Photo label displayed in a pill in the editor specifying the type of media being sent. -->
     <plurals name="MediaEditScreen__photo">

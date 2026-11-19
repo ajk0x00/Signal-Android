@@ -5,8 +5,6 @@
 
 package org.signal.appsettings.account
 
-import org.signal.passwordmanager.PasskeyCreationResult
-
 /**
  * Reminder that these events are logged, so don't include anything sensitive in the toString.
  */
@@ -50,20 +48,26 @@ sealed interface AccountSettingsEvent {
   /** The user confirmed turning registration lock on or off. */
   data object RegistrationLockConfirmed : AccountSettingsEvent
 
-  /** The user tapped the authenticator app option in the two-factor set-up menu. */
+  /** The user tapped the authenticator app option in the two-factor set-up menu, which asks for the screen lock first. */
   data object AddTotpAppClicked : AccountSettingsEvent
 
-  /** The user tapped the passkey option in the two-factor set-up menu. */
+  /** The user got past their screen lock, so we can send them into authenticator app setup. */
+  data object AddTotpAppAuthenticated : AccountSettingsEvent
+
+  /** The user tapped the passkey option in the two-factor set-up menu, which asks for the screen lock first. */
   data object AddPasskeyClicked : AccountSettingsEvent
 
-  /** The passkey ceremony finished, one way or another. A credential still has to be verified by the service to count. */
-  data class PasskeyCeremonyCompleted(val result: PasskeyCreationResult) : AccountSettingsEvent
+  /** The user got past their screen lock, so we can send them into passkey setup. */
+  data object AddPasskeyAuthenticated : AccountSettingsEvent
 
   /** The user tapped a learn more link that should open the support article at [url]. */
   data class LearnMoreClicked(val url: String) : AccountSettingsEvent
 
   /** The user tapped the rename option in [method]'s overflow menu. */
   data class RenameMethodClicked(val method: TwoFactorMethod) : AccountSettingsEvent
+
+  /** The name screen reported that a second factor was named, as described by [result]. */
+  data class MethodNamed(val result: TwoFactorMethodNamed) : AccountSettingsEvent
 
   /** The user tapped the remove option in [method]'s overflow menu, which asks for the screen lock first. */
   data class RemoveMethodClicked(val method: TwoFactorMethod) : AccountSettingsEvent
@@ -112,4 +116,7 @@ sealed interface AccountSettingsEvent {
 
   /** Dismisses whatever is in [AccountSettingsState.dialog]. */
   data object DialogDismissed : AccountSettingsEvent
+
+  /** The snackbar finished showing. */
+  data object SnackbarDismissed : AccountSettingsEvent
 }

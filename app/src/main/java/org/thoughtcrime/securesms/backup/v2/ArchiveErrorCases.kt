@@ -39,6 +39,10 @@ object ExportSkips {
     return log(sentTimestamp, "Failed to parse GiftBadge.")
   }
 
+  fun invalidGiftBadgeReceiptCredentialPresentation(sentTimestamp: Long): String {
+    return log(sentTimestamp, "GiftBadge had an invalid receipt credential presentation.")
+  }
+
   fun failedToParseGroupUpdate(sentTimestamp: Long): String {
     return log(sentTimestamp, "Failed to parse GroupUpdate.")
   }
@@ -73,6 +77,14 @@ object ExportSkips {
 
   fun invalidStickerPackKey(): String {
     return log(0, "Sticker pack  had an invalid packKey.")
+  }
+
+  fun invalidFavoriteStickerPackId(): String {
+    return log(0, "Favorite sticker had an invalid packId.")
+  }
+
+  fun invalidFavoriteStickerPackKey(): String {
+    return log(0, "Favorite sticker had an invalid packKey.")
   }
 
   fun identityUpdateForSelf(sentTimestamp: Long): String {
@@ -226,6 +238,10 @@ object ExportOddities {
     return log(0, "Distribution list had self as a member. Removing it.")
   }
 
+  fun myStoryMarkedDeleted(): String {
+    return log(0, "My Story was marked as deleted. Exporting it as a live list with default settings.")
+  }
+
   fun quoteAuthorNotFound(sentTimestamp: Long): String {
     return log(sentTimestamp, "Quote author was not found in the exported recipients. Removing the quote.")
   }
@@ -317,6 +333,10 @@ object ImportSkips {
 
   fun missingAdminDeleteRecipient(sentTimestamp: Long, chatId: Long): String {
     return log(sentTimestamp, "Missing admin delete recipient for chat $chatId")
+  }
+
+  fun invalidFavoriteSticker(): String {
+    return log(0, "Favorite sticker was missing or had an invalid packId, packKey, or favoritedAtTimestamp.")
   }
 
   private fun log(sentTimestamp: Long, message: String): String {

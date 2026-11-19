@@ -71,6 +71,14 @@
     <string name="RegistrationActivity_link_device">Nasc an gléas</string>
     <!-- Clickable text that opens a corresponding URL -->
     <string name="RegistrationActivity_learn_more">Tuilleadh faisnéise</string>
+    <!-- Dialog message shown when the server rejects the user\'s captcha response during registration -->
+    <string name="PhoneNumberEntryScreen__captcha_not_accepted">Níor glacadh le do fhreagairt fíoraithe. Triail arís, nó déan teagmháil leis an bhfoireann tacaíochta má leanann an fhadhb.</string>
+    <!-- Dialog button that lets the user contact support after their captcha response was rejected -->
+    <string name="PhoneNumberEntryScreen__contact_support">Déan teagmháil leis an bhfoireann tacaíochta</string>
+    <!-- Subject line of the support email composed when the user\'s captcha response was rejected during registration -->
+    <string name="PhoneNumberEntryScreen__contact_support_email_subject">Clárúchán Signal – Ní Ghlactar le Captcha le haghaidh Android</string>
+    <!-- Text placed in the body of the support email composed when the user\'s captcha response was rejected. Used to route the request, so it is not translated. -->
+  <!-- Removed by excludeNonTranslatables <string name="PhoneNumberEntryScreen__contact_support_email_filter" translatable="false">Signal Registration - Captcha Not Accepted for Android</string> -->
 
     <!-- CountryCodePickerScreen -->
     <!-- Title of the country code selection screen -->
@@ -243,19 +251,19 @@
     <!-- Title of the dialog shown when the entered recovery key does not match the account being registered -->
     <string name="EnterAepScreen__incorrect_recovery_key_dialog_title">Eochair athshlánaithe mhícheart</string>
     <!-- Body of the dialog shown when the entered recovery key does not match the account being registered -->
-    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Make sure you\'re registering with the same phone number and 64-character recovery key you saved when enabling Signal backups. Backups cannot be recovered without this key.</string>
+    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Cinntigh go bhfuil tú ag clárú leis an uimhir ghutháin agus an eochair athshlánaithe 64 carachtar chéanna a shábháil tú agus cúltacaí Signal á gcumasú agat. Ní féidir cúltacaí a athshlánú gan an eochair sin.</string>
     <!-- Button in the incorrect recovery key dialog that dismisses it so the user can re-enter their key -->
     <string name="EnterAepScreen__try_again">Triail arís</string>
     <!-- Button in the incorrect recovery key dialog that offers to verify the phone number over SMS instead -->
-    <string name="EnterAepScreen__try_another_way">Try another way</string>
+    <string name="EnterAepScreen__try_another_way">Bain triail as bealach eile</string>
     <!-- Button in the incorrect recovery key dialog that opens a support article about recovery keys -->
     <string name="EnterAepScreen__recovery_key_help">Cabhair maidir le heochair athshlánaithe</string>
     <!-- Title of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code">Verify with SMS code?</string>
+    <string name="EnterAepScreen__verify_with_sms_code">Fíoraigh le cód SMS?</string>
     <!-- Body of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code_body">You can register your account by verifying via an SMS code Signal will send you. After entering the code, you can try restoring your backup with your recovery key again.</string>
+    <string name="EnterAepScreen__verify_with_sms_code_body">Is féidir leat do chuntas a chlárú tríd an gcód SMS, a sheolfaidh Signal chugat, a fhíorú. Tar éis an cód a chur isteach, is féidir leat aischur do chúltaca a thriail le d\'eochair athshlánaithe arís.</string>
     <!-- Confirm button in the verify with SMS code dialog that requests an SMS verification code -->
-    <string name="EnterAepScreen__send_code">Send code</string>
+    <string name="EnterAepScreen__send_code">Seol cód</string>
     <!-- Text shown while preparing the restore -->
     <string name="LocalBackupRestoreScreen__preparing_restore">Aischur á ullmhú…</string>
     <!-- Title shown while restore is in progress -->
@@ -673,7 +681,7 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginInfoScreen__no_password_manager_available">Níl bainisteoir pasfhocal socraithe agat.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginInfoScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginInfoScreen__only_store_your_credentials">Ná stóráil d\'fhaisnéis aitheantais ach i mbainisteoir pasfhocal a bhfuil muinín agat as a shláine. Ní thugann Signal moladh ar bhainisteoir pasfhocal atá ceart duit.</string>
     <!-- Action button for users who would rather write the Signal Login down themselves. -->
     <string name="SignalLoginInfoScreen__save_manually">Sábháil de láimh</string>
     <!-- Error shown when the Signal Login could not be stored in the password manager. -->
@@ -742,6 +750,8 @@
     <string name="SignalLoginCredentialEntryScreen__show_login_info_again">Taispeáin an fhaisnéis logáil isteach arís</string>
     <!-- Error shown when what the user typed back doesn\'t match the Signal Login they were given. -->
     <string name="SignalLoginCredentialEntryScreen__that_doesnt_match_the_signal_login_you_were_shown">Níl sé sin ag teacht leis an Signal Login a taispeánadh duit</string>
+    <!-- Subtitle on the Signal Login entry screen when the user opened it from a reminder to check they still know their login -->
+    <string name="SignalLoginCredentialEntryScreen__enter_your_signal_login_to_verify_you_still_know_it">Cuir isteach do Signal Login le fíorú go bhfuil sé ar eolas agat fós.</string>
 
     <!-- Add username screen -->
     <!-- Title of the screen offering the user an optional username. -->
@@ -825,5 +835,17 @@
     <!-- Button text to cancel two-factor authentication -->
     <string name="TwoFactorSelectionScreen__cancel">Cuir ar ceal</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
-    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again or choose another method.</string>
+    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Chuaigh rud éigin amú le do phaseochair. Triail arís nó roghnaigh modh eile.</string>
+
+    <!-- PasskeyVerificationScreen -->
+    <!-- Title of the screen asking the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__two_factor_authentication">Fíordheimhniú dhá fhachtóir</string>
+    <!-- Subtitle telling the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__to_continue_verify_your_account">Le leanúint leis, fíoraigh do chuntas le do phaseochair.</string>
+    <!-- Button text to start verifying with a passkey -->
+    <string name="PasskeyVerificationScreen__continue">Lean ar aghaidh</string>
+    <!-- Button text to cancel two-factor authentication -->
+    <string name="PasskeyVerificationScreen__cancel">Cuir ar ceal</string>
+    <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
+    <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">Chuaigh rud éigin amú le do phaseochair. Triail arís.</string>
 </resources>

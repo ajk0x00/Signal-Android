@@ -25,18 +25,22 @@ plugins {
   id("com.squareup.wire")
   id("translations")
   id("licenses")
+  id("pseudo-locales")
 }
 
 val staticIps = Properties().apply { file("static-ips.properties").reader().use { load(it) } }
 staticIps.stringPropertyNames().forEach { rootProject.extra[it] = staticIps.getProperty(it) }
 
-val canonicalVersionCode = 1765
-val canonicalVersionName = "8.31.1"
+val canonicalVersionCode = 1784
+val canonicalVersionName = "8.37.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
 // We don't want versions to ever end in 0 so that they don't conflict with nightly versions
 val possibleHotfixVersions = (0 until maxHotfixVersions).toList().filter { it % 10 != 0 }
+
+// Nightly tags look like v8.33.0-nightly-1767-3: the canonical version code of the tagged commit, then a build number from 0 to 9 that resets with it.
+val nightlyTagRegex = Regex("^v\\d+\\.\\d+\\.\\d+-nightly-(\\d+)-(\\d)$")
 
 val debugKeystorePropertiesProvider: Provider<Properties> = providers.of(PropertiesFileValueSource::class.java) {
   parameters.file.set(rootProject.layout.projectDirectory.file("keystore.debug.properties"))
@@ -109,6 +113,10 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).conf
   if (isTestTask && name.contains("AndroidTest")) {
     source("$projectDir/src/benchmarkShared/java")
   }
+  val usesReleaseStubs = android.buildTypes.names.any { it != "debug" && it != "release" && name.endsWith("${it.replaceFirstChar(Char::uppercase)}Kotlin") }
+  if (!isTestTask && usesReleaseStubs) {
+    source("$projectDir/src/release/java")
+  }
 }
 
 wire {
@@ -146,6 +154,9 @@ screenshotTests {
   imageDifferenceThreshold = 0.0001f
 }
 
+// Whether to ship translations as Play language splits.
+val languageSplits = true
+
 android {
   namespace = "org.thoughtcrime.securesms"
 
@@ -161,7 +172,7 @@ android {
 
   flavorDimensions += listOf("distribution", "environment")
 
-  android.bundle.language.enableSplit = false
+  android.bundle.language.enableSplit = languageSplits
 
   debugKeystorePropertiesProvider.get().takeIf { it.isNotEmpty() }?.let { properties ->
     signingConfigs.getByName("debug").apply {
@@ -294,6 +305,7 @@ android {
     buildConfigField("String", "GENERIC_SERVER_PUBLIC_PARAMS", "\"AeCO67P9mIv1yUHkdeZ9JF789GDbox61GvTqq3S4kYc1ADUWxWHQygU390tv1oRWt9WjkdZlU7mKkifF59ftjE+2ZlMmxns6I+ySiLpR8FEmfu+TGpVp3zYTjNV93obJJTyBCCsSHVETCyQRbKdCyb5TMa6LGrvcZaX0Q/VAavhuNA/m4kSiRMgSnYrUjGhVekdDnF+7xioo4wvFnxjIDh7uJQrYOWD6MloNGX7St5gbysTuQQ7i/HI38b9V8x8mKazuDSXxB//BKGZx/XHkK8cHX+QK1MPxYUVM1/CBI5oW\"")
     buildConfigField("String", "BACKUP_SERVER_PUBLIC_PARAMS", "\"AZwNSU55fsFCbgaxGRD11wO1juAs8Yr5GF8FPlGzzvdJJIKH5/4CC7ZJSOe3yL2vturVaRU2Cx0n751Vt8wkj1Y4pyiScu0/S10n647ipo+iq97JZQv+UOlwH8ThyNlGT5DfxXCwTqivxHuXvZpuezPgHk5Gxl5aC6xuNxOnwmFlmu4CeSgdhW8+Pp0vAJOQ1MsU2D0+/kzI+tU94nB3tybY/Ao1AcGW2q41uKQbnOJUWwmQaFT6s+xTISgzsg7CPox6oORGX8rnyk/9lic3DbGsUHctIVpMAl/ogJBb4aYC\"")
     buildConfigField("String[]", "LANGUAGES", "new String[]{ ${languagesForBuildConfigProvider.get()} }")
+    buildConfigField("boolean", "LANGUAGE_SPLITS", "$languageSplits")
     buildConfigField("int", "CANONICAL_VERSION_CODE", "$canonicalVersionCode")
     buildConfigField("String", "DEFAULT_CURRENCIES", "\"EUR,AUD,GBP,CAD,CNY\"")
     buildConfigField("String", "GIPHY_API_KEY", "\"3o6ZsYH6U6Eri53TXy\"")
@@ -496,7 +508,7 @@ android {
       buildConfigField("String", "SIGNAL_CDN3_URL", "\"https://cdn3-staging.signal.org\"")
       buildConfigField("String", "SIGNAL_CDSI_URL", "\"https://cdsi.staging.signal.org\"")
       buildConfigField("String", "SIGNAL_SVR2_URL", "\"https://svr2.staging.signal.org\"")
-      buildConfigField("String", "SVR2_MRENCLAVE_LEGACY", "\"3c699f4975aaa3d172c0aad042f94f031b2b03e10b9c19a45116a01693d83302\"")
+      buildConfigField("String", "SVR2_MRENCLAVE_LEGACY", "\"\"")
       buildConfigField("String", "SVR2_MRENCLAVE", "\"0ff2d7d4efbe7cfc24ac069a16fba898928dbe6c40d500c8b6da55733c727d6e\"")
       buildConfigField("String[]", "UNIDENTIFIED_SENDER_TRUST_ROOTS", "new String[]{\"BbqY1DzohE4NUZoVF+L18oUPrK3kILllLEJh2UnPSsEx\", \"BYhU6tPjqP46KGZEzRs1OL4U39V5dlPJ/X09ha4rErkm\"}")
       buildConfigField("String", "ZKGROUP_SERVER_PUBLIC_PARAMS", "\"ABSY21VckQcbSXVNCGRYJcfWHiAMZmpTtTELcDmxgdFbtp/bWsSxZdMKzfCp8rvIs8ocCU3B37fT3r4Mi5qAemeGeR2X+/YmOGR5ofui7tD5mDQfstAI9i+4WpMtIe8KC3wU5w3Inq3uNWVmoGtpKndsNfwJrCg0Hd9zmObhypUnSkfYn2ooMOOnBpfdanRtrvetZUayDMSC5iSRcXKpdlukrpzzsCIvEwjwQlJYVPOQPj4V0F4UXXBdHSLK05uoPBCQG8G9rYIGedYsClJXnbrgGYG3eMTG5hnx4X4ntARBgELuMWWUEEfSK0mjXg+/2lPmWcTZWR9nkqgQQP0tbzuiPm74H2wMO4u1Wafe+UwyIlIT9L7KLS19Aw8r4sPrXZSSsOZ6s7M1+rTJN0bI5CKY2PX29y5Ok3jSWufIKcgKOnWoP67d5b2du2ZVJjpjfibNIHbT/cegy/sBLoFwtHogVYUewANUAXIaMPyCLRArsKhfJ5wBtTminG/PAvuBdJ70Z/bXVPf8TVsR292zQ65xwvWTejROW6AZX6aqucUjlENAErBme1YHmOSpU6tr6doJ66dPzVAWIanmO/5mgjNEDeK7DDqQdB1xd03HT2Qs2TxY3kCK8aAb/0iM0HQiXjxZ9HIgYhbtvGEnDKW5ILSUydqH/KBhW4Pb0jZWnqN/YgbWDKeJxnDbYcUob5ZY5Lt5ZCMKuaGUvCJRrCtuugSMaqjowCGRempsDdJEt+cMaalhZ6gczklJB/IbdwENW9KeVFPoFNFzhxWUIS5ML9riVYhAtE6JE5jX0xiHNVIIPthb458cfA8daR0nYfYAUKogQArm0iBezOO+mPk5vCNWI+wwkyFCqNDXz/qxl1gAntuCJtSfq9OC3NkdhQlgYQ==\"")
@@ -527,7 +539,7 @@ android {
   val debugDir = "$projectDir/src/debug/java"
 
   android.buildTypes.configureEach {
-    val path = if (name == "release") releaseDir else debugDir
+    val path = if (name == "debug") debugDir else releaseDir
     sourceSets.named(name) {
       java.directories += path
     }
@@ -577,19 +589,21 @@ androidComponents {
 
     // Version overrides
     if (variant.name.contains("nightly", ignoreCase = true)) {
-      var tag = getNightlyTagForCurrentCommit()
-      if (!tag.isNullOrEmpty()) {
-        if (tag.startsWith("v")) {
-          tag = tag.substring(1)
-        }
-
-        // We add a multiple of maxHotfixVersions to nightlies to ensure we're always at least that many versions ahead
-        val nightlyBuffer = (5 * maxHotfixVersions)
-        val nightlyVersionCode = (canonicalVersionCode * maxHotfixVersions) + (getNightlyBuildNumber(tag) * 10) + nightlyBuffer
+      val tag = getNightlyTagForCurrentCommit()
+      if (tag != null) {
+        val nightlyVersionCode = providers.provider { getNightlyVersionCode(tag) }
 
         variant.outputs.forEach { output ->
-          output.versionName.set("$tag | ${getLastCommitDateTimeUtc()}")
+          output.versionName.set("${tag.removePrefix("v")} | ${getLastCommitDateTimeUtc()}")
           output.versionCode.set(nightlyVersionCode)
+        }
+      } else if (variant.buildType == "release") {
+        val missingTag = providers.provider<Int> {
+          throw GradleException("Nightly release builds need a tag like v<version>-nightly-$canonicalVersionCode-<n> pointing at HEAD.")
+        }
+
+        variant.outputs.forEach { output ->
+          output.versionCode.set(missingTag)
         }
       }
     }
@@ -688,8 +702,7 @@ dependencies {
   ktlintRuleset(libs.ktlint.twitter.compose)
   coreLibraryDesugaring(libs.android.tools.desugar)
 
-  implementation(project(":core:models"))
-  implementation(project(":core:models-jvm"))
+  implementation(project(":core:database"))
   implementation(project(":core:serialization"))
   implementation(project(":core:ui"))
   implementation(project(":core:util"))
@@ -705,13 +718,16 @@ dependencies {
   implementation(project(":lib:glide"))
   implementation(project(":lib:image-editor"))
   implementation(project(":lib:libsignal-service"))
+  implementation(project(":lib:locale"))
   implementation(project(":lib:network"))
   implementation(project(":lib:paging"))
   implementation(project(":lib:password-manager"))
   implementation(project(":lib:photoview"))
   implementation(project(":lib:qr"))
+  implementation(project(":lib:remote-config"))
   implementation(project(":lib:signal-login"))
   implementation(project(":lib:sticky-header-grid"))
+  implementation(project(":lib:storage"))
   implementation(project(":lib:ui-components"))
   implementation(project(":lib:video"))
 
@@ -719,6 +735,7 @@ dependencies {
   implementation(project(":feature:camera"))
   implementation(project(":feature:chat-settings"))
   implementation(project(":feature:media-keyboard"))
+  implementation(project(":feature:media-overview"))
   implementation(project(":feature:registration"))
 
   implementation(libs.androidx.fragment.ktx)
@@ -773,6 +790,7 @@ dependencies {
   }
   implementation(libs.google.play.services.maps)
   implementation(libs.google.play.services.auth)
+  implementation(libs.google.play.feature.delivery)
   implementation(libs.google.signin)
   implementation(libs.androidx.media)
   implementation(libs.bundles.media3)
@@ -785,7 +803,6 @@ dependencies {
   implementation(libs.glide.glide)
   implementation(libs.roundedimageview)
   implementation(libs.materialish.progress)
-  implementation(libs.greenrobot.eventbus)
   implementation(libs.google.zxing.android.integration)
   implementation(libs.google.zxing.core)
   implementation(libs.google.flexbox)
@@ -830,6 +847,7 @@ dependencies {
 
   implementation(project(":lib:billing"))
   implementation(project(":feature:media-send"))
+  implementation(project(":feature:media-viewer"))
 
   "spinnerImplementation"(project(":lib:spinner"))
 
@@ -858,7 +876,9 @@ dependencies {
   testImplementation(testLibs.conscrypt.openjdk.uber)
   testImplementation(testLibs.mockk)
   testImplementation(testFixtures(project(":core:ui")))
+  testImplementation(testFixtures(project(":lib:emoji")))
   testImplementation(testFixtures(project(":lib:libsignal-service")))
+  testImplementation(testFixtures(project(":lib:storage")))
   testImplementation(testLibs.espresso.core)
   testImplementation(testLibs.kotlinx.coroutines.test)
   testImplementation(testLibs.sqlite.jdbc)
@@ -917,21 +937,21 @@ fun getNightlyTagForCurrentCommit(): String? {
     commandLine("git", "tag", "--points-at", "HEAD")
   }.standardOutput.asText.get().trim()
 
-  return if (output.isNotEmpty()) {
-    val tags = output.split("\n").toList()
-    tags.firstOrNull { it.contains("nightly") } ?: tags[0]
-  } else {
-    null
-  }
+  return output.lines()
+    .mapNotNull { nightlyTagRegex.matchEntire(it) }
+    .maxByOrNull { it.groupValues[2].toInt() }
+    ?.value
 }
 
-fun getNightlyBuildNumber(tag: String?): Int {
-  if (tag == null) {
-    return 0
+fun getNightlyVersionCode(tag: String): Int {
+  val (tagCanonicalVersionCode, buildNumber) = checkNotNull(nightlyTagRegex.matchEntire(tag)).destructured
+
+  if (tagCanonicalVersionCode.toInt() != canonicalVersionCode) {
+    throw GradleException("Nightly tag '$tag' is for canonical version code $tagCanonicalVersionCode, but HEAD is at $canonicalVersionCode.")
   }
 
-  val match = Regex("-(\\d{3})$").find(tag)
-  return match?.groupValues?.get(1)?.toIntOrNull() ?: 0
+  // Nightlies sit 5 canonical versions ahead and only use version codes ending in 0, so they never collide with a release or hotfix.
+  return ((canonicalVersionCode + 5) * maxHotfixVersions) + (buildNumber.toInt() * 10)
 }
 
 fun getLastCommitDateTimeUtc(): String {

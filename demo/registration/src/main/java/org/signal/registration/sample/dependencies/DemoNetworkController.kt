@@ -343,7 +343,6 @@ class DemoNetworkController(
     fun startSocket() {
       val handle = ProvisioningSocket.start<ProvisionMessage>(
         mode = ProvisioningSocket.Mode.Link(linkAndSyncCapable = allowLinkAndSync),
-        identityKeyPair = IdentityKeyPair.generate(),
         configuration = serviceConfiguration,
         handler = { id, t ->
           Log.w(TAG, "[startLinkDeviceProvisioning] Socket [$id] failed", t)
@@ -370,7 +369,8 @@ class DemoNetworkController(
                 ephemeralBackupKey = msg.ephemeralBackupKey,
                 accountEntropyPool = msg.accountEntropyPool,
                 mediaRootBackupKey = msg.mediaRootBackupKey,
-                readReceipts = msg.readReceipts
+                readReceipts = msg.readReceipts,
+                authCredentialSalt = msg.authCredentialSalt
               )
             )
           )
@@ -481,7 +481,6 @@ class DemoNetworkController(
     val network = Network(Network.Environment.STAGING, USER_AGENT, emptyMap(), Network.BuildVariant.PRODUCTION)
     val credentialsProvider = StaticCredentialsProvider(aci, pni, e164, deviceId, password)
     val healthMonitor = object : HealthMonitor {
-      override fun onKeepAliveResponse(sentTimestamp: Long, isIdentifiedWebSocket: Boolean) {}
       override fun onMessageError(status: Int, isIdentifiedWebSocket: Boolean) {}
       override fun onReceivedAlerts(alerts: Array<out String>, isIdentifiedWebSocket: Boolean) {}
       override fun onServerTimestamp(serverTimestamp: Long, isIdentifiedWebSocket: Boolean) {}
@@ -532,7 +531,6 @@ class DemoNetworkController(
     fun startSocket() {
       val handle = ProvisioningSocket.start<RegistrationProvisionMessage>(
         mode = ProvisioningSocket.Mode.Rereg,
-        identityKeyPair = IdentityKeyPair.generate(),
         configuration = serviceConfiguration,
         handler = { id, t ->
           Log.w(TAG, "[startProvisioning] Socket [$id] failed", t)
@@ -697,7 +695,6 @@ class DemoNetworkController(
       val network = Network(Network.Environment.STAGING, "Signal-Android-Registration-Sample", emptyMap(), Network.BuildVariant.PRODUCTION)
       val credentialsProvider = StaticCredentialsProvider(aci, pni, e164, currentDeviceId(), password)
       val healthMonitor = object : HealthMonitor {
-        override fun onKeepAliveResponse(sentTimestamp: Long, isIdentifiedWebSocket: Boolean) {}
         override fun onMessageError(status: Int, isIdentifiedWebSocket: Boolean) {}
         override fun onReceivedAlerts(alerts: Array<out String>, isIdentifiedWebSocket: Boolean) {}
         override fun onServerTimestamp(serverTimestamp: Long, isIdentifiedWebSocket: Boolean) {}
@@ -1021,7 +1018,7 @@ class DemoNetworkController(
       return@withContext RequestResult.NonSuccess(ReserveUsernameError.NicknameInvalid)
     }
 
-    val hashes: List<String> = candidates.map { Base64.encodeUrlSafeWithoutPadding(it.hash) }
+    val hashes: List<String> = candidates.map { Base64.encodeUrlSafeWithoutPadding(it.hash.serialize()) }
 
     try {
       val credentials = okhttp3.Credentials.basic(authUsername(aci), password)
@@ -1039,7 +1036,7 @@ class DemoNetworkController(
         when (response.code) {
           200 -> {
             val reservedHash = json.decodeFromString<ReserveUsernameResponseJson>(response.body.string()).usernameHash
-            val reserved = candidates.firstOrNull { Base64.encodeUrlSafeWithoutPadding(it.hash) == reservedHash }
+            val reserved = candidates.firstOrNull { Base64.encodeUrlSafeWithoutPadding(it.hash.serialize()) == reservedHash }
             if (reserved == null) {
               Log.w(TAG, "[reserveUsername] The reserved hash was not one of our candidates.")
               RequestResult.NonSuccess(ReserveUsernameError.NicknameInvalid)
@@ -1086,7 +1083,7 @@ class DemoNetworkController(
       val credentials = okhttp3.Credentials.basic(authUsername(aci), password)
       val baseUrl = serviceConfiguration.signalServiceUrls[0].url
       val requestJson = ConfirmUsernameRequestJson(
-        usernameHash = Base64.encodeUrlSafeWithoutPadding(username.hash),
+        usernameHash = Base64.encodeUrlSafeWithoutPadding(username.hash.serialize()),
         zkProof = Base64.encodeUrlSafeWithoutPadding(username.generateProof()),
         encryptedUsername = Base64.encodeUrlSafeWithoutPadding(link.encryptedUsername)
       )
@@ -1154,7 +1151,6 @@ class DemoNetworkController(
     val network = Network(Network.Environment.STAGING, "Signal-Android-Registration-Sample", emptyMap(), Network.BuildVariant.PRODUCTION)
     val credentialsProvider = StaticCredentialsProvider(aci, pni, e164, currentDeviceId(), password)
     val healthMonitor = object : HealthMonitor {
-      override fun onKeepAliveResponse(sentTimestamp: Long, isIdentifiedWebSocket: Boolean) {}
       override fun onMessageError(status: Int, isIdentifiedWebSocket: Boolean) {}
       override fun onReceivedAlerts(alerts: Array<out String>, isIdentifiedWebSocket: Boolean) {}
       override fun onServerTimestamp(serverTimestamp: Long, isIdentifiedWebSocket: Boolean) {}

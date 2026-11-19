@@ -16,7 +16,6 @@
   <!-- Removed by excludeNonTranslatables <string name="google_pay_url" translatable="false">https://pay.google.com</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
   <!-- Removed by excludeNonTranslatables <string name="pending_transfer_url" translatable="false">https://support.signal.org/hc/articles/360031949872#pending</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_faq_url" translatable="false">https://support.signal.org/hc/articles/360031949872#donate</string> -->
   <!-- Removed by excludeNonTranslatables <string name="inactive_primary_support" translatable="false">https://support.signal.org/hc/articles/9021007554074</string> -->
@@ -31,15 +30,6 @@
     <string name="save">Salvar</string>
     <string name="note_to_self">Anotações</string>
 
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a weather/climate application. -->
-    <string name="app_icon_label_weather">Tempo</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a note-taking application.-->
-    <string name="app_icon_label_notes">Notas</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a news/journalism application. -->
-    <string name="app_icon_label_news">Notícias</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in waves of the ocean. -->
-    <string name="app_icon_label_waves">Ondas</string>
-
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
 
@@ -47,23 +37,7 @@
     <string name="ApplicationMigrationActivity__signal_is_updating">O Signal está atualizando…</string>
 
     <!-- ApplicationPreferencesActivity -->
-    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Você ainda não definiu uma frase de recuperação!</string>
-    <string name="ApplicationPreferencesActivity_disable_passphrase">Desabilitar frase de recuperação?</string>
-    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Isto irá destravar permanentemente as notificações do Signal e de mensagens.</string>
-    <string name="ApplicationPreferencesActivity_disable">Desabilitar</string>
     <string name="ApplicationPreferencesActivity_error_connecting_to_server">Erro ao conectar-se com o servidor!</string>
-    <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">Os PINs são necessários para o bloqueio de registro. Para desativar os PINs, desative primeiro o bloqueio de registro.</string>
-    <string name="ApplicationPreferencesActivity_pin_created">PIN criado.</string>
-    <string name="ApplicationPreferencesActivity_pin_disabled">PIN desativado.</string>
-    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Gravar a frase de recuperação de pagamentos</string>
-    <string name="ApplicationPreferencesActivity_record_phrase">Gravar frase</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Antes de desativar seu PIN, certifique-se de salvar sua frase de recuperação de pagamentos para garantir que você possa recuperar sua conta.</string>
-    <!-- The title of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_title">Crie uma nova chave de recuperação</string>
-    <!-- The body of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_body">Você precisa criar e registrar uma chave de recuperação nova antes de poder desativar seu PIN.</string>
-    <!-- The confirmation button for a dialog letting the user know they have to rotate their recovery key if they want to disable PINs. If they click the button, they will be taken to a flow to rotate their key. -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_positive_button">Criar chave</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -387,8 +361,6 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s apagou esta mensagem</string>
     <string name="ConversationItem_you_deleted_this_message">Você apagou esta mensagem</string>
-    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
-    <string name="ConversationItem_delete_for_everyone_question">Apagar para todos?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Admin %1$s apagou esta mensagem</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -498,6 +470,8 @@
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">O envio de mensagens SMS não é mais suportado no Signal. Convide %1$s para o Signal para salvar a conversa aqui.</string>
     <!-- Message shown when opening a conversation with an unregistered user who used to be on Signal -->
     <string name="ConversationActivity__this_person_is_no_longer_using_signal">Essa pessoa não está mais usando o Signal. Convide essa pessoa para o Signal para salvar a conversa aqui.</string>
+    <!-- Message shown when opening a conversation with an unregistered user who is not on Signal -->
+    <string name="ConversationActivity__this_person_is_not_using_signal">Essa pessoa não está mais usando o Signal. Convide essa pessoa para o Signal para salvar a conversa aqui.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__invite_to_signal">Convidar para o Signal</string>
     <!-- Toast message shown when trying to record a voice message during an ongoing call -->
@@ -516,6 +490,8 @@
     <string name="ChatStickerConfirmation__reply_to_yourself">Responder à sua mensagem</string>
     <!-- Content description for the button that closes the sticker confirmation without sending -->
     <string name="ChatStickerConfirmation__go_back">Voltar</string>
+    <!-- Content description for the button that opens the sticker\'s pack, where it can be managed -->
+    <string name="ChatStickerConfirmation__manage_pack">Gerenciar pacote</string>
 
     <!-- ConversationFragment -->
     <!-- Toast text when contacts activity is not found -->
@@ -539,6 +515,8 @@
     <string name="ConversationFragment_deleting_messages">Excluindo mensagens…</string>
     <string name="ConversationFragment_delete_for_me">Apagar para mim</string>
     <string name="ConversationFragment_delete_for_everyone">Apagar para todos</string>
+    <!-- Snackbar text shown after the user deletes one or more messages only for themselves -->
+    <string name="ConversationFragment__deleted_for_me">Apagar para mim</string>
     <!-- Title of dialog confirming whether to delete the message -->
     <plurals name="ConversationFragment_delete_selected_title">
         <item quantity="one">Apagar mensagem selecionada?</item>
@@ -845,7 +823,6 @@
     <string name="CreateProfileActivity_error_setting_profile_photo">Erro ao definir foto do perfil</string>
     <string name="CreateProfileActivity_problem_setting_profile">Problema ao definir perfil</string>
     <string name="CreateProfileActivity_set_up_your_profile">Crie seu perfil</string>
-    <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Seu perfil e alterações ficarão visíveis para seus contatos, grupos e pessoas que você enviar mensagens.</string>
     <string name="CreateProfileActivity_set_avatar_description">Definir avatar</string>
 
     <!-- ProfileCreateFragment -->
@@ -987,7 +964,7 @@
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Todas as mensagens nos dispositivos vinculados são privadas</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
-    <string name="LinkDeviceFragment__signal_messages_are_synchronized">As mensagens do Signal são sincronizadas com o Signal no seu celular após o vínculo. Seu histórico de mensagens anterior não será exibido.</string>
+    <string name="LinkDeviceFragment__signal_messages_are_synchronized">As mensagens do Signal são sincronizadas com o Signal no seu celular após a vinculação.</string>
     <!-- Bottom sheet description explaining that for non-desktop/iPad devices, they should go to %s to download Signal where %s is Signal\'s website -->
     <string name="LinkDeviceFragment__on_other_device_visit_signal">Acesse %1$s no dispositivo que você deseja vincular para instalar o Signal. </string>
   <!-- Removed by excludeNonTranslatables <string name="LinkDeviceFragment__signal_download_url" translatable="false">signal.org/download</string> -->
@@ -1243,6 +1220,14 @@
         <item quantity="other">Não foi possível adicionar os membros.</item>
     </plurals>
 
+    <!-- LanguagePackReadyBanner -->
+    <!-- Banner shown after a language finished downloading in the background. %1$s is the language\'s name written in that language, for example "Deutsch". -->
+    <string name="LanguagePackReadyBanner__body">"The app language %1$s is ready to use. Restart Signal to switch to it."</string>
+    <!-- Button on the banner shown after a language finished downloading. Restarts the app so the language takes effect. -->
+    <string name="LanguagePackReadyBanner__restart">Restart</string>
+    <!-- Button on the banner shown after a language finished downloading. Hides the banner without restarting and applying the new language. -->
+    <string name="LanguagePackReadyBanner__not_now">Not now</string>
+
     <!-- LeaveGroupDialog -->
     <string name="LeaveGroupDialog_leave_group">Sair do grupo?</string>
     <string name="LeaveGroupDialog_you_will_no_longer_be_able_to_send_or_receive_messages_in_this_group">Você não poderá mais enviar nem receber mensagens neste grupo.</string>
@@ -1351,17 +1336,13 @@
 
     <!-- AddGroupDetailsFragment -->
     <string name="AddGroupDetailsFragment__name_this_group">Escolha um nome para este grupo</string>
-    <string name="AddGroupDetailsFragment__create_group">Criar grupo</string>
     <string name="AddGroupDetailsFragment__create">Criar</string>
     <string name="AddGroupDetailsFragment__members">Membros</string>
     <string name="AddGroupDetailsFragment__you_can_add_or_invite_friends_after_creating_this_group">Você pode adicionar ou convidar amigos(as) após criar esse grupo.</string>
     <string name="AddGroupDetailsFragment__group_name_required">Nome do grupo (obrigatório)</string>
-    <string name="AddGroupDetailsFragment__group_name_optional">Nome do grupo (opcional)</string>
-    <string name="AddGroupDetailsFragment__this_field_is_required">Este campo é obrigatório.</string>
     <string name="AddGroupDetailsFragment__group_creation_failed">A criação do grupo falhou.</string>
     <string name="AddGroupDetailsFragment__try_again_later">Tente novamente mais tarde.</string>
     <string name="AddGroupDetailsFragment__remove">Excluir</string>
-    <string name="AddGroupDetailsFragment__sms_contact">Contato de SMS</string>
     <string name="AddGroupDetailsFragment__remove_s_from_this_group">Excluir %1$s desse grupo?</string>
     <!-- Title of the dialog shown when tapping an existing group while creating a new group, confirming the user wants to leave and discard their in-progress group -->
     <string name="AddGroupDetailsFragment__discard_group">Descartar grupo?</string>
@@ -1369,8 +1350,6 @@
     <string name="AddGroupDetailsFragment__if_you_continue_to_the_group_s_your_changes_wont_be_saved">Se você continuar no grupo \"%1$s\", suas alterações não serão salvas.</string>
     <!-- Label for the button that confirms discarding the in-progress group and navigating to an existing group -->
     <string name="AddGroupDetailsFragment__discard">Descartar</string>
-    <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Você selecionou um contato que não tem suporte para grupos do Signal, por isso, este grupo será de MMS. Nomes e fotos de grupos de MMS personalizados serão visíveis apenas para você. O suporte para grupos de MMS será removido em breve. Nosso foco serão as mensagens com criptografia.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_who_can_add_new_members">Quem pode adicionar novos membros?</string>
@@ -1403,34 +1382,7 @@
     <!-- RemoteRestoreActivity -->
 
     <!-- ManageProfileFragment -->
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc -->
-    <string name="ManageProfileFragment__your_username">Seu nome de usuário, QR code e link não estão visíveis em seu perfil. Compartilhe seu nome de usuário somente com pessoas em quem você confia.</string>
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc, shown when you have no username -->
-    <string name="ManageProfileFragment__username_footer_no_username">As pessoas podem enviar mensagens para você usando um nome de usuário opcional em vez de um número de telefone. Os nomes de usuário têm um QR code único e um link que você pode compartilhar com amigos.</string>
-    <string name="ManageProfileFragment_profile_name">Nome de perfil</string>
-    <string name="ManageProfileFragment_username">Nome de usuário</string>
-    <string name="ManageProfileFragment_about">Sobre mim</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">Falha ao salvar foto de perfil</string>
     <string name="ManageProfileFragment_badges">Selos</string>
-    <!-- Text for a button that will take the user to the screen to manage their username link and QR code -->
-    <string name="ManageProfileFragment_link_setting_text">QR code ou link</string>
-    <string name="ManageProfileFragment__edit_photo">Editar foto</string>
-    <!-- Title of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_title">Compartilhe seu nome de usuário</string>
-    <!-- Body of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_body">Compartilhe seu QR code único ou link para permitir que outras pessoas iniciem uma conversa com você.</string>
-    <!-- Snackbar message after creating username -->
-    <string name="ManageProfileFragment__username_created">Nome de usuário criado</string>
-    <!-- Snackbar message after copying username -->
-    <string name="ManageProfileFragment__username_copied">Nome de usuário copiado</string>
-    <!-- Snackbar message after network failure while trying to delete username -->
-    <string name="ManageProfileFragment__couldnt_delete_username">Não foi possível apagar o nome de usuário. Tente novamente mais tarde.</string>
-    <!-- Snackbar message after successful deletion of username -->
-    <string name="ManageProfileFragment__username_deleted">Nome de usuário excluído</string>
-    <!-- The title of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_title">Excluir nome de usuário?</string>
-    <!-- The body of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_body">"Esta ação vai remover seu nome de usuário e desativar seu QR code e link. “%1$s” ficará disponível para outros usuários. Tem certeza?"</string>
 
     <!-- UsernameOutOfSyncReminder -->
     <!-- Displayed above the conversation list when a user needs to address an issue with their username -->
@@ -1556,11 +1508,6 @@
     <string name="InputPanel__this_action_cant_be_undone">Essa ação não poderá ser desfeita.</string>
     <!-- Button inside an alert dialog confirming the deletion of their draft -->
     <string name="InputPanel__discard">Descartar</string>
-
-    <!-- LearnMoreTextView -->
-    <string name="LearnMoreTextView_learn_more">Saiba mais</string>
-
-    <string name="SpanUtil__read_more">Leia mais</string>
 
     <!-- LongMessageActivity -->
     <string name="LongMessageActivity_unable_to_find_message">Mensagem não encontrada</string>
@@ -2612,6 +2559,12 @@
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_failed_to_submit" translatable="false">Failed to submit :(</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_success" translatable="false">Success!</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_share" translatable="false">Share</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting" translatable="false">Submitting debug log</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting_body" translatable="false">Collecting and uploading logs. This can take a minute.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_retry" translatable="false">Retry</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_close" translatable="false">Close</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copy" translatable="false">Copy</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copied" translatable="false">Copied to clipboard</string> -->
 
     <!-- SharedContactView -->
     <string name="SharedContactView_add_to_contacts">Adicionar a Contatos</string>
@@ -2621,7 +2574,7 @@
     <!-- Button on a contact card shared in a group chat that adds the person on the card to that group -->
     <string name="SharedContactView_add_to_group">Adicionar ao grupo</string>
     <!-- Confirmation dialog body when adding the person on a shared contact card to the current group. %1$s is the person\'s name, %2$s is the group name -->
-    <string name="SharedContactView_add_s_to_s">Add %1$s to “%2$s”?</string>
+    <string name="SharedContactView_add_s_to_s">Adicionar %1$s a “%2$s”?</string>
 
     <!-- SignalBottomActionBar -->
     <!-- Text to describe a button that will show more options -->
@@ -2710,6 +2663,16 @@
     </plurals>
     <!-- Message shown after copying a sticker pack link. -->
     <string name="StickerManagement_copied">Link copiado</string>
+    <!-- Title of the confirmation dialog shown before hiding a sticker pack. -->
+    <string name="StickerManagement_hide_pack_confirmation">Ocultar pacote de figurinhas?</string>
+    <!-- Body of the confirmation dialog shown before hiding a sticker pack that is not installed. -->
+    <string name="StickerManagement_hide_pack_confirmation_body">Isso ocultará o pacote de figurinhas dos pacotes disponíveis para você. Você não poderá adicioná-lo novamente sem um link ou uma mensagem com uma figurinha.</string>
+    <!-- Body of the confirmation dialog shown before hiding an installed sticker pack, which also removes it. -->
+    <string name="StickerManagement_hide_installed_pack_confirmation_body">Isso removerá o pacote de figurinhas dos pacotes disponíveis para você. Você não poderá adicioná-lo novamente sem um link ou uma mensagem com uma figurinha.</string>
+    <!-- Snackbar shown when a pack is hidden -->
+    <string name="StickerManagement_hidden_pack">Pacote de figurinhas oculto</string>
+    <!-- Snackbar action label to undo hiding a sticker pack. -->
+    <string name="StickerManagement_undo">Desfazer</string>
 
     <!-- Sticker pack list dropdown menu label for the button to forward a sticker pack to another user. -->
     <string name="StickerManagement_menu_forward_pack">Encaminhar</string>
@@ -2719,6 +2682,8 @@
     <string name="StickerManagement_menu_install_pack">Instalar</string>
     <!-- Sticker pack list dropdown menu label for the button to uninstall a sticker pack. -->
     <string name="StickerManagement_menu_remove_pack">Excluir</string>
+    <!-- Sticker pack list dropdown menu label for the button to hide an uninstalled sticker pack from the list of available packs. -->
+    <string name="StickerManagement_menu_hide_pack">Ocultar</string>
     <!-- Sticker management screen dropdown menu label for the button to enter multi-select mode. -->
     <string name="StickerManagement_menu_select_packs">Selecionar pacote de figurinhas</string>
     <!-- Sticker pack list dropdown menu label for sending a sticker pack. -->
@@ -2761,7 +2726,6 @@
     <string name="StickerManagement_accessibility_clear_search">Limpar os resultados da pesquisa</string>
 
     <!-- StickerManagementAdapter -->
-    <string name="StickerManagementAdapter_untitled">Sem título</string>
 
     <!-- StickerPackPreviewActivity -->
     <string name="StickerPackPreviewActivity_untitled">Sem título</string>
@@ -2775,16 +2739,18 @@
     <string name="StickerPreviewBottomSheet__title_author">%1$s · %2$s</string>
     <!-- Bottom sheet option that opens the pack the sticker belongs to -->
     <string name="StickerPreviewBottomSheet__view_pack">Ver pacote</string>
+    <!-- Bottom sheet label for sending a sticker. -->
+    <string name="StickerPreviewBottomSheet__send_sticker">Enviar figurinha</string>
     <!-- Snackbar shown after a sticker was successfully added to the user\'s favorite stickers -->
-    <string name="StickerFavorites__added_to_favorites">Sticker added to Favorites</string>
+    <string name="StickerFavorites__added_to_favorites">Figurinha adicionada aos Favoritos</string>
     <!-- Snackbar shown when the user tries to favorite a sticker but already has the maximum number of favorite stickers. Placeholder is 500. -->
-    <string name="StickerFavorites__favorites_limit_reached">You can only add %1$d stickers to Favorites</string>
+    <string name="StickerFavorites__favorites_limit_reached">Você só pode adicionar %1$d figurinhas aos Favoritos</string>
     <!-- Snackbar shown when we are unable to add or remove a sticker. -->
-    <string name="StickerFavorites__unknown_error">Unknown error. Try again later.</string>
+    <string name="StickerFavorites__unknown_error">Erro desconhecido. Tente novamente mais tarde.</string>
     <!-- Snackbar shown after a sticker was successfully removed from the user\'s favorite stickers -->
-    <string name="StickerFavorites__removed_from_favorites">Sticker removed from Favorites</string>
+    <string name="StickerFavorites__removed_from_favorites">Figurinha removida dos Favoritos</string>
     <!-- Snackbar shown when the user opens their favorite stickers but has not favorited any yet -->
-    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Press and hold a sticker to add to Favorites</string>
+    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Mantenha uma figurinha pressionada para adicioná-la aos Favoritos</string>
 
     <!-- Menu option to save a debug log file to disk. -->
     <string name="SubmitDebugLogActivity_save">Salvar</string>
@@ -2912,52 +2878,14 @@
     <string name="UnverifiedSendDialog_send">Enviar</string>
 
     <!-- UsernameEditFragment -->
-    <!-- Placeholder text for custom discriminator -->
-    <string name="UsernameEditFragment__00">00</string>
-    <!-- Instructional text at the top of the username edit screen -->
-    <string name="UsernameEditFragment__choose_your_username">Escolha seu nome de usuário</string>
-    <string name="UsernameEditFragment_username">Nome de usuário</string>
-    <string name="UsernameEditFragment_delete">Apagar</string>
+    <!-- Toast shown after your username is deleted -->
     <string name="UsernameEditFragment_successfully_removed_username">Usuário excluído com sucesso</string>
-    <string name="UsernameEditFragment_encountered_a_network_error">Foi encontrado um erro de rede.</string>
-    <!-- Toast message shown if user exceeds the rate limit for reserving usernames -->
-    <string name="UsernameEditFragment_rate_limit_exceeded_error">Foram feitas muitas tentativas, tente novamente mais tarde.</string>
-    <string name="UsernameEditFragment_this_username_is_taken">Este nome de usuário já está sendo utilizado.</string>
-    <string name="UsernameEditFragment_usernames_can_only_include">Os nomes de usuário só podem incluir a–Z, 0–9, e sublinhado.</string>
-    <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Os nomes de usuários não podem começar com um número.</string>
-    <string name="UsernameEditFragment_username_is_invalid">Nome de usuário inválido.</string>
-    <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Os nomes de usuário devem conter no mínimo %1$d e no máximo %2$d caracteres.</string>
-    <!-- Explanation about what usernames provide -->
-    <string name="UsernameEditFragment__usernames_let_others_message">As pessoas podem enviar mensagens para você usando seu nome de usuário opcional em vez de um número de telefone. Os nomes de usuário são sempre combinados com um conjunto de números.</string>
-    <!-- Button to allow user to skip -->
-    <string name="UsernameEditFragment__skip">Pular</string>
-    <!-- Content description for done button -->
-    <string name="UsernameEditFragment__done">Pronto</string>
-    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
-    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">Este nome de usuário não está disponível. Tente outro número.</string>
-    <!-- Displayed when the chosen discriminator is too short -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">Nome de usuário inválido, insira no mínimo %1$d dígitos.</string>
-    <!-- Displayed when the chosen discriminator is too long -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Nome de usuário inválido, insira no mínimo %1$d dígitos.</string>
-    <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">Este número não pode ser 00. Insira um dígito entre 1-9</string>
-    <!-- Displayed when the chosen discriminator starts with 0 and has a length > 2 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_0">Os números com mais de dois dígitos não podem começar com zero</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
-    <string name="UsernameEditFragment_recovery_dialog_confirmation">Se você recuperar seu nome de usuário, o QR code e o link existentes também serão alterados. Tem certeza?</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to change their username, even if it resets their link -->
-    <string name="UsernameEditFragment_change_confirmation_message">Se você mudar seu nome de usuário, o QR code e o link existentes também serão alterados. Tem certeza?</string>
-    <!-- Text for a button in a dialog asking if the user would like to continue the operation of changing their username -->
-    <string name="UsernameEditFragment_continue">Continuar</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%1$d contato está no Signal!</item>
         <item quantity="other">%1$d contatos estão no Signal!</item>
     </plurals>
 
-    <!-- UsernameShareBottomSheet -->
-    <!-- Explanation of what the sheet enables the user to do -->
-    <string name="UsernameShareBottomSheet__copy_or_share_a_username_link">Copiar ou compartilhar um link de nome de usuário</string>
 
     <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">O código QR escaneado não é um código de verificação de número de segurança formatado corretamente. Por favor, tente escanear de novo.</string>
     <string name="VerifyIdentityActivity_share_safety_number_via">Compartilhar número de segurança por…</string>
@@ -3005,28 +2933,15 @@
     <string name="KeyCachingService_lock">Trancar Signal</string>
 
     <!-- MediaPreviewActivity -->
-    <string name="MediaPreviewActivity_you">Você</string>
-    <string name="MediaPreviewActivity_unssuported_media_type">Tipo de mídia não suportado</string>
-    <string name="MediaPreviewActivity_draft">Rascunho</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_title">Apagar mensagem?</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_message">Esta mensagem será apagada permanentemente.</string>
-    <string name="MediaPreviewActivity_s_to_s">%1$s para %2$s</string>
-    <!-- All media preview title when viewing media send by you to another recipient (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_you_to_s">Enviado para %1$s</string>
-    <!-- All media preview title when viewing media sent by another recipient to you (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_s_to_you">%1$s para você</string>
     <string name="MediaPreviewActivity_media_no_longer_available">A mídia não está mais disponível.</string>
     <!-- Notifying the user that the device has encountered a technical issue and is unable to render a video. -->
     <string name="MediaPreviewActivity_unable_to_play_media">Não foi possível reproduzir a mídia.</string>
     <!-- Toast shown when there is an error finding a media-based message -->
     <string name="MediaPreviewActivity_error_finding_message">Erro ao encontrar mensagem.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Não foi possível encontrar um aplicativo capaz de compartilhar esta mídia.</string>
-    <string name="MediaPreviewActivity_dismiss_due_to_error">Fechar</string>
     <string name="MediaPreviewFragment_edit_media_error">Erro de mídia</string>
     <!-- This is displayed as a toast notification when we encounter an error deleting a message, including potentially on other people\'s devices -->
     <string name="MediaPreviewFragment_media_delete_error">Erro ao excluir mensagem, é possível que a mensagem ainda exista</string>
-    <!-- A suffix to be attached to truncated captions that the user may tap onto to view the entire text caption -->
-    <string name="MediaPreviewFragment_read_more_overflow_text">Leia mais</string>
     <string name="MediaPreviewFragment_share">Compartilhar</string>
 
     <!-- MessageNotifier -->
@@ -3159,6 +3074,8 @@
 
     <!-- Message explaining that it is not possible to save media to the device storage after the user denied the system save to storage permission. -->
     <string name="AttachmentSaver__unable_to_write_to_external_storage_without_permission">Não é possível gravar dados no armazenamento externo sem as permissões</string>
+    <!-- Toast shown when media can\'t be saved to the device storage because its data is no longer on the device and can\'t be downloaded again. -->
+    <string name="AttachmentSaver__media_no_longer_available">Este arquivo de mídia não está mais disponível.</string>
 
     <!-- Dialog title shown when attempting to save media that has been offloaded from the device by the storage optimization feature. -->
     <string name="AttachmentSaver__cant_save_media">Não é possível salvar os arquivos de mídia</string>
@@ -3229,7 +3146,7 @@
 
     <!-- SetUpUsernameBanner -->
     <!-- Body of a banner on the new message screen prompting the user to create a username -->
-    <string name="SetUpUsernameBanner__choose_a_username_so_others_can_connect_with_you">Escolha um nome de usuário para que outras pessoas possam entrar em contato com você.</string>
+    <string name="SetUpUsernameBanner__choose_a_username">Escolha um nome de usuário</string>
     <!-- Button label that takes the user to the username creation screen -->
     <string name="SetUpUsernameBanner__set_up">Configurar</string>
     <!-- Accessibility label for the button that permanently dismisses the banner -->
@@ -3527,45 +3444,6 @@
 
     <string name="device_list_fragment__link_new_device">Vincular novo dispositivo</string>
 
-    <!-- expiration -->
-    <string name="expiration_off">Desligado</string>
-
-    <plurals name="expiration_seconds">
-        <item quantity="one">%1$d segundo</item>
-        <item quantity="other">%1$d segundos</item>
-    </plurals>
-
-    <string name="expiration_seconds_abbreviated">%1$ds</string>
-
-    <plurals name="expiration_minutes">
-        <item quantity="one">%1$d minuto</item>
-        <item quantity="other">%1$d minutos</item>
-    </plurals>
-
-    <string name="expiration_minutes_abbreviated">%1$dmin</string>
-
-    <plurals name="expiration_hours">
-        <item quantity="one">%1$d hora</item>
-        <item quantity="other">%1$d horas</item>
-    </plurals>
-
-    <string name="expiration_hours_abbreviated">%1$dh</string>
-
-    <plurals name="expiration_days">
-        <item quantity="one">%1$d dia</item>
-        <item quantity="other">%1$d dias</item>
-    </plurals>
-
-    <string name="expiration_days_abbreviated">%1$dd</string>
-
-    <plurals name="expiration_weeks">
-        <item quantity="one">%1$d semana</item>
-        <item quantity="other">%1$d semanas</item>
-    </plurals>
-
-    <string name="expiration_weeks_abbreviated">%1$dsem</string>
-    <string name="expiration_combined">%1$s %2$s</string>
-
     <!-- unverified safety numbers -->
     <string name="IdentityUtil_unverified_banner_one">Seu número de segurança com %1$s mudou e não está verificado</string>
     <string name="IdentityUtil_unverified_banner_two">Seus números de segurança com %1$s e %2$s não estão verificados</string>
@@ -3627,42 +3505,14 @@
     <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Nomes e fotos de grupos de MMS personalizados serão visíveis apenas para você.</string>
     <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">A descrição do grupo estará visível para os membros deste grupo e pessoas que foram convidadas.</string>
 
-    <!-- EditAboutFragment -->
-    <string name="EditAboutFragment_about">Sobre mim</string>
-    <string name="EditAboutFragment_write_a_few_words_about_yourself">Escreva algo sobre você…</string>
-    <string name="EditAboutFragment_count">%1$d/%2$d</string>
-    <string name="EditAboutFragment_speak_freely">Fale livremente</string>
-    <string name="EditAboutFragment_encrypted">Criptografado</string>
-    <string name="EditAboutFragment_be_kind">Seja gentil</string>
-    <string name="EditAboutFragment_coffee_lover">Amante de café</string>
-    <string name="EditAboutFragment_free_to_chat">Disponível para chat</string>
-    <string name="EditAboutFragment_taking_a_break">Relaxando</string>
-    <string name="EditAboutFragment_working_on_something_new">Trabalhando em algo novo</string>
-
     <!-- EditProfileFragment -->
     <string name="EditProfileFragment__edit_group">Editar grupo</string>
     <string name="EditProfileFragment__group_name">Nome do grupo</string>
     <string name="EditProfileFragment__group_description">Descrição do grupo</string>
   <!-- Removed by excludeNonTranslatables <string name="EditProfileFragment__support_link" translatable="false">https://support.signal.org/hc/articles/360007459591</string> -->
-    <!-- The title of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_title">Atualizar o Signal</string>
-    <!-- The body of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_body">Esta versão do Signal expirou. Atualize agora para continuar a usar o Signal.</string>
-    <!-- The button on a dialog prompting user to update to the latest version of Signal. When clicked, the user will be taken to the store to update their app. -->
-    <string name="EditProfileFragment_deprecated_dialog_update_button">Atualizar</string>
-    <!-- The title of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_title">Dispositivo não registrado</string>
-    <!-- The body of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_body">O dispositivo não está mais registrado. Registre-se novamente para fazer alterações na sua conta.</string>
-    <!-- The button on a dialog informing the user that they cannot use this app feature when they are unregistered. When clicked, the user will be taken to a screen to help them re-register. -->
-    <string name="EditProfileFragment_unregistered_dialog_reregister_button">Registrar novamente</string>
 
     <!-- EditProfileNameFragment -->
-    <string name="EditProfileNameFragment_your_name">Seu nome</string>
-    <string name="EditProfileNameFragment_first_name">Nome</string>
-    <string name="EditProfileNameFragment_last_name_optional">Sobrenome (opcional)</string>
     <string name="EditProfileNameFragment_save">Salvar</string>
-    <string name="EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later">Falha ao salvar devido aos problemas na rede. Tente mais tarde.</string>
 
     <!-- recipient_preferences_activity -->
     <string name="recipient_preference_activity__shared_media">Mídia compartilhada</string>
@@ -3810,19 +3660,8 @@
     <string name="DebugLogsPromptDialogFragment__no_thanks">Não, agradeço</string>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Recentes</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Esta mensagem</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Utilizado recentemente</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Nenhum resultado encontrado</string>
 
-    <string name="GifQuickSearchOption__trending">Em alta</string>
-    <string name="GifQuickSearchOption__celebrate">Comemoração</string>
-    <string name="GifQuickSearchOption__love">Amor</string>
-    <string name="GifQuickSearchOption__thumbs_up">Joinha</string>
-    <string name="GifQuickSearchOption__surprised">Surpreso</string>
-    <string name="GifQuickSearchOption__excited">Animado</string>
-    <string name="GifQuickSearchOption__sad">Triste</string>
-    <string name="GifQuickSearchOption__angry">Com raiva</string>
 
     <!-- arrays.xml -->
     <string name="arrays__use_default">Usar padrão</string>
@@ -3838,24 +3677,9 @@
     <string name="arrays__enabled">Habilitado</string>
     <string name="arrays__disabled">Desabilitado</string>
 
-    <string name="arrays__name_and_message">Nome e mensagem</string>
-    <string name="arrays__name_only">Apenas nome</string>
-    <string name="arrays__no_name_or_message">Nem nome nem mensagem</string>
 
-    <string name="arrays__images">Imagens</string>
-    <string name="arrays__audio">Áudio</string>
-    <string name="arrays__video">Vídeo</string>
-    <string name="arrays__documents">Documentos</string>
 
-    <string name="arrays__small">Pequeno</string>
-    <string name="arrays__normal">Normal</string>
-    <string name="arrays__large">Grande</string>
-    <string name="arrays__extra_large">Extra grande</string>
 
-    <string name="arrays__default">Padrão</string>
-    <string name="arrays__high">Alta</string>
-    <!-- Setting title that represent an abstract priority to assign to notifications as the max/highest priority a notification can be within the system. -->
-    <string name="arrays__max">Máxima</string>
 
     <!-- plurals.xml -->
     <plurals name="hours_ago">
@@ -3863,205 +3687,32 @@
         <item quantity="other">%1$d h</item>
     </plurals>
 
-    <string name="preferences__change_passphrase">Alterar frase de recuperação</string>
-    <string name="preferences__change_your_passphrase">Alterar sua frase de recuperação</string>
-    <!-- Legacy preference menu item to enable a passphrase screen lock that is only available to those who have previously had a passphrase -->
-    <string name="preferences__enable_passphrase">Habilitar o bloqueio da tela com frase de recuperação</string>
-    <string name="preferences__lock_signal_and_message_notifications_with_a_passphrase">Bloquear tela e notificações com frase de recuperação</string>
-    <string name="preferences__screen_security">Segurança da tela</string>
-    <string name="preferences__auto_lock_signal_after_a_specified_time_interval_of_inactivity">Trancar automaticamente o Signal após um determinado período de inatividade</string>
-    <!-- Legacy preference menu item to enable locking of app after inactivity -->
-    <string name="preferences__inactivity_timeout_passphrase">Frase de recuperação após período de inatividade</string>
-    <!-- Legacy preference menu item to choose the interval of inactivity before lockout -->
-    <string name="preferences__inactivity_timeout_interval">Período de expiração por inatividade</string>
+    <!-- Bottom sheet message shown after an assistant app requested the contents of the screen, explaining that screenshots were automatically disabled -->
+    <string name="AssistantScreenSecurityBottomSheet__body">Aplicativos de assistentes de IA, como o Gemini, podem analisar seu conteúdo no Signal. Para evitar isso, a proteção de tela foi ativada. Isso também impedirá prints.</string>
+    <!-- Bottom sheet title shown after an assistant app requested the contents of the screen and screen security was automatically turned on -->
+    <string name="AssistantScreenSecurityBottomSheet__title">A segurança da tela está ativada</string>
+    <!-- Bottom sheet button that turns screen security back off -->
+    <string name="AssistantScreenSecurityBottomSheet__turn_off_screen_security">Desativar segurança da tela</string>
+    <!-- Title of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__title">Desativar segurança da tela?</string>
+    <!-- Body of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__body">Se esta opção estiver desativada, assistentes de IA, como o Google Gemini, poderão analisar o conteúdo do Signal e utilizá-lo em recursos que talvez não sejam privados.</string>
+    <!-- Dialog button that confirms turning off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__turn_off">Desativar</string>
+    <!-- Snackbar shown after the user turns off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__screen_security_is_off">A segurança da tela está desativada</string>
     <string name="preferences__notifications">Notificações</string>
-    <!-- Preference item menu to enable notifications -->
-    <string name="preferences__enable_notifications">Exibir notificações</string>
-    <!-- Preference header for call notifications -->
-    <string name="preferences__call_notifications">Notificações de chamadas</string>
-    <string name="preferences__led_color">Cor do LED</string>
     <string name="preferences__led_color_unknown">Desconhecida</string>
-    <string name="preferences__pref_led_blink_title">Padrão de piscagem do LED</string>
-    <string name="preferences__customize">Personalizar</string>
-    <string name="preferences__change_sound_and_vibration">Mudar som e vibração</string>
-    <!-- Preference menu item to control the sound of notifications -->
-    <string name="preferences__sound">Som</string>
     <string name="preferences__silent">Silencioso</string>
-    <!-- Preference menu item to use the default sound for notifications -->
-    <string name="preferences__default">Padrão</string>
-    <string name="preferences__repeat_alerts">Repetir alertas</string>
-    <string name="preferences__never">Nunca</string>
-    <string name="preferences__one_time">Uma vez</string>
-    <string name="preferences__two_times">Duas vezes</string>
-    <string name="preferences__three_times">Três vezes</string>
-    <string name="preferences__five_times">Cinco vezes</string>
-    <string name="preferences__ten_times">Dez vezes</string>
-    <string name="preferences__vibrate">Vibrar</string>
-    <string name="preferences__green">Verde</string>
-    <string name="preferences__red">Vermelho</string>
-    <string name="preferences__blue">Azul</string>
-    <string name="preferences__orange">Laranja</string>
-    <string name="preferences__cyan">Ciano</string>
-    <string name="preferences__magenta">Magenta</string>
-    <string name="preferences__white">Branco</string>
-    <!-- Text shown when no preference label has been selected -->
-    <string name="preferences__none">Nenhuma</string>
-    <string name="preferences__fast">Rápido</string>
-    <string name="preferences__normal">Normal</string>
-    <string name="preferences__slow">Lento</string>
-    <string name="preferences__help">Ajuda</string>
-    <string name="preferences__advanced">Avançadas</string>
     <string name="preferences__donate_to_signal">Doar para o Signal</string>
-    <!-- Preference label for making one-time donations to Signal -->
-    <string name="preferences__privacy">Privacidade</string>
     <!-- Preference label for stories -->
     <string name="preferences__stories">Stories</string>
-    <string name="preferences__data_and_storage">Dados e armazenamento</string>
-    <string name="preferences__storage">Armazenamento</string>
     <string name="preferences__payments">Pagamentos</string>
-    <!-- Privacy settings payments section description -->
-    <string name="preferences__payment_lock">Bloqueio de pagamento</string>
-    <string name="preferences__conversation_length_limit">Tamanho máximo de chat</string>
-    <string name="preferences__keep_messages">Manter as mensagens</string>
     <string name="preferences__linked_devices">Dispositivos vinculados</string>
-    <string name="preferences__light_theme">Claro</string>
-    <string name="preferences__dark_theme">Escuro</string>
-    <string name="preferences__appearance">Aparência</string>
-    <string name="preferences__theme">Tema</string>
-    <string name="preferences__chat_color_and_wallpaper">Cor e papel de parede do chat</string>
-    <!-- Clickable settings text allowing the user to change the icon visible on their phone\'s home screen. -->
-    <string name="preferences__app_icon">Ícone do app</string>
-    <!-- Approval for changing the app icon. -->
-    <string name="preferences__app_icon_dialog_ok">OK</string>
-    <!-- Cancelling the operation of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_cancel">Cancelar</string>
-    <!-- Title for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_title">Mudar ícone e nome do app para \"%1$s\"</string>
-    <!-- Description for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_description">Para mudar o ícone e nome do app, você precisará fechar o Signal. As notificações sempre exibirão o ícone e o nome padrão do Signal.</string>
-    <!-- Visible warning label for the limitations of changing the app icon with learn more call to action. -->
-    <string name="preferences__app_icon_warning_learn_more">Selecione um ícone e nome para o app, que ficarão visíveis na tela inicial do seu telefone e na gaveta de apps. As notificações sempre exibirão o ícone e o nome padrão do Signal. Saiba mais</string>
-    <!-- Visible warning label for the limitations of changing the app icon. -->
-    <string name="preferences__app_icon_warning">Os ícones e nomes de apps ficam visíveis na tela inicial e na gaveta de apps.</string>
-    <!-- Visible warning label explaining that changing the app icon and name does not affect notifications. -->
-    <string name="preferences__app_icon_notification_warning">As notificações sempre exibirão o ícone e o nome padrão do Signal.</string>
-    <!--Call to action to get more information about the limitations of the change app icon functionality. -->
-    <string name="preferences__app_icon_learn_more">Saiba mais</string>
-    <!--Text description of a graphic illustrating the limitations of the app icon change. -->
-    <string name="preferences__graphic_illustrating_where_the_replacement_app_icon_will_be_visible">Gráfico ilustrando onde o ícone de substituição do app ficará visível.</string>
-    <string name="preferences__disable_pin">Desabilitar PIN</string>
-    <string name="preferences__enable_pin">Habilitar PIN</string>
-    <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">Se você desativar o PIN, perderá todos os dados ao se registrar de novo com o Signal, a menos que você faça backup manualmente e os restaure. Você não pode ativar o Bloqueio de Registro enquanto o PIN estiver desativado.</string>
-    <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">O PIN mantém criptografadas as informações armazenadas no Signal, de modo que apenas você as acesse. Seu perfil, configurações e contatos serão restaurados quando você reinstalar. Você não precisará do PIN para abrir o app.</string>
-    <string name="preferences__system_default">Padrão do sistema</string>
-    <string name="preferences__language">Idioma</string>
-    <!-- Title of toolbar for the advanced pin settings screen -->
-    <string name="preferences__advanced_pin_settings_title">Configurações avançadas do PIN</string>
     <string name="preferences__submit_debug_log">Enviar registro de depuração</string>
-    <string name="preferences__incognito_keyboard">Teclado incógnito</string>
-    <string name="preferences__read_receipts">Confirmações de leitura</string>
-    <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">Se as confirmações de leitura estiverem desabilitadas, você não verá as confirmações de leitura das outras pessoas.</string>
-    <string name="preferences__typing_indicators">Indicadores de digitação</string>
-    <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">Se os indicadores de digitação estiverem desabilitados, você não poderá ver os indicadores de digitação de outras pessoas.</string>
-    <string name="preferences__request_keyboard_to_disable">Solicitar ao teclado para evitar o aprendizado de digitação.</string>
-    <string name="preferences__this_setting_is_not_a_guarantee">Essa configuração não é uma garantia e seu teclado pode ignorá-la.</string>
-  <!-- Removed by excludeNonTranslatables <string name="preferences__incognito_keyboard_learn_more" translatable="false">https://support.signal.org/hc/articles/360055276112</string> -->
-    <string name="preferences_chats__when_using_mobile_data">Quando usar dados móveis</string>
-    <string name="preferences_chats__when_using_wifi">Quando usar Wi-Fi</string>
-    <string name="preferences_chats__when_roaming">Quando em roaming</string>
-    <string name="preferences_chats__media_auto_download">Download automático de mídia</string>
-    <string name="preferences_storage__storage_usage">Uso do armazenamento</string>
-    <string name="preferences_storage__photos">Fotos</string>
-    <string name="preferences_storage__videos">Vídeos</string>
-    <string name="preferences_storage__files">Arquivos</string>
-    <string name="preferences_storage__audio">Áudio</string>
-    <!-- Storage usage legend label for the size of the main message database -->
-    <string name="preferences_storage__messages">Mensagens</string>
-    <!-- Storage usage legend label for the size of downloaded sticker packs -->
-    <string name="preferences_storage__stickers">Figurinhas</string>
-    <!-- Storage usage legend label for all remaining app storage, such as other databases, caches and temporary files -->
-    <string name="preferences_storage__other">Outro</string>
-    <!-- Shown in place of the total storage size while usage is still being computed -->
-    <string name="preferences_storage__calculating">Calculando…</string>
-    <string name="preferences_storage__review_storage">Checar armazenamento</string>
-    <string name="preferences_storage__delete_older_messages">Apagar as mensagens mais antigas?</string>
-    <!-- Dialog title shown when selecting delete message history from manage storage -->
-    <string name="preferences_storage__delete_message_history">Excluir histórico de mensagens?</string>
-    <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">Todo o histórico de mensagens e mídias do seu dispositivo que sejam mais antigos que %1$s serão apagados permanentemente.</string>
-    <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
-    <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
-        <item quantity="one">Esta ação vai recortar todos os chats na mensagem mais recente.</item>
-        <item quantity="other">Esta ação vai recortar todos os chats nas %1$s mensagens mais recentes.</item>
-    </plurals>
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device">Todo o histórico de mensagens e mídias do seu dispositivo serão apagados permanentemente.</string>
-    <!-- Dialog message warning about delete chat message history will delete everything everywhere including linked devices -->
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device_linked_device">Isso excluirá permanentemente todo o histórico de mensagens e mídias deste dispositivo e de todos os dispositivos vinculados.</string>
-    <string name="preferences_storage__are_you_sure_you_want_to_delete_all_message_history">Tem certeza que quer apagar todo o histórico de mensagens?</string>
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone">Todo o histórico de mensagens será excluído permanentemente. Esta ação não pode ser desfeita.</string>
-    <!-- Secondary warning dialog message about deleting all chat message history from everything everywhere including linked devices -->
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone_linked_device">Todo o histórico de mensagens será removido permanentemente de todos os dispositivos. Essa ação não pode ser desfeita.</string>
-    <string name="preferences_storage__delete_all_now">Apagar tudo agora</string>
-    <!-- Option for keeping messages forever when managing storage -->
-    <string name="preferences_storage__forever">Para sempre</string>
-    <string name="preferences_storage__one_year">1 ano</string>
-    <string name="preferences_storage__six_months">6 meses</string>
-    <string name="preferences_storage__thirty_days">30 dias</string>
-    <!-- Option for setting no limit of the length of chat messages -->
-    <string name="preferences_storage__none">Nenhum</string>
-    <plurals name="preferences_storage__s_messages_plural">
-        <item quantity="one">%1$s mensagem</item>
-        <item quantity="other">%1$s mensagens</item>
-    </plurals>
 
-    <string name="preferences_storage__custom">Personalizado</string>
-    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Encaminhar todas as chamadas através do servidor Signal para evitar revelar seu endereço IP para seu contato. Habilitar reduzirá a qualidade da chamada.</string>
-    <string name="preferences_advanced__always_relay_calls">Sempre reencaminhar chamadas</string>
-    <!-- Privacy settings payments section title -->
-    <string name="preferences_app_protection__payments">Pagamentos</string>
-    <string name="preferences_data_and_storage__manage_storage">Gerenciar armazenamento</string>
-    <string name="preferences_data_and_storage__use_less_data_for_calls">Usar menos dados em chamadas</string>
-    <string name="preferences_data_and_storage__never">Nunca</string>
-    <string name="preferences_data_and_storage__wifi_and_mobile_data">Wi-Fi e dados móveis</string>
-    <string name="preferences_data_and_storage__mobile_data_only">Somente por dados móveis</string>
-    <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Usar menos dados pode melhorar as chamadas em redes ruins.</string>
-    <string name="preferences_notifications__in_chat_sounds">Sons no chat</string>
-    <string name="preferences_notifications__show">Exibir</string>
-    <!-- Preference item to set notification settings when chats are muted -->
-    <string name="preferences_notifications__while_muted">Enquanto estiver no silencioso</string>
-    <!-- Option in settings to turn on reaction notifications -->
-    <string name="preferences_notifications__reaction">Notificações de reação</string>
-    <!-- Body option in settings to turn on reaction notifications    -->
-    <string name="preferences_notifications__notify_reaction">Mostrar notificações de reações às mensagens que você envia</string>
     <!-- Option in settings to turn on unread reminders -->
     <string name="preferences_notifications__unread">Lembretes não lidos</string>
-    <!-- Body option to turn on unread reminders -->
-    <string name="preferences_notifications__notify_unread">Notificar ocasionalmente quando houver mensagens não lidas em conversas silenciadas</string>
-    <string name="preferences_notifications__ringtone">Toque</string>
-    <string name="preferences_chats__message_text_size">Tamanho da fonte da mensagem</string>
-    <!-- Option in settings that will provide a shortcut to notification system settings to control the priority of Signal notifications -->
-    <string name="preferences_notifications__priority">Prioridade</string>
-    <!-- Option in settings to trouble shoot delayed notifications -->
-    <string name="preferences_notifications__troubleshoot">Notificações de resolução de problemas</string>
-    <!-- Heading for the \'censorship circumvention\' section of privacy preferences -->
-    <string name="preferences_communication__category_censorship_circumvention">Driblagem de censura</string>
-    <!-- Title of the \'censorship circumvention\' toggle switch -->
-    <string name="preferences_communication__censorship_circumvention">Driblagem de censura</string>
-    <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Se ativado, Signal tentará contornar a censura. Não habilite esta função ao menos que você esteja em um lugar onde Signal é censurado.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">A driblagem de censura foi ativada tendo como base o número de telefone da sua conta.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Você desabilitou manualmente a driblagem de censura.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service -->
-    <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">A driblagem de censura não é necessária. Você já se conectou ao serviço Signal.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet -->
-    <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">A driblagem de censura pode ser habilitada somente durante uma conexão à Internet.</string>
-    <string name="preferences_communication__category_sealed_sender">Remetente Oculto</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone">Permitir de qualquer um</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone_description">Habilitar remetente oculto para mensagens recebidas de não contatos e pessoas com quem você não compartilhou seu perfil.</string>
-    <string name="preferences_proxy">Proxy</string>
-    <string name="preferences_use_proxy">Usar proxy</string>
-    <string name="preferences_off">Desligado</string>
-    <string name="preferences_on">Ligado</string>
     <string name="preferences_proxy_address">Endereço de proxy</string>
     <string name="preferences_only_use_a_proxy_if">Somente use um proxy se você não conseguir se conectar ao Signal com dados móveis ou Wi-Fi.</string>
     <string name="preferences_share">Compartilhar</string>
@@ -4075,18 +3726,6 @@
     <string name="preferences_success">Deu certo</string>
     <string name="preferences_failed_to_connect">Falha de conexão</string>
     <string name="preferences_enter_proxy_address">Digite o endereço de proxy</string>
-    <!-- Preference title for changing navigation (bottom) bar size -->
-    <string name="preferences_navigation_bar_size">Tamanho da barra de navegação</string>
-    <!-- Preference summary for normal navigation bar size -->
-    <string name="preferences_normal">Normal</string>
-    <!-- Preference summary for compact navigation bar size -->
-    <string name="preferences_compact">Compacta</string>
-    <!-- Dialog message body explaining that we have to restart the app in order to apply the user\'s new language setting.  -->
-    <string name="preferences_language_change_confirmation_message">O app será reiniciado para aplicar a nova configuração de idioma.</string>
-    <!-- Preference title for automatic key verification -->
-    <string name="preferences_automatic_key_verification">Verificação automática de chaves</string>
-    <!-- Preference summary for automatic key verification -->
-    <string name="preferences_automatic_key_verification_body">Quando ativado, o Signal tentará verificar automaticamente a criptografia das conversas individuais.</string>
 
 
     <!-- Internal only preferences -->
@@ -4467,11 +4106,6 @@
     <!-- Label for a button in a banner to learn more about why we cannot process the user\'s contacts -->
     <string name="reminder_cds_permanent_error_learn_more">Saiba mais</string>
 
-    <!-- media_preview -->
-    <string name="media_preview__save_title">Salvar</string>
-    <string name="media_preview__edit_title">Editar</string>
-
-
     <!-- media_preview_activity -->
     <!-- Content description of images or videos when viewing media -->
     <string name="media_preview_activity__media_content_description">Pré-visualização de mídia</string>
@@ -4600,6 +4234,12 @@
     <string name="CallNotificationBuilder__ongoing_signal_group_call">Chamada de grupo do Signal em andamento</string>
 
     <string name="CallNotificationBuilder_connecting">Conectando…</string>
+    <!-- Notification title shown when Signal needs to be opened to use the microphone during a call -->
+    <string name="CallNotificationBuilder__open_signal">Open Signal</string>
+    <!-- Notification body shown when a call was answered from a watch or other device but Signal needs microphone permission before it can connect -->
+    <string name="CallNotificationBuilder__to_answer_this_call_allow_signal_access_to_your_microphone">To answer this call, allow Signal access to your microphone.</string>
+    <!-- Notification body shown during a call when Android blocked microphone access because Signal was in the background -->
+    <string name="CallNotificationBuilder__the_other_person_cant_hear_you_until_you_open_signal">The other person can\'t hear you until you open Signal.</string>
     <string name="enter_backup_passphrase_dialog__backup_passphrase">Frase de recuperação de backup</string>
     <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Os backups serão salvos no armazenamento externo e criptografados com a frase de recuperação abaixo. Você precisa desta frase de recuperação para restaurar um backup.</string>
     <string name="backup_enable_dialog__you_must_have_this_passphrase">Você deve ter esta frase de recuperação para restaurar um backup.</string>
@@ -4645,39 +4285,6 @@
     <string name="BackupUtil_never">Nunca</string>
     <!-- Subtext below last backup time when we do not know when the last backup was -->
     <string name="BackupUtil_unknown">Desconhecida</string>
-    <!-- Phone number heading displayed as a screen title -->
-    <string name="preferences_app_protection__phone_number">Número de telefone</string>
-    <!-- Subtext below option to launch into phone number privacy settings screen -->
-    <string name="preferences_app_protection__choose_who_can_see">Defina quem pode encontrar seu número de telefone e quem pode entrar em contato com você pelo Signal usando seu número.</string>
-    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_see_my_number_heading">Quem pode ver meu número?</string>
-    <!-- Subtext below radio buttons when who can see my number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_on_description">Seu número de telefone estará visível para todas as pessoas e grupos dos quais você participa.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_on_description">Seu número de telefone não ficará visível para ninguém, a menos que ele esteja salvo nos contatos do telefone.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_off_description">Seu número de telefone não ficará visível para ninguém.</string>
-    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_find_me_by_number_heading">Quem pode encontrar meu número</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_on_description">Qualquer pessoa que tenha seu número de telefone verá que você está no Signal e poderá iniciar chats com você.</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_off_description">Ninguém poderá ver que você está no Signal, a não ser que você envie uma mensagem ou participe de um chat com alguém.</string>
-    <!-- Snackbar text when pressing invalid radio item -->
-    <string name="PhoneNumberPrivacySettingsFragment__to_change_this_setting">"Para alterar esta configuração, defina \"Quem pode ver meu número\" como \"Ninguém\"."</string>
-    <!-- Dialog title shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_title">Tem certeza?</string>
-    <!-- Dialog warning message shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_message">Se você definir \"Quem pode ver meu número\" como \"Ninguém\", vai ser mais difícil para as pessoas te acharem no Signal.</string>
-    <!-- Dialog button text for canceling change action -->
-    <string name="PhoneNumberPrivacySettingsFragment__cancel">Cancelar</string>
-    <string name="PhoneNumberPrivacy_everyone">Todo mundo</string>
-    <string name="PhoneNumberPrivacy_nobody">Ninguém</string>
-    <string name="preferences_app_protection__screen_lock">Bloqueio de tela</string>
-    <!-- Snackbar text shown when trying to enable screen lock but the user does not have a password or biometrics enabled -->
-    <string name="preferences_app_protection__to_use_screen_lock">Para configurar o bloqueio de tela, defina um PIN, padrão ou senha neste dispositivo.</string>
-    <string name="preferences_app_protection__failed_to_enable_registration_lock">Falha ao ativar o Desbloqueio de registro.</string>
-    <string name="preferences_app_protection__failed_to_disable_registration_lock">Falha ao desativar o Desbloqueio de registro.</string>
     <string name="RegistrationActivity_you_must_enter_your_registration_lock_PIN">Você deve inserir seu PIN de Desbloqueio de registro</string>
     <string name="RegistrationActivity_your_pin_has_at_least_d_digits_or_characters">Seu PIN tem pelo menos %1$d dígitos ou characteres</string>
     <string name="RegistrationActivity_too_many_attempts">Excesso de tentativas</string>
@@ -4698,26 +4305,6 @@
     <string name="prompt_passphrase_activity__try_again">Tentar novamente</string>
 
     <!-- ScreenLockSettingsFragment -->
-    <!-- Text shown when screen lock is not enabled -->
-    <string name="ScreenLockSettingsFragment__off">Desativado</string>
-    <!-- Text shown with toggle that when switched on will enable screen lock -->
-    <string name="ScreenLockSettingsFragment__use_screen_lock">Usar bloqueio de tela</string>
-    <!-- Description of what screen locking will do and how notification content will not be shown when screen is locked -->
-    <string name="ScreenLockSettingsFragment__your_android_device">As configurações de bloqueio do seu dispositivo Android serão necessárias para desbloquear o Signal quando você sair ou alternar entre aplicativos. Quando bloqueado, as prévias de notificações não mostrarão o conteúdo das mensagens.</string>
-    <!-- Title text explaining when users should start the screen lock -->
-    <string name="ScreenLockSettingsFragment__start_screen_lock">Ativar bloqueio de tela</string>
-    <!-- Option text explaining that screen lock should start after 1 minute of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_1_min">Após 1 minuto</string>
-    <!-- Option text explaining that screen lock should start after 5 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_5_min">Após 5 minutos</string>
-    <!-- Option text explaining that screen lock should start after 30 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_30_min">Após 30 minutos</string>
-    <!-- Option text explaining that screen lock should start at a custom time set by the user -->
-    <string name="ScreenLockSettingsFragment__custom_time">Tempo personalizado</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn on screen lock -->
-    <string name="ScreenLockSettingsFragment__use_signal_screen_lock">Usar bloqueio de tela do Signal</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn off screen lock -->
-    <string name="ScreenLockSettingsFragment__turn_off_signal_lock">Desativar o bloqueio de tela do Signal</string>
 
     <string name="Recipient_unknown">Desconhecido</string>
     <!-- Name to use for a user across the UI when they are unregistered and have no other name available -->
@@ -5174,61 +4761,8 @@
     <string name="GroupDescriptionDialog__group_description">Descrição do grupo</string>
 
     <!-- AppSettingsFragment -->
-    <!-- String alerting user that something is wrong with their backups subscription -->
-    <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Renove sua assinatura dos backups seguros do Signal</string>
-    <!-- String alerting user that backup failed -->
-    <string name="AppSettingsFragment__couldnt_complete_backup">Não foi possível concluir o backup</string>
     <!-- String alerting user that backup redemption -->
     <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Não foi possível resgatar sua assinatura de backups</string>
-    <!-- String alerting user that backup storage limit has been reached -->
-    <string name="AppSettingsFragment__backup_storage_limit_reached">Limite de armazenamento de backup atingido</string>
-    <!-- String displayed telling user to invite their friends to Signal -->
-    <string name="AppSettingsFragment__invite_your_friends">Convide seus amigos</string>
-    <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">ID de assinante do doador copiada para a área de transferência</string>
-    <!-- String displayed in a toast when we successfully copy the backups subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">Backups do ID de assinante copiados para a área de transferência</string>
-
-    <!-- ExportAccountDataFragment -->
-    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Seus dados da conta</string>
-    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Exporte um relatório com os dados da sua conta do Signal. Este relatório não inclui mensagens ou mídia. %1$s</string>
-    <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Saiba mais</string>
-    <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Exportar relatório</string>
-
-    <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Exportar como TXT</string>
-    <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Arquivo de texto fácil de ler</string>
-    <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Exportar como JSON</string>
-    <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Arquivo legível por máquina</string>
-
-    <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancelar</string>
-
-    <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Title of dialog shown when report fails to generate -->
-    <string name="ExportAccountDataFragment__report_generation_failed">Não foi possível gerar o relatório</string>
-    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
-    <string name="ExportAccountDataFragment__check_network">Verifique a sua conexão e tente novamente.</string>
-
-    <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Exportar dados?</string>
-    <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Compartilhe os dados da sua conta do Signal com pessoas ou apps que você conhece.</string>
-    <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Exportar</string>
-
-    <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Gerando relatório…</string>
-    <!-- Explanation that the report is only generated on export and is not saved on the device -->
-    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Seu relatório é gerado somente durante a exportação, o Signal não o armazena no seu dispositivo.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Proceda para mudar o seu número de telefone atual para um novo número de telefone. Você não poderá desfazer esta mudança.\n\nAntes de continuar, certifique-se que o seu novo número está recebendo SMS ou ligações.</string>
@@ -5426,45 +4960,15 @@
     <!-- Done button label to save selected chats to folder -->
     <string name="ChooseChatsFragment__done">Pronto</string>
 
-    <string name="NotificationsSettingsFragment__calls">Chamadas</string>
-    <!-- Notification header for sounds -->
-    <string name="NotificationsSettingsFragment__sounds">Sons</string>
-    <string name="NotificationsSettingsFragment__contact_joins_signal">O contato entrou no Signal</string>
-    <!-- Notification body to get notified when someone joins Signal -->
-    <string name="NotificationsSettingsFragment__notify_contact">Exibir uma notificação quando um contato do seu celular entrar no Signal</string>
-    <!-- Option to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset">Redefinir configurações de notificações</string>
-    <!-- Option body to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_notifications">Redefinir as configurações de notificação para o padrão, incluindo as configurações personalizadas das suas conversas</string>
-    <!-- Dialog to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_body">Redefinir todas as configurações de notificação de todas as conversas para o padrão?</string>
-    <!-- Confirmation button to reset dialog -->
-    <string name="NotificationsSettingsFragment__reset_confirm">Redefinir</string>
     <!-- Notification preference header -->
     <string name="NotificationsSettingsFragment__notification_profiles">Perfis de notificações</string>
-    <!-- Notification preference summary text -->
-    <string name="NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose">Crie um perfil para receber notificações apenas das pessoas e grupos que você escolher.</string>
 
-    <!-- Header to describe screen that shows while muted settings -->
-    <string name="MutedNotificationsFragment__while">Enquanto estiver no silencioso</string>
     <!-- Title for toggle row to control call settings while muted -->
     <string name="MutedNotificationsFragment__calls">Chamadas</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body_global">Tocar ou enviar uma notificação quando uma chamada for iniciada em conversas silenciadas.</string>
     <!-- Title for toggle row to control mentions settings while muted -->
     <string name="MutedNotificationsFragment__mentions">Menções</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body_global">Notificar quando mencionarem você em conversas silenciadas.</string>
     <!-- Title for toggle row to control replies settings while muted -->
     <string name="MutedNotificationsFragment__replies">Respostas</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body_global">Notificar quando responderem às suas mensagens em conversas silenciadas.</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body">Tocar ou enviar uma notificação quando uma chamada for iniciada enquanto esta conversa estiver silenciada.</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body">Notificar quando mencionarem você enquanto esta conversa estiver silenciada.</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body">Notificar quando alguém responder à sua mensagem enquanto esta conversa estiver silenciada.</string>
     <!-- Description for toggle row to control unread reminders while muted -->
     <string name="MutedNotificationsFragment__unread_body">Notificar ocasionalmente quando houver mensagens não lidas enquanto esta conversa estiver silenciada.</string>
 
@@ -5475,88 +4979,14 @@
     <string name="NotificationProfilesFragment__create_profile">Criar perfil</string>
 
     <!-- PrivacySettingsFragment -->
-    <string name="PrivacySettingsFragment__blocked">Bloqueados</string>
-    <!-- Settings label that shows the number blocked contacts -->
-    <plurals name="PrivacySettingsFragment__d_contacts">
-        <item quantity="one">%1$d contato ou grupo</item>
-        <item quantity="other">%1$d contatos ou grupos</item>
-    </plurals>
-    <string name="PrivacySettingsFragment__messaging">Mensagens</string>
     <string name="PrivacySettingsFragment__disappearing_messages">Mensagens efêmeras</string>
-    <string name="PrivacySettingsFragment__app_security">Segurança do app</string>
-    <!-- This refers to the multi-tasking overview (recent apps) from the Android operating system.-->
-    <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Bloquear capturas de tela na lista de recentes e dentro do aplicativo</string>
-    <string name="PrivacySettingsFragment__signal_message_and_calls">Mensagens e chamadas no Signal, redirecionar chamadas e remetente oculto</string>
-    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Cronômetro padrão para novos chats</string>
-    <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Defina um cronômetro padrão para o desaparecimento de mensagens em todos os chats iniciados por você.</string>
-    <!-- Summary for stories preference to launch into story privacy settings -->
-    <string name="PrivacySettingsFragment__payment_lock_require_lock">Exigir bloqueio de tela ou impressão digital para transferir dinheiro</string>
-    <!-- Alert dialog title when payment lock cannot be enabled -->
-    <string name="PrivacySettingsFragment__cant_enable_title">Não foi possível ativar o bloqueio de pagamento</string>
-    <!-- Alert dialog description to setup screen lock or fingerprint in phone settings -->
-    <string name="PrivacySettingsFragment__cant_enable_description">Para usar o bloqueio de pagamento, você precisa ativar um bloqueio de tela ou identificação com impressão digital nas configurações do seu telefone.</string>
-    <!-- Shown in a toast when we can\'t navigate to the user\'s system fingerprint settings -->
-    <string name="PrivacySettingsFragment__failed_to_navigate_to_system_settings">Ocorreu um erro ao acessar as configurações do sistema</string>
     <!-- Alert dialog button to go to phone settings -->
     <!-- Alert dialog button to cancel the dialog -->
 
     <!-- AdvancedPrivacySettingsFragment -->
   <!-- Removed by excludeNonTranslatables <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string> -->
-    <string name="AdvancedPrivacySettingsFragment__show_status_icon">Exibir indicadores</string>
-    <string name="AdvancedPrivacySettingsFragment__show_an_icon">Mostrar ícone de status em mensagens que foram entregues usando remetente oculto.</string>
 
-    <!-- ExpireTimerSettingsFragment -->
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Quando habilitadas, novas mensagens enviadas e recebidas em novos chats desaparecerão após terem sido lidas.</string>
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Quando habilitadas, as mensagens enviadas e recebidas neste chat desaparecerão após terem sido lidas.</string>
-    <string name="ExpireTimerSettingsFragment__off">Desligado</string>
-    <string name="ExpireTimerSettingsFragment__4_weeks">4 semanas</string>
-    <string name="ExpireTimerSettingsFragment__1_week">1 semana</string>
-    <string name="ExpireTimerSettingsFragment__1_day">1 dia</string>
-    <string name="ExpireTimerSettingsFragment__8_hours">8 horas</string>
-    <string name="ExpireTimerSettingsFragment__1_hour">1 hora</string>
-    <string name="ExpireTimerSettingsFragment__5_minutes">5 minutos</string>
-    <string name="ExpireTimerSettingsFragment__30_seconds">30 segundos</string>
-    <string name="ExpireTimerSettingsFragment__custom_time">Tempo personalizado</string>
-    <string name="ExpireTimerSettingsFragment__set">Definir</string>
-    <string name="ExpireTimerSettingsFragment__save">Salvar</string>
 
-    <string name="CustomExpireTimerSelectorView__seconds">segundos</string>
-    <string name="CustomExpireTimerSelectorView__minutes">minutos</string>
-    <string name="CustomExpireTimerSelectorView__hours">horas</string>
-    <string name="CustomExpireTimerSelectorView__days">dias</string>
-    <string name="CustomExpireTimerSelectorView__weeks">semanas</string>
-
-    <!-- HelpSettingsFragment -->
-    <string name="HelpSettingsFragment__support_center">Central de suporte</string>
-    <string name="HelpSettingsFragment__contact_us">Entre em contato</string>
-    <string name="HelpSettingsFragment__version">Versão</string>
-    <!-- Displayed when copying help screen text to the clipboard -->
-    <string name="HelpSettingsFragment__copied_to_clipboard">Copiado para a área de transferência</string>
-    <string name="HelpSettingsFragment__debug_log">Registro de depuração</string>
-    <!--    Header for the screen that displays the licenses of the open-source software dependencies of the Signal app-->
-    <string name="HelpSettingsFragment__licenses">Licenças</string>
-    <string name="HelpSettingsFragment__terms_amp_privacy_policy">Termos e Política de Privacidade</string>
-    <string name="HelpFragment__copyright_signal_messenger">Direitos autorais Signal Messenger</string>
-    <string name="HelpFragment__licenced_under_the_agplv3">Licenciado nos termos da GNU AGPLv3</string>
-    <!-- Non-English translations should use "Signal is a nonprofit." instead, dropping the 501c3 reference. -->
-    <string name="HelpSettingsFragment__signal_is_a_501c3">O Signal é uma organização sem fins lucrativos</string>
-
-    <!-- DataAndStorageSettingsFragment -->
-    <string name="DataAndStorageSettingsFragment__media_quality">Qualidade das fotos</string>
-    <!-- Label shown on the manage storage row while total storage usage is still being computed -->
-    <string name="DataAndStorageSettingsFragment__calculating">Calculando…</string>
-    <!-- Category title for the quality of the media to be sent -->
-    <string name="DataAndStorageSettingsFragment__sent_media_quality">Qualidade da mídia enviada</string>
-    <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Enviar mídia com alta qualidade usará mais dados de internet.</string>
-    <!-- Disclaimer shown under the media auto-download settings. Placeholder is a formatted size like "100 KB". -->
-    <string name="DataAndStorageSettingsFragment__voice_messages_and_stickers_under_size_are_always_auto_downloaded">O download de mensagens de voz e figurinhas (com menos de %1$s) é sempre automático. </string>
-    <string name="DataAndStorageSettingsFragment__calls">Chamadas</string>
-    <!-- Title of a toggle that keeps Signal connected in the background via a persistent foreground service instead of using FCM push messages -->
-    <string name="DataAndStorageSettingsFragment__stay_connected_in_background">Manter conexão em segundo plano</string>
-    <!-- Body of a confirmation dialog shown when a user tries to enable the "Stay connected in background" setting -->
-    <string name="DataAndStorageSettingsFragment__staying_connected_while_in_the_background_will_likely_result_in_increased_battery_usage">Manter a conexão ativa em segundo plano provavelmente resultará em maior consumo de bateria. Isso não é necessário na maioria dos dispositivos. Ative essa opção apenas se estiver enfrentando problemas com notificações.</string>
-    <!-- Button label that enables the "Stay connected in background" setting from a confirmation dialog -->
-    <string name="DataAndStorageSettingsFragment__enable">Ativar</string>
 
     <!-- ChatColorSelectionFragment -->
     <!-- Text shown on a circle button to indicate the app will automatically select a color for conversation bubbles for this chat. -->
@@ -5607,23 +5037,8 @@
     <string name="BecomeASustainerMegaphone__become_a_sustainer">Torne-se um apoiador</string>
 
     <!-- KeyboardPagerFragment -->
-    <string name="KeyboardPagerFragment_emoji">Emojis</string>
-    <string name="KeyboardPagerFragment_open_emoji_search">Fazer pesquisa de emoji</string>
-    <string name="KeyboardPagerFragment_open_sticker_search">Fazer pesquisa de figurinha</string>
-    <string name="KeyboardPagerFragment_open_gif_search">Fazer pesquisa de GIF</string>
-    <string name="KeyboardPagerFragment_stickers">Figurinhas</string>
-    <string name="KeyboardPagerFragment_backspace">Apagar</string>
-    <string name="KeyboardPagerFragment_gifs">GIFs</string>
-    <string name="KeyboardPagerFragment_search_emoji">Pesquisar emoji</string>
-    <string name="KeyboardPagerfragment_back_to_emoji">Voltar para os emojis</string>
-    <string name="KeyboardPagerfragment_clear_search_entry">Limpar texto no campo de pesquisa</string>
     <string name="KeyboardPagerFragment_search_giphy">Pesquisar via GIPHY</string>
 
-    <!-- StickerSearchDialogFragment -->
-    <string name="StickerSearchDialogFragment_search_stickers">Pesquisar figurinha</string>
-    <string name="StickerSearchDialogFragment_no_results_found">Nenhum resultado encontrado</string>
-    <string name="EmojiSearchFragment__no_results_found">Nenhum resultado encontrado</string>
-    <string name="NotificationsSettingsFragment__unknown_ringtone">Toque desconhecido</string>
 
     <!-- ConversationSettingsFragment -->
     <!-- Dialog title displayed when non-admin tries to add a story to an audience group -->
@@ -5732,6 +5147,8 @@
     <string name="NewConversationActivity__video_call">Chamada de vídeo</string>
     <!-- Context menu item remove -->
     <string name="NewConversationActivity__remove">Remover</string>
+    <!-- Context menu item that hides a contact -->
+    <string name="NewConversationActivity__hide">Hide</string>
     <!-- Context menu item block -->
     <string name="NewConversationActivity__block">Bloquear</string>
     <!-- Dialog title when removing a contact -->
@@ -5740,6 +5157,12 @@
     <string name="NewConversationActivity__you_wont_see_this_person">Você não verá esta pessoa ao pesquisar. Você receberá uma solicitação de mensagem se essa pessoa enviar uma mensagem para você no futuro.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s foi removido</string>
+    <!-- Dialog title when hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__hide_s">Hide %1$s?</string>
+    <!-- Dialog body when hiding a contact -->
+    <string name="NewConversationActivity__this_person_wont_appear">This person won\'t appear in your contact list and search. If they message you in the future, you\'ll receive a message request. You can manage people you\'ve hidden in settings.</string>
+    <!-- Snackbar message after hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__s_has_been_hidden">%1$s has been hidden</string>
     <!-- Snackbar message after blocking a contact -->
     <string name="NewConversationActivity__s_has_been_blocked">Você bloqueou %1$s</string>
     <!-- Error message shown when looking up a person by phone number and that phone number is not associated with a signal account -->
@@ -5792,6 +5215,10 @@
 
     <!-- VectorAvatarCreationFragment -->
     <string name="VectorAvatarCreationFragment__select_a_color">Escolher uma cor</string>
+
+    <!-- AvatarColorGrid -->
+    <!-- Accessibility label for one of the colors an avatar can be drawn in. %1$d is the color\'s position in the list, %2$d is how many colors there are. -->
+    <string name="AvatarColorGrid__color_d_of_d">Cor %1$d de %2$d</string>
 
     <!-- Displayed in the toolbar when externally sharing text to multiple recipients -->
     <string name="ShareInterstitialActivity__share">Compartilhar</string>
@@ -5863,15 +5290,9 @@
     <string name="MediaReviewImagePageFragment__discard_changes">Descartar alterações?</string>
     <string name="MediaReviewImagePageFragment__youll_lose_any_changes">Você perderá todas as alterações feitas nessa foto.</string>
 
-    <string name="BadgesOverviewFragment__my_badges">Meus selos</string>
     <string name="BadgesOverviewFragment__featured_badge">Selo em destaque</string>
-    <string name="BadgesOverviewFragment__display_badges_on_profile">Mostrar selos no perfil</string>
-    <string name="BadgesOverviewFragment__failed_to_update_profile">Falha ao atualizar o perfil</string>
 
 
-    <string name="SelectFeaturedBadgeFragment__select_a_badge">Escolher um selo</string>
-    <string name="SelectFeaturedBadgeFragment__you_must_select_a_badge">Você precisa escolher um selo</string>
-    <string name="SelectFeaturedBadgeFragment__failed_to_update_profile">Falha ao atualizar o perfil</string>
 
     <!-- Displayed on primary button in the bottom sheet as a call-to-action to launch into the donation flow -->
     <string name="ViewBadgeBottomSheetDialogFragment__donate_now">Doar</string>
@@ -5919,9 +5340,6 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Definir como selo em destaque</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Continuar</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Quando tiver mais de um selo, você poderá escolher qual deles será apresentado em seu perfil para as outras pessoas verem.</string>
-
-    <string name="BecomeASustainerFragment__get_badges">Obtenha selos para o seu perfil ao apoiar o Signal.</string>
-    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal é uma organização sem fins lucrativos, sem anunciantes ou investidores, sustentada apenas por pessoas como você.</string>
 
     <!-- Button label for creating a donation -->
     <string name="ManageDonationsFragment__donate_to_signal">Doar para o Signal</string>
@@ -6161,6 +5579,10 @@
     <string name="EditNotificationProfileFragment__focus">Concentração</string>
     <!-- Error message shown when attempting to next/save without a profile name -->
     <string name="EditNotificationProfileFragment__profile_must_have_a_name">Precisa ter um nome</string>
+    <!-- Accessibility label for the button beside the profile name that opens the emoji picker to choose the profile\'s emoji -->
+    <string name="EditNotificationProfileFragment__choose_emoji">Escolher emoji</string>
+    <!-- Accessibility label for the button that clears both the profile name and its emoji -->
+    <string name="EditNotificationProfileFragment__clear_name_and_emoji">Limpar nome e emoji</string>
 
     <!-- Title for add recipients to notification profile screen in create flow -->
     <string name="AddAllowedMembers__allowed_notifications">Notificações permitidas</string>
@@ -6175,8 +5597,6 @@
     <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
     <string name="AddAllowedMembers__notify_for_all_mentions">Notifique-me quando eu for mencionada(o)</string>
 
-    <!-- Call to action button on contact picker for adding to profile -->
-    <string name="SelectRecipientsFragment__add">Adicionar</string>
 
     <!-- Notification profiles home fragment, shown when no profiles have been created yet -->
     <string name="NotificationProfilesFragment__create_a_profile_to_receive_notifications_and_calls_only_from_the_people_and_groups_you_want_to_hear_from">Crie um perfil para receber notificações e ligações apenas das pessoas e grupos que você escolher.</string>
@@ -6228,20 +5648,6 @@
     <string name="EditNotificationProfileSchedule__start">Início</string>
     <!-- Label for showing the end time for the schedule -->
     <string name="EditNotificationProfileSchedule__end">Término</string>
-    <!-- First letter of Sunday -->
-    <string name="EditNotificationProfileSchedule__sunday_first_letter">D</string>
-    <!-- First letter of Monday -->
-    <string name="EditNotificationProfileSchedule__monday_first_letter">S</string>
-    <!-- First letter of Tuesday -->
-    <string name="EditNotificationProfileSchedule__tuesday_first_letter">T</string>
-    <!-- First letter of Wednesday -->
-    <string name="EditNotificationProfileSchedule__wednesday_first_letter">Q</string>
-    <!-- First letter of Thursday -->
-    <string name="EditNotificationProfileSchedule__thursday_first_letter">Q</string>
-    <!-- First letter of Friday -->
-    <string name="EditNotificationProfileSchedule__friday_first_letter">S</string>
-    <!-- First letter of Saturday -->
-    <string name="EditNotificationProfileSchedule__saturday_first_letter">S</string>
     <!-- Title of select time dialog shown when setting start time for schedule -->
     <string name="EditNotificationProfileSchedule__set_start_time">Definir a hora de início</string>
     <!-- Title of select time dialog shown when setting end time for schedule -->
@@ -6255,17 +5661,6 @@
     <!-- Error message shown if trying to save/use a schedule with no days selected -->
     <string name="EditNotificationProfileSchedule__schedule_must_have_at_least_one_day">A agenda deve ter pelo menos um dia</string>
 
-    <!-- Title for final screen shown after completing a profile creation -->
-    <string name="NotificationProfileCreated__profile_created">Perfil criado</string>
-    <!-- Call to action button to press to close the created screen and move to the profile details screen -->
-    <string name="NotificationProfileCreated__done">Pronto</string>
-    <!-- Descriptor text shown to indicate how to manually turn a profile on/off -->
-    <string name="NotificationProfileCreated__you_can_turn_your_profile_on_or_off_manually_via_the_menu_on_the_chat_list">Você pode ativar ou desativar o seu perfil de notificação por meio do menu na lista de chats.</string>
-    <!-- Descriptor text shown to indicate you can add a schedule later since you did not add one during create flow -->
-    <string name="NotificationProfileCreated__add_a_schedule_in_settings_to_automate_your_profile">Adicione uma agenda em configurações para automatizar seu perfil.</string>
-    <!-- Descriptor text shown to indicate your profile will follow the schedule set during create flow -->
-    <string name="NotificationProfileCreated__your_profile_will_turn_on_and_off_automatically_according_to_your_schedule">Seu perfil será automaticamente ligado e desligado de acordo com a sua agenda.</string>
-
     <!-- Button text shown in profile selection bottom sheet to create a new profile -->
     <string name="NotificationProfileSelection__new_profile">Novo perfil</string>
     <!-- Manual enable option to manually enable a profile for 1 hour -->
@@ -6277,12 +5672,6 @@
     <!-- Descriptor text indicating how long a profile will be on when there is a time component associated with it -->
     <string name="NotificationProfileSelection__on_until_s">Ligado até %1$s</string>
 
-    <!-- Displayed in a toast when we fail to open the ringtone picker -->
-    <string name="NotificationSettingsFragment__failed_to_open_picker">Falha ao abrir o selecionador de toques.</string>
-    <!-- Banner title when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__to_enable_notifications">Para ativar notificações, o Signal precisa de permissão para exibi-las.</string>
-    <!-- Banner action when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__turn_on">Ativar</string>
 
     <!-- Text description in Signal Release channel details explaining that it is the only chat from Signal -->
     <string name="ReleaseNotes__this_is_official_chat">Este é o único chat oficial do Signal</string>
@@ -6710,6 +6099,8 @@
     <string name="GiftFlowStartFragment__next">Próximo</string>
     <!-- Title text on choose recipient page for badge gifting -->
     <string name="GiftFlowRecipientSelectionFragment__choose_recipient">Escolha o favorecido</string>
+    <!-- Hint text that shows in the recipient search bar on the choose recipient page for badge gifting -->
+    <string name="GiftFlowRecipientSelectionFragment__search">Buscar</string>
     <!-- Title text on confirm gift page -->
     <string name="GiftFlowConfirmationFragment__confirm_donation">Confirmar doação</string>
     <!-- Heading text specifying who the gift will be sent to -->
@@ -6935,7 +6326,7 @@
     <string name="ChooseANewDefaultSmsAppFragment__bullet_2">2</string>
     <!-- BackupSchedulePermission Megaphone -->
     <!-- The title on an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
-    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Improve backup scheduling</string>
+    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Melhorar agendamento de backup</string>
     <!-- The body text of an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
     <string name="BackupSchedulePermissionMegaphone__allow_the_alarms_permission_to_improve_automatic_daily_backups">Permitir a opção “Alarmes” para melhorar os backups diários automáticos.</string>
     <!-- The text on a button in an alert window that, when clicked, will take the user to a screen to grant the alarms permission -->
@@ -7197,11 +6588,6 @@
     <!-- Popup menu label for clearing applied formatting -->
     <string name="TextFormatting_clear_formatting">Limpar formatação</string>
 
-    <!-- Username edit dialog -->
-    <!-- Option to open username editor displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__edit_username">Editar nome de usuário</string>
-    <!-- Option to delete username displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__delete_username">Excluir nome de usuário</string>
 
     <!-- Time duration picker -->
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
@@ -7406,12 +6792,6 @@
     <string name="EditCallLinkNameDialogFragment__call_name">Nome da chamada</string>
 
     <!-- ChooseNavigationBarStyleFragment -->
-    <!-- Dialog title, displayed below the header image -->
-    <string name="ChooseNavigationBarStyleFragment__navigation_bar_size">Tamanho da barra de navegação</string>
-    <!-- Toggle button label for normal size -->
-    <string name="ChooseNavigationBarStyleFragment__normal">Normal</string>
-    <!-- Toggle button label for compact size -->
-    <string name="ChooseNavigationBarStyleFragment__compact">Compacta</string>
 
     <!-- Title shown at top of bottom sheet dialog for displaying a message\'s edit history -->
     <string name="EditMessageHistoryDialog_title">Histórico de edições</string>
@@ -7440,69 +6820,11 @@
     <!-- Displayed as body in dialog when user attempts to delete the link -->
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">Este link não funcionará mais para ninguém que o tenha.</string>
 
-    <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Link</string>
-    <!-- Button label for the share button in the username link settings -->
-    <string name="UsernameLinkSettings_share_button_label">Compartilhar</string>
-    <!-- Button label for the color selector button in the username link settings -->
-    <string name="UsernameLinkSettings_color_button_label">Cor</string>
-    <!-- Description text for QR code and links in the username link settings -->
-    <string name="UsernameLinkSettings_qr_description">Compartilhe seu QR code e envie para as pessoas em quem você confia. Quando compartilhado, outras pessoas poderão ver seu nome de usuário e iniciar um chat com você.</string>
-    <!-- Content of a toast that will show after the username is copied to the clipboard -->
-    <string name="UsernameLinkSettings_username_copied_toast">Nome de usuário copiado</string>
-    <!-- Content of a toast that will show after the username link is copied to the clipboard -->
-    <string name="UsernameLinkSettings_link_copied_toast">Link copiado</string>
-    <!-- Content of a text field that is shown when the user has not yet set a username link -->
-    <string name="UsernameLinkSettings_link_not_set_label">Link não definido</string>
-    <!-- Content of a text field that is shown when the user is actively resetting the username link and waiting for the operation to finish -->
-    <string name="UsernameLinkSettings_resetting_link_label">Redefinindo link…</string>
-    <!-- Title of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_title">Redefinir QR code?</string>
-    <!-- Body of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_body">Se você redefinir o QR code, o QR code e o link existentes vão parar de funcionar.</string>
-    <!-- Label for the confirmation button on a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_confirm_button">Redefinir</string>
-    <!-- Button label for a button that will reset your username and give you a new link -->
-    <string name="UsernameLinkSettings_reset_button_label">Redefinir</string>
-    <!-- Button label for a button that indicates that the user is done changing the current setting -->
-    <string name="UsernameLinkSettings_done_button_label">Pronto</string>
-    <!-- Label for a tab that shows a screen to view your username QR code -->
-    <string name="UsernameLinkSettings_code_tab_name">Código</string>
-    <!-- Label for a tab that shows a screen to scan a QR code -->
-    <string name="UsernameLinkSettings_scan_tab_name">Escanear</string>
-    <!-- Description text shown underneath the username QR code scanner -->
-    <string name="UsernameLinkSettings_qr_scan_description">Escanear o QR code no dispositivo da outra pessoa.</string>
-    <!-- App bar title for the username QR code color picker screen -->
-    <string name="UsernameLinkSettings_color_picker_app_bar_title">Cor</string>
-    <!-- Body of a dialog that is displayed when we failed to read a username QR code. -->
-    <string name="UsernameLinkSettings_qr_result_invalid">O QR code é inválido.</string>
-    <!-- Body of a dialog that is displayed when the username we looked up could not be found. -->
-    <string name="UsernameLinkSettings_qr_result_not_found">Não foi possível encontrar o nome de usuário %1$s.</string>
     <!-- Body of a dialog that is displayed when the username we looked up could not be found and we also could not parse the username. -->
     <string name="UsernameLinkSettings_qr_result_not_found_no_username">Não foi possível encontrar este usuário.</string>
-    <!-- Body of a dialog that is displayed when we experienced a network error when looking up a username. -->
-    <string name="UsernameLinkSettings_qr_result_network_error">Ocorreu um erro de rede. Tente novamente.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because you had no internet. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_unavailable">Você não tem acesso à rede. Seu link não foi redefinido. Tente novamente mais tarde.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_error">Ocorreu um erro de rede ao tentar redefinir seu link. Tente novamente mais tarde.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of an unknown error. -->
-    <string name="UsernameLinkSettings_reset_link_result_unknown_error">Ocorreu um erro de rede ao tentar redefinir seu link. Tente novamente mais tarde.</string>
-    <!-- Body of a dialog that is displayed when we successfully reset you username link. -->
-    <string name="UsernameLinkSettings_reset_link_result_success">Seu QR code e link foram redefinidos, e um novo código QR e link foram criados.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
     <string name="UsernameLinkSettings_scan_this_qr_code">Escaneie o QR Code com o seu telefone para conversar comigo no Signal.</string>
-    <!-- Dialog title shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_qr_code_not_found">QR code não encontrado</string>
-    <!-- Dialog message shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_try_scanning_another_image_containing_a_signal_qr_code">Escaneie outra imagem com um QR code do Signal.</string>
 
-    <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
-    <string name="UsernameLinkShareBottomSheet_title">Qualquer pessoa com este link pode visualizar seu nome de usuário e começar a conversar com você. Compartilhe isso apenas com pessoas em quem você confia.</string>
-    <!-- A button label for a button that, when pressed, will copy your username link to the clipboard -->
-    <string name="UsernameLinkShareBottomSheet_copy_link">Copiar link</string>
-    <!-- A button label for a button that, when pressed, will open a share sheet for sharing your username link -->
-    <string name="UsernameLinkShareBottomSheet_share">Compartilhar</string>
 
     <!-- PendingParticipantsView -->
     <!-- Displayed in the popup card when a remote user attempts to join a call link -->
@@ -7632,6 +6954,30 @@
     <string name="VerifyBackupKey__backup_key_correct">Chave de recuperação correta. Mantenha sua chave segura.</string>
     <!-- Snackbar text shown when the user chooses to snooze the recovery key reminder. -->
     <string name="VerifyBackupKey__we_will_ask_again">Perguntaremos novamente em uma semana.</string>
+
+    <!-- Title of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__verify_your_two_factor_method">Verifique o método de autenticação de dois fatores</string>
+    <!-- Body of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__well_occasionally_ask_you_to_verify">Ocasionalmente, solicitaremos que você verifique seu método de autenticação de dois fatores para garantir que ele continue configurado corretamente.</string>
+    <!-- Button of a megaphone that will take users to the screen where they verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__verify">Verificar</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__not_now">Agora não</string>
+    <!-- Snackbar text shown after the user verified their authenticator app from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_authenticator_app">Agradecemos por confirmar seu app de autenticação.</string>
+    <!-- Snackbar text shown after the user verified their passkey from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_passkey">Agradecemos por confirmar sua chave de acesso.</string>
+
+    <!-- Title of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login (their account ID and recovery key) -->
+    <string name="SignalLoginReminderMegaphone__verify_your_signal_login">Verifique o Signal Login</string>
+    <!-- Body of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login -->
+    <string name="SignalLoginReminderMegaphone__well_occasionally_ask_you_to_verify">Pediremos que verifique suas informações de login de vez em quando para você não se esquecer.</string>
+    <!-- Button of a megaphone that will take users to the screen where they enter their Signal Login to verify it -->
+    <string name="SignalLoginReminderMegaphone__verify">Verificar</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify the Signal Login -->
+    <string name="SignalLoginReminderMegaphone__not_now">Agora não</string>
+    <!-- Snackbar text shown after the user verified their Signal Login from the reminder -->
+    <string name="SignalLoginReminderMegaphone__thanks_for_confirming_your_signal_login">Agradecemos por confirmar o Signal Login.</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
     <string name="GrantFullScreenIntentPermission_megaphone_title">Ativar notificações em tela cheia?</string>
@@ -7953,34 +7299,6 @@
     <!-- Dialog message shown when Google Play services is invalid and subscriptions are not available -->
     <string name="GooglePlayServicesAvailability__service_invalid_message">Você não pode assinar os backups seguros do Signal pois seu aparelho não é compatível com os serviços do Google Play. Entre em contato com o fabricante do telefone para receber ajuda.</string>
 
-    <!-- ManageStorageSettingsFragment -->
-    <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
-    <string name="ManageStorageSettingsFragment_chat_limit">Limites de histórico de mensagens</string>
-    <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
-    <string name="ManageStorageSettingsFragment_delete_message_history">Excluir histórico de mensagens</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
-    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Mensagens mais antigas do que o intervalo de tempo selecionado serão excluídas permanentemente.</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
-    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">As mensagens que excedam o tamanho selecionado serão excluídas permanentemente.</string>
-    <!-- Setting title for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_title">Aplicar limites aos dispositivos vinculados</string>
-    <!-- Setting description for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_description">Quando ativado, os limites de chat também excluirão mensagens dos seus dispositivos vinculados.</string>
-    <!-- Setting section title header for storage optimization -->
-    <string name="ManageStorageSettingsFragment__on_device_storage">Armazenamento do Signal</string>
-    <!-- Setting row title for storage optimization -->
-    <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Otimizar armazenamento do Signal</string>
-    <!-- Setting row explanation for storage optimization -->
-    <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Arquivos de mídia não utilizados serão descarregados, mas poderão ser baixados do seu backup a qualquer momento.</string>
-    <!-- Dialog message for paid tier pending dialog -->
-    <string name="ManageStorageSettingsFragment__storage_optimization_can_only_be_used">A otimização de armazenamento só pode ser usada com o plano pago dos backups seguros do Signal. Sua assinatura de backups está sendo processada e ainda não está ativa. Tente novamente mais tarde.</string>
-    <!-- Title of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__media_will_be_removed_from_your_on_device_backup">As mídias serão removidas do backup no dispositivo</string>
-    <!-- Body of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__turning_on_optimize_signal_storage_will_offload">Se você ativar a opção \"Otimizar armazenamento do Signal\", as mídias antigas serão transferidas para o backup do seu dispositivo. Você poderá baixar esses arquivos novamente quando quiser. Esta ação também removerá mídias antigas do backup no dispositivo.</string>
-    <!-- Dialog action to confirm turning on "Optimize Signal storage" -->
-    <string name="ManageStorageSettingsFragment__turn_on">Ativar</string>
-
     <!-- UpgradeToEnableOptimizedStorageSheet -->
     <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
     <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">Faça um upgrade para ativar este recurso</string>
@@ -8025,11 +7343,11 @@
     <!-- Retry button shown when ending a group fails -->
     <string name="EndGroupDialog__try_again">Tentar novamente</string>
 
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, with admin name. %1$s is the admin\'s display name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, with admin name. %1$s is the admin\'s display name -->
     <string name="TerminatedGroupBottomSheet__s_ended_the_group">%1$s encerrou o grupo</string>
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, without admin name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, without admin name -->
     <string name="TerminatedGroupBottomSheet__the_group_has_been_ended">Esse grupo foi encerrado.</string>
-    <!-- Body of bottom sheet shown when opening a terminated group -->
+    <!-- Body of bottom sheet shown when a group is ended while the user has the conversation open -->
     <string name="TerminatedGroupBottomSheet__you_can_no_longer_send_and_receive">Você não pode mais enviar e receber mensagens ou chamadas neste grupo.</string>
 
     <!-- NoManualBackupBottomSheet -->
@@ -8328,6 +7646,12 @@
     <string name="MessageBackupsFlowFragment__a_network_failure_occurred">Ocorreu um erro na rede. Tente novamente mais tarde.</string>
     <!-- Toast message if this fragment encounters an in progress deletion -->
     <string name="MessageBackupsFlowFragment__a_backup_deletion_is_in_progress">Uma exclusão de backup está em andamento.</string>
+    <!-- Title of the device screen lock prompt shown before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__unlock_to_set_up_secure_backups">Desbloqueie para configurar os backups seguros</string>
+    <!-- Title of the sheet explaining that the device screen lock is needed before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__to_set_up_secure_backups_confirm_its_you">Para configurar os backups seguros, confirme sua identidade</string>
+    <!-- Toast shown when the device screen lock wasn\'t confirmed, so backup setup didn\'t continue -->
+    <string name="MessageBackupsFlowFragment__authentication_required">Autenticação obrigatória</string>
 
     <!-- MessageBackupsEducationScreen -->
     <!-- Screen subtitle underneath large headline title -->
@@ -8620,6 +7944,8 @@
     <string name="MainToolbar__notification_profile_content_description">Perfil de notificações</string>
     <!-- Accessibility label for more options button in MainToolbar -->
     <string name="MainToolbar__proxy_content_description">Proxy</string>
+    <!-- Overflow menu item in MainToolbar that opens donation settings -->
+    <string name="MainToolbar__donate">Doar</string>
     <!-- Accessibility label for search filter button in MainToolbar -->
   <!-- Removed by excludeNonTranslatables <string name="MainToolbar__search_filter_content_description" translatable="false">Search filter</string> -->
 
@@ -8641,9 +7967,6 @@
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__clear" translatable="false">Clear</string> -->
     <!-- SearchFilterBottomSheet: Select date dialog title -->
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__select_date" translatable="false">Select date</string> -->
-
-    <!-- Accessibility label for a button displayed in the toolbar to return to the previous screen. -->
-    <string name="DefaultTopAppBar__navigate_up_content_description">Ir para cima</string>
 
     <!-- Accessibility label describing the action that occurs when clicking a checkbox. -->
     <string name="SignalCheckbox_accessibility_on_click_label">Alternar</string>
@@ -8942,6 +8265,9 @@
 
     <!-- Body of the sheet shown when a local backup restore could not be completed, explaining how to try again -->
     <string name="CouldNotCompleteBackupRestoreSheet__body_retry">Para tentar novamente, desinstale e instale novamente o Signal neste dispositivo e escolha \"Restaurar ou transferir\".</string>
+
+    <!-- Button on the sheet shown when a local backup restore could not be completed, opening a support article about it -->
+    <string name="CouldNotCompleteBackupRestoreSheet__learn_more">Saiba mais</string>
 
     <!-- Title of the sheet shown when the server reports a verification code was requested for the user\'s phone number -->
     <string name="VerificationCodeRequestedBottomSheet__title">Um código de verificação foi solicitado</string>

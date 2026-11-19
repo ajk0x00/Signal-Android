@@ -103,6 +103,7 @@ import org.thoughtcrime.securesms.migrations.ReleaseChannelRecipientFixMigration
 import org.thoughtcrime.securesms.migrations.ResetArchiveTierMigrationJob;
 import org.thoughtcrime.securesms.migrations.ResetKeyTransparencyMigrationJob;
 import org.thoughtcrime.securesms.migrations.SelfRegisteredStateMigrationJob;
+import org.thoughtcrime.securesms.migrations.SignalLoginReminderMigrationJob;
 import org.thoughtcrime.securesms.migrations.StickerAdditionMigrationJob;
 import org.thoughtcrime.securesms.migrations.StickerDayByDayMigrationJob;
 import org.thoughtcrime.securesms.migrations.StickerLaunchMigrationJob;
@@ -121,6 +122,7 @@ import org.thoughtcrime.securesms.migrations.SyncDistributionListsMigrationJob;
 import org.thoughtcrime.securesms.migrations.SyncKeysMigrationJob;
 import org.thoughtcrime.securesms.migrations.SyncStickerPacksMigrationJob;
 import org.thoughtcrime.securesms.migrations.TrimByLengthSettingsMigrationJob;
+import org.thoughtcrime.securesms.migrations.TwoFactorMethodsMigrationJob;
 import org.thoughtcrime.securesms.migrations.UpdateSmsJobsMigrationJob;
 import org.thoughtcrime.securesms.migrations.UserNotificationMigrationJob;
 import org.thoughtcrime.securesms.migrations.UuidMigrationJob;
@@ -146,6 +148,7 @@ public final class JobManagerFactories {
       put(ArchiveAttachmentReconciliationJob.KEY,      new ArchiveAttachmentReconciliationJob.Factory());
       put(ArchiveBackupIdReservationJob.KEY,           new ArchiveBackupIdReservationJob.Factory());
       put(ArchiveCommitAttachmentDeletesJob.KEY,       new ArchiveCommitAttachmentDeletesJob.Factory());
+      put(ArchiveCredentialRefreshJob.KEY,             new ArchiveCredentialRefreshJob.Factory());
       put(ArchiveThumbnailBackfillJob.KEY,             new ArchiveThumbnailBackfillJob.Factory());
       put(ArchiveThumbnailUploadJob.KEY,               new ArchiveThumbnailUploadJob.Factory());
       put(AttachmentCompressionJob.KEY,                new AttachmentCompressionJob.Factory());
@@ -240,6 +243,7 @@ public final class JobManagerFactories {
       put(MultiDeviceStickerPackSyncJob.KEY,           new MultiDeviceStickerPackSyncJob.Factory());
       put(MultiDeviceStorageSyncRequestJob.KEY,        new MultiDeviceStorageSyncRequestJob.Factory());
       put(MultiDeviceSubscriptionSyncRequestJob.KEY,   new MultiDeviceSubscriptionSyncRequestJob.Factory());
+      put(MultiDeviceSyncRequestJob.KEY,               new MultiDeviceSyncRequestJob.Factory());
       put(MultiDeviceUsernameChangeSyncJob.KEY,        new MultiDeviceUsernameChangeSyncJob.Factory());
       put(MultiDeviceVerifiedUpdateJob.KEY,            new MultiDeviceVerifiedUpdateJob.Factory());
       put(MultiDeviceViewOnceOpenJob.KEY,              new MultiDeviceViewOnceOpenJob.Factory());
@@ -249,7 +253,6 @@ public final class JobManagerFactories {
       put(OptimizeMediaJob.KEY,                        new OptimizeMediaJob.Factory());
       put(OptimizeMessageSearchIndexJob.KEY,           new OptimizeMessageSearchIndexJob.Factory());
       put(PaymentLedgerUpdateJob.KEY,                  new PaymentLedgerUpdateJob.Factory());
-      put(PaymentNotificationSendJob.KEY,              new PaymentNotificationSendJob.Factory());
       put(PaymentNotificationSendJobV2.KEY,            new PaymentNotificationSendJobV2.Factory());
       put(PaymentSendJob.KEY,                          new PaymentSendJob.Factory());
       put(PaymentTransactionCheckJob.KEY,              new PaymentTransactionCheckJob.Factory());
@@ -299,7 +302,7 @@ public final class JobManagerFactories {
       put(SendPaymentsActivatedJob.KEY,                new SendPaymentsActivatedJob.Factory());
       put(SendReadReceiptJob.KEY,                      new SendReadReceiptJob.Factory());
       put(SendRetryReceiptJob.KEY,                     new SendRetryReceiptJob.Factory());
-      put(SendViewedReceiptJob.KEY,                    new SendViewedReceiptJob.Factory(application));
+      put(SendViewedReceiptJob.KEY,                    new SendViewedReceiptJob.Factory());
       put(StorageRotateManifestJob.KEY,                new StorageRotateManifestJob.Factory());
       put(SyncSystemContactLinksJob.KEY,               new SyncSystemContactLinksJob.Factory());
       put(MultiDeviceStorySendSyncJob.KEY,             new MultiDeviceStorySendSyncJob.Factory());
@@ -386,6 +389,7 @@ public final class JobManagerFactories {
       put(ResetKeyTransparencyMigrationJob.KEY,           new ResetKeyTransparencyMigrationJob.Factory());
       put(SelfRegisteredStateMigrationJob.KEY,            new SelfRegisteredStateMigrationJob.Factory());
       put(StickerLaunchMigrationJob.KEY,                  new StickerLaunchMigrationJob.Factory());
+      put(SignalLoginReminderMigrationJob.KEY,            new SignalLoginReminderMigrationJob.Factory());
       put(StickerAdditionMigrationJob.KEY,                new StickerAdditionMigrationJob.Factory());
       put(StickerDayByDayMigrationJob.KEY,                new StickerDayByDayMigrationJob.Factory());
       put(StickerMyDailyLifeMigrationJob.KEY,             new StickerMyDailyLifeMigrationJob.Factory());
@@ -403,6 +407,7 @@ public final class JobManagerFactories {
       put(SyncKeysMigrationJob.KEY,                       new SyncKeysMigrationJob.Factory());
       put(SyncStickerPacksMigrationJob.KEY,               new SyncStickerPacksMigrationJob.Factory());
       put(TrimByLengthSettingsMigrationJob.KEY,           new TrimByLengthSettingsMigrationJob.Factory());
+      put(TwoFactorMethodsMigrationJob.KEY,               new TwoFactorMethodsMigrationJob.Factory());
       put(UpdateSmsJobsMigrationJob.KEY,                  new UpdateSmsJobsMigrationJob.Factory());
       put(UserNotificationMigrationJob.KEY,               new UserNotificationMigrationJob.Factory());
       put(UuidMigrationJob.KEY,                           new UuidMigrationJob.Factory());
@@ -467,6 +472,7 @@ public final class JobManagerFactories {
       put("ResumableUploadSpecJob",                      new FailingJob.Factory());
       put("SaveStoryToDriveJob",                         new FailingJob.Factory());
       put("DriveSyncJob",                                new FailingJob.Factory());
+      put("PaymentNotificationSendJob",                  new FailingJob.Factory());
     }};
   }
 

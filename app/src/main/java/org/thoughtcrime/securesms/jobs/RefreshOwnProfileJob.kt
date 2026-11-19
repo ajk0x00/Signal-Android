@@ -1,9 +1,11 @@
 package org.thoughtcrime.securesms.jobs
 
 import android.text.TextUtils
+import org.signal.core.models.badges.Badge
 import org.signal.core.util.Base64
 import org.signal.core.util.ExpiringProfileCredentialUtil
 import org.signal.core.util.Util
+import org.signal.core.util.crypto.InvalidCiphertextException
 import org.signal.core.util.logging.Log
 import org.signal.libsignal.net.RequestResult
 import org.signal.libsignal.usernames.BaseUsernameException
@@ -11,9 +13,9 @@ import org.signal.libsignal.usernames.Username
 import org.signal.libsignal.zkgroup.profiles.ExpiringProfileKeyCredential
 import org.signal.libsignal.zkgroup.profiles.ProfileKey
 import org.signal.network.exceptions.PushNetworkException
+import org.signal.storage.keyvalue.isTerminal
 import org.thoughtcrime.securesms.badges.BadgeRepository
 import org.thoughtcrime.securesms.badges.Badges
-import org.thoughtcrime.securesms.badges.models.Badge
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil
 import org.thoughtcrime.securesms.database.RecipientTable.PhoneNumberSharingState
@@ -23,13 +25,11 @@ import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.jobmanager.Job
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
 import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.keyvalue.isTerminal
 import org.thoughtcrime.securesms.net.SignalNetwork
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.profiles.manage.UsernameRepository
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.util.ProfileUtil
-import org.whispersystems.signalservice.api.crypto.InvalidCiphertextException
 import org.whispersystems.signalservice.api.crypto.ProfileCipher
 import org.whispersystems.signalservice.api.profiles.ProfileAndCredential
 import org.whispersystems.signalservice.api.profiles.SignalServiceProfile
@@ -253,7 +253,7 @@ class RefreshOwnProfileJob private constructor(parameters: Parameters) : BaseJob
         .map { value -> if (value) PhoneNumberSharingState.ENABLED else PhoneNumberSharingState.DISABLED }
         .orElse(PhoneNumberSharingState.UNKNOWN)
 
-      if (remotePhoneNumberSharing == PhoneNumberSharingState.UNKNOWN || remotePhoneNumberSharing.enabled != SignalStore.phoneNumberPrivacy.isPhoneNumberSharingEnabled()) {
+      if (remotePhoneNumberSharing == PhoneNumberSharingState.UNKNOWN || remotePhoneNumberSharing.enabled != SignalStore.phoneNumberPrivacy.isPhoneNumberSharingEnabled) {
         Log.w(TAG, "Phone number sharing setting did not match! Syncing with storage service, then uploading our profile.")
         syncWithStorageServiceThenUploadProfile()
       }
@@ -389,8 +389,7 @@ class RefreshOwnProfileJob private constructor(parameters: Parameters) : BaseJob
         true
       )
 
-      val badgeRepository = BadgeRepository(context)
-      val updatedBadges = badgeRepository.setVisibilityForAllBadgesSync(displayBadgesOnProfile, appBadges)
+      val updatedBadges = BadgeRepository.setVisibilityForAllBadgesSync(displayBadgesOnProfile, appBadges).successOrThrow()
       SignalDatabase.recipients.setBadges(Recipient.self().id, updatedBadges)
     } else {
       SignalDatabase.recipients.setBadges(Recipient.self().id, appBadges)
@@ -414,7 +413,7 @@ class RefreshOwnProfileJob private constructor(parameters: Parameters) : BaseJob
 
       val whoAmIResponse = AppDependencies.signalServiceAccountManager.getWhoAmI()
       val remoteUsernameHash = whoAmIResponse.usernameHash
-      val localUsernameHash = if (localUsername != null) Base64.encodeUrlSafeWithoutPadding(Username(localUsername).getHash()) else null
+      val localUsernameHash = if (localUsername != null) Base64.encodeUrlSafeWithoutPadding(Username(localUsername).getHash().serialize()) else null
 
       if (TextUtils.isEmpty(localUsernameHash) && TextUtils.isEmpty(remoteUsernameHash)) {
         Log.d(TAG, "Local and remote username hash are both empty. Considering validated.")

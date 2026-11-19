@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
+import org.signal.core.models.recipients.RecipientId;
 import org.signal.core.util.Result;
 import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.groups.GroupChangeException;
@@ -17,9 +18,11 @@ import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.database.ThreadTable;
 import org.thoughtcrime.securesms.database.model.GroupRecord;
 import org.thoughtcrime.securesms.dependencies.AppDependencies;
+import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.GroupManager;
 import org.thoughtcrime.securesms.groups.ui.GroupChangeErrorCallback;
 import org.thoughtcrime.securesms.groups.ui.GroupChangeFailureReason;
+import org.thoughtcrime.securesms.jobs.GroupV2UpdateSelfProfileKeyJob;
 import org.thoughtcrime.securesms.jobs.MultiDeviceMessageRequestResponseJob;
 import org.thoughtcrime.securesms.jobs.ReportSpamJob;
 import org.thoughtcrime.securesms.jobs.SendViewedReceiptJob;
@@ -28,7 +31,6 @@ import org.thoughtcrime.securesms.mms.MmsException;
 import org.thoughtcrime.securesms.mms.OutgoingMessage;
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver;
 import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
 import org.thoughtcrime.securesms.sms.MessageSender;
 import org.whispersystems.signalservice.internal.push.exceptions.GroupPatchNotAcceptedException;
@@ -187,11 +189,16 @@ public final class MessageRequestRepository {
       Recipient recipient = Recipient.resolved(recipientId);
       if (recipient.isPushV2Group()) {
         try {
+          GroupId.V2 groupId = recipient.requireGroupId().requireV2();
+
           Log.i(TAG, "GV2 accepting invite");
-          GroupManager.acceptInvite(context, recipient.requireGroupId().requireV2());
+          GroupManager.acceptInvite(context, groupId);
 
           RecipientTable recipientTable = SignalDatabase.recipients();
           recipientTable.setProfileSharing(recipientId, true);
+
+          Log.i(TAG, "Ensuring our profile key is up to date in the accepted group");
+          AppDependencies.getJobManager().add(GroupV2UpdateSelfProfileKeyJob.withoutLimits(groupId));
 
           insertMessageRequestAccept(recipient, threadId);
           onMessageRequestAccepted.run();

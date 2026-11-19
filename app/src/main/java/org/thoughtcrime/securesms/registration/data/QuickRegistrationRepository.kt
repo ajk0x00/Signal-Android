@@ -6,6 +6,7 @@
 package org.thoughtcrime.securesms.registration.data
 
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -15,7 +16,7 @@ import org.signal.core.util.Base64.decode
 import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
 import org.signal.libsignal.protocol.InvalidKeyException
-import org.signal.libsignal.protocol.ecc.ECPublicKey
+import org.signal.libsignal.provisioning.ProvisioningPublicKey
 import org.signal.network.NetworkResult
 import org.signal.registration.proto.RegistrationProvisionMessage
 import org.thoughtcrime.securesms.backup.v2.MessageBackupTier
@@ -60,6 +61,15 @@ object QuickRegistrationRepository {
     return Capability.Numberless in Uri.parse(data).getCapabilities()
   }
 
+  /**
+   * Accepts both standard and url-safe base64, with or without padding.
+   */
+  @VisibleForTesting
+  fun parsePublicKey(uri: Uri): ProvisioningPublicKey? {
+    val publicKeyEncoded: String = uri.getQueryParameter("pub_key") ?: return null
+    return ProvisioningPublicKey(decode(publicKeyEncoded))
+  }
+
   private fun Uri.getCapabilities(): Set<Capability> {
     return this.getQueryParameter("capabilities")
       ?.split(",")
@@ -89,14 +99,12 @@ object QuickRegistrationRepository {
 
     try {
       val ephemeralId: String? = uri.getQueryParameter("uuid")
-      val publicKeyEncoded: String? = uri.getQueryParameter("pub_key")
+      val publicKey: ProvisioningPublicKey? = parsePublicKey(uri)
 
-      if (ephemeralId == null || publicKeyEncoded == null) {
-        Log.w(TAG, "Invalid link data hasId: ${ephemeralId != null} hasKey: ${publicKeyEncoded != null}")
+      if (ephemeralId == null || publicKey == null) {
+        Log.w(TAG, "Invalid link data hasId: ${ephemeralId != null} hasKey: ${publicKey != null}")
         return TransferAccountResult.FAILED
       }
-
-      val publicKey = ECPublicKey(decode(publicKeyEncoded))
 
       SignalNetwork
         .provisioningApi

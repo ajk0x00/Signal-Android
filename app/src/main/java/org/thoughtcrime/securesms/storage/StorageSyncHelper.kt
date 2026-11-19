@@ -3,13 +3,14 @@ package org.thoughtcrime.securesms.storage
 import androidx.annotation.VisibleForTesting
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
+import org.signal.core.database.SqlUtil
 import org.signal.core.util.Base64.encodeWithPadding
-import org.signal.core.util.SqlUtil
 import org.signal.core.util.Util
 import org.signal.core.util.UuidUtil
 import org.signal.core.util.logging.Log
 import org.signal.core.util.toByteArray
 import org.signal.libsignal.net.KeyTransparency
+import org.signal.storage.keyvalue.PhoneNumberPrivacyValues.PhoneNumberDiscoverabilityMode
 import org.thoughtcrime.securesms.backup.v2.MessageBackupTier
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.getSubscriber
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.isUserManuallyCancelled
@@ -26,9 +27,9 @@ import org.thoughtcrime.securesms.jobs.RefreshAttributesJob
 import org.thoughtcrime.securesms.jobs.RetrieveProfileAvatarJob
 import org.thoughtcrime.securesms.jobs.StorageSyncJob
 import org.thoughtcrime.securesms.keyvalue.AccountValues
-import org.thoughtcrime.securesms.keyvalue.PhoneNumberPrivacyValues.PhoneNumberDiscoverabilityMode
 import org.thoughtcrime.securesms.keyvalue.SettingsValues
 import org.thoughtcrime.securesms.keyvalue.SignalStore
+import org.thoughtcrime.securesms.keyvalue.reactions
 import org.thoughtcrime.securesms.notifications.profiles.NotificationProfileId
 import org.thoughtcrime.securesms.payments.Entropy
 import org.thoughtcrime.securesms.recipients.Recipient
@@ -202,6 +203,7 @@ object StorageSyncHelper {
       }
 
       notificationProfileManualOverride = getNotificationProfileManualOverride()
+      notificationProfileSyncDisabled = SignalStore.notificationProfile.syncDisabled
 
       getSubscriber(InAppPaymentSubscriberRecord.Type.DONATION)?.let {
         safeSetSubscriber(it.subscriberId.bytes.toByteString(), it.currency?.currencyCode ?: "")
@@ -276,7 +278,7 @@ object StorageSyncHelper {
     SignalStore.settings.isPreferSystemContactPhotos = update.new.proto.preferContactAvatars
     SignalStore.payments.setEnabledAndEntropy(update.new.proto.payments?.enabled == true, Entropy.fromBytes(update.new.proto.payments?.entropy?.toByteArray()))
     SignalStore.settings.universalExpireTimer = update.new.proto.universalExpireTimer
-    SignalStore.emoji.reactions = update.new.proto.preferredReactionEmoji
+    SignalStore.emoji.rawReactions = update.new.proto.preferredReactionEmoji
     SignalStore.inAppPayments.setDisplayBadgesOnProfile(update.new.proto.displayBadgesOnProfile)
     SignalStore.settings.keepMutedChatsArchived = update.new.proto.keepMutedChatsArchived
     SignalStore.story.userHasBeenNotifiedAboutStories = update.new.proto.hasSetMyStoriesPrivacy
@@ -378,6 +380,7 @@ object StorageSyncHelper {
       Recipient.live(releaseChannelId).refresh()
     }
 
+    SignalStore.notificationProfile.syncDisabled = update.new.proto.notificationProfileSyncDisabled
     if (update.new.proto.notificationProfileManualOverride != null) {
       if (update.new.proto.notificationProfileManualOverride!!.enabled != null) {
         Log.i(TAG, "Found a remote enabled notification override")

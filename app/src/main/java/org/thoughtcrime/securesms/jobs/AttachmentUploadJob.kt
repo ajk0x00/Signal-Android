@@ -7,11 +7,11 @@ package org.thoughtcrime.securesms.jobs
 import android.text.TextUtils
 import kotlinx.coroutines.runBlocking
 import okhttp3.internal.http2.StreamResetException
-import org.greenrobot.eventbus.EventBus
 import org.signal.core.models.database.AttachmentId
 import org.signal.core.util.Base64
 import org.signal.core.util.Util
 import org.signal.core.util.concurrent.SignalExecutors
+import org.signal.core.util.eventbus.EventBus
 import org.signal.core.util.inRoundedDays
 import org.signal.core.util.logging.Log
 import org.signal.core.util.readLength
@@ -21,6 +21,7 @@ import org.signal.libsignal.net.UploadTooLargeException
 import org.signal.network.api.AttachmentUploadResult
 import org.signal.network.api.CdnApi
 import org.signal.protos.resumableuploads.ResumableUpload
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.attachments.Attachment
 import org.thoughtcrime.securesms.attachments.AttachmentUploadUtil
@@ -43,7 +44,6 @@ import org.thoughtcrime.securesms.service.AttachmentProgressService
 import org.thoughtcrime.securesms.transport.UndeliverableMessageException
 import org.thoughtcrime.securesms.util.MediaUtil
 import org.thoughtcrime.securesms.util.MessageUtil
-import org.thoughtcrime.securesms.util.RemoteConfig
 import org.whispersystems.signalservice.api.crypto.AttachmentCipherStreamUtil
 import org.whispersystems.signalservice.api.messages.AttachmentTransferProgress
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachment
@@ -316,7 +316,7 @@ class AttachmentUploadJob private constructor(
   }
 
   private fun resetProgressListeners(attachment: DatabaseAttachment) {
-    EventBus.getDefault().postSticky(PartProgressEvent(attachment, PartProgressEvent.Type.NETWORK, 0, -1))
+    EventBus.default.postSticky(PartProgressEvent(attachment, PartProgressEvent.Type.NETWORK, 0, -1))
   }
 
   override fun onFailure() {
@@ -356,7 +356,7 @@ class AttachmentUploadJob private constructor(
         progressListener = object : SignalServiceAttachment.ProgressListener {
           override fun onAttachmentProgress(progress: AttachmentTransferProgress) {
             SignalExecutors.BOUNDED_IO.execute {
-              EventBus.getDefault().postSticky(PartProgressEvent(attachment, PartProgressEvent.Type.NETWORK, progress))
+              EventBus.default.postSticky(PartProgressEvent(attachment, PartProgressEvent.Type.NETWORK, progress))
               notification?.updateProgress(progress.value)
             }
           }

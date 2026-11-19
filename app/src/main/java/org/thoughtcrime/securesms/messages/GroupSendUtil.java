@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 import org.signal.core.models.ServiceId;
+import org.signal.core.models.recipients.RecipientId;
 import org.signal.core.util.Util;
 import org.signal.core.util.groups.GroupChangeException;
 import org.signal.core.util.logging.Log;
@@ -17,7 +18,10 @@ import org.signal.libsignal.protocol.NoSessionException;
 import org.signal.libsignal.zkgroup.groups.GroupSecretParams;
 import org.signal.libsignal.zkgroup.groupsend.GroupSendEndorsement;
 import org.signal.libsignal.zkgroup.groupsend.GroupSendFullToken;
+import org.signal.network.crypto.SealedSenderAccess;
+import org.signal.network.crypto.UnidentifiedAccess;
 import org.signal.network.util.Preconditions;
+import org.signal.remoteconfig.RemoteConfig;
 import org.thoughtcrime.securesms.crypto.SealedSenderAccessUtil;
 import org.thoughtcrime.securesms.crypto.SenderKeyUtil;
 import org.thoughtcrime.securesms.database.MessageSendLogTables;
@@ -32,17 +36,13 @@ import org.thoughtcrime.securesms.groups.GroupManager;
 import org.thoughtcrime.securesms.jobs.RequestGroupV2InfoJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
 import org.thoughtcrime.securesms.util.RecipientAccessList;
-import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender.LegacyGroupEvents;
 import org.whispersystems.signalservice.api.SignalServiceMessageSender.SenderKeyGroupEvents;
 import org.whispersystems.signalservice.api.crypto.ContentHint;
-import org.whispersystems.signalservice.api.crypto.SealedSenderAccess;
-import org.whispersystems.signalservice.api.crypto.UnidentifiedAccess;
 import org.whispersystems.signalservice.api.crypto.UntrustedIdentityException;
 import org.whispersystems.signalservice.api.groupsv2.GroupSendEndorsements;
 import org.whispersystems.signalservice.api.messages.SendMessageResult;
@@ -286,7 +286,11 @@ public final class GroupSendUtil {
         refreshGroupSendEndorsements = true;
       }
 
-      if (refreshGroupSendEndorsements) {
+      if (refreshGroupSendEndorsements && !groupRecord.get().isMember()) {
+        Log.i(TAG, "Not a member of the group, unable to refresh group send endorsements, using legacy");
+        useGroupSendEndorsements    = false;
+        groupSendEndorsementRecords = new GroupSendEndorsementRecords(Collections.emptyMap());
+      } else if (refreshGroupSendEndorsements) {
         try {
           GroupManager.updateGroupSendEndorsements(context, groupRecord.get().requireV2GroupProperties().getGroupMasterKey());
 

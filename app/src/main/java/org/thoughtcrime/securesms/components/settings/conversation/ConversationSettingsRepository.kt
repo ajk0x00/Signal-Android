@@ -6,6 +6,7 @@
 package org.thoughtcrime.securesms.components.settings.conversation
 
 import android.content.Context
+import android.net.Uri
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -19,6 +20,7 @@ import kotlinx.coroutines.rx3.asFlow
 import kotlinx.coroutines.rx3.await
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.Result
 import org.signal.core.util.concurrent.SignalDispatchers
 import org.signal.core.util.concurrent.SignalExecutors
@@ -26,10 +28,12 @@ import org.signal.core.util.groups.GroupChangeException
 import org.signal.core.util.logging.Log
 import org.signal.core.util.orNull
 import org.signal.core.util.readToList
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.conversation.shared.CallEntry
 import org.thoughtcrime.securesms.components.settings.conversation.shared.GroupMember
 import org.thoughtcrime.securesms.components.settings.conversation.shared.LegacyGroupState
+import org.thoughtcrime.securesms.contacts.SystemContactUris
 import org.thoughtcrime.securesms.contacts.sync.ContactDiscovery
 import org.thoughtcrime.securesms.conversation.colors.ColorizerV2
 import org.thoughtcrime.securesms.database.CallTable
@@ -53,10 +57,8 @@ import org.thoughtcrime.securesms.groups.v2.GroupManagementRepository
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.messagerequests.MessageRequestRepository
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.recipients.RecipientUtil
 import org.thoughtcrime.securesms.stories.Stories
-import org.thoughtcrime.securesms.util.RemoteConfig
 import java.io.IOException
 import kotlin.coroutines.resume
 
@@ -215,6 +217,10 @@ class ConversationSettingsRepository(
         null
       }
     }
+  }
+
+  suspend fun getSystemContactUri(recipient: Recipient): Uri? {
+    return SystemContactUris.resolve(context, recipient)
   }
 
   suspend fun getGroupMembership(recipientId: RecipientId): List<RecipientId> {

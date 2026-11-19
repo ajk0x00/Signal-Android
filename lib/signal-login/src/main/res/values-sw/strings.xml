@@ -38,11 +38,21 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginViewDetailsScreen__no_password_manager_available">Hujaweka mipangilio ya kidhibiti cha nenosiri.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Hifadhi tu taarifa zako katika kidhibiti cha manenosiri ambacho unaamini ni salama. Signal haitoi mapendekezo kuhusu kidhibiti gani cha manenosiri ni sahihi kwako.</string>
     <!-- Toast shown when saving the Signal Login PDF fails. -->
     <string name="SignalLoginViewDetailsScreen__unable_to_save_pdf">Imeshindwa kuhifadhi PDF. Tafadhali jaribu tena.</string>
     <!-- Toast shown when the location the user picked for the Signal Login PDF refuses the write. -->
     <string name="SignalLoginViewDetailsScreen__cant_save_pdf_to_the_selected_location">Imeshindwa kuhifadhi PDF kwenye eneo lililochaguliwa.</string>
+
+    <!-- Do not share warning sheet, shown before the user copies or saves their Signal Login -->
+    <!-- Title of the sheet warning the user not to share their Signal Login. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login">Usimpatie mtu maelezo yako ya Signal Login</string>
+    <!-- Body of the warning sheet. The text inside the <b> tags is shown in bold; keep the tags around the equivalent phrase. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login_with_anyone">Usimpatie mtu yeyote maelezo yako ya Signal Login. Hii itawawezesha waidhibiti akaunti yako. <b>Signal haiwezi kukutumia ujumbe</b>kuhusu Kitambulisho cha akaunti yako au ufunguo wa kurejesha akaunti. Usijibu gumzo linaloiga kuwa Signal.</string>
+    <!-- Button acknowledging the warning and continuing with the copy or save the user started. -->
+    <string name="DoNotShareLoginBottomSheet__got_it">Nimeelewa</string>
+    <!-- Button opening a help article with more information about keeping the Signal Login safe. -->
+    <string name="DoNotShareLoginBottomSheet__learn_more">Jifunze zaidi</string>
 
     <!-- Signal Login PDF -->
     <!-- Title at the top of the PDF that holds the user\'s Signal Login. -->

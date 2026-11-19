@@ -6,19 +6,28 @@ import android.provider.Settings
 import androidx.annotation.ArrayRes
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LiveData
+import org.signal.core.models.calls.CallDataMode
+import org.signal.core.models.media.SentMediaQuality
+import org.signal.core.models.storage.KeepMessagesDuration
 import org.signal.core.util.StringStringSerializer
 import org.signal.core.util.logging.Log
-import org.signal.mediasend.SentMediaQuality
+import org.signal.storage.keyvalue.KeyValueStore
+import org.signal.storage.keyvalue.LegacySharedPrefs
+import org.signal.storage.keyvalue.SignalStoreValues
+import org.signal.storage.keyvalue.booleanValue
+import org.signal.storage.keyvalue.integerValue
+import org.signal.storage.keyvalue.longValue
+import org.signal.storage.keyvalue.stringValue
+import org.signal.storage.protos.SignalStoreList
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.database.model.databaseprotos.SignalStoreList
 import org.thoughtcrime.securesms.preferences.widgets.NotificationPrivacyPreference
 import org.thoughtcrime.securesms.util.DynamicTheme
 import org.thoughtcrime.securesms.util.Environment
 import org.thoughtcrime.securesms.util.SingleLiveEvent
-import org.thoughtcrime.securesms.webrtc.CallDataMode
 import java.util.Arrays
 import java.util.Random
 import kotlin.math.abs
+import org.signal.appsettings.R as AppSettingsR
 
 @Suppress("DEPRECATION")
 class SettingsValues internal constructor(store: KeyValueStore, private val context: Context) : SignalStoreValues(store) {
@@ -93,6 +102,7 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
     private const val MEDIA_DOWNLOAD_WIFI = "settings.media.download.wifi"
     private const val MEDIA_DOWNLOAD_ROAMING = "settings.media.download.roaming"
     private const val AUTOPLAY_STICKERS_AND_GIFS = "settings.chats.autoplayStickersAndGifs"
+    private const val ASSISTANT_SCREEN_SECURITY_DECLINED_AT = "settings.assistant.screen.security.declined.at"
 
     const val SCREEN_SECURITY_ENABLED = "settings.screen.security.enabled"
     const val INCOGNITO_KEYBOARD_ENABLED = "settings.incognito.keyboard.enabled"
@@ -131,52 +141,53 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
     }
   }
 
-  public override fun getKeysToIncludeInBackup(): List<String> = listOf(
-    LINK_PREVIEWS,
-    KEEP_MESSAGES_DURATION,
-    PREFER_SYSTEM_CONTACT_PHOTOS,
-    CALL_DATA_MODE,
-    THREAD_TRIM_LENGTH,
-    THREAD_TRIM_ENABLED,
-    THEME,
-    MESSAGE_FONT_SIZE,
-    PREFER_SYSTEM_EMOJI,
-    ENTER_KEY_SENDS,
-    BACKUPS_ENABLED,
-    MESSAGE_NOTIFICATIONS_ENABLED,
-    MESSAGE_NOTIFICATION_SOUND,
-    MESSAGE_VIBRATE_ENABLED,
-    MESSAGE_LED_COLOR,
-    MESSAGE_LED_BLINK_PATTERN,
-    MESSAGE_IN_CHAT_SOUNDS_ENABLED,
-    MESSAGE_REPEAT_ALERTS,
-    MESSAGE_NOTIFICATION_PRIVACY,
-    CALL_NOTIFICATIONS_ENABLED,
-    CALL_RINGTONE,
-    CALL_VIBRATE_ENABLED,
-    NOTIFY_WHEN_CONTACT_JOINS_SIGNAL,
-    UNIVERSAL_EXPIRE_TIMER,
-    SENT_MEDIA_QUALITY,
-    KEEP_MUTED_CHATS_ARCHIVED,
-    USE_COMPACT_NAVIGATION_BAR,
-    THREAD_TRIM_SYNC_TO_LINKED_DEVICES,
-    PASSPHRASE_DISABLED,
-    PASSPHRASE_TIMEOUT_ENABLED,
-    PASSPHRASE_TIMEOUT,
-    SCREEN_LOCK_ENABLED,
-    SCREEN_LOCK_TIMEOUT,
-    SCREEN_SECURITY_ENABLED,
-    INCOGNITO_KEYBOARD_ENABLED,
-    READ_RECEIPTS_ENABLED,
-    TYPING_INDICATORS_ENABLED,
-    SHOW_UNIDENTIFIED_DELIVERY_INDICATORS,
-    UNIVERSAL_UNIDENTIFIED_ACCESS,
-    ALWAYS_RELAY_CALLS,
-    MEDIA_DOWNLOAD_MOBILE,
-    MEDIA_DOWNLOAD_WIFI,
-    MEDIA_DOWNLOAD_ROAMING,
-    AUTOPLAY_STICKERS_AND_GIFS
-  )
+  override val keysToIncludeInBackup: List<String>
+    get() = listOf(
+      LINK_PREVIEWS,
+      KEEP_MESSAGES_DURATION,
+      PREFER_SYSTEM_CONTACT_PHOTOS,
+      CALL_DATA_MODE,
+      THREAD_TRIM_LENGTH,
+      THREAD_TRIM_ENABLED,
+      THEME,
+      MESSAGE_FONT_SIZE,
+      PREFER_SYSTEM_EMOJI,
+      ENTER_KEY_SENDS,
+      BACKUPS_ENABLED,
+      MESSAGE_NOTIFICATIONS_ENABLED,
+      MESSAGE_NOTIFICATION_SOUND,
+      MESSAGE_VIBRATE_ENABLED,
+      MESSAGE_LED_COLOR,
+      MESSAGE_LED_BLINK_PATTERN,
+      MESSAGE_IN_CHAT_SOUNDS_ENABLED,
+      MESSAGE_REPEAT_ALERTS,
+      MESSAGE_NOTIFICATION_PRIVACY,
+      CALL_NOTIFICATIONS_ENABLED,
+      CALL_RINGTONE,
+      CALL_VIBRATE_ENABLED,
+      NOTIFY_WHEN_CONTACT_JOINS_SIGNAL,
+      UNIVERSAL_EXPIRE_TIMER,
+      SENT_MEDIA_QUALITY,
+      KEEP_MUTED_CHATS_ARCHIVED,
+      USE_COMPACT_NAVIGATION_BAR,
+      THREAD_TRIM_SYNC_TO_LINKED_DEVICES,
+      PASSPHRASE_DISABLED,
+      PASSPHRASE_TIMEOUT_ENABLED,
+      PASSPHRASE_TIMEOUT,
+      SCREEN_LOCK_ENABLED,
+      SCREEN_LOCK_TIMEOUT,
+      SCREEN_SECURITY_ENABLED,
+      INCOGNITO_KEYBOARD_ENABLED,
+      READ_RECEIPTS_ENABLED,
+      TYPING_INDICATORS_ENABLED,
+      SHOW_UNIDENTIFIED_DELIVERY_INDICATORS,
+      UNIVERSAL_UNIDENTIFIED_ACCESS,
+      ALWAYS_RELAY_CALLS,
+      MEDIA_DOWNLOAD_MOBILE,
+      MEDIA_DOWNLOAD_WIFI,
+      MEDIA_DOWNLOAD_ROAMING,
+      AUTOPLAY_STICKERS_AND_GIFS
+    )
 
   val onConfigurationSettingChanged: LiveData<String>
     get() = configurationSettingChanged
@@ -232,7 +243,7 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
     }
 
   var theme: Theme
-    get() = Theme.deserialize(getString(THEME, if (DynamicTheme.systemThemeAvailable()) "system" else "light"))
+    get() = Theme.deserialize(getNonNullString(THEME, if (DynamicTheme.systemThemeAvailable()) "system" else "light"))
     set(value) {
       putString(THEME, value.serialize())
       configurationSettingChanged.postValue(THEME)
@@ -242,7 +253,7 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
 
   fun getMessageQuoteFontSize(context: Context): Int {
     val currentMessageSize = messageFontSize
-    val possibleMessageSizes = context.resources.getIntArray(R.array.pref_message_font_size_values)
+    val possibleMessageSizes = context.resources.getIntArray(AppSettingsR.array.pref_message_font_size_values)
     val possibleQuoteSizes = context.resources.getIntArray(R.array.pref_message_font_quote_size_values)
     var sizeIndex = Arrays.binarySearch(possibleMessageSizes, currentMessageSize)
 
@@ -315,7 +326,7 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
 
   var messageNotificationSound: Uri
     get() {
-      var result = getString(MESSAGE_NOTIFICATION_SOUND, Settings.System.DEFAULT_NOTIFICATION_URI.toString())
+      var result = getNonNullString(MESSAGE_NOTIFICATION_SOUND, Settings.System.DEFAULT_NOTIFICATION_URI.toString())
 
       if (result.startsWith("file:")) {
         result = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
@@ -334,7 +345,7 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
   var messageLedBlinkPattern: String by stringValue(MESSAGE_LED_BLINK_PATTERN, "500,2000")
 
   val messageLedBlinkPatternCustom: String
-    get() = getString(MESSAGE_LED_BLINK_PATTERN_CUSTOM, "500,2000")
+    get() = getNonNullString(MESSAGE_LED_BLINK_PATTERN_CUSTOM, "500,2000")
 
   var isMessageNotificationsInChatSoundsEnabled: Boolean by booleanValue(MESSAGE_IN_CHAT_SOUNDS_ENABLED, true)
 
@@ -381,9 +392,9 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
 
   var callRingtone: Uri
     get() {
-      var result = getString(CALL_RINGTONE, Settings.System.DEFAULT_RINGTONE_URI.toString())
+      var result = getNonNullString(CALL_RINGTONE, Settings.System.DEFAULT_RINGTONE_URI.toString())
 
-      if (result != null && result.startsWith("file:")) {
+      if (result.startsWith("file:")) {
         result = Settings.System.DEFAULT_RINGTONE_URI.toString()
       }
 
@@ -429,6 +440,9 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
 
   var isScreenSecurityEnabled: Boolean by booleanValue(SCREEN_SECURITY_ENABLED, false)
 
+  /** When the user last turned screen security back off after it was automatically enabled due to an assistant app, or 0 if never. */
+  var assistantScreenSecurityDeclinedAt: Long by longValue(ASSISTANT_SCREEN_SECURITY_DECLINED_AT, 0)
+
   var isIncognitoKeyboardEnabled: Boolean by booleanValue(INCOGNITO_KEYBOARD_ENABLED, false)
 
   var isReadReceiptsEnabled: Boolean by booleanValue(READ_RECEIPTS_ENABLED, false)
@@ -462,8 +476,11 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
       putInteger(FORCE_WEBSOCKET_MODE, value.serialize())
     }
 
+  /** Whether the websocket should be kept open while the app is in the background. */
+  fun shouldStayConnectedInBackground(): Boolean = forceWebsocketMode.shouldStayConnected(SignalStore.account.fcmEnabled)
+
   var mediaKeyboardMode: MediaKeyboardMode
-    get() = MediaKeyboardMode.valueOf(getString(MEDIA_KEYBOARD_MODE, MediaKeyboardMode.EMOJI.name))
+    get() = MediaKeyboardMode.valueOf(getNonNullString(MEDIA_KEYBOARD_MODE, MediaKeyboardMode.EMOJI.name))
     set(value) {
       putString(MEDIA_KEYBOARD_MODE, value.name)
     }
@@ -672,8 +689,14 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
     ENABLED_AUTOMATICALLY(2),
     DISABLED_BY_USER(3);
 
-    val isEnabled: Boolean
-      get() = this == ENABLED_BY_USER || this == ENABLED_AUTOMATICALLY
+    /** Without FCM there's no push, so we stay connected unless the user explicitly turned it off. */
+    fun shouldStayConnected(fcmEnabled: Boolean): Boolean {
+      return when (this) {
+        ENABLED_BY_USER, ENABLED_AUTOMATICALLY -> true
+        DISABLED_BY_USER -> false
+        DISABLED_AUTOMATICALLY -> !fcmEnabled
+      }
+    }
 
     fun serialize(): Int = value
 

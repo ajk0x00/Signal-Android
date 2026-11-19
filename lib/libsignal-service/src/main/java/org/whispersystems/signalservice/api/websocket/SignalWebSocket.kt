@@ -29,10 +29,10 @@ import org.signal.libsignal.net.BadRequestError
 import org.signal.libsignal.net.ChatConnection
 import org.signal.libsignal.net.RequestResult
 import org.signal.libsignal.net.UnauthenticatedChatConnection
+import org.signal.network.crypto.SealedSenderAccess
 import org.signal.network.websocket.WebSocketRequestMessage
 import org.signal.network.websocket.WebSocketResponseMessage
 import org.signal.network.websocket.WebsocketResponse
-import org.whispersystems.signalservice.api.crypto.SealedSenderAccess
 import org.whispersystems.signalservice.api.messages.EnvelopeResponse
 import org.whispersystems.signalservice.internal.push.Envelope
 import org.whispersystems.signalservice.internal.util.awaitRequest
@@ -117,16 +117,7 @@ sealed class SignalWebSocket(
     }
   }
 
-  @Synchronized
-  @Throws(IOException::class)
-  fun sendKeepAlive() {
-    if (canConnect.canConnect()) {
-      Log.v(TAG, "$connectionName keepAliveTokens: $keepAliveTokens")
-      getWebSocket().sendKeepAlive()
-    }
-  }
-
-  fun shouldSendKeepAlives(): Boolean {
+  fun hasKeepAliveTokens(): Boolean {
     return keepAliveTokens.isNotEmpty()
   }
 
@@ -277,7 +268,7 @@ sealed class SignalWebSocket(
       delayedDisconnectJob = scope.launch {
         Log.v(TAG, "$connectionName Disconnect scheduled in $disconnectTimeout")
         delay(disconnectTimeout)
-        if (!shouldSendKeepAlives()) {
+        if (!hasKeepAliveTokens()) {
           disconnect()
         }
       }

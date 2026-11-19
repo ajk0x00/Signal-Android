@@ -13,10 +13,16 @@ data class StickerPageState(
   val selectedPackId: String? = null,
   val scrollTargetPackId: String? = null,
   val allowAnimation: Boolean = true,
-  val favoritesEnabled: Boolean = true,
+  val moveToTopEnabled: Boolean = true,
   val confirmRemovePack: ConfirmRemovePack? = null,
-  val confirmRemoveFavorite: KeyboardSticker? = null
-)
+  val confirmRemoveFavorite: KeyboardSticker? = null,
+  val showSearchField: Boolean = true,
+  val searchQuery: String = ""
+) {
+  /** A search came back empty, as opposed to one still under way. */
+  val hasNoSearchResults: Boolean
+    get() = searchQuery.isNotEmpty() && packs.isEmpty()
+}
 
 /**
  * The pack the user has asked to remove, held until they confirm or dismiss the prompt.

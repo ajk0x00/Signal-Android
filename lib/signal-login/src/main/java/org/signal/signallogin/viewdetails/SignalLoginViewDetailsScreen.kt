@@ -56,6 +56,7 @@ import org.signal.signallogin.SignalLoginTestTags
 import org.signal.signallogin.beta.SignalLoginBetaDisclaimer
 import org.signal.signallogin.beta.SignalLoginBetaTag
 import org.signal.signallogin.details.SignalLoginKeyDetails
+import org.signal.signallogin.warning.DoNotShareLoginBottomSheet
 
 /** Aspect ratio of the credential card artwork. */
 private const val CARD_ASPECT_RATIO = 1.75f
@@ -126,7 +127,8 @@ private fun rememberLayout(): Layout {
 fun SignalLoginViewDetailsScreen(
   state: SignalLoginViewDetailsState,
   onEvent: (SignalLoginViewDetailsScreenEvents) -> Unit,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  snackbarHost: @Composable () -> Unit = {}
 ) {
   val layout = rememberLayout()
   val firstPaneScrollState = rememberScrollState()
@@ -138,6 +140,7 @@ fun SignalLoginViewDetailsScreen(
     navigationIcon = SignalIcons.ArrowStart.imageVector,
     navigationContentDescription = stringResource(R.string.SignalLoginViewDetailsScreen__navigate_back),
     titleContent = { _, title -> TitleWithBetaTag(title) },
+    snackbarHost = snackbarHost,
     bottomBar = {
       Footer(
         maxButtonWidth = layout.maxButtonWidth,
@@ -181,6 +184,14 @@ fun SignalLoginViewDetailsScreen(
       isGooglePasswordManagerDefault = state.isGooglePasswordManagerDefault,
       onContinue = { onEvent(SignalLoginViewDetailsScreenEvents.SaveToPasswordManagerConfirmed) },
       onDismiss = { onEvent(SignalLoginViewDetailsScreenEvents.SaveToPasswordManagerConfirmationDismissed) }
+    )
+  }
+
+  if (state.doNotShareWarningAction != null) {
+    DoNotShareLoginBottomSheet(
+      onGotIt = { onEvent(SignalLoginViewDetailsScreenEvents.DoNotShareWarningGotItClicked) },
+      onLearnMore = { onEvent(SignalLoginViewDetailsScreenEvents.DoNotShareWarningLearnMoreClicked) },
+      onDismiss = { onEvent(SignalLoginViewDetailsScreenEvents.DoNotShareWarningDismissed) }
     )
   }
 }
@@ -298,8 +309,8 @@ private fun KeyDetails(
   SignalLoginKeyDetails(
     accountId = state.accountKey,
     recoveryKeyGroups = state.recoveryKeyGroups,
-    onCopyAccountId = { onEvent(SignalLoginViewDetailsScreenEvents.CopyAccountIdClicked(it)) },
-    onCopyRecoveryKey = { onEvent(SignalLoginViewDetailsScreenEvents.CopyRecoveryKeyClicked(it)) }
+    onCopyAccountId = { onEvent(SignalLoginViewDetailsScreenEvents.CopyAccountIdClicked) },
+    onCopyRecoveryKey = { onEvent(SignalLoginViewDetailsScreenEvents.CopyRecoveryKeyClicked) }
   )
 }
 

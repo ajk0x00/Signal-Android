@@ -27,10 +27,18 @@
   <string name="MediaKeyboard__clear_search">Ачысціць пошук</string>
   <!-- Message shown in place of the grid when a media keyboard search matches no emoji or GIFs. -->
   <string name="MediaKeyboard__no_results_found">Вынікаў не знойдзена</string>
+  <!-- Message shown in place of the sticker grid when a sticker search matches nothing. %1$s is the search query the user typed. -->
+  <string name="MediaKeyboard__no_results_found_for_s">Няма вынікаў для «%1$s»</string>
+
+  <!-- Emoji sheet -->
+  <!-- Accessibility description for the button in the emoji picker sheet that opens the screen where the user picks their quick reactions. -->
+  <string name="MediaKeyboard__customize_reactions">Наладзіць рэакцыі</string>
 
   <!-- Emoji page -->
   <!-- Accessibility description for the button in the media keyboard top bar that deletes the character before the cursor. Verb, as an action the button performs. -->
   <string name="MediaKeyboard__backspace">Backspace</string>
+  <!-- Header, and rail accessibility description, for the emoji already reacted with on the message the user is reacting to. -->
+  <string name="MediaKeyboard__this_message">Гэта паведамленне</string>
   <!-- Header, and rail accessibility description, for the group of emoji or stickers the user picked most recently. -->
   <string name="MediaKeyboard__recently_used">Нядаўна выкарыстаныя</string>
   <!-- Header for the emoji category holding faces and people. -->
@@ -64,9 +72,9 @@
   <!-- Menu option in a sticker pack header\'s menu that uninstalls the pack. Verb, imperative. -->
   <string name="MediaKeyboard__remove_pack">Выдаліць</string>
   <!-- Header in keyboard to show favorite options. -->
-  <string name="MediaKeyboard__favorites">Favorites</string>
+  <string name="MediaKeyboard__favorites">Абраныя</string>
   <!-- Menu option to move favorited sticker to front of the list. -->
-  <string name="MediaKeyboard__move_to_top">Move to top</string>
+  <string name="MediaKeyboard__move_to_top">Перасунуць наверх</string>
   <!-- Title of the confirmation dialog shown before uninstalling a sticker pack. -->
   <string name="MediaKeyboard__remove_sticker_pack_question">Выдаліць набор стыкераў?</string>
   <!-- Body of the confirmation dialog shown before uninstalling a sticker pack. -->

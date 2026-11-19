@@ -38,11 +38,21 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginViewDetailsScreen__no_password_manager_available">설정된 비밀번호 관리자가 없습니다.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">로그인 정보는 안전성을 신뢰할 수 있는 비밀번호 관리자에만 저장하세요. Signal은 특정 비밀번호 관리자를 별도로 추천하지 않습니다.</string>
     <!-- Toast shown when saving the Signal Login PDF fails. -->
     <string name="SignalLoginViewDetailsScreen__unable_to_save_pdf">PDF를 저장할 수 없습니다. 다시 시도해 주세요.</string>
     <!-- Toast shown when the location the user picked for the Signal Login PDF refuses the write. -->
     <string name="SignalLoginViewDetailsScreen__cant_save_pdf_to_the_selected_location">선택한 위치에 PDF를 저장할 수 없습니다.</string>
+
+    <!-- Do not share warning sheet, shown before the user copies or saves their Signal Login -->
+    <!-- Title of the sheet warning the user not to share their Signal Login. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login">Signal Login 정보를 공유하지 마세요</string>
+    <!-- Body of the warning sheet. The text inside the <b> tags is shown in bold; keep the tags around the equivalent phrase. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login_with_anyone">Signal Login 정보를 다른 사람과 공유하지 마세요. Signal Login 정보를 공유하면 다른 사람이 내 계정을 탈취할 수 있습니다. <b>Signal은 사용자에게 계정 ID나 복구 키를 요구하는 메시지를 </b>절대 보내지 않습니다. Signal을 사칭하는 채팅에 절대 답장하지 마세요.</string>
+    <!-- Button acknowledging the warning and continuing with the copy or save the user started. -->
+    <string name="DoNotShareLoginBottomSheet__got_it">확인</string>
+    <!-- Button opening a help article with more information about keeping the Signal Login safe. -->
+    <string name="DoNotShareLoginBottomSheet__learn_more">자세히 알아보기</string>
 
     <!-- Signal Login PDF -->
     <!-- Title at the top of the PDF that holds the user\'s Signal Login. -->

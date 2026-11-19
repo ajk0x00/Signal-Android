@@ -11,11 +11,14 @@ import kotlinx.collections.immutable.toImmutableList
 import org.signal.core.models.ServiceId
 import org.signal.core.models.ServiceId.ACI
 import org.signal.core.models.ServiceId.PNI
+import org.signal.core.models.badges.Badge
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.fonts.SignalSymbols
+import org.signal.core.ui.util.SpanUtil
+import org.signal.core.ui.util.ViewUtil
 import org.signal.core.util.BidiUtil
 import org.signal.core.util.UsernameUtil.isValidUsernameForSearch
 import org.signal.core.util.Util
-import org.signal.core.util.UuidUtil
 import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
 import org.signal.core.util.nullIfBlank
@@ -23,7 +26,6 @@ import org.signal.core.util.requireDrawable
 import org.signal.libsignal.zkgroup.profiles.ExpiringProfileKeyCredential
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.avatar.fallback.FallbackAvatar
-import org.thoughtcrime.securesms.badges.models.Badge
 import org.thoughtcrime.securesms.contacts.avatars.ContactPhoto
 import org.thoughtcrime.securesms.contacts.avatars.GroupRecordContactPhoto
 import org.thoughtcrime.securesms.contacts.avatars.ProfileContactPhoto
@@ -53,8 +55,6 @@ import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient.Companion.external
 import org.thoughtcrime.securesms.service.webrtc.links.CallLinkRoomId
 import org.thoughtcrime.securesms.util.SignalE164Util
-import org.thoughtcrime.securesms.util.SpanUtil
-import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper
 import org.whispersystems.signalservice.api.push.SignalServiceAddress
 import org.whispersystems.signalservice.api.util.OptionalUtil
@@ -1058,7 +1058,7 @@ class Recipient(
         throw AssertionError()
       }
 
-      val recipientId = RecipientId.from(SignalServiceAddress(serviceId, e164))
+      val recipientId = RecipientIds.from(SignalServiceAddress(serviceId, e164))
       val resolved = resolved(recipientId)
 
       if (resolved.id != recipientId) {
@@ -1100,28 +1100,6 @@ class Recipient(
     }
 
     /**
-     * A safety wrapper around [.external] for when you know you're using an
-     * identifier for a system contact, and therefore always want to prevent interpreting it as a
-     * UUID. This will crash if given a UUID.
-     *
-     * (This may seem strange, but apparently some devices are returning valid UUIDs for contacts)
-     */
-    @JvmStatic
-    @WorkerThread
-    fun externalContact(identifier: String): Recipient? {
-      val id: RecipientId = if (UuidUtil.isUuid(identifier)) {
-        throw AssertionError("UUIDs are not valid system contact identifiers!")
-      } else if (NumberUtil.isValidEmail(identifier)) {
-        SignalDatabase.recipients.getOrInsertFromEmail(identifier)
-      } else {
-        val e164 = SignalE164Util.formatNonShortCodeAsE164(identifier) ?: return null
-        SignalDatabase.recipients.getOrInsertFromE164(e164)
-      }
-
-      return resolved(id)
-    }
-
-    /**
      * A version of [external] that should be used when you know the
      * identifier is a groupId.
      *
@@ -1149,12 +1127,12 @@ class Recipient(
     @JvmStatic
     @WorkerThread
     fun externalPossiblyMigratedGroup(groupId: GroupId): Recipient {
-      val id = RecipientId.from(groupId)
+      val id = RecipientIds.from(groupId)
       return try {
         resolved(id)
       } catch (ex: MissingRecipientException) {
         Log.w(TAG, "Could not find recipient ($id) for group $groupId. Clearing RecipientId cache and trying again.", ex)
-        RecipientId.clearCache()
+        RecipientIds.clearCache()
         resolved(SignalDatabase.recipients.getOrInsertFromPossiblyMigratedGroupId(groupId))
       }
     }

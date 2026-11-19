@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -53,6 +52,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import org.signal.appsettings.AppSettingsLazyColumn
 import org.signal.appsettings.R
 import org.signal.appsettings.account.AccountSettingsState.Dialog
 import org.signal.appsettings.account.AccountSettingsState.LoadState
@@ -66,6 +67,7 @@ import org.signal.core.ui.compose.Rows
 import org.signal.core.ui.compose.Rows.TextAndLabel
 import org.signal.core.ui.compose.Scaffolds
 import org.signal.core.ui.compose.SignalIcons
+import org.signal.core.ui.compose.Snackbars
 import org.signal.core.ui.compose.Texts
 import org.signal.core.ui.compose.theme.SignalTheme
 import org.signal.signallogin.beta.SignalLoginBetaTag
@@ -110,17 +112,32 @@ object AccountSettingsTestTags {
 @Composable
 fun AccountSettingsScreen(
   state: AccountSettingsState,
-  onEvent: (AccountSettingsEvent) -> Unit
+  onEvent: (AccountSettingsEvent) -> Unit,
+  modifier: Modifier = Modifier
 ) {
+  LifecycleResumeEffect(Unit) {
+    onEvent(AccountSettingsEvent.ScreenResumed)
+    onPauseOrDispose {}
+  }
+
   Scaffolds.Settings(
     title = stringResource(R.string.AccountSettingsFragment__account),
     onNavigationClick = { onEvent(AccountSettingsEvent.NavigateBackClicked) },
-    navigationIcon = SignalIcons.ArrowStart.imageVector
+    navigationIcon = SignalIcons.ArrowStart.imageVector,
+    navigationContentDescription = stringResource(CoreUiR.string.CloseButton__content_description),
+    snackbarHost = {
+      Snackbars.Host(
+        message = state.snackbar.message(),
+        onDismissed = { onEvent(AccountSettingsEvent.SnackbarDismissed) },
+        duration = Snackbars.Duration.LONG
+      )
+    },
+    modifier = modifier,
+    expandableTitle = true
   ) { contentPadding ->
-    LazyColumn(
-      modifier = Modifier
-        .padding(contentPadding)
-        .testTag(AccountSettingsTestTags.SCROLLER)
+    AppSettingsLazyColumn(
+      scaffoldPadding = contentPadding,
+      modifier = Modifier.testTag(AccountSettingsTestTags.SCROLLER)
     ) {
       if (state.signalLogin != null) {
         item {
@@ -372,7 +389,6 @@ fun AccountSettingsScreen(
     is Dialog.ConfirmRemoveMethod -> ConfirmRemoveMethodDialog(method = dialog.method, onEvent = onEvent)
     Dialog.MaxTotpAppsReached -> MaxTotpAppsReachedDialog(maxApps = state.signalLogin?.maxTotpApps ?: 0, onEvent = onEvent)
     Dialog.MaxTwoFactorMethodsReached -> MaxTwoFactorMethodsReachedDialog(maxTwoFactorMethods = state.signalLogin?.maxTwoFactorMethods ?: 0, onEvent = onEvent)
-    Dialog.PasskeyInProgress -> Dialogs.IndeterminateProgressDialog()
   }
 }
 
@@ -430,7 +446,7 @@ private fun SetUpTwoFactorRow(
       if (arePasskeysSupported) {
         DropdownMenus.Item(
           contentPadding = TWO_LINE_MENU_ITEM_PADDING,
-          leadingIconResId = CoreUiR.drawable.symbol_key_24,
+          leadingIconResId = CoreUiR.drawable.symbol_person_key_24,
           leadingIconSpacing = MENU_ITEM_EXTRA_ICON_GAP,
           text = {
             Column {
@@ -467,7 +483,7 @@ private fun TwoFactorMethodRow(
 
   val icon = when (method.kind) {
     TwoFactorMethod.Kind.AUTHENTICATOR_APP -> SignalIcons.DevicePhone
-    TwoFactorMethod.Kind.PASSKEY -> SignalIcons.Key
+    TwoFactorMethod.Kind.PASSKEY -> SignalIcons.PersonKey
     TwoFactorMethod.Kind.OTHER -> SignalIcons.Lock
   }
 
@@ -840,6 +856,46 @@ private fun ConfirmPinToDisableRemindersDialog(
       }
     }
   )
+}
+
+@Composable
+private fun AccountSettingsState.Snackbar.message(): String? {
+  return when (this) {
+    AccountSettingsState.Snackbar.None -> null
+    AccountSettingsState.Snackbar.PinCreated -> stringResource(R.string.AccountSettingsScreen__pin_created)
+    AccountSettingsState.Snackbar.AuthenticationRequired -> stringResource(R.string.AccountSettingsFragment__authentication_required)
+    is AccountSettingsState.Snackbar.MethodRemoved -> stringResource(
+      when (kind) {
+        TwoFactorMethod.Kind.AUTHENTICATOR_APP -> R.string.AccountSettingsFragment__authenticator_app_removed
+        TwoFactorMethod.Kind.PASSKEY -> R.string.AccountSettingsFragment__passkey_removed
+        TwoFactorMethod.Kind.OTHER -> R.string.AccountSettingsFragment__two_factor_method_removed
+      }
+    )
+    is AccountSettingsState.Snackbar.MethodSetUp -> stringResource(
+      when (kind) {
+        TwoFactorMethod.Kind.AUTHENTICATOR_APP -> R.string.TwoFactorNameEntryScreen__authenticator_app_set_up
+        TwoFactorMethod.Kind.PASSKEY -> R.string.TwoFactorNameEntryScreen__passkey_set_up
+        TwoFactorMethod.Kind.OTHER -> R.string.TwoFactorNameEntryScreen__two_factor_method_set_up
+      }
+    )
+    is AccountSettingsState.Snackbar.MethodRenamed -> stringResource(
+      when (kind) {
+        TwoFactorMethod.Kind.AUTHENTICATOR_APP -> R.string.TwoFactorNameEntryScreen__authenticator_app_renamed
+        TwoFactorMethod.Kind.PASSKEY -> R.string.TwoFactorNameEntryScreen__passkey_renamed
+        TwoFactorMethod.Kind.OTHER -> R.string.TwoFactorNameEntryScreen__two_factor_method_renamed
+      }
+    )
+    is AccountSettingsState.Snackbar.MethodRemovalFailed -> stringResource(
+      when (kind) {
+        TwoFactorMethod.Kind.AUTHENTICATOR_APP -> R.string.AccountSettingsFragment__couldnt_remove_authenticator_app
+        TwoFactorMethod.Kind.PASSKEY -> R.string.AccountSettingsFragment__couldnt_remove_passkey
+        TwoFactorMethod.Kind.OTHER -> R.string.AccountSettingsFragment__couldnt_remove_two_factor_method
+      }
+    )
+    AccountSettingsState.Snackbar.DeleteAllDataFailed -> stringResource(R.string.AccountSettingsScreen__delete_all_data_failed)
+    AccountSettingsState.Snackbar.RegistrationLockEnableFailed -> stringResource(R.string.preferences_app_protection__failed_to_enable_registration_lock)
+    AccountSettingsState.Snackbar.RegistrationLockDisableFailed -> stringResource(R.string.preferences_app_protection__failed_to_disable_registration_lock)
+  }
 }
 
 @DayNightPreviews

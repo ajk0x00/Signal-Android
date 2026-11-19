@@ -19,8 +19,10 @@ import org.signal.glide.SignalGlideDependencies
 import org.signal.libsignal.net.Network
 import org.signal.libsignal.zkgroup.profiles.ClientZkProfileOperations
 import org.signal.libsignal.zkgroup.receipts.ClientZkReceiptOperations
+import org.signal.locale.LanguageSplitRepository
 import org.signal.mediakeyboard.MediaKeyboardDependencies
 import org.signal.mediasend.MediaSendDependencies
+import org.signal.mediaviewer.MediaViewerDependencies
 import org.signal.network.api.AccountApiV2
 import org.signal.network.api.ArchiveApiV2
 import org.signal.network.api.AttachmentApi
@@ -136,6 +138,7 @@ object AppDependencies {
     CameraDependencies.init(application, CameraDependenciesProvider)
     MediaSendDependencies.init(application, MediaSendDependenciesProvider)
     MediaKeyboardDependencies.init(application, MediaKeyboardDependenciesProvider)
+    MediaViewerDependencies.init(MediaViewerDependenciesProvider)
     EmojiDependencies.init(application, EmojiDependenciesProvider)
   }
 
@@ -268,6 +271,11 @@ object AppDependencies {
   }
 
   @JvmStatic
+  val languageSplitRepository: LanguageSplitRepository by lazy {
+    provider.provideLanguageSplitRepository()
+  }
+
+  @JvmStatic
   val androidCallAudioManager: AudioManagerCompat by lazy {
     provider.provideAndroidCallAudioManager()
   }
@@ -387,6 +395,10 @@ object AppDependencies {
   @JvmStatic
   val keysApi: KeysApi
     get() = networkModule.keysApi
+
+  @JvmStatic
+  val keysApiV2: KeysApiV2
+    get() = networkModule.keysApiV2
 
   @JvmStatic
   val attachmentApi: AttachmentApi
@@ -553,10 +565,12 @@ object AppDependencies {
     fun provideOkHttpClient(): OkHttpClient
     fun provideScheduledMessageManager(): ScheduledMessageManager
     fun providePinnedMessageManager(): PinnedMessageManager
+    fun provideLanguageSplitRepository(): LanguageSplitRepository
     fun provideUnreadReminderManager(): UnreadReminderManager
     fun provideLibsignalNetwork(config: SignalServiceConfiguration, proxyState: NetworkProxyState): Network
     fun provideBillingApi(): BillingApi
     fun provideKeysApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeysApi
+    fun provideKeysApiV2(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeysApiV2
     fun provideAttachmentApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket): AttachmentApi
     fun provideCdnApi(signalRestClient: SignalRestClient): CdnApi
     fun provideLinkDeviceApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket): LinkDeviceApi
@@ -581,7 +595,7 @@ object AppDependencies {
     fun provideProvisioningApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): ProvisioningApi
     fun provideCertificateApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket): CertificateApi
     fun provideProfileApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket, pushServiceSocket: PushServiceSocket, clientZkProfileOperations: ClientZkProfileOperations): ProfileApi
-    fun provideRemoteConfigApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, pushServiceSocket: PushServiceSocket): RemoteConfigApi
+    fun provideRemoteConfigApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket): RemoteConfigApi
     fun provideDonationsApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): DonationsApi
     fun provideSvrBApi(libSignalNetwork: Network): SvrBApi
     fun provideKeyTransparencyApi(unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeyTransparencyApi

@@ -36,6 +36,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import org.signal.appsettings.R
+import org.signal.appsettings.appSettingsScreen
 import org.signal.appsettings.deleteaccount.DeleteAccountState.Dialog
 import org.signal.core.ui.compose.Buttons
 import org.signal.core.ui.compose.DayNightPreviews
@@ -43,6 +44,7 @@ import org.signal.core.ui.compose.Dialogs
 import org.signal.core.ui.compose.Previews
 import org.signal.core.ui.compose.Scaffolds
 import org.signal.core.ui.compose.SignalIcons
+import org.signal.core.ui.R as CoreUiR
 
 /**
  * Lets a user with no phone number delete their account. There's no number for them to key in, so they confirm by
@@ -59,6 +61,7 @@ fun DeleteAccountWithoutNumberScreen(
     title = "",
     onNavigationClick = { onEvent(DeleteAccountEvent.NavigateBackClicked) },
     navigationIcon = SignalIcons.ArrowStart.imageVector,
+    navigationContentDescription = stringResource(CoreUiR.string.CloseButton__content_description),
     modifier = modifier
   ) { contentPadding ->
     Column(
@@ -70,6 +73,7 @@ fun DeleteAccountWithoutNumberScreen(
         modifier = Modifier
           .weight(1f)
           .verticalScroll(rememberScrollState())
+          .appSettingsScreen()
           .padding(horizontal = 24.dp)
           .testTag(DeleteAccountTestTags.NUMBERLESS_SCROLLER)
       ) {
@@ -116,7 +120,7 @@ fun DeleteAccountWithoutNumberScreen(
           contentColor = MaterialTheme.colorScheme.onError
         ),
         modifier = Modifier
-          .fillMaxWidth()
+          .appSettingsScreen()
           .padding(horizontal = 40.dp)
           .padding(top = 16.dp, bottom = 32.dp)
           .testTag(DeleteAccountTestTags.NUMBERLESS_BUTTON_DELETE)
@@ -161,6 +165,10 @@ private fun Bullets(
     if (walletBalance != null) {
       Bullet(text = stringResource(R.string.DeleteAccountFragment__delete_s_in_your_payments_account, walletBalance))
     }
+
+    Bullet(text = stringResource(R.string.DeleteAccountScreen__delete_your_account_id_and_recovery_key))
+
+    Bullet(text = stringResource(R.string.DeleteAccountScreen__you_wont_be_able_to_re_register_or_restore_your_account))
 
     Bullet(text = stringResource(R.string.DeleteAccountScreen__this_action_can_not_be_undone))
   }

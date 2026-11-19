@@ -17,13 +17,14 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.IntentCompat
 import androidx.fragment.app.Fragment
 import org.signal.core.models.media.Media
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.util.logging.Log
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.location.SignalPlace
 import org.thoughtcrime.securesms.contactshare.Contact
-import org.thoughtcrime.securesms.contactshare.ContactShareEditActivityV2
-import org.thoughtcrime.securesms.contactshare.SelectContactActivity
+import org.thoughtcrime.securesms.contactshare.ContactShareActivity
 import org.thoughtcrime.securesms.contactshare.SharedContactSource
 import org.thoughtcrime.securesms.conversation.MessageSendType
 import org.thoughtcrime.securesms.conversation.colors.ChatColors
@@ -31,8 +32,6 @@ import org.thoughtcrime.securesms.giph.ui.GiphyActivity
 import org.thoughtcrime.securesms.maps.PlacePickerActivity
 import org.thoughtcrime.securesms.mediasend.MediaSendActivityResult
 import org.thoughtcrime.securesms.mediasend.MediaSendLauncher
-import org.thoughtcrime.securesms.recipients.RecipientId
-import org.thoughtcrime.securesms.util.RemoteConfig
 
 /**
  * This encapsulates the logic for interacting with other activities used throughout a conversation. The gist
@@ -49,7 +48,7 @@ class ConversationActivityResultContracts(private val fragment: Fragment, privat
   }
 
   private val contactShareLauncher = fragment.registerForActivityResult(ContactShareEditor) { contacts -> callbacks.onSendContacts(contacts) }
-  private val selectContactLauncher = fragment.registerForActivityResult(SelectContact) { source -> callbacks.onContactSelect(source) }
+  private val selectContactLauncher = fragment.registerForActivityResult(SelectContact) { contacts -> callbacks.onSendContacts(contacts) }
   private val systemSelectContactLauncher = fragment.registerForActivityResult(SystemSelectContact) { source -> callbacks.onContactSelect(source) }
   private val mediaSelectionLauncher = fragment.registerForActivityResult(MediaSelection) { result -> callbacks.onMediaSend(result) }
   private val gifSearchLauncher = fragment.registerForActivityResult(GifSearch) { result -> callbacks.onMediaSend(result) }
@@ -66,12 +65,12 @@ class ConversationActivityResultContracts(private val fragment: Fragment, privat
     contactShareLauncher.launch(source to recipientId)
   }
 
-  fun launchSelectContact() {
+  fun launchSelectContact(recipientId: RecipientId) {
     if (RemoteConfig.contactSharingV2) {
       // No permission gate on purpose. The new picker shows Signal connections without contacts
       // permission and prompts for it inline, so asking in front of it would block a screen that
       // works without it.
-      selectContactLauncher.launch(Unit)
+      selectContactLauncher.launch(recipientId)
     } else {
       Permissions
         .with(fragment)
@@ -173,12 +172,12 @@ class ConversationActivityResultContracts(private val fragment: Fragment, privat
   private object ContactShareEditor : ActivityResultContract<Pair<SharedContactSource, RecipientId>, List<Contact>>() {
     override fun createIntent(context: Context, input: Pair<SharedContactSource, RecipientId>): Intent {
       val (source, recipientId) = input
-      return ContactShareEditActivityV2.getIntent(context, source, recipientId)
+      return ContactShareActivity.createShareIntent(context, source, recipientId)
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): List<Contact> {
       return if (resultCode == Activity.RESULT_OK) {
-        intent?.let { IntentCompat.getParcelableArrayListExtra(intent, ContactShareEditActivityV2.KEY_CONTACTS, Contact::class.java) } ?: emptyList()
+        intent?.let { IntentCompat.getParcelableArrayListExtra(intent, ContactShareActivity.KEY_CONTACTS, Contact::class.java) } ?: emptyList()
       } else {
         emptyList()
       }
@@ -200,24 +199,19 @@ class ConversationActivityResultContracts(private val fragment: Fragment, privat
     }
   }
 
-  private object SelectContact : ActivityResultContract<Unit, SharedContactSource?>() {
-    override fun createIntent(context: Context, input: Unit): Intent {
-      return SelectContactActivity.getIntent(context)
+  private object SelectContact : ActivityResultContract<RecipientId, List<Contact>>() {
+    override fun createIntent(context: Context, input: RecipientId): Intent {
+      return ContactShareActivity.createSelectContactIntent(context, input)
     }
 
-    override fun parseResult(resultCode: Int, intent: Intent?): SharedContactSource? {
-      return if (resultCode == Activity.RESULT_OK && intent != null) {
-        IntentCompat.getParcelableExtra(intent, SelectContactActivity.KEY_SOURCE, SharedContactSource::class.java)
-      } else {
-        null
-      }
+    override fun parseResult(resultCode: Int, intent: Intent?): List<Contact> {
+      return ContactShareEditor.parseResult(resultCode, intent)
     }
   }
 
   private object GifSearch : ActivityResultContract<GifSearchInput, MediaSendActivityResult?>() {
     override fun createIntent(context: Context, input: GifSearchInput): Intent {
       return Intent(context, GiphyActivity::class.java).apply {
-        putExtra(GiphyActivity.EXTRA_IS_MMS, false)
         putExtra(GiphyActivity.EXTRA_RECIPIENT_ID, input.recipientId)
         putExtra(GiphyActivity.EXTRA_TRANSPORT, MessageSendType.SignalMessageSendType)
         putExtra(GiphyActivity.EXTRA_TEXT, input.text)

@@ -71,6 +71,14 @@
     <string name="RegistrationActivity_link_device">קשר מכשיר</string>
     <!-- Clickable text that opens a corresponding URL -->
     <string name="RegistrationActivity_learn_more">למידע נוסף</string>
+    <!-- Dialog message shown when the server rejects the user\'s captcha response during registration -->
+    <string name="PhoneNumberEntryScreen__captcha_not_accepted">תגובת האימות שלך לא אושרה. נא לנסות שוב, או ליצור קשר עם התמיכה אם הבעיה נמשכת.</string>
+    <!-- Dialog button that lets the user contact support after their captcha response was rejected -->
+    <string name="PhoneNumberEntryScreen__contact_support">יצירת קשר עם התמיכה</string>
+    <!-- Subject line of the support email composed when the user\'s captcha response was rejected during registration -->
+    <string name="PhoneNumberEntryScreen__contact_support_email_subject">הרשמה ל–Signal – מבחן CAPTCHA לא אושר עבור Android</string>
+    <!-- Text placed in the body of the support email composed when the user\'s captcha response was rejected. Used to route the request, so it is not translated. -->
+  <!-- Removed by excludeNonTranslatables <string name="PhoneNumberEntryScreen__contact_support_email_filter" translatable="false">Signal Registration - Captcha Not Accepted for Android</string> -->
 
     <!-- CountryCodePickerScreen -->
     <!-- Title of the country code selection screen -->
@@ -243,19 +251,19 @@
     <!-- Title of the dialog shown when the entered recovery key does not match the account being registered -->
     <string name="EnterAepScreen__incorrect_recovery_key_dialog_title">מפתח שחזור שגוי</string>
     <!-- Body of the dialog shown when the entered recovery key does not match the account being registered -->
-    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Make sure you\'re registering with the same phone number and 64-character recovery key you saved when enabling Signal backups. Backups cannot be recovered without this key.</string>
+    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">חשוב לוודא שההרשמה מתבצעת עם אותו מספר טלפון ואותו מפתח גיבוי בן 64 ספרות ששמרת בעת הפעלת גיבויים של Signal. לא ניתן לשחזר גיבויים בלי המפתח הזה.</string>
     <!-- Button in the incorrect recovery key dialog that dismisses it so the user can re-enter their key -->
     <string name="EnterAepScreen__try_again">נסה שוב</string>
     <!-- Button in the incorrect recovery key dialog that offers to verify the phone number over SMS instead -->
-    <string name="EnterAepScreen__try_another_way">Try another way</string>
+    <string name="EnterAepScreen__try_another_way">לנסות דרך אחרת</string>
     <!-- Button in the incorrect recovery key dialog that opens a support article about recovery keys -->
     <string name="EnterAepScreen__recovery_key_help">עזרה עם מפתח שחזור</string>
     <!-- Title of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code">Verify with SMS code?</string>
+    <string name="EnterAepScreen__verify_with_sms_code">לאמת עם קוד SMS?</string>
     <!-- Body of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code_body">You can register your account by verifying via an SMS code Signal will send you. After entering the code, you can try restoring your backup with your recovery key again.</string>
+    <string name="EnterAepScreen__verify_with_sms_code_body">אפשר לרשום את החשבון שלך באמצעות אימות דרך קוד SMS שיישלח אליך על ידי Signal. לאחר הזנת הקוד, אפשר לנסות לשחזר את הגיבוי שלך שוב עם מפתח הגיבוי.</string>
     <!-- Confirm button in the verify with SMS code dialog that requests an SMS verification code -->
-    <string name="EnterAepScreen__send_code">Send code</string>
+    <string name="EnterAepScreen__send_code">שליחת קוד</string>
     <!-- Text shown while preparing the restore -->
     <string name="LocalBackupRestoreScreen__preparing_restore">שחזור בהכנה…</string>
     <!-- Title shown while restore is in progress -->
@@ -671,7 +679,7 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginInfoScreen__no_password_manager_available">עדיין לא הגדרת מנהל סיסמאות.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginInfoScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginInfoScreen__only_store_your_credentials">חשוב לאחסן את פרטי ההתחברות שלך רק במנהל סיסמאות שידוע לך בוודאות שהוא מאובטח. Signal לא ממליצה על מנהל סיסמאות מסוים שמתאים עבורך.</string>
     <!-- Action button for users who would rather write the Signal Login down themselves. -->
     <string name="SignalLoginInfoScreen__save_manually">שמירה ידנית</string>
     <!-- Error shown when the Signal Login could not be stored in the password manager. -->
@@ -740,6 +748,8 @@
     <string name="SignalLoginCredentialEntryScreen__show_login_info_again">הצגה חוזרת של פרטי ה-Signal Login</string>
     <!-- Error shown when what the user typed back doesn\'t match the Signal Login they were given. -->
     <string name="SignalLoginCredentialEntryScreen__that_doesnt_match_the_signal_login_you_were_shown">זה לא תואם ל–Signal Login שהוצג לך</string>
+    <!-- Subtitle on the Signal Login entry screen when the user opened it from a reminder to check they still know their login -->
+    <string name="SignalLoginCredentialEntryScreen__enter_your_signal_login_to_verify_you_still_know_it">יש להזין את Signal Login שלך כדי לאמת שהוא עדיין זכור לך.</string>
 
     <!-- Add username screen -->
     <!-- Title of the screen offering the user an optional username. -->
@@ -823,5 +833,17 @@
     <!-- Button text to cancel two-factor authentication -->
     <string name="TwoFactorSelectionScreen__cancel">ביטול</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
-    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again or choose another method.</string>
+    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">משהו השתבש עם מפתח הגישה שלך. יש לנסות שוב או לבחור אמצעי אחר.</string>
+
+    <!-- PasskeyVerificationScreen -->
+    <!-- Title of the screen asking the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__two_factor_authentication">אימות דוֿ-שלבי</string>
+    <!-- Subtitle telling the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__to_continue_verify_your_account">כדי להמשיך, יש לאמת את החשבון באמצעות מפתח הגישה שלך.</string>
+    <!-- Button text to start verifying with a passkey -->
+    <string name="PasskeyVerificationScreen__continue">המשך</string>
+    <!-- Button text to cancel two-factor authentication -->
+    <string name="PasskeyVerificationScreen__cancel">ביטול</string>
+    <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
+    <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">משהו השתבש עם מפתח הגישה שלך. נא לנסות שוב.</string>
 </resources>

@@ -71,6 +71,14 @@
     <string name="RegistrationActivity_link_device">Түзмөктү байланыштыруу</string>
     <!-- Clickable text that opens a corresponding URL -->
     <string name="RegistrationActivity_learn_more">Кененирээк маалымат</string>
+    <!-- Dialog message shown when the server rejects the user\'s captcha response during registration -->
+    <string name="PhoneNumberEntryScreen__captcha_not_accepted">Жообуңуз кабыл алынган жок. Кайталап көрүңүз же маселе чечилбесе, кардарларды тейлеген кызматка кайрылыңыз.</string>
+    <!-- Dialog button that lets the user contact support after their captcha response was rejected -->
+    <string name="PhoneNumberEntryScreen__contact_support">Кардарларды колдоо кызматына кайрылуу</string>
+    <!-- Subject line of the support email composed when the user\'s captcha response was rejected during registration -->
+    <string name="PhoneNumberEntryScreen__contact_support_email_subject">Signal\'га катталуу — Android түзмөгүндө текшерүү коду кабыл алынбай жатат</string>
+    <!-- Text placed in the body of the support email composed when the user\'s captcha response was rejected. Used to route the request, so it is not translated. -->
+  <!-- Removed by excludeNonTranslatables <string name="PhoneNumberEntryScreen__contact_support_email_filter" translatable="false">Signal Registration - Captcha Not Accepted for Android</string> -->
 
     <!-- CountryCodePickerScreen -->
     <!-- Title of the country code selection screen -->
@@ -243,19 +251,19 @@
     <!-- Title of the dialog shown when the entered recovery key does not match the account being registered -->
     <string name="EnterAepScreen__incorrect_recovery_key_dialog_title">Калыбына келтирүү ачкычы туура эмес</string>
     <!-- Body of the dialog shown when the entered recovery key does not match the account being registered -->
-    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Make sure you\'re registering with the same phone number and 64-character recovery key you saved when enabling Signal backups. Backups cannot be recovered without this key.</string>
+    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Signal\'дын камдык көчүрмөсүн иштетүүдө колдонгон телефон номерин жана 64 орундуу камдык көчүрмөнүн ачкычын колдонушуңуз керек. Камдык көчүрмөлөрдү ушул код менен калыбына келтиресиз.</string>
     <!-- Button in the incorrect recovery key dialog that dismisses it so the user can re-enter their key -->
     <string name="EnterAepScreen__try_again">Кайталап көрүңүз</string>
     <!-- Button in the incorrect recovery key dialog that offers to verify the phone number over SMS instead -->
-    <string name="EnterAepScreen__try_another_way">Try another way</string>
+    <string name="EnterAepScreen__try_another_way">Башка ыкманы колдонуп көрүү</string>
     <!-- Button in the incorrect recovery key dialog that opens a support article about recovery keys -->
     <string name="EnterAepScreen__recovery_key_help">Калыбына келтирүү ачкычы боюнча жардам</string>
     <!-- Title of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code">Verify with SMS code?</string>
+    <string name="EnterAepScreen__verify_with_sms_code">SMS код менен ырастайсызбы?</string>
     <!-- Body of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code_body">You can register your account by verifying via an SMS code Signal will send you. After entering the code, you can try restoring your backup with your recovery key again.</string>
+    <string name="EnterAepScreen__verify_with_sms_code_body">Аккаунтуңузду Signal жөнөткөн SMS код менен ырастай аласыз. Кодду киргизгенден кийин камдык көчүрмөңүздү тийиштүү ачкыч менен калыбына келтирип көрсөңүз болот.</string>
     <!-- Confirm button in the verify with SMS code dialog that requests an SMS verification code -->
-    <string name="EnterAepScreen__send_code">Send code</string>
+    <string name="EnterAepScreen__send_code">Код жөнөтүү</string>
     <!-- Text shown while preparing the restore -->
     <string name="LocalBackupRestoreScreen__preparing_restore">Калыбына келгени жатат…</string>
     <!-- Title shown while restore is in progress -->
@@ -667,7 +675,7 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginInfoScreen__no_password_manager_available">Сырсөздөрдү башкаргычты койгон эмессиз.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginInfoScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginInfoScreen__only_store_your_credentials">Аккаунтуңузга киргизүүчү маалыматтарды ишеничтүү сырсөздөрдү башкаргычта гана сактаңыз. Signal кайсы башкаргычты колдонуу керектигин сунуштабайт.</string>
     <!-- Action button for users who would rather write the Signal Login down themselves. -->
     <string name="SignalLoginInfoScreen__save_manually">Кол менен сактоо</string>
     <!-- Error shown when the Signal Login could not be stored in the password manager. -->
@@ -736,6 +744,8 @@
     <string name="SignalLoginCredentialEntryScreen__show_login_info_again">Аккаунтка киргизүүчү маалыматты кайра көрсөтүү</string>
     <!-- Error shown when what the user typed back doesn\'t match the Signal Login they were given. -->
     <string name="SignalLoginCredentialEntryScreen__that_doesnt_match_the_signal_login_you_were_shown">Сизге көрүнүп турган Signal Login\'ге дал келген жок</string>
+    <!-- Subtitle on the Signal Login entry screen when the user opened it from a reminder to check they still know their login -->
+    <string name="SignalLoginCredentialEntryScreen__enter_your_signal_login_to_verify_you_still_know_it">Signal Login маалымат унутуп калбаганыңызды текшерүү үчүн аны киргизиңиз.</string>
 
     <!-- Add username screen -->
     <!-- Title of the screen offering the user an optional username. -->
@@ -819,5 +829,17 @@
     <!-- Button text to cancel two-factor authentication -->
     <string name="TwoFactorSelectionScreen__cancel">Жок</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
-    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again or choose another method.</string>
+    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Киргизүүчү ачкычыңызда ката кетти. Кайталап көрүңүз же башка ыкма тандаңыз.</string>
+
+    <!-- PasskeyVerificationScreen -->
+    <!-- Title of the screen asking the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__two_factor_authentication">Эки этаптуу авторизация</string>
+    <!-- Subtitle telling the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__to_continue_verify_your_account">Улантуу үчүн аккаунтуңузду киргизүүчү ачкыч менен тастыктаңыз.</string>
+    <!-- Button text to start verifying with a passkey -->
+    <string name="PasskeyVerificationScreen__continue">Улантуу</string>
+    <!-- Button text to cancel two-factor authentication -->
+    <string name="PasskeyVerificationScreen__cancel">Жок</string>
+    <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
+    <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">Киргизүүчү ачкычыңызда ката кетти. Кайталап көрүңүз.</string>
 </resources>

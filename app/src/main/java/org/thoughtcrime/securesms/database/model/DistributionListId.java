@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.signal.core.util.database.DatabaseId;
+import org.signal.core.models.database.DatabaseId;
 
 import java.util.Objects;
 
@@ -50,6 +50,10 @@ public final class DistributionListId implements DatabaseId, Parcelable {
 
   public boolean isMyStory() {
     return equals(MY_STORY);
+  }
+
+  public long toLong() {
+    return id;
   }
 
   @Override

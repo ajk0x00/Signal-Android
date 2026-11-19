@@ -16,7 +16,6 @@
   <!-- Removed by excludeNonTranslatables <string name="google_pay_url" translatable="false">https://pay.google.com</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
   <!-- Removed by excludeNonTranslatables <string name="pending_transfer_url" translatable="false">https://support.signal.org/hc/articles/360031949872#pending</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_faq_url" translatable="false">https://support.signal.org/hc/articles/360031949872#donate</string> -->
   <!-- Removed by excludeNonTranslatables <string name="inactive_primary_support" translatable="false">https://support.signal.org/hc/articles/9021007554074</string> -->
@@ -31,15 +30,6 @@
     <string name="save">Uložit</string>
     <string name="note_to_self">Poznámka pro sebe</string>
 
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a weather/climate application. -->
-    <string name="app_icon_label_weather">Počasí</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a note-taking application.-->
-    <string name="app_icon_label_notes">Poznámky</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a news/journalism application. -->
-    <string name="app_icon_label_news">Zprávy</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in waves of the ocean. -->
-    <string name="app_icon_label_waves">Vlny</string>
-
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
 
@@ -47,23 +37,7 @@
     <string name="ApplicationMigrationActivity__signal_is_updating">Signal se aktualizuje…</string>
 
     <!-- ApplicationPreferencesActivity -->
-    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Dosud nemáte nastavené heslo!</string>
-    <string name="ApplicationPreferencesActivity_disable_passphrase">Zakázat heslo?</string>
-    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Tímto trvale odemknete Signal a upozornění na zprávy.</string>
-    <string name="ApplicationPreferencesActivity_disable">Deaktivovat</string>
     <string name="ApplicationPreferencesActivity_error_connecting_to_server">Chyba při připojování k serveru!</string>
-    <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">PIN je vyžadován pro zámek registrace. Nejprve prosím zakažte zámek registrace, aby bylo možné PIN deaktivovat.</string>
-    <string name="ApplicationPreferencesActivity_pin_created">PIN vytvořen.</string>
-    <string name="ApplicationPreferencesActivity_pin_disabled">PIN zakázán.</string>
-    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Záznam fráze pro obnovení plateb</string>
-    <string name="ApplicationPreferencesActivity_record_phrase">Záznam fráze</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Než budete moci deaktivovat svůj PIN, musíte si zaznamenat frázi pro obnovení plateb, abyste zajistili, že můžete obnovit svůj platební účet.</string>
-    <!-- The title of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_title">Vytvořit nový klíč pro obnovení</string>
-    <!-- The body of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_body">Než budete moci vypnout PIN, musíte vytvořit a nahrát nový klíč pro obnovení.</string>
-    <!-- The confirmation button for a dialog letting the user know they have to rotate their recovery key if they want to disable PINs. If they click the button, they will be taken to a flow to rotate their key. -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_positive_button">Vytvořit klíč</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -391,8 +365,6 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s tuto zprávu odstranil/a</string>
     <string name="ConversationItem_you_deleted_this_message">Tuto zprávu jste odstranili</string>
-    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
-    <string name="ConversationItem_delete_for_everyone_question">Odstranit pro všechny?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Správce %1$s tuto zprávu odstranil</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -506,6 +478,8 @@
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">Zasílání SMS zpráv již není aplikací Signal podporováno. Pozvěte kontakt %1$s do aplikace Signal a pokračujte v konverzaci zde.</string>
     <!-- Message shown when opening a conversation with an unregistered user who used to be on Signal -->
     <string name="ConversationActivity__this_person_is_no_longer_using_signal">Tato osoba již Signal nepoužívá. Pozvěte ji do aplikace Signal a pokračujte v konverzaci zde.</string>
+    <!-- Message shown when opening a conversation with an unregistered user who is not on Signal -->
+    <string name="ConversationActivity__this_person_is_not_using_signal">Tato osoba nepoužívá Signal. Pozvěte ji a pokračujte v konverzaci zde.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__invite_to_signal">Pozvat do Signal</string>
     <!-- Toast message shown when trying to record a voice message during an ongoing call -->
@@ -526,6 +500,8 @@
     <string name="ChatStickerConfirmation__reply_to_yourself">Odpovědět sami sobě</string>
     <!-- Content description for the button that closes the sticker confirmation without sending -->
     <string name="ChatStickerConfirmation__go_back">Vrátit se zpět</string>
+    <!-- Content description for the button that opens the sticker\'s pack, where it can be managed -->
+    <string name="ChatStickerConfirmation__manage_pack">Spravovat balíček</string>
 
     <!-- ConversationFragment -->
     <!-- Toast text when contacts activity is not found -->
@@ -553,6 +529,8 @@
     <string name="ConversationFragment_deleting_messages">Mažu zprávy…</string>
     <string name="ConversationFragment_delete_for_me">Odstranit pro mě</string>
     <string name="ConversationFragment_delete_for_everyone">Odstranit pro všechny</string>
+    <!-- Snackbar text shown after the user deletes one or more messages only for themselves -->
+    <string name="ConversationFragment__deleted_for_me">Odstraněno pro mě</string>
     <!-- Title of dialog confirming whether to delete the message -->
     <plurals name="ConversationFragment_delete_selected_title">
         <item quantity="one">Odstranit označenou zprávu?</item>
@@ -893,7 +871,6 @@
     <string name="CreateProfileActivity_error_setting_profile_photo">Chyba při nastavení profilové fotografie</string>
     <string name="CreateProfileActivity_problem_setting_profile">Problém při nastavení profilu</string>
     <string name="CreateProfileActivity_set_up_your_profile">Nastavit váš profil</string>
-    <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Váš profil a změny v něm budou viditelné lidem, se kterými si píšete, které máte v kontaktech, a vašim skupinám.</string>
     <string name="CreateProfileActivity_set_avatar_description">Nastavit avatar</string>
 
     <!-- ProfileCreateFragment -->
@@ -1041,7 +1018,7 @@
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Všechny zprávy na propojených zařízeních jsou soukromé</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
-    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Po propojení jsou zprávy Signal synchronizovány se službou Signal ve vašem mobilu. Historie předchozích zpráv se nezobrazí.</string>
+    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Zprávy aplikace Signal se po propojení synchronizují s aplikací Signal v mobilním zařízení.</string>
     <!-- Bottom sheet description explaining that for non-desktop/iPad devices, they should go to %s to download Signal where %s is Signal\'s website -->
     <string name="LinkDeviceFragment__on_other_device_visit_signal">V zařízení, které chcete propojit, navštivte %1$s a nainstalujte aplikaci Signal.</string>
   <!-- Removed by excludeNonTranslatables <string name="LinkDeviceFragment__signal_download_url" translatable="false">signal.org/download</string> -->
@@ -1319,6 +1296,14 @@
         <item quantity="other">Nelze přidat členy.</item>
     </plurals>
 
+    <!-- LanguagePackReadyBanner -->
+    <!-- Banner shown after a language finished downloading in the background. %1$s is the language\'s name written in that language, for example "Deutsch". -->
+    <string name="LanguagePackReadyBanner__body">"The app language %1$s is ready to use. Restart Signal to switch to it."</string>
+    <!-- Button on the banner shown after a language finished downloading. Restarts the app so the language takes effect. -->
+    <string name="LanguagePackReadyBanner__restart">Restart</string>
+    <!-- Button on the banner shown after a language finished downloading. Hides the banner without restarting and applying the new language. -->
+    <string name="LanguagePackReadyBanner__not_now">Not now</string>
+
     <!-- LeaveGroupDialog -->
     <string name="LeaveGroupDialog_leave_group">Opustit skupinu?</string>
     <string name="LeaveGroupDialog_you_will_no_longer_be_able_to_send_or_receive_messages_in_this_group">Nebudete dále moci odesílat nebo přijímat zprávy v této skupině.</string>
@@ -1435,17 +1420,13 @@
 
     <!-- AddGroupDetailsFragment -->
     <string name="AddGroupDetailsFragment__name_this_group">Pojmenovat tuto skupinu</string>
-    <string name="AddGroupDetailsFragment__create_group">Vytvořit skupinu</string>
     <string name="AddGroupDetailsFragment__create">Vytvořit</string>
     <string name="AddGroupDetailsFragment__members">Členové</string>
     <string name="AddGroupDetailsFragment__you_can_add_or_invite_friends_after_creating_this_group">Po založení této skupiny můžete přidat nebo pozvat přátele.</string>
     <string name="AddGroupDetailsFragment__group_name_required">Název skupiny (vyžadováno)</string>
-    <string name="AddGroupDetailsFragment__group_name_optional">Název skupiny (nepovinné)</string>
-    <string name="AddGroupDetailsFragment__this_field_is_required">Toto pole je povinné.</string>
     <string name="AddGroupDetailsFragment__group_creation_failed">Vytvoření skupiny selhalo.</string>
     <string name="AddGroupDetailsFragment__try_again_later">Zkuste to později znovu.</string>
     <string name="AddGroupDetailsFragment__remove">Odebrat</string>
-    <string name="AddGroupDetailsFragment__sms_contact">SMS kontakt</string>
     <string name="AddGroupDetailsFragment__remove_s_from_this_group">Odebrat %1$s z této skupiny?</string>
     <!-- Title of the dialog shown when tapping an existing group while creating a new group, confirming the user wants to leave and discard their in-progress group -->
     <string name="AddGroupDetailsFragment__discard_group">Zrušit zakládání skupiny?</string>
@@ -1453,8 +1434,6 @@
     <string name="AddGroupDetailsFragment__if_you_continue_to_the_group_s_your_changes_wont_be_saved">Pokud přejdete do skupiny „%1$s“, vaše změny se neuloží.</string>
     <!-- Label for the button that confirms discarding the in-progress group and navigating to an existing group -->
     <string name="AddGroupDetailsFragment__discard">Zahodit</string>
-    <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Protože jste vybrali kontakt, který nepodporuje skupiny Signal, bude tato skupina MMS. Vlastní názvy a fotografie skupin MMS uvidíte pouze vy. Podpora skupin MMS bude brzy ukončena, abychom se mohli zaměřit na šifrované zprávy.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_who_can_add_new_members">Kdo může přidávat nové členy?</string>
@@ -1489,34 +1468,7 @@
     <!-- RemoteRestoreActivity -->
 
     <!-- ManageProfileFragment -->
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc -->
-    <string name="ManageProfileFragment__your_username">Vaše uživatelské jméno, QR kód a odkaz se na vašem profilu nezobrazují. Své uživatelské jméno sdílejte jen s lidmi, kterým věříte.</string>
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc, shown when you have no username -->
-    <string name="ManageProfileFragment__username_footer_no_username">Lidé vám mohou posílat zprávy pomocí volitelného uživatelského jména místo telefonního čísla. Uživatelská jména mají jedinečný QR kód a odkaz, který můžete sdílet s přáteli.</string>
-    <string name="ManageProfileFragment_profile_name">Jméno profilu</string>
-    <string name="ManageProfileFragment_username">Uživatelské jméno</string>
-    <string name="ManageProfileFragment_about">O mně</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">Nepodařilo se nastavit avatar</string>
     <string name="ManageProfileFragment_badges">Odznaky</string>
-    <!-- Text for a button that will take the user to the screen to manage their username link and QR code -->
-    <string name="ManageProfileFragment_link_setting_text">QR kód nebo odkaz</string>
-    <string name="ManageProfileFragment__edit_photo">Upravit fotku</string>
-    <!-- Title of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_title">Sdílení uživatelského jména</string>
-    <!-- Body of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_body">Sdílením svého jedinečného QR kódu nebo odkazu umožníte ostatním zahájit s vámi chat.</string>
-    <!-- Snackbar message after creating username -->
-    <string name="ManageProfileFragment__username_created">Uživatelské jméno vytvořeno</string>
-    <!-- Snackbar message after copying username -->
-    <string name="ManageProfileFragment__username_copied">Uživatelské jméno zkopírováno</string>
-    <!-- Snackbar message after network failure while trying to delete username -->
-    <string name="ManageProfileFragment__couldnt_delete_username">Uživatelské jméno se nepodařilo odstranit. Zkuste to znovu později.</string>
-    <!-- Snackbar message after successful deletion of username -->
-    <string name="ManageProfileFragment__username_deleted">Uživatelské jméno odstraněno</string>
-    <!-- The title of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_title">Odstranit uživatelské jméno?</string>
-    <!-- The body of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_body">"Tím odstraníte své uživatelské jméno a deaktivujete svůj QR kód a odkaz. Jméno %1$s budou moci použít ostatní. Jste si jisti?"</string>
 
     <!-- UsernameOutOfSyncReminder -->
     <!-- Displayed above the conversation list when a user needs to address an issue with their username -->
@@ -1650,11 +1602,6 @@
     <string name="InputPanel__this_action_cant_be_undone">Tuto akci nelze vzít zpět.</string>
     <!-- Button inside an alert dialog confirming the deletion of their draft -->
     <string name="InputPanel__discard">Zahodit</string>
-
-    <!-- LearnMoreTextView -->
-    <string name="LearnMoreTextView_learn_more">Zjistit více</string>
-
-    <string name="SpanUtil__read_more">Číst dále</string>
 
     <!-- LongMessageActivity -->
     <string name="LongMessageActivity_unable_to_find_message">Nepodařilo se nalézt zprávu</string>
@@ -2794,6 +2741,12 @@
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_failed_to_submit" translatable="false">Failed to submit :(</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_success" translatable="false">Success!</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_share" translatable="false">Share</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting" translatable="false">Submitting debug log</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting_body" translatable="false">Collecting and uploading logs. This can take a minute.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_retry" translatable="false">Retry</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_close" translatable="false">Close</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copy" translatable="false">Copy</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copied" translatable="false">Copied to clipboard</string> -->
 
     <!-- SharedContactView -->
     <string name="SharedContactView_add_to_contacts">Přidat do kontaktů</string>
@@ -2803,7 +2756,7 @@
     <!-- Button on a contact card shared in a group chat that adds the person on the card to that group -->
     <string name="SharedContactView_add_to_group">Přidat do skupiny</string>
     <!-- Confirmation dialog body when adding the person on a shared contact card to the current group. %1$s is the person\'s name, %2$s is the group name -->
-    <string name="SharedContactView_add_s_to_s">Add %1$s to “%2$s”?</string>
+    <string name="SharedContactView_add_s_to_s">Přidat %1$s do „%2$s“?</string>
 
     <!-- SignalBottomActionBar -->
     <!-- Text to describe a button that will show more options -->
@@ -2902,6 +2855,16 @@
     </plurals>
     <!-- Message shown after copying a sticker pack link. -->
     <string name="StickerManagement_copied">Odkaz zkopírován</string>
+    <!-- Title of the confirmation dialog shown before hiding a sticker pack. -->
+    <string name="StickerManagement_hide_pack_confirmation">Skrýt balíček nálepek?</string>
+    <!-- Body of the confirmation dialog shown before hiding a sticker pack that is not installed. -->
+    <string name="StickerManagement_hide_pack_confirmation_body">Tímto se skryje tento balíček nálepek z dostupných balíčků. Bez odkazu nebo zprávy s nálepkou jej nebude možné znovu přidat.</string>
+    <!-- Body of the confirmation dialog shown before hiding an installed sticker pack, which also removes it. -->
+    <string name="StickerManagement_hide_installed_pack_confirmation_body">Tímto se tento balíček nálepek odstraní a skryje z dostupných balíčků. Bez odkazu nebo zprávy s nálepkou jej nebude možné znovu přidat.</string>
+    <!-- Snackbar shown when a pack is hidden -->
+    <string name="StickerManagement_hidden_pack">Balíček nálepek je skrytý</string>
+    <!-- Snackbar action label to undo hiding a sticker pack. -->
+    <string name="StickerManagement_undo">Zpět</string>
 
     <!-- Sticker pack list dropdown menu label for the button to forward a sticker pack to another user. -->
     <string name="StickerManagement_menu_forward_pack">Přeposlat</string>
@@ -2911,6 +2874,8 @@
     <string name="StickerManagement_menu_install_pack">Instalovat</string>
     <!-- Sticker pack list dropdown menu label for the button to uninstall a sticker pack. -->
     <string name="StickerManagement_menu_remove_pack">Odstranit</string>
+    <!-- Sticker pack list dropdown menu label for the button to hide an uninstalled sticker pack from the list of available packs. -->
+    <string name="StickerManagement_menu_hide_pack">Skrýt</string>
     <!-- Sticker management screen dropdown menu label for the button to enter multi-select mode. -->
     <string name="StickerManagement_menu_select_packs">Zvolit balíček nálepek</string>
     <!-- Sticker pack list dropdown menu label for sending a sticker pack. -->
@@ -2953,7 +2918,6 @@
     <string name="StickerManagement_accessibility_clear_search">Vymazat hledání</string>
 
     <!-- StickerManagementAdapter -->
-    <string name="StickerManagementAdapter_untitled">Nepojmenovaná</string>
 
     <!-- StickerPackPreviewActivity -->
     <string name="StickerPackPreviewActivity_untitled">Nepojmenovaná</string>
@@ -2967,16 +2931,18 @@
     <string name="StickerPreviewBottomSheet__title_author">%1$s · %2$s</string>
     <!-- Bottom sheet option that opens the pack the sticker belongs to -->
     <string name="StickerPreviewBottomSheet__view_pack">Zobrazit balíček</string>
+    <!-- Bottom sheet label for sending a sticker. -->
+    <string name="StickerPreviewBottomSheet__send_sticker">Poslat nálepku</string>
     <!-- Snackbar shown after a sticker was successfully added to the user\'s favorite stickers -->
-    <string name="StickerFavorites__added_to_favorites">Sticker added to Favorites</string>
+    <string name="StickerFavorites__added_to_favorites">Nálepka přidána do Oblíbených</string>
     <!-- Snackbar shown when the user tries to favorite a sticker but already has the maximum number of favorite stickers. Placeholder is 500. -->
-    <string name="StickerFavorites__favorites_limit_reached">You can only add %1$d stickers to Favorites</string>
+    <string name="StickerFavorites__favorites_limit_reached">Do Oblíbených můžete přidat maximálně %1$d nálepek</string>
     <!-- Snackbar shown when we are unable to add or remove a sticker. -->
-    <string name="StickerFavorites__unknown_error">Unknown error. Try again later.</string>
+    <string name="StickerFavorites__unknown_error">Neznámá chyba. Zkuste to znovu později.</string>
     <!-- Snackbar shown after a sticker was successfully removed from the user\'s favorite stickers -->
-    <string name="StickerFavorites__removed_from_favorites">Sticker removed from Favorites</string>
+    <string name="StickerFavorites__removed_from_favorites">Nálepka odstraněna z Oblíbených</string>
     <!-- Snackbar shown when the user opens their favorite stickers but has not favorited any yet -->
-    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Press and hold a sticker to add to Favorites</string>
+    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Podržením nálepky ji přidáte do Oblíbených</string>
 
     <!-- Menu option to save a debug log file to disk. -->
     <string name="SubmitDebugLogActivity_save">Uložit</string>
@@ -3104,43 +3070,8 @@
     <string name="UnverifiedSendDialog_send">Odeslat</string>
 
     <!-- UsernameEditFragment -->
-    <!-- Placeholder text for custom discriminator -->
-    <string name="UsernameEditFragment__00">00</string>
-    <!-- Instructional text at the top of the username edit screen -->
-    <string name="UsernameEditFragment__choose_your_username">Vyberte si své uživatelské jméno</string>
-    <string name="UsernameEditFragment_username">Uživatelské jméno</string>
-    <string name="UsernameEditFragment_delete">Odstranit</string>
+    <!-- Toast shown after your username is deleted -->
     <string name="UsernameEditFragment_successfully_removed_username">Uživatelské jméno bylo úspěšně odstraněno.</string>
-    <string name="UsernameEditFragment_encountered_a_network_error">Došlo k chybě v síti.</string>
-    <!-- Toast message shown if user exceeds the rate limit for reserving usernames -->
-    <string name="UsernameEditFragment_rate_limit_exceeded_error">Uskutečnili jste příliš mnoho pokusů. Zkuste to prosím znovu později.</string>
-    <string name="UsernameEditFragment_this_username_is_taken">Toto uživatelské jméno je obsazené.</string>
-    <string name="UsernameEditFragment_usernames_can_only_include">Uživatelská jména mohou obsahovat pouze a–Z, 0–9 a podtržítka.</string>
-    <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Uživatelská jména nesmí začínat číslicí.</string>
-    <string name="UsernameEditFragment_username_is_invalid">Uživatelské jméno je neplatné.</string>
-    <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Uživatelská jména musí mít %1$d až %2$d znaků.</string>
-    <!-- Explanation about what usernames provide -->
-    <string name="UsernameEditFragment__usernames_let_others_message">Lidé vám mohou posílat zprávy pomocí volitelného uživatelského jména místo telefonního čísla. Uživatelská jména jsou vždy spárována s číselnou kombinací.</string>
-    <!-- Button to allow user to skip -->
-    <string name="UsernameEditFragment__skip">Přeskočit</string>
-    <!-- Content description for done button -->
-    <string name="UsernameEditFragment__done">Hotovo</string>
-    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
-    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">Toto uživatelské jméno není dostupné, zkuste jiné číslo.</string>
-    <!-- Displayed when the chosen discriminator is too short -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">Neplatné uživatelské jméno – zadejte alespoň %1$d číslice.</string>
-    <!-- Displayed when the chosen discriminator is too long -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Neplatné uživatelské jméno – zadejte alespoň %1$d číslic.</string>
-    <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">Toto číslo nesmí být 00. Zadejte číslici od 1 do 9</string>
-    <!-- Displayed when the chosen discriminator starts with 0 and has a length > 2 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_0">Čísla s více než dvěma číslicemi nemohou začínat 0</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
-    <string name="UsernameEditFragment_recovery_dialog_confirmation">Obnovením uživatelského jména resetujete svůj stávající QR kód a odkaz. Jste si jisti?</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to change their username, even if it resets their link -->
-    <string name="UsernameEditFragment_change_confirmation_message">Změnou uživatelského jména zresetuje váš současný QR kód a odkaz. Jste si jisti?</string>
-    <!-- Text for a button in a dialog asking if the user would like to continue the operation of changing their username -->
-    <string name="UsernameEditFragment_continue">Pokračovat</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%1$d kontakt má Signal!</item>
@@ -3149,9 +3080,6 @@
         <item quantity="other">%1$d kontaktů má Signal!</item>
     </plurals>
 
-    <!-- UsernameShareBottomSheet -->
-    <!-- Explanation of what the sheet enables the user to do -->
-    <string name="UsernameShareBottomSheet__copy_or_share_a_username_link">Kopírovat nebo sdílet odkaz na uživatelské jméno</string>
 
     <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Naskenovaný QR kód nemá správný formát bezpečnostního kódu. Prosím naskenujte QR kód znovu.</string>
     <string name="VerifyIdentityActivity_share_safety_number_via">Sdílet bezpečnostní číslo prostřednictvím …</string>
@@ -3199,28 +3127,15 @@
     <string name="KeyCachingService_lock">Zamknout Signal</string>
 
     <!-- MediaPreviewActivity -->
-    <string name="MediaPreviewActivity_you">Vy</string>
-    <string name="MediaPreviewActivity_unssuported_media_type">Nepodporovaný typ dat</string>
-    <string name="MediaPreviewActivity_draft">Koncept</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_title">Odstranit zprávu?</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_message">Tímto tuto zprávu trvale odstraníte.</string>
-    <string name="MediaPreviewActivity_s_to_s">%1$s pro %2$s</string>
-    <!-- All media preview title when viewing media send by you to another recipient (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_you_to_s">Odesláno uživateli %1$s</string>
-    <!-- All media preview title when viewing media sent by another recipient to you (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_s_to_you">%1$s pro vás</string>
     <string name="MediaPreviewActivity_media_no_longer_available">Média již nejsou k dispozici.</string>
     <!-- Notifying the user that the device has encountered a technical issue and is unable to render a video. -->
     <string name="MediaPreviewActivity_unable_to_play_media">Médium nelze přehrát.</string>
     <!-- Toast shown when there is an error finding a media-based message -->
     <string name="MediaPreviewActivity_error_finding_message">Při hledání zprávy došlo k chybě.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Nebyla nalezena žádná aplikace pro sdílení tohoto média.</string>
-    <string name="MediaPreviewActivity_dismiss_due_to_error">Zavřít</string>
     <string name="MediaPreviewFragment_edit_media_error">Chyba médií</string>
     <!-- This is displayed as a toast notification when we encounter an error deleting a message, including potentially on other people\'s devices -->
     <string name="MediaPreviewFragment_media_delete_error">Při odstraňování zprávy došlo k chybě; zpráva může stále existovat</string>
-    <!-- A suffix to be attached to truncated captions that the user may tap onto to view the entire text caption -->
-    <string name="MediaPreviewFragment_read_more_overflow_text">Číst dál</string>
     <string name="MediaPreviewFragment_share">Sdílet</string>
 
     <!-- MessageNotifier -->
@@ -3365,6 +3280,8 @@
 
     <!-- Message explaining that it is not possible to save media to the device storage after the user denied the system save to storage permission. -->
     <string name="AttachmentSaver__unable_to_write_to_external_storage_without_permission">Nelze uložit do externího úložiště bez oprávnění</string>
+    <!-- Toast shown when media can\'t be saved to the device storage because its data is no longer on the device and can\'t be downloaded again. -->
+    <string name="AttachmentSaver__media_no_longer_available">Toto médium již není k dispozici</string>
 
     <!-- Dialog title shown when attempting to save media that has been offloaded from the device by the storage optimization feature. -->
     <string name="AttachmentSaver__cant_save_media">Média nelze uložit</string>
@@ -3435,7 +3352,7 @@
 
     <!-- SetUpUsernameBanner -->
     <!-- Body of a banner on the new message screen prompting the user to create a username -->
-    <string name="SetUpUsernameBanner__choose_a_username_so_others_can_connect_with_you">Zvolte si uživatelské jméno, aby se s vámi ostatní mohli spojit.</string>
+    <string name="SetUpUsernameBanner__choose_a_username">Zvolte si uživatelské jméno</string>
     <!-- Button label that takes the user to the username creation screen -->
     <string name="SetUpUsernameBanner__set_up">Nastavit</string>
     <!-- Accessibility label for the button that permanently dismisses the banner -->
@@ -3745,55 +3662,6 @@
 
     <string name="device_list_fragment__link_new_device">Propojit nové zařízení</string>
 
-    <!-- expiration -->
-    <string name="expiration_off">Vyp.</string>
-
-    <plurals name="expiration_seconds">
-        <item quantity="one">%1$d vteřina</item>
-        <item quantity="few">%1$d vteřiny</item>
-        <item quantity="many">%1$d vteřin</item>
-        <item quantity="other">%1$d vteřin</item>
-    </plurals>
-
-    <string name="expiration_seconds_abbreviated">%1$ds</string>
-
-    <plurals name="expiration_minutes">
-        <item quantity="one">%1$d minuta</item>
-        <item quantity="few">%1$d minuty</item>
-        <item quantity="many">%1$d minut</item>
-        <item quantity="other">%1$d minut</item>
-    </plurals>
-
-    <string name="expiration_minutes_abbreviated">%1$dm</string>
-
-    <plurals name="expiration_hours">
-        <item quantity="one">%1$d hodina</item>
-        <item quantity="few">%1$d hodiny</item>
-        <item quantity="many">%1$d hodin</item>
-        <item quantity="other">%1$d hodin</item>
-    </plurals>
-
-    <string name="expiration_hours_abbreviated">%1$dh</string>
-
-    <plurals name="expiration_days">
-        <item quantity="one">%1$d den</item>
-        <item quantity="few">%1$d dny</item>
-        <item quantity="many">%1$d dnů</item>
-        <item quantity="other">%1$d dnů</item>
-    </plurals>
-
-    <string name="expiration_days_abbreviated">%1$dd</string>
-
-    <plurals name="expiration_weeks">
-        <item quantity="one">%1$d týden</item>
-        <item quantity="few">%1$d týdny</item>
-        <item quantity="many">%1$d týdnů</item>
-        <item quantity="other">%1$d týdnů</item>
-    </plurals>
-
-    <string name="expiration_weeks_abbreviated">%1$dtýd.</string>
-    <string name="expiration_combined">%1$s %2$s</string>
-
     <!-- unverified safety numbers -->
     <string name="IdentityUtil_unverified_banner_one">Vaše bezpečnostní číslo pro komunikaci s %1$s již není ověřené.</string>
     <string name="IdentityUtil_unverified_banner_two">Vaše bezpečnostní čísla pro komunikaci s %1$s a %2$s již nejsou ověřená.</string>
@@ -3859,42 +3727,14 @@
     <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Názvy a fotografie vlastních skupin MMS se zobrazí pouze vám.</string>
     <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Popisky skupiny budou viditelné členům skupiny a lidem, kteří byli pozváni.</string>
 
-    <!-- EditAboutFragment -->
-    <string name="EditAboutFragment_about">O mně</string>
-    <string name="EditAboutFragment_write_a_few_words_about_yourself">Napište pár slov o sobě…</string>
-    <string name="EditAboutFragment_count">%1$d/%2$d</string>
-    <string name="EditAboutFragment_speak_freely">Vyjadřujte se svobodně</string>
-    <string name="EditAboutFragment_encrypted">Šifrováno</string>
-    <string name="EditAboutFragment_be_kind">Buďte milí</string>
-    <string name="EditAboutFragment_coffee_lover">Milovník kávy</string>
-    <string name="EditAboutFragment_free_to_chat">Rád/a pokecám</string>
-    <string name="EditAboutFragment_taking_a_break">Dávám si pauzu</string>
-    <string name="EditAboutFragment_working_on_something_new">Pracuji na něčem novém</string>
-
     <!-- EditProfileFragment -->
     <string name="EditProfileFragment__edit_group">Editovat skupinu</string>
     <string name="EditProfileFragment__group_name">Název skupiny</string>
     <string name="EditProfileFragment__group_description">Popisek skupiny</string>
   <!-- Removed by excludeNonTranslatables <string name="EditProfileFragment__support_link" translatable="false">https://support.signal.org/hc/articles/360007459591</string> -->
-    <!-- The title of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_title">Aktualizovat Signal</string>
-    <!-- The body of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_body">Platnost této verze aplikace Signal vypršela. Aktualizujte ji, ať můžete Signal dál používat.</string>
-    <!-- The button on a dialog prompting user to update to the latest version of Signal. When clicked, the user will be taken to the store to update their app. -->
-    <string name="EditProfileFragment_deprecated_dialog_update_button">Aktualizovat</string>
-    <!-- The title of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_title">Zařízení není registrováno</string>
-    <!-- The body of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_body">Toto zařízení již není registrované. Chcete-li provést změny ve svém účtu, znovu ho zaregistrujte.</string>
-    <!-- The button on a dialog informing the user that they cannot use this app feature when they are unregistered. When clicked, the user will be taken to a screen to help them re-register. -->
-    <string name="EditProfileFragment_unregistered_dialog_reregister_button">Znovu se zaregistrovat</string>
 
     <!-- EditProfileNameFragment -->
-    <string name="EditProfileNameFragment_your_name">Vaše jméno</string>
-    <string name="EditProfileNameFragment_first_name">Křestní jméno</string>
-    <string name="EditProfileNameFragment_last_name_optional">Příjmení (nepovinné)</string>
     <string name="EditProfileNameFragment_save">Uložit</string>
-    <string name="EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later">Uložení se nezdařilo kvůli problémům se sítí. Zkuste to znovu později.</string>
 
     <!-- recipient_preferences_activity -->
     <string name="recipient_preference_activity__shared_media">Sdílená média</string>
@@ -4044,19 +3884,8 @@
     <string name="DebugLogsPromptDialogFragment__no_thanks">Ne, díky</string>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Poslední</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Tato zpráva</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Nedávno použité</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Nebyly nalezeny žádné výsledky</string>
 
-    <string name="GifQuickSearchOption__trending">Trendy</string>
-    <string name="GifQuickSearchOption__celebrate">Oslava</string>
-    <string name="GifQuickSearchOption__love">Láska</string>
-    <string name="GifQuickSearchOption__thumbs_up">Palec nahoru</string>
-    <string name="GifQuickSearchOption__surprised">Překvapený</string>
-    <string name="GifQuickSearchOption__excited">Nadšený</string>
-    <string name="GifQuickSearchOption__sad">Smutný</string>
-    <string name="GifQuickSearchOption__angry">Naštvaný</string>
 
     <!-- arrays.xml -->
     <string name="arrays__use_default">Použít výchozí</string>
@@ -4072,24 +3901,9 @@
     <string name="arrays__enabled">Povoleno</string>
     <string name="arrays__disabled">Zakázáno</string>
 
-    <string name="arrays__name_and_message">Jméno a zpráva</string>
-    <string name="arrays__name_only">Pouze jméno</string>
-    <string name="arrays__no_name_or_message">Žádné jméno ani zprávy</string>
 
-    <string name="arrays__images">Obrázky</string>
-    <string name="arrays__audio">Audio</string>
-    <string name="arrays__video">Video</string>
-    <string name="arrays__documents">Dokumenty</string>
 
-    <string name="arrays__small">Malé</string>
-    <string name="arrays__normal">Normální</string>
-    <string name="arrays__large">Velké</string>
-    <string name="arrays__extra_large">Extra velké</string>
 
-    <string name="arrays__default">Výchozí</string>
-    <string name="arrays__high">Vysoká</string>
-    <!-- Setting title that represent an abstract priority to assign to notifications as the max/highest priority a notification can be within the system. -->
-    <string name="arrays__max">Max</string>
 
     <!-- plurals.xml -->
     <plurals name="hours_ago">
@@ -4099,209 +3913,32 @@
         <item quantity="other">%1$dh</item>
     </plurals>
 
-    <string name="preferences__change_passphrase">Změnit heslo</string>
-    <string name="preferences__change_your_passphrase">Změna vašeho hesla</string>
-    <!-- Legacy preference menu item to enable a passphrase screen lock that is only available to those who have previously had a passphrase -->
-    <string name="preferences__enable_passphrase">Povolit heslo zámku obrazovky</string>
-    <string name="preferences__lock_signal_and_message_notifications_with_a_passphrase">Zamknout obrazovky a upozornění heslem</string>
-    <string name="preferences__screen_security">Zabezpečení obrazovky</string>
-    <string name="preferences__auto_lock_signal_after_a_specified_time_interval_of_inactivity">Automaticky zamknout Signal po určité době neaktivity</string>
-    <!-- Legacy preference menu item to enable locking of app after inactivity -->
-    <string name="preferences__inactivity_timeout_passphrase">Heslo po době neaktivity</string>
-    <!-- Legacy preference menu item to choose the interval of inactivity before lockout -->
-    <string name="preferences__inactivity_timeout_interval">Interval neaktivity</string>
+    <!-- Bottom sheet message shown after an assistant app requested the contents of the screen, explaining that screenshots were automatically disabled -->
+    <string name="AssistantScreenSecurityBottomSheet__body">Asistenti AI jako Gemini mohou skenovat váš obsah v aplikaci Signal. Aby se tomu zabránilo, bylo zapnuto zabezpečení obrazovky. Tím se zároveň zakážou snímky obrazovky.</string>
+    <!-- Bottom sheet title shown after an assistant app requested the contents of the screen and screen security was automatically turned on -->
+    <string name="AssistantScreenSecurityBottomSheet__title">Zabezpečení obrazovky je zapnuto</string>
+    <!-- Bottom sheet button that turns screen security back off -->
+    <string name="AssistantScreenSecurityBottomSheet__turn_off_screen_security">Vypnout zabezpečení obrazovky</string>
+    <!-- Title of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__title">Vypnout zabezpečení obrazovky?</string>
+    <!-- Body of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__body">Pokud možnost vypnete, mohou asistenti AI, např. Google Gemini, skenovat obsah v aplikaci Signal a využívat jej pro funkce, které nemusejí být soukromé.</string>
+    <!-- Dialog button that confirms turning off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__turn_off">Vypnout</string>
+    <!-- Snackbar shown after the user turns off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__screen_security_is_off">Zabezpečení obrazovky je vypnuto</string>
     <string name="preferences__notifications">Upozornění</string>
-    <!-- Preference item menu to enable notifications -->
-    <string name="preferences__enable_notifications">Povolit oznámení</string>
-    <!-- Preference header for call notifications -->
-    <string name="preferences__call_notifications">Oznámení o hovorech</string>
-    <string name="preferences__led_color">Barva LED</string>
     <string name="preferences__led_color_unknown">Neznámý</string>
-    <string name="preferences__pref_led_blink_title">Schéma blikání LED</string>
-    <string name="preferences__customize">Upravit</string>
-    <string name="preferences__change_sound_and_vibration">Změnit zvuk a vibrace</string>
-    <!-- Preference menu item to control the sound of notifications -->
-    <string name="preferences__sound">Zvuk</string>
     <string name="preferences__silent">Ticho</string>
-    <!-- Preference menu item to use the default sound for notifications -->
-    <string name="preferences__default">Výchozí</string>
-    <string name="preferences__repeat_alerts">Opakovat upozornění</string>
-    <string name="preferences__never">Nikdy</string>
-    <string name="preferences__one_time">Jednou</string>
-    <string name="preferences__two_times">Dvakrát</string>
-    <string name="preferences__three_times">Třikrát</string>
-    <string name="preferences__five_times">Pětkrát</string>
-    <string name="preferences__ten_times">Desetkrát</string>
-    <string name="preferences__vibrate">Vibrovat</string>
-    <string name="preferences__green">Zelená</string>
-    <string name="preferences__red">Červená</string>
-    <string name="preferences__blue">Modrá</string>
-    <string name="preferences__orange">Oranžová</string>
-    <string name="preferences__cyan">Tyrkysová</string>
-    <string name="preferences__magenta">Purpurová</string>
-    <string name="preferences__white">Bílá</string>
-    <!-- Text shown when no preference label has been selected -->
-    <string name="preferences__none">Nic</string>
-    <string name="preferences__fast">Rychle</string>
-    <string name="preferences__normal">Normálně</string>
-    <string name="preferences__slow">Pomalu</string>
-    <string name="preferences__help">Nápověda</string>
-    <string name="preferences__advanced">Rozšířené možnosti</string>
     <string name="preferences__donate_to_signal">Podpořte Signal finančně</string>
-    <!-- Preference label for making one-time donations to Signal -->
-    <string name="preferences__privacy">Soukromí</string>
     <!-- Preference label for stories -->
     <string name="preferences__stories">Příběhy</string>
-    <string name="preferences__data_and_storage">Data a úložiště</string>
-    <string name="preferences__storage">Úložiště</string>
     <string name="preferences__payments">Platby</string>
-    <!-- Privacy settings payments section description -->
-    <string name="preferences__payment_lock">Zámek plateb</string>
-    <string name="preferences__conversation_length_limit">Omezení délky chatu</string>
-    <string name="preferences__keep_messages">Zachovat zprávy</string>
     <string name="preferences__linked_devices">Propojená zařízení</string>
-    <string name="preferences__light_theme">Světlý</string>
-    <string name="preferences__dark_theme">Tmavý</string>
-    <string name="preferences__appearance">Vzhled</string>
-    <string name="preferences__theme">Motiv</string>
-    <string name="preferences__chat_color_and_wallpaper">Barva chatu a tapeta</string>
-    <!-- Clickable settings text allowing the user to change the icon visible on their phone\'s home screen. -->
-    <string name="preferences__app_icon">Ikona aplikace</string>
-    <!-- Approval for changing the app icon. -->
-    <string name="preferences__app_icon_dialog_ok">OK</string>
-    <!-- Cancelling the operation of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_cancel">Zrušit</string>
-    <!-- Title for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_title">Změnit ikonu a název aplikace na „%1$s“</string>
-    <!-- Description for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_description">Aby bylo možné ikonu a název aplikace Signal změnit, bude nutné ji zavřít. Oznámení budou vždy zobrazovat výchozí ikonu a název Signal.</string>
-    <!-- Visible warning label for the limitations of changing the app icon with learn more call to action. -->
-    <string name="preferences__app_icon_warning_learn_more">Vyberte si ikonu a název aplikace, které se budou zobrazovat na domovské obrazovce vašeho telefonu a ve složce s aplikacemi. Oznámení budou vždy zobrazovat výchozí ikonu a název Signal. Více informací</string>
-    <!-- Visible warning label for the limitations of changing the app icon. -->
-    <string name="preferences__app_icon_warning">Ikony a názvy aplikací se zobrazují na domovské obrazovce a ve složce s aplikacemi.</string>
-    <!-- Visible warning label explaining that changing the app icon and name does not affect notifications. -->
-    <string name="preferences__app_icon_notification_warning">Oznámení budou vždy zobrazovat výchozí ikonu a název Signal.</string>
-    <!--Call to action to get more information about the limitations of the change app icon functionality. -->
-    <string name="preferences__app_icon_learn_more">Více informací</string>
-    <!--Text description of a graphic illustrating the limitations of the app icon change. -->
-    <string name="preferences__graphic_illustrating_where_the_replacement_app_icon_will_be_visible">Grafika znázorňující, kde se bude nová ikona aplikace zobrazovat.</string>
-    <string name="preferences__disable_pin">Deaktivovat PIN</string>
-    <string name="preferences__enable_pin">Povolit PIN</string>
-    <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">Pokud PIN deaktivujete, tak při opětovné registraci Signal ztratíte všechna data, jestliže si je ručně nezazálohujete a neobnovíte. Když je PIN deaktivován, nemůžete si zapnout zámek registrace.</string>
-    <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">PIN uchovává informace uložené v Signal zašifrované, takže pouze vy k nim můžete přistupovat. Váš profil, nastavení a kontakty budou při reinstalaci obnoveny. Pro spuštění aplikace PIN nebudete potřebovat.</string>
-    <string name="preferences__system_default">Podle systému</string>
-    <string name="preferences__language">Jazyk</string>
-    <!-- Title of toolbar for the advanced pin settings screen -->
-    <string name="preferences__advanced_pin_settings_title">Rozšířené nastavení PIN</string>
     <string name="preferences__submit_debug_log">Odeslat ladicí log</string>
-    <string name="preferences__incognito_keyboard">Inkognito klávesnice</string>
-    <string name="preferences__read_receipts">Potvrzení o přečtení</string>
-    <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">Jestliže zakážete posílání potvrzení o přečtení zpráv, nebudete vidět tato potvrzení ani od ostatních.</string>
-    <string name="preferences__typing_indicators">Indikátory psaní</string>
-    <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">Pokud máte vypnuté indikátory psaní, nebudete je vidět ani od ostatních.</string>
-    <string name="preferences__request_keyboard_to_disable">Vyžadovat, aby klávesnice deaktivovala personalizované učení.</string>
-    <string name="preferences__this_setting_is_not_a_guarantee">Toto nastavení negarantuje, že ho vaše klávesnice nebude ignorovat.</string>
-  <!-- Removed by excludeNonTranslatables <string name="preferences__incognito_keyboard_learn_more" translatable="false">https://support.signal.org/hc/articles/360055276112</string> -->
-    <string name="preferences_chats__when_using_mobile_data">Při použití mobilních datových přenosů</string>
-    <string name="preferences_chats__when_using_wifi">Při použití WiFi</string>
-    <string name="preferences_chats__when_roaming">Při roamingu</string>
-    <string name="preferences_chats__media_auto_download">Automatické stahování multimédií</string>
-    <string name="preferences_storage__storage_usage">Využití úložiště</string>
-    <string name="preferences_storage__photos">Fotografie</string>
-    <string name="preferences_storage__videos">Videa</string>
-    <string name="preferences_storage__files">Soubory</string>
-    <string name="preferences_storage__audio">Audio</string>
-    <!-- Storage usage legend label for the size of the main message database -->
-    <string name="preferences_storage__messages">Zprávy</string>
-    <!-- Storage usage legend label for the size of downloaded sticker packs -->
-    <string name="preferences_storage__stickers">Nálepky</string>
-    <!-- Storage usage legend label for all remaining app storage, such as other databases, caches and temporary files -->
-    <string name="preferences_storage__other">Jiné</string>
-    <!-- Shown in place of the total storage size while usage is still being computed -->
-    <string name="preferences_storage__calculating">Probíhá výpočet…</string>
-    <string name="preferences_storage__review_storage">Zkontrolovat úložiště</string>
-    <string name="preferences_storage__delete_older_messages">Odstranit starší zprávy?</string>
-    <!-- Dialog title shown when selecting delete message history from manage storage -->
-    <string name="preferences_storage__delete_message_history">Smazat historii zpráv?</string>
-    <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">Tímto trvale odstraníte veškerou historii zpráv a mediální soubory z vašeho zařízení, které jsou starší než %1$s.</string>
-    <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
-    <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
-        <item quantity="one">Tím se trvale zkrátí všechny chaty na nejnovější zprávu.</item>
-        <item quantity="few">Tím se trvale zkrátí všechny chaty na %1$s nejnovější zprávy.</item>
-        <item quantity="many">Tím se trvale zkrátí všechny chaty na %1$s nejnovějších zpráv.</item>
-        <item quantity="other">Tím se trvale zkrátí všechny chaty na %1$s nejnovějších zpráv.</item>
-    </plurals>
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device">Tímto trvale odstraníte veškerou historii zpráv a mediální soubory z vašeho zařízení.</string>
-    <!-- Dialog message warning about delete chat message history will delete everything everywhere including linked devices -->
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device_linked_device">Trvale se tak odstraní veškerá historie zpráv a médií z tohoto zařízení a všech propojených zařízení.</string>
-    <string name="preferences_storage__are_you_sure_you_want_to_delete_all_message_history">Opravdu chcete odstranit veškerou historii zpráv?</string>
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone">Veškerá historie zpráv bude trvale odstraněna. Tuto akci nelze vrátit zpět.</string>
-    <!-- Secondary warning dialog message about deleting all chat message history from everything everywhere including linked devices -->
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone_linked_device">Ze všech zařízení bude trvale odstraněna veškerá historie zpráv. Tuto operaci nelze vzít zpět.</string>
-    <string name="preferences_storage__delete_all_now">Vše nyní odstranit</string>
-    <!-- Option for keeping messages forever when managing storage -->
-    <string name="preferences_storage__forever">Navždy</string>
-    <string name="preferences_storage__one_year">1 rok</string>
-    <string name="preferences_storage__six_months">6 měsíců</string>
-    <string name="preferences_storage__thirty_days">30 dní</string>
-    <!-- Option for setting no limit of the length of chat messages -->
-    <string name="preferences_storage__none">Žádný</string>
-    <plurals name="preferences_storage__s_messages_plural">
-        <item quantity="one">%1$s zpráva</item>
-        <item quantity="few">%1$s zprávy</item>
-        <item quantity="many">%1$s zpráv</item>
-        <item quantity="other">%1$s zpráv</item>
-    </plurals>
 
-    <string name="preferences_storage__custom">Vlastní</string>
-    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Přenášet všechna volání přes servery Signal, aby nedošlo k odhalení vaší IP adresy volanému. Povolením dojde ke zhoršení kvality hovoru.</string>
-    <string name="preferences_advanced__always_relay_calls">Vždy předávat hovory</string>
-    <!-- Privacy settings payments section title -->
-    <string name="preferences_app_protection__payments">Platby</string>
-    <string name="preferences_data_and_storage__manage_storage">Správa úložiště</string>
-    <string name="preferences_data_and_storage__use_less_data_for_calls">Šetřit data při hovorech</string>
-    <string name="preferences_data_and_storage__never">Nikdy</string>
-    <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi a mobilní data</string>
-    <string name="preferences_data_and_storage__mobile_data_only">Pouze mobilní data</string>
-    <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Menší spotřeba dat může zlepšit kvalitu hovorů při slabém připojení.</string>
-    <string name="preferences_notifications__in_chat_sounds">Zvuky v chatu</string>
-    <string name="preferences_notifications__show">Zobrazit</string>
-    <!-- Preference item to set notification settings when chats are muted -->
-    <string name="preferences_notifications__while_muted">Při ztlumení</string>
-    <!-- Option in settings to turn on reaction notifications -->
-    <string name="preferences_notifications__reaction">Oznámení o reakcích</string>
-    <!-- Body option in settings to turn on reaction notifications    -->
-    <string name="preferences_notifications__notify_reaction">Zobrazovat oznámení o reakcích na vámi odeslané zprávy</string>
     <!-- Option in settings to turn on unread reminders -->
     <string name="preferences_notifications__unread">Připomínky nepřečtených zpráv</string>
-    <!-- Body option to turn on unread reminders -->
-    <string name="preferences_notifications__notify_unread">Občas upozornit na nepřečtené zprávy ve ztlumených chatech</string>
-    <string name="preferences_notifications__ringtone">Vyzvánění</string>
-    <string name="preferences_chats__message_text_size">Velikost písma zprávy</string>
-    <!-- Option in settings that will provide a shortcut to notification system settings to control the priority of Signal notifications -->
-    <string name="preferences_notifications__priority">Priorita</string>
-    <!-- Option in settings to trouble shoot delayed notifications -->
-    <string name="preferences_notifications__troubleshoot">Řešení problémů s oznámeními</string>
-    <!-- Heading for the \'censorship circumvention\' section of privacy preferences -->
-    <string name="preferences_communication__category_censorship_circumvention">Obcházení cenzury</string>
-    <!-- Title of the \'censorship circumvention\' toggle switch -->
-    <string name="preferences_communication__censorship_circumvention">Obcházení cenzury</string>
-    <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Pokud je povoleno, Signal se pokusí obejít cenzuru. Nepovolujte v místech, kde Signal není cenzurován.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Obcházení cenzury bylo aktivováno na základě vašeho telefonního čísla.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Ručně jste zakázal(a) obcházení cenzury.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service -->
-    <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Obcházení cenzury není nutné; již jste připojeni ke službě Signal.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet -->
-    <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Obcházení cenzury může být povoleno pouze pokud jste připojeni k internetu.</string>
-    <string name="preferences_communication__category_sealed_sender">Utajený odesílatel</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone">Povolit od kohokoliv</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone_description">Povolit utajené odesílatele pro příchozí zprávy od lidí, které nemáte kontaktech a se kterými nesdílíte váš profil.</string>
-    <string name="preferences_proxy">Proxy</string>
-    <string name="preferences_use_proxy">Použít proxy</string>
-    <string name="preferences_off">Vyp.</string>
-    <string name="preferences_on">Zap.</string>
     <string name="preferences_proxy_address">Proxy adresa</string>
     <string name="preferences_only_use_a_proxy_if">Proxy používat pouze v případě, kdy se nelze připojit k Signal prostřednictvím mobilní sítě nebo WiFi.</string>
     <string name="preferences_share">Sdílet</string>
@@ -4315,18 +3952,6 @@
     <string name="preferences_success">Úspěch</string>
     <string name="preferences_failed_to_connect">Připojení selhalo</string>
     <string name="preferences_enter_proxy_address">Zadat adresu proxy</string>
-    <!-- Preference title for changing navigation (bottom) bar size -->
-    <string name="preferences_navigation_bar_size">Velikost lišty navigace</string>
-    <!-- Preference summary for normal navigation bar size -->
-    <string name="preferences_normal">Normální</string>
-    <!-- Preference summary for compact navigation bar size -->
-    <string name="preferences_compact">Kompaktní</string>
-    <!-- Dialog message body explaining that we have to restart the app in order to apply the user\'s new language setting.  -->
-    <string name="preferences_language_change_confirmation_message">Aplikace se restartuje a použije nové nastavení jazyka.</string>
-    <!-- Preference title for automatic key verification -->
-    <string name="preferences_automatic_key_verification">Automatické ověření klíče</string>
-    <!-- Preference summary for automatic key verification -->
-    <string name="preferences_automatic_key_verification_body">Pokud je tato funkce povolena, služba Signal se pokusí automaticky ověřit šifrování 1:1 chatů.</string>
 
 
     <!-- Internal only preferences -->
@@ -4711,11 +4336,6 @@
     <!-- Label for a button in a banner to learn more about why we cannot process the user\'s contacts -->
     <string name="reminder_cds_permanent_error_learn_more">Více informací</string>
 
-    <!-- media_preview -->
-    <string name="media_preview__save_title">Uložit</string>
-    <string name="media_preview__edit_title">Upravit</string>
-
-
     <!-- media_preview_activity -->
     <!-- Content description of images or videos when viewing media -->
     <string name="media_preview_activity__media_content_description">Náhled multimedií</string>
@@ -4858,6 +4478,12 @@
     <string name="CallNotificationBuilder__ongoing_signal_group_call">Probíhající skupinový hovor Signal</string>
 
     <string name="CallNotificationBuilder_connecting">Připojování…</string>
+    <!-- Notification title shown when Signal needs to be opened to use the microphone during a call -->
+    <string name="CallNotificationBuilder__open_signal">Open Signal</string>
+    <!-- Notification body shown when a call was answered from a watch or other device but Signal needs microphone permission before it can connect -->
+    <string name="CallNotificationBuilder__to_answer_this_call_allow_signal_access_to_your_microphone">To answer this call, allow Signal access to your microphone.</string>
+    <!-- Notification body shown during a call when Android blocked microphone access because Signal was in the background -->
+    <string name="CallNotificationBuilder__the_other_person_cant_hear_you_until_you_open_signal">The other person can\'t hear you until you open Signal.</string>
     <string name="enter_backup_passphrase_dialog__backup_passphrase">Heslo pro zálohy</string>
     <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Zálohy budou uloženy na externí úložiště a zašifrovány níže uvedeným heslem. Toto heslo musíte znát, abyste mohli zálohu obnovit.</string>
     <string name="backup_enable_dialog__you_must_have_this_passphrase">Toto heslo musíte mít pro obnovu ze zálohy.</string>
@@ -4903,39 +4529,6 @@
     <string name="BackupUtil_never">Nikdy</string>
     <!-- Subtext below last backup time when we do not know when the last backup was -->
     <string name="BackupUtil_unknown">Neznámý</string>
-    <!-- Phone number heading displayed as a screen title -->
-    <string name="preferences_app_protection__phone_number">Telefonní číslo</string>
-    <!-- Subtext below option to launch into phone number privacy settings screen -->
-    <string name="preferences_app_protection__choose_who_can_see">Zvolte si, kdo uvidí vaše telefonní číslo a kdo vás pomocí něj může v aplikaci Signal kontaktovat.</string>
-    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_see_my_number_heading">Kdo uvidí moje číslo</string>
-    <!-- Subtext below radio buttons when who can see my number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_on_description">Vaše telefonní číslo bude viditelné pro lidi a skupiny, se kterými si píšete.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_on_description">Vaše telefonní číslo nikdo neuvidí, pokud ho nemá uložené v kontaktech svého telefonu.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_off_description">Vaše telefonní číslo nikdo neuvidí.</string>
-    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_find_me_by_number_heading">Kdo mě může najít podle čísla</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_on_description">Každý, kdo má vaše telefonní číslo, uvidí, že používáte Signal, a může s vámi začít chatovat.</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_off_description">Nikdo neuvidí, že používáte Signal, dokud mu nenapíšete nebo pokud s ním už nejste v existujícím chatu.</string>
-    <!-- Snackbar text when pressing invalid radio item -->
-    <string name="PhoneNumberPrivacySettingsFragment__to_change_this_setting">"Pokud toto nastavení chcete změnit, nastavte možnost Kdo uvidí moje číslo na Nikdo."</string>
-    <!-- Dialog title shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_title">Jste si jisti?</string>
-    <!-- Dialog warning message shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_message">Nastavením položky „Kdo mě může najít podle čísla“ na „Nikdo“ ztížíte lidem, aby vás ve službě Signal našli.</string>
-    <!-- Dialog button text for canceling change action -->
-    <string name="PhoneNumberPrivacySettingsFragment__cancel">Zrušit</string>
-    <string name="PhoneNumberPrivacy_everyone">Všichni</string>
-    <string name="PhoneNumberPrivacy_nobody">Nikdo</string>
-    <string name="preferences_app_protection__screen_lock">Zámek obrazovky</string>
-    <!-- Snackbar text shown when trying to enable screen lock but the user does not have a password or biometrics enabled -->
-    <string name="preferences_app_protection__to_use_screen_lock">Pro využití zámku obrazovky nastavte v tomto zařízení PIN, vzorec nebo heslo.</string>
-    <string name="preferences_app_protection__failed_to_enable_registration_lock">Aktivace zámku registrace se nezdařila.</string>
-    <string name="preferences_app_protection__failed_to_disable_registration_lock">Zablokování zámku registrace se nezdařilo.</string>
     <string name="RegistrationActivity_you_must_enter_your_registration_lock_PIN">Musíte zadat PIN zámku registrace</string>
     <string name="RegistrationActivity_your_pin_has_at_least_d_digits_or_characters">Váš PIN má alespoň %1$d číslic nebo znaků</string>
     <string name="RegistrationActivity_too_many_attempts">Příliš mnoho pokusů</string>
@@ -4956,26 +4549,6 @@
     <string name="prompt_passphrase_activity__try_again">Zkusit znovu</string>
 
     <!-- ScreenLockSettingsFragment -->
-    <!-- Text shown when screen lock is not enabled -->
-    <string name="ScreenLockSettingsFragment__off">Vypnuto</string>
-    <!-- Text shown with toggle that when switched on will enable screen lock -->
-    <string name="ScreenLockSettingsFragment__use_screen_lock">Použít zámek obrazovky</string>
-    <!-- Description of what screen locking will do and how notification content will not be shown when screen is locked -->
-    <string name="ScreenLockSettingsFragment__your_android_device">Pro odemknutí aplikace Signal při jejím vypnutí nebo přepnutí bude nutné nastavení zámku v zařízení se systémem Android. Při uzamčení se v náhledech oznámení nezobrazuje obsah zprávy.</string>
-    <!-- Title text explaining when users should start the screen lock -->
-    <string name="ScreenLockSettingsFragment__start_screen_lock">Zámek úvodní obrazovky</string>
-    <!-- Option text explaining that screen lock should start after 1 minute of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_1_min">Po 1 minutě</string>
-    <!-- Option text explaining that screen lock should start after 5 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_5_min">Po 5 minutách</string>
-    <!-- Option text explaining that screen lock should start after 30 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_30_min">Po 30 minutách</string>
-    <!-- Option text explaining that screen lock should start at a custom time set by the user -->
-    <string name="ScreenLockSettingsFragment__custom_time">Vlastní čas</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn on screen lock -->
-    <string name="ScreenLockSettingsFragment__use_signal_screen_lock">Použít zámek obrazovky aplikace Signal</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn off screen lock -->
-    <string name="ScreenLockSettingsFragment__turn_off_signal_lock">Vypněte zámek obrazovky aplikace Signal</string>
 
     <string name="Recipient_unknown">Neznámý</string>
     <!-- Name to use for a user across the UI when they are unregistered and have no other name available -->
@@ -5448,61 +5021,8 @@
     <string name="GroupDescriptionDialog__group_description">Popisek skupiny</string>
 
     <!-- AppSettingsFragment -->
-    <!-- String alerting user that something is wrong with their backups subscription -->
-    <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Obnovte předplatné Zabezpečeného zálohování služby Signal</string>
-    <!-- String alerting user that backup failed -->
-    <string name="AppSettingsFragment__couldnt_complete_backup">Zálohování se nepodařilo dokončit</string>
     <!-- String alerting user that backup redemption -->
     <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Nepodařilo se obnovit vaše předplatné pro zálohování</string>
-    <!-- String alerting user that backup storage limit has been reached -->
-    <string name="AppSettingsFragment__backup_storage_limit_reached">Dosažen limit pro ukládání záloh</string>
-    <!-- String displayed telling user to invite their friends to Signal -->
-    <string name="AppSettingsFragment__invite_your_friends">Pozvěte své přátele</string>
-    <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">ID předplatitele zkopírováno do schránky</string>
-    <!-- String displayed in a toast when we successfully copy the backups subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">ID předplatitele záloh zkopírováno do schránky</string>
-
-    <!-- ExportAccountDataFragment -->
-    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Údaje o vašem účtu</string>
-    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Exportujte si přehled údajů o svém účtu Signal. Tento přehled neobsahuje žádné zprávy ani média. %1$s</string>
-    <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Více informací</string>
-    <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Exportovat přehled</string>
-
-    <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Exportovat jako TXT</string>
-    <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Snadno čitelný textový soubor</string>
-    <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Exportovat jako JSON</string>
-    <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Strojově čitelný soubor</string>
-
-    <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Zrušit</string>
-
-    <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Title of dialog shown when report fails to generate -->
-    <string name="ExportAccountDataFragment__report_generation_failed">Přehled se nepodařilo vygenerovat</string>
-    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
-    <string name="ExportAccountDataFragment__check_network">Zkontrolujte připojení a zkuste to znovu.</string>
-
-    <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Exportovat údaje?</string>
-    <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Údaje o svém účtu Signal sdílejte jen s lidmi nebo aplikacemi, kterým důvěřujete.</string>
-    <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Exportovat</string>
-
-    <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Generování přehledu…</string>
-    <!-- Explanation that the report is only generated on export and is not saved on the device -->
-    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Váš přehled se generuje v okamžiku exportu a služba Signal jej neukládá do vašeho zařízení.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Pomocí této funkce můžete změnit své aktuální telefonní číslo na nové. Tuto změnu nelze vrátit zpět.\n\nPřed pokračováním se ujistěte, že nové číslo může přijímat SMS nebo hovory.</string>
@@ -5714,45 +5234,15 @@
     <!-- Done button label to save selected chats to folder -->
     <string name="ChooseChatsFragment__done">Hotovo</string>
 
-    <string name="NotificationsSettingsFragment__calls">Volání</string>
-    <!-- Notification header for sounds -->
-    <string name="NotificationsSettingsFragment__sounds">Zvuky</string>
-    <string name="NotificationsSettingsFragment__contact_joins_signal">Kontakt se připojil na Signal</string>
-    <!-- Notification body to get notified when someone joins Signal -->
-    <string name="NotificationsSettingsFragment__notify_contact">Zobrazit oznámení, když se k aplikaci Signal připojí telefonní kontakt</string>
-    <!-- Option to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset">Obnovit nastavení oznámení</string>
-    <!-- Option body to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_notifications">Obnovit výchozí nastavení oznámení včetně vlastních nastavení pro jednotlivé chaty</string>
-    <!-- Dialog to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_body">Obnovit výchozí nastavení oznámení pro všechny chaty?</string>
-    <!-- Confirmation button to reset dialog -->
-    <string name="NotificationsSettingsFragment__reset_confirm">Obnovit</string>
     <!-- Notification preference header -->
     <string name="NotificationsSettingsFragment__notification_profiles">Profily oznámení</string>
-    <!-- Notification preference summary text -->
-    <string name="NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose">Vytvořte si profil a přijímejte oznámení pouze od lidí a skupin, které si vyberete.</string>
 
-    <!-- Header to describe screen that shows while muted settings -->
-    <string name="MutedNotificationsFragment__while">Při ztlumení</string>
     <!-- Title for toggle row to control call settings while muted -->
     <string name="MutedNotificationsFragment__calls">Hovory</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body_global">Vyzvánět nebo upozornit při zahájení hovoru ve ztlumených chatech.</string>
     <!-- Title for toggle row to control mentions settings while muted -->
     <string name="MutedNotificationsFragment__mentions">Zmínky</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body_global">Upozornit na zmínku ve ztlumených chatech.</string>
     <!-- Title for toggle row to control replies settings while muted -->
     <string name="MutedNotificationsFragment__replies">Odpovědi</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body_global">Upozornit na odpověď na vaši zprávu ve ztlumených chatech.</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body">Vyzvánět nebo upozornit při zahájení hovoru, i když je tento chat ztlumený.</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body">Upozornit na zmínku, i když je tento chat ztlumený.</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body">Upozornit na odpověď na vaši zprávu, i když je tento chat ztlumený.</string>
     <!-- Description for toggle row to control unread reminders while muted -->
     <string name="MutedNotificationsFragment__unread_body">Občas upozornit na nepřečtené zprávy, i když je tento chat ztlumený.</string>
 
@@ -5763,90 +5253,14 @@
     <string name="NotificationProfilesFragment__create_profile">Vytvořit profil</string>
 
     <!-- PrivacySettingsFragment -->
-    <string name="PrivacySettingsFragment__blocked">Zablokováno</string>
-    <!-- Settings label that shows the number blocked contacts -->
-    <plurals name="PrivacySettingsFragment__d_contacts">
-        <item quantity="one">%1$d kontakt nebo skupina</item>
-        <item quantity="few">%1$d kontakty nebo skupiny</item>
-        <item quantity="many">%1$d kontaktů nebo skupin</item>
-        <item quantity="other">%1$d kontaktů nebo skupin</item>
-    </plurals>
-    <string name="PrivacySettingsFragment__messaging">Odesílání zpráv</string>
     <string name="PrivacySettingsFragment__disappearing_messages">Mizející zprávy</string>
-    <string name="PrivacySettingsFragment__app_security">Zabezpečení aplikace</string>
-    <!-- This refers to the multi-tasking overview (recent apps) from the Android operating system.-->
-    <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Blokovat snímky obrazovky v seznamu posledních položek a uvnitř aplikace</string>
-    <string name="PrivacySettingsFragment__signal_message_and_calls">Signal zprávy a hovory, vždy předávat hovory, a utajený odesílatel.</string>
-    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Výchozí časovač pro nové chaty</string>
-    <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Nastavení výchozího časovače zmizení zprávy pro všechny vámi zahájené nové chaty.</string>
-    <!-- Summary for stories preference to launch into story privacy settings -->
-    <string name="PrivacySettingsFragment__payment_lock_require_lock">Vyžadovat při převodu finančních prostředků zámek obrazovky nebo otisk prstu systému Android</string>
-    <!-- Alert dialog title when payment lock cannot be enabled -->
-    <string name="PrivacySettingsFragment__cant_enable_title">Zámek plateb nelze aktivovat</string>
-    <!-- Alert dialog description to setup screen lock or fingerprint in phone settings -->
-    <string name="PrivacySettingsFragment__cant_enable_description">Chcete-li použít zámek plateb, musíte nejprve v nastavení telefonu povolit zámek obrazovky nebo ověření otiskem prstu.</string>
-    <!-- Shown in a toast when we can\'t navigate to the user\'s system fingerprint settings -->
-    <string name="PrivacySettingsFragment__failed_to_navigate_to_system_settings">Nepodařilo se přejít na nastavení systému</string>
     <!-- Alert dialog button to go to phone settings -->
     <!-- Alert dialog button to cancel the dialog -->
 
     <!-- AdvancedPrivacySettingsFragment -->
   <!-- Removed by excludeNonTranslatables <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string> -->
-    <string name="AdvancedPrivacySettingsFragment__show_status_icon">Zobrazit stavovou ikonu</string>
-    <string name="AdvancedPrivacySettingsFragment__show_an_icon">Zobrazení ikony v podrobnostech zprávy, pokud byla doručena pomocí utajeného odesílatele.</string>
 
-    <!-- ExpireTimerSettingsFragment -->
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Pokud je tato funkce povolena, nové zprávy odeslané a přijaté v nových chatech, které jste zahájili, po zobrazení zmizí.</string>
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Pokud je tato funkce povolena, nové zprávy odeslané a přijaté v tomto chatu po zobrazení zmizí.</string>
-    <string name="ExpireTimerSettingsFragment__off">Vyp.</string>
-    <string name="ExpireTimerSettingsFragment__4_weeks">4 týdny</string>
-    <string name="ExpireTimerSettingsFragment__1_week">1 týden</string>
-    <string name="ExpireTimerSettingsFragment__1_day">1 den</string>
-    <string name="ExpireTimerSettingsFragment__8_hours">8 hodin</string>
-    <string name="ExpireTimerSettingsFragment__1_hour">1 hodina</string>
-    <string name="ExpireTimerSettingsFragment__5_minutes">5 minut</string>
-    <string name="ExpireTimerSettingsFragment__30_seconds">30 sekund</string>
-    <string name="ExpireTimerSettingsFragment__custom_time">Vlastní čas</string>
-    <string name="ExpireTimerSettingsFragment__set">Nastavit</string>
-    <string name="ExpireTimerSettingsFragment__save">Uložit</string>
 
-    <string name="CustomExpireTimerSelectorView__seconds">vteřiny</string>
-    <string name="CustomExpireTimerSelectorView__minutes">minuty</string>
-    <string name="CustomExpireTimerSelectorView__hours">hodiny</string>
-    <string name="CustomExpireTimerSelectorView__days">dny</string>
-    <string name="CustomExpireTimerSelectorView__weeks">týdny</string>
-
-    <!-- HelpSettingsFragment -->
-    <string name="HelpSettingsFragment__support_center">Centrum podpory</string>
-    <string name="HelpSettingsFragment__contact_us">Kontaktujte nás</string>
-    <string name="HelpSettingsFragment__version">Verze</string>
-    <!-- Displayed when copying help screen text to the clipboard -->
-    <string name="HelpSettingsFragment__copied_to_clipboard">Zkopírováno do schránky</string>
-    <string name="HelpSettingsFragment__debug_log">Ladící log</string>
-    <!--    Header for the screen that displays the licenses of the open-source software dependencies of the Signal app-->
-    <string name="HelpSettingsFragment__licenses">Licence</string>
-    <string name="HelpSettingsFragment__terms_amp_privacy_policy">Podmínky a zásady ochrany osobních údajů</string>
-    <string name="HelpFragment__copyright_signal_messenger">Copyright Signal Messenger</string>
-    <string name="HelpFragment__licenced_under_the_agplv3">Licencováno pod GNU AGPLv3</string>
-    <!-- Non-English translations should use "Signal is a nonprofit." instead, dropping the 501c3 reference. -->
-    <string name="HelpSettingsFragment__signal_is_a_501c3">Signal je nezisková organizace</string>
-
-    <!-- DataAndStorageSettingsFragment -->
-    <string name="DataAndStorageSettingsFragment__media_quality">Kvalita médií</string>
-    <!-- Label shown on the manage storage row while total storage usage is still being computed -->
-    <string name="DataAndStorageSettingsFragment__calculating">Probíhá výpočet…</string>
-    <!-- Category title for the quality of the media to be sent -->
-    <string name="DataAndStorageSettingsFragment__sent_media_quality">Kvalita odeslaných médií</string>
-    <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Odesílání médií ve vysoké kvalitě spotřebovává více dat.</string>
-    <!-- Disclaimer shown under the media auto-download settings. Placeholder is a formatted size like "100 KB". -->
-    <string name="DataAndStorageSettingsFragment__voice_messages_and_stickers_under_size_are_always_auto_downloaded">Hlasové zprávy a nálepky (do %1$s) se vždy stahují automaticky.</string>
-    <string name="DataAndStorageSettingsFragment__calls">Volání</string>
-    <!-- Title of a toggle that keeps Signal connected in the background via a persistent foreground service instead of using FCM push messages -->
-    <string name="DataAndStorageSettingsFragment__stay_connected_in_background">Ponechat připojení na pozadí</string>
-    <!-- Body of a confirmation dialog shown when a user tries to enable the "Stay connected in background" setting -->
-    <string name="DataAndStorageSettingsFragment__staying_connected_while_in_the_background_will_likely_result_in_increased_battery_usage">Trvalé připojení na pozadí pravděpodobně povede ke zvýšené spotřebě baterie. U většiny zařízení to není nutné. Tuto možnost povolte pouze v případě, že máte problémy s doručováním oznámení.</string>
-    <!-- Button label that enables the "Stay connected in background" setting from a confirmation dialog -->
-    <string name="DataAndStorageSettingsFragment__enable">Povolit</string>
 
     <!-- ChatColorSelectionFragment -->
     <!-- Text shown on a circle button to indicate the app will automatically select a color for conversation bubbles for this chat. -->
@@ -5901,23 +5315,8 @@
     <string name="BecomeASustainerMegaphone__become_a_sustainer">Staňte se podporovatelem</string>
 
     <!-- KeyboardPagerFragment -->
-    <string name="KeyboardPagerFragment_emoji">Smajlíky</string>
-    <string name="KeyboardPagerFragment_open_emoji_search">Otevřít vyhledávání smajlíků</string>
-    <string name="KeyboardPagerFragment_open_sticker_search">Otevřít hledání nálepek</string>
-    <string name="KeyboardPagerFragment_open_gif_search">Otevřít hledání gifů</string>
-    <string name="KeyboardPagerFragment_stickers">Nálepky</string>
-    <string name="KeyboardPagerFragment_backspace">Backspace</string>
-    <string name="KeyboardPagerFragment_gifs">Gify</string>
-    <string name="KeyboardPagerFragment_search_emoji">Hledat smajlíka</string>
-    <string name="KeyboardPagerfragment_back_to_emoji">Zpět ke smajlíkům</string>
-    <string name="KeyboardPagerfragment_clear_search_entry">Vymazat hledání</string>
     <string name="KeyboardPagerFragment_search_giphy">Hledat v GIPHY</string>
 
-    <!-- StickerSearchDialogFragment -->
-    <string name="StickerSearchDialogFragment_search_stickers">Hledat nálepky</string>
-    <string name="StickerSearchDialogFragment_no_results_found">Nebyly nalezeny žádné výsledky</string>
-    <string name="EmojiSearchFragment__no_results_found">Nebyly nalezeny žádné výsledky</string>
-    <string name="NotificationsSettingsFragment__unknown_ringtone">Neznámé vyzvánění</string>
 
     <!-- ConversationSettingsFragment -->
     <!-- Dialog title displayed when non-admin tries to add a story to an audience group -->
@@ -6028,6 +5427,8 @@
     <string name="NewConversationActivity__video_call">Videohovor</string>
     <!-- Context menu item remove -->
     <string name="NewConversationActivity__remove">Odstranit</string>
+    <!-- Context menu item that hides a contact -->
+    <string name="NewConversationActivity__hide">Hide</string>
     <!-- Context menu item block -->
     <string name="NewConversationActivity__block">Blokovat</string>
     <!-- Dialog title when removing a contact -->
@@ -6036,6 +5437,12 @@
     <string name="NewConversationActivity__you_wont_see_this_person">Tato osoba se vám při vyhledávání nezobrazí. Pokud vám v budoucnu pošle zprávu, zobrazí se vám žádost o její zaslání.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s byl/a odebrán/a</string>
+    <!-- Dialog title when hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__hide_s">Hide %1$s?</string>
+    <!-- Dialog body when hiding a contact -->
+    <string name="NewConversationActivity__this_person_wont_appear">This person won\'t appear in your contact list and search. If they message you in the future, you\'ll receive a message request. You can manage people you\'ve hidden in settings.</string>
+    <!-- Snackbar message after hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__s_has_been_hidden">%1$s has been hidden</string>
     <!-- Snackbar message after blocking a contact -->
     <string name="NewConversationActivity__s_has_been_blocked">Uživatel %1$s byl zablokován</string>
     <!-- Error message shown when looking up a person by phone number and that phone number is not associated with a signal account -->
@@ -6090,6 +5497,10 @@
 
     <!-- VectorAvatarCreationFragment -->
     <string name="VectorAvatarCreationFragment__select_a_color">Vyberte barvu</string>
+
+    <!-- AvatarColorGrid -->
+    <!-- Accessibility label for one of the colors an avatar can be drawn in. %1$d is the color\'s position in the list, %2$d is how many colors there are. -->
+    <string name="AvatarColorGrid__color_d_of_d">Barva %1$d z %2$d</string>
 
     <!-- Displayed in the toolbar when externally sharing text to multiple recipients -->
     <string name="ShareInterstitialActivity__share">Sdílet</string>
@@ -6169,15 +5580,9 @@
     <string name="MediaReviewImagePageFragment__discard_changes">Zrušit změny?</string>
     <string name="MediaReviewImagePageFragment__youll_lose_any_changes">Ztratíte všechny změny, které jste na této fotografii provedli.</string>
 
-    <string name="BadgesOverviewFragment__my_badges">Moje odznaky</string>
     <string name="BadgesOverviewFragment__featured_badge">Doporučený odznak</string>
-    <string name="BadgesOverviewFragment__display_badges_on_profile">Zobrazení odznaků na profilu</string>
-    <string name="BadgesOverviewFragment__failed_to_update_profile">Nepodařilo se aktualizovat profil</string>
 
 
-    <string name="SelectFeaturedBadgeFragment__select_a_badge">Vybrat odznak</string>
-    <string name="SelectFeaturedBadgeFragment__you_must_select_a_badge">Musíte vybrat odznak</string>
-    <string name="SelectFeaturedBadgeFragment__failed_to_update_profile">Nepodařilo se aktualizovat profil</string>
 
     <!-- Displayed on primary button in the bottom sheet as a call-to-action to launch into the donation flow -->
     <string name="ViewBadgeBottomSheetDialogFragment__donate_now">Přispět</string>
@@ -6225,9 +5630,6 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Vytvořit doporučený odznak</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Pokračovat</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Pokud máte více odznaků, můžete si jeden z nich vybrat, aby ho ostatní viděli na vašem profilu.</string>
-
-    <string name="BecomeASustainerFragment__get_badges">Získejte odznaky pro svůj profil tím, že podpoříte Signal.</string>
-    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal je nezisková organizace fungující bez reklam a investorů, kterou podporují pouze lidé jako vy.</string>
 
     <!-- Button label for creating a donation -->
     <string name="ManageDonationsFragment__donate_to_signal">Podpořte Signal finančně</string>
@@ -6467,6 +5869,10 @@
     <string name="EditNotificationProfileFragment__focus">Soustředění</string>
     <!-- Error message shown when attempting to next/save without a profile name -->
     <string name="EditNotificationProfileFragment__profile_must_have_a_name">Musí být pojmenován</string>
+    <!-- Accessibility label for the button beside the profile name that opens the emoji picker to choose the profile\'s emoji -->
+    <string name="EditNotificationProfileFragment__choose_emoji">Vybrat emoji</string>
+    <!-- Accessibility label for the button that clears both the profile name and its emoji -->
+    <string name="EditNotificationProfileFragment__clear_name_and_emoji">Smazat jméno a emoji</string>
 
     <!-- Title for add recipients to notification profile screen in create flow -->
     <string name="AddAllowedMembers__allowed_notifications">Povolená oznámení</string>
@@ -6481,8 +5887,6 @@
     <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
     <string name="AddAllowedMembers__notify_for_all_mentions">Upozornit na všechny zmínky</string>
 
-    <!-- Call to action button on contact picker for adding to profile -->
-    <string name="SelectRecipientsFragment__add">Přidat</string>
 
     <!-- Notification profiles home fragment, shown when no profiles have been created yet -->
     <string name="NotificationProfilesFragment__create_a_profile_to_receive_notifications_and_calls_only_from_the_people_and_groups_you_want_to_hear_from">Vytvořte si profil a přijímejte oznámení a hovory pouze od lidí a skupin, které chcete slyšet.</string>
@@ -6534,20 +5938,6 @@
     <string name="EditNotificationProfileSchedule__start">Začátek</string>
     <!-- Label for showing the end time for the schedule -->
     <string name="EditNotificationProfileSchedule__end">Konec</string>
-    <!-- First letter of Sunday -->
-    <string name="EditNotificationProfileSchedule__sunday_first_letter">N</string>
-    <!-- First letter of Monday -->
-    <string name="EditNotificationProfileSchedule__monday_first_letter">P</string>
-    <!-- First letter of Tuesday -->
-    <string name="EditNotificationProfileSchedule__tuesday_first_letter">Ú</string>
-    <!-- First letter of Wednesday -->
-    <string name="EditNotificationProfileSchedule__wednesday_first_letter">S</string>
-    <!-- First letter of Thursday -->
-    <string name="EditNotificationProfileSchedule__thursday_first_letter">Č</string>
-    <!-- First letter of Friday -->
-    <string name="EditNotificationProfileSchedule__friday_first_letter">P</string>
-    <!-- First letter of Saturday -->
-    <string name="EditNotificationProfileSchedule__saturday_first_letter">S</string>
     <!-- Title of select time dialog shown when setting start time for schedule -->
     <string name="EditNotificationProfileSchedule__set_start_time">Nastavení času začátku</string>
     <!-- Title of select time dialog shown when setting end time for schedule -->
@@ -6561,17 +5951,6 @@
     <!-- Error message shown if trying to save/use a schedule with no days selected -->
     <string name="EditNotificationProfileSchedule__schedule_must_have_at_least_one_day">Plán musí obsahovat alespoň jeden den</string>
 
-    <!-- Title for final screen shown after completing a profile creation -->
-    <string name="NotificationProfileCreated__profile_created">Profil vytvořen</string>
-    <!-- Call to action button to press to close the created screen and move to the profile details screen -->
-    <string name="NotificationProfileCreated__done">Hotovo</string>
-    <!-- Descriptor text shown to indicate how to manually turn a profile on/off -->
-    <string name="NotificationProfileCreated__you_can_turn_your_profile_on_or_off_manually_via_the_menu_on_the_chat_list">Profil můžete ručně zapnout nebo vypnout v nabídce v seznamu chatů.</string>
-    <!-- Descriptor text shown to indicate you can add a schedule later since you did not add one during create flow -->
-    <string name="NotificationProfileCreated__add_a_schedule_in_settings_to_automate_your_profile">Přidáním plánu v nastavení můžete svůj profil automatizovat.</string>
-    <!-- Descriptor text shown to indicate your profile will follow the schedule set during create flow -->
-    <string name="NotificationProfileCreated__your_profile_will_turn_on_and_off_automatically_according_to_your_schedule">Váš profil se automaticky zapne a vypne podle vašeho plánu.</string>
-
     <!-- Button text shown in profile selection bottom sheet to create a new profile -->
     <string name="NotificationProfileSelection__new_profile">Nový profil</string>
     <!-- Manual enable option to manually enable a profile for 1 hour -->
@@ -6583,12 +5962,6 @@
     <!-- Descriptor text indicating how long a profile will be on when there is a time component associated with it -->
     <string name="NotificationProfileSelection__on_until_s">Zapnuto do %1$s</string>
 
-    <!-- Displayed in a toast when we fail to open the ringtone picker -->
-    <string name="NotificationSettingsFragment__failed_to_open_picker">Nepodařilo se otevřít picker.</string>
-    <!-- Banner title when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__to_enable_notifications">Aby bylo možné oznámení zapnout, Signal potřebuje povolení k jejich zobrazování.</string>
-    <!-- Banner action when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__turn_on">Zapnout</string>
 
     <!-- Text description in Signal Release channel details explaining that it is the only chat from Signal -->
     <string name="ReleaseNotes__this_is_official_chat">Toto je jediný oficiální chat od Signal</string>
@@ -7038,6 +6411,8 @@
     <string name="GiftFlowStartFragment__next">Další</string>
     <!-- Title text on choose recipient page for badge gifting -->
     <string name="GiftFlowRecipientSelectionFragment__choose_recipient">Zvolte příjemce</string>
+    <!-- Hint text that shows in the recipient search bar on the choose recipient page for badge gifting -->
+    <string name="GiftFlowRecipientSelectionFragment__search">Hledat</string>
     <!-- Title text on confirm gift page -->
     <string name="GiftFlowConfirmationFragment__confirm_donation">Potvrdit příspěvek</string>
     <!-- Heading text specifying who the gift will be sent to -->
@@ -7283,7 +6658,7 @@
     <string name="ChooseANewDefaultSmsAppFragment__bullet_2">2</string>
     <!-- BackupSchedulePermission Megaphone -->
     <!-- The title on an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
-    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Improve backup scheduling</string>
+    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Vylepšit plánování záloh</string>
     <!-- The body text of an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
     <string name="BackupSchedulePermissionMegaphone__allow_the_alarms_permission_to_improve_automatic_daily_backups">Povolte oprávnění upozornění, aby automatické denní zálohy fungovaly spolehlivě.</string>
     <!-- The text on a button in an alert window that, when clicked, will take the user to a screen to grant the alarms permission -->
@@ -7549,11 +6924,6 @@
     <!-- Popup menu label for clearing applied formatting -->
     <string name="TextFormatting_clear_formatting">Odstranit formátování</string>
 
-    <!-- Username edit dialog -->
-    <!-- Option to open username editor displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__edit_username">Upravit uživatelské jméno</string>
-    <!-- Option to delete username displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__delete_username">Odstranit uživatelské jméno</string>
 
     <!-- Time duration picker -->
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
@@ -7764,12 +7134,6 @@
     <string name="EditCallLinkNameDialogFragment__call_name">Název hovoru</string>
 
     <!-- ChooseNavigationBarStyleFragment -->
-    <!-- Dialog title, displayed below the header image -->
-    <string name="ChooseNavigationBarStyleFragment__navigation_bar_size">Velikost lišty navigace</string>
-    <!-- Toggle button label for normal size -->
-    <string name="ChooseNavigationBarStyleFragment__normal">Normální</string>
-    <!-- Toggle button label for compact size -->
-    <string name="ChooseNavigationBarStyleFragment__compact">Kompaktní</string>
 
     <!-- Title shown at top of bottom sheet dialog for displaying a message\'s edit history -->
     <string name="EditMessageHistoryDialog_title">Historie úprav</string>
@@ -7798,69 +7162,11 @@
     <!-- Displayed as body in dialog when user attempts to delete the link -->
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">Tento odkaz již nebude nikomu, kdo ho má, fungovat.</string>
 
-    <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Odkaz</string>
-    <!-- Button label for the share button in the username link settings -->
-    <string name="UsernameLinkSettings_share_button_label">Sdílet</string>
-    <!-- Button label for the color selector button in the username link settings -->
-    <string name="UsernameLinkSettings_color_button_label">Barva</string>
-    <!-- Description text for QR code and links in the username link settings -->
-    <string name="UsernameLinkSettings_qr_description">Svůj QR kód a odkaz sdílejte jen s lidmi, kterým věříte. Jakmile je sdílíte, mohou ostatní vidět vaše uživatelské jméno a začít s vámi chatovat.</string>
-    <!-- Content of a toast that will show after the username is copied to the clipboard -->
-    <string name="UsernameLinkSettings_username_copied_toast">Uživatelské jméno zkopírováno</string>
-    <!-- Content of a toast that will show after the username link is copied to the clipboard -->
-    <string name="UsernameLinkSettings_link_copied_toast">Odkaz zkopírován</string>
-    <!-- Content of a text field that is shown when the user has not yet set a username link -->
-    <string name="UsernameLinkSettings_link_not_set_label">Odkaz není nastaven</string>
-    <!-- Content of a text field that is shown when the user is actively resetting the username link and waiting for the operation to finish -->
-    <string name="UsernameLinkSettings_resetting_link_label">Resetování odkazu…</string>
-    <!-- Title of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_title">Resetovat QR kód?</string>
-    <!-- Body of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_body">Pokud resetujete svůj QR kód, váš stávající QR kód a odkaz již nebudou fungovat.</string>
-    <!-- Label for the confirmation button on a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_confirm_button">Obnovit</string>
-    <!-- Button label for a button that will reset your username and give you a new link -->
-    <string name="UsernameLinkSettings_reset_button_label">Obnovit</string>
-    <!-- Button label for a button that indicates that the user is done changing the current setting -->
-    <string name="UsernameLinkSettings_done_button_label">Hotovo</string>
-    <!-- Label for a tab that shows a screen to view your username QR code -->
-    <string name="UsernameLinkSettings_code_tab_name">Kód</string>
-    <!-- Label for a tab that shows a screen to scan a QR code -->
-    <string name="UsernameLinkSettings_scan_tab_name">Skenování</string>
-    <!-- Description text shown underneath the username QR code scanner -->
-    <string name="UsernameLinkSettings_qr_scan_description">Naskenujte QR kód na zařízení vašeho kontaktu.</string>
-    <!-- App bar title for the username QR code color picker screen -->
-    <string name="UsernameLinkSettings_color_picker_app_bar_title">Barva</string>
-    <!-- Body of a dialog that is displayed when we failed to read a username QR code. -->
-    <string name="UsernameLinkSettings_qr_result_invalid">QR kód byl neplatný.</string>
-    <!-- Body of a dialog that is displayed when the username we looked up could not be found. -->
-    <string name="UsernameLinkSettings_qr_result_not_found">Uživatele s uživatelským jménem %1$s se nepodařilo najít.</string>
     <!-- Body of a dialog that is displayed when the username we looked up could not be found and we also could not parse the username. -->
     <string name="UsernameLinkSettings_qr_result_not_found_no_username">Tohoto uživatele se nepodařilo najít.</string>
-    <!-- Body of a dialog that is displayed when we experienced a network error when looking up a username. -->
-    <string name="UsernameLinkSettings_qr_result_network_error">Došlo k chybě sítě. Zkuste to prosím znovu.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because you had no internet. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_unavailable">Nemáte přístup k síti. Váš odkaz nebyl resetován. Zkuste to znovu později.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_error">Při pokusu o resetování vašeho odkazu došlo k chybě sítě. Zkuste to znovu později.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of an unknown error. -->
-    <string name="UsernameLinkSettings_reset_link_result_unknown_error">Při pokusu o resetování vašeho odkazu se vyskytla neočekávaná chyba. Zkuste to znovu později.</string>
-    <!-- Body of a dialog that is displayed when we successfully reset you username link. -->
-    <string name="UsernameLinkSettings_reset_link_result_success">Váš QR kód a odkaz byly resetovány a byl vytvořen nový QR kód a odkaz.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
     <string name="UsernameLinkSettings_scan_this_qr_code">Naskenuj tento QR kód svým telefonem a chatuj se mnou přes Signal.</string>
-    <!-- Dialog title shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_qr_code_not_found">QR kód nebyl nalezen</string>
-    <!-- Dialog message shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_try_scanning_another_image_containing_a_signal_qr_code">Zkuste naskenovat jiný obrázek s QR kódem Signal.</string>
 
-    <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
-    <string name="UsernameLinkShareBottomSheet_title">Kdokoli, kdo má tento odkaz, může vidět vaše uživatelské jméno a začít s vámi chatovat. Sdílejte jej pouze s lidmi, kterým důvěřujete.</string>
-    <!-- A button label for a button that, when pressed, will copy your username link to the clipboard -->
-    <string name="UsernameLinkShareBottomSheet_copy_link">Zkopírovat odkaz</string>
-    <!-- A button label for a button that, when pressed, will open a share sheet for sharing your username link -->
-    <string name="UsernameLinkShareBottomSheet_share">Sdílet</string>
 
     <!-- PendingParticipantsView -->
     <!-- Displayed in the popup card when a remote user attempts to join a call link -->
@@ -7994,6 +7300,30 @@
     <string name="VerifyBackupKey__backup_key_correct">Klíč pro obnovení je správný. Uchovávejte svůj klíč v bezpečí.</string>
     <!-- Snackbar text shown when the user chooses to snooze the recovery key reminder. -->
     <string name="VerifyBackupKey__we_will_ask_again">Zeptáme se vás znovu za týden.</string>
+
+    <!-- Title of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__verify_your_two_factor_method">Ověřte svou dvoufázovou metodu</string>
+    <!-- Body of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__well_occasionally_ask_you_to_verify">Občas vás požádáme o ověření vaší dvoufázové metody ověření, abychom se ujistili, že je stále správně nastavena.</string>
+    <!-- Button of a megaphone that will take users to the screen where they verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__verify">Ověřit</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__not_now">Nyní ne</string>
+    <!-- Snackbar text shown after the user verified their authenticator app from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_authenticator_app">Děkujeme za potvrzení vaší ověřovací aplikace.</string>
+    <!-- Snackbar text shown after the user verified their passkey from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_passkey">Děkujeme za potvrzení vašeho přístupového klíče.</string>
+
+    <!-- Title of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login (their account ID and recovery key) -->
+    <string name="SignalLoginReminderMegaphone__verify_your_signal_login">Ověřte svůj Signal Login</string>
+    <!-- Body of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login -->
+    <string name="SignalLoginReminderMegaphone__well_occasionally_ask_you_to_verify">Občas vás požádáme o ověření vašich přihlašovacích údajů, abychom se ujistili, že je stále znáte.</string>
+    <!-- Button of a megaphone that will take users to the screen where they enter their Signal Login to verify it -->
+    <string name="SignalLoginReminderMegaphone__verify">Ověřit</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify the Signal Login -->
+    <string name="SignalLoginReminderMegaphone__not_now">Nyní ne</string>
+    <!-- Snackbar text shown after the user verified their Signal Login from the reminder -->
+    <string name="SignalLoginReminderMegaphone__thanks_for_confirming_your_signal_login">Děkujeme za potvrzení vašeho Signal Login.</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
     <string name="GrantFullScreenIntentPermission_megaphone_title">Zapnout oznámení na celou obrazovku?</string>
@@ -8321,34 +7651,6 @@
     <!-- Dialog message shown when Google Play services is invalid and subscriptions are not available -->
     <string name="GooglePlayServicesAvailability__service_invalid_message">Nemůžete si předplatit zabezpečené zálohy Signal, protože váš telefon nepodporuje služby Google Play. Obraťte se na výrobce telefonu a požádejte o pomoc.</string>
 
-    <!-- ManageStorageSettingsFragment -->
-    <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
-    <string name="ManageStorageSettingsFragment_chat_limit">Limity délky historie chatu</string>
-    <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
-    <string name="ManageStorageSettingsFragment_delete_message_history">Smazat historii zpráv</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
-    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Zprávy starší než zvolené období budou trvale odstraněny.</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
-    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Zprávy přesahující zvolenou délku budou trvale odstraněny.</string>
-    <!-- Setting title for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_title">Použít limity u propojených zařízení</string>
-    <!-- Setting description for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_description">Pokud jsou limity chatu povoleny, budou se mazat i zprávy z propojených zařízení.</string>
-    <!-- Setting section title header for storage optimization -->
-    <string name="ManageStorageSettingsFragment__on_device_storage">Úložiště Signal</string>
-    <!-- Setting row title for storage optimization -->
-    <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Optimalizovat úložiště Signal</string>
-    <!-- Setting row explanation for storage optimization -->
-    <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Nepoužívaná média budou odložena, ale můžete si je kdykoli stáhnout ze zálohy.</string>
-    <!-- Dialog message for paid tier pending dialog -->
-    <string name="ManageStorageSettingsFragment__storage_optimization_can_only_be_used">Optimalizaci úložiště lze použít pouze s placenou verzí zabezpečeného zálohování služby Signal. Vaše předplatné zálohování se stále zpracovává a není ještě aktivní. Zkuste to prosím znovu později.</string>
-    <!-- Title of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__media_will_be_removed_from_your_on_device_backup">Ze zálohy ve vašem zařízení budou odebrána média</string>
-    <!-- Body of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__turning_on_optimize_signal_storage_will_offload">Zapnutím funkce Optimalizovat úložiště Signal dojde k odložení starších médií z vašeho zařízení. Kdykoliv si je můžete opět stáhnout. Tím se stará média odeberou i ze zálohy ve vašem zařízení.</string>
-    <!-- Dialog action to confirm turning on "Optimize Signal storage" -->
-    <string name="ManageStorageSettingsFragment__turn_on">Zapnout</string>
-
     <!-- UpgradeToEnableOptimizedStorageSheet -->
     <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
     <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">Pro tuto funkci je nutná aktualizace</string>
@@ -8395,11 +7697,11 @@
     <!-- Retry button shown when ending a group fails -->
     <string name="EndGroupDialog__try_again">Zkusit znovu</string>
 
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, with admin name. %1$s is the admin\'s display name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, with admin name. %1$s is the admin\'s display name -->
     <string name="TerminatedGroupBottomSheet__s_ended_the_group">%1$s ukončil(a) skupinu</string>
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, without admin name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, without admin name -->
     <string name="TerminatedGroupBottomSheet__the_group_has_been_ended">Skupina byla ukončena.</string>
-    <!-- Body of bottom sheet shown when opening a terminated group -->
+    <!-- Body of bottom sheet shown when a group is ended while the user has the conversation open -->
     <string name="TerminatedGroupBottomSheet__you_can_no_longer_send_and_receive">V této skupině již nelze posílat a přijímat zprávy ani hovory.</string>
 
     <!-- NoManualBackupBottomSheet -->
@@ -8710,6 +8012,12 @@
     <string name="MessageBackupsFlowFragment__a_network_failure_occurred">Vyskytla se chyba sítě. Zkuste to prosím znovu později.</string>
     <!-- Toast message if this fragment encounters an in progress deletion -->
     <string name="MessageBackupsFlowFragment__a_backup_deletion_is_in_progress">Probíhá mazání zálohy.</string>
+    <!-- Title of the device screen lock prompt shown before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__unlock_to_set_up_secure_backups">Odemknout a nastavit zabezpečené zálohování</string>
+    <!-- Title of the sheet explaining that the device screen lock is needed before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__to_set_up_secure_backups_confirm_its_you">Pro nastavení zabezpečeného zálohování potvrďte svou identitu</string>
+    <!-- Toast shown when the device screen lock wasn\'t confirmed, so backup setup didn\'t continue -->
+    <string name="MessageBackupsFlowFragment__authentication_required">Je vyžadováno ověření</string>
 
     <!-- MessageBackupsEducationScreen -->
     <!-- Screen subtitle underneath large headline title -->
@@ -9006,6 +8314,8 @@
     <string name="MainToolbar__notification_profile_content_description">Profil oznámení</string>
     <!-- Accessibility label for more options button in MainToolbar -->
     <string name="MainToolbar__proxy_content_description">Proxy</string>
+    <!-- Overflow menu item in MainToolbar that opens donation settings -->
+    <string name="MainToolbar__donate">Přispět</string>
     <!-- Accessibility label for search filter button in MainToolbar -->
   <!-- Removed by excludeNonTranslatables <string name="MainToolbar__search_filter_content_description" translatable="false">Search filter</string> -->
 
@@ -9027,9 +8337,6 @@
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__clear" translatable="false">Clear</string> -->
     <!-- SearchFilterBottomSheet: Select date dialog title -->
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__select_date" translatable="false">Select date</string> -->
-
-    <!-- Accessibility label for a button displayed in the toolbar to return to the previous screen. -->
-    <string name="DefaultTopAppBar__navigate_up_content_description">Přejděte nahoru</string>
 
     <!-- Accessibility label describing the action that occurs when clicking a checkbox. -->
     <string name="SignalCheckbox_accessibility_on_click_label">Přepnout</string>
@@ -9332,6 +8639,9 @@
 
     <!-- Body of the sheet shown when a local backup restore could not be completed, explaining how to try again -->
     <string name="CouldNotCompleteBackupRestoreSheet__body_retry">Můžete to zkusit znovu tak, že odinstalujete a znovu nainstalujete Signal v tomto zařízení a zvolíte Obnovit nebo přenést.</string>
+
+    <!-- Button on the sheet shown when a local backup restore could not be completed, opening a support article about it -->
+    <string name="CouldNotCompleteBackupRestoreSheet__learn_more">Zjistit více</string>
 
     <!-- Title of the sheet shown when the server reports a verification code was requested for the user\'s phone number -->
     <string name="VerificationCodeRequestedBottomSheet__title">Byl vyžádán ověřovací kód</string>

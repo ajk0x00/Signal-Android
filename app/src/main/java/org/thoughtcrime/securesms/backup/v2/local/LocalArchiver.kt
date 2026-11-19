@@ -379,8 +379,8 @@ object LocalArchiver {
       post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.CALL)))
     }
 
-    override fun onSticker() {
-      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.STICKER)))
+    override fun onInstalledStickerPack() {
+      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.INSTALLED_STICKER_PACK)))
     }
 
     override fun onNotificationProfile() {
@@ -389,6 +389,14 @@ object LocalArchiver {
 
     override fun onChatFolder() {
       post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.CHAT_FOLDER)))
+    }
+
+    override fun onFavoriteStickerList() {
+      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.FAVORITE_STICKER_LIST)))
+    }
+
+    override fun onHiddenStickerPack() {
+      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.HIDDEN_STICKER_PACK)))
     }
 
     override fun onMessage(currentProgress: Long, approximateCount: Long) {
@@ -434,8 +442,8 @@ object LocalArchiver {
       post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.CALL)))
     }
 
-    override fun onSticker() {
-      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.STICKER)))
+    override fun onInstalledStickerPack() {
+      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.INSTALLED_STICKER_PACK)))
     }
 
     override fun onNotificationProfile() {
@@ -444,6 +452,14 @@ object LocalArchiver {
 
     override fun onChatFolder() {
       post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.CHAT_FOLDER)))
+    }
+
+    override fun onFavoriteStickerList() {
+      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.FAVORITE_STICKER_LIST)))
+    }
+
+    override fun onHiddenStickerPack() {
+      post(LocalBackupCreationProgress(exporting = LocalBackupCreationProgress.Exporting(phase = LocalBackupCreationProgress.ExportPhase.HIDDEN_STICKER_PACK)))
     }
 
     override fun onMessage(currentProgress: Long, approximateCount: Long) {

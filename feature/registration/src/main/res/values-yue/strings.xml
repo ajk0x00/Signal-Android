@@ -71,6 +71,14 @@
     <string name="RegistrationActivity_link_device">連結部機</string>
     <!-- Clickable text that opens a corresponding URL -->
     <string name="RegistrationActivity_learn_more">了解詳情</string>
+    <!-- Dialog message shown when the server rejects the user\'s captcha response during registration -->
+    <string name="PhoneNumberEntryScreen__captcha_not_accepted">唔接受你嘅驗證回覆。請你再試過，如果仲有問題就聯絡支援團隊啦。</string>
+    <!-- Dialog button that lets the user contact support after their captcha response was rejected -->
+    <string name="PhoneNumberEntryScreen__contact_support">聯絡支援團隊</string>
+    <!-- Subject line of the support email composed when the user\'s captcha response was rejected during registration -->
+    <string name="PhoneNumberEntryScreen__contact_support_email_subject">Signal 註冊 — 唔接受 Android 嘅「我不是機械人」驗證</string>
+    <!-- Text placed in the body of the support email composed when the user\'s captcha response was rejected. Used to route the request, so it is not translated. -->
+  <!-- Removed by excludeNonTranslatables <string name="PhoneNumberEntryScreen__contact_support_email_filter" translatable="false">Signal Registration - Captcha Not Accepted for Android</string> -->
 
     <!-- CountryCodePickerScreen -->
     <!-- Title of the country code selection screen -->
@@ -243,19 +251,19 @@
     <!-- Title of the dialog shown when the entered recovery key does not match the account being registered -->
     <string name="EnterAepScreen__incorrect_recovery_key_dialog_title">恢復金鑰錯咗</string>
     <!-- Body of the dialog shown when the entered recovery key does not match the account being registered -->
-    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Make sure you\'re registering with the same phone number and 64-character recovery key you saved when enabling Signal backups. Backups cannot be recovered without this key.</string>
+    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">請確保你而家註冊嘅電話冧把同埋 64 字元恢復金鑰，同你當初啟用 Signal 備份時儲存嘅冧把相同。冇咗金鑰就冇得還原備份㗎喇。</string>
     <!-- Button in the incorrect recovery key dialog that dismisses it so the user can re-enter their key -->
     <string name="EnterAepScreen__try_again">再試一次</string>
     <!-- Button in the incorrect recovery key dialog that offers to verify the phone number over SMS instead -->
-    <string name="EnterAepScreen__try_another_way">Try another way</string>
+    <string name="EnterAepScreen__try_another_way">試試其他方法</string>
     <!-- Button in the incorrect recovery key dialog that opens a support article about recovery keys -->
     <string name="EnterAepScreen__recovery_key_help">恢復金鑰說明</string>
     <!-- Title of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code">Verify with SMS code?</string>
+    <string name="EnterAepScreen__verify_with_sms_code">係咪用 SMS 碼嚟驗證？</string>
     <!-- Body of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code_body">You can register your account by verifying via an SMS code Signal will send you. After entering the code, you can try restoring your backup with your recovery key again.</string>
+    <string name="EnterAepScreen__verify_with_sms_code_body">你可以透過驗證 Signal 發俾你嘅 SMS 碼嚟註冊帳戶。輸入驗證碼之後，你可以再試下用恢復金鑰嚟還原備份。</string>
     <!-- Confirm button in the verify with SMS code dialog that requests an SMS verification code -->
-    <string name="EnterAepScreen__send_code">Send code</string>
+    <string name="EnterAepScreen__send_code">傳送驗證碼</string>
     <!-- Text shown while preparing the restore -->
     <string name="LocalBackupRestoreScreen__preparing_restore">準備緊還原……</string>
     <!-- Title shown while restore is in progress -->
@@ -665,7 +673,7 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginInfoScreen__no_password_manager_available">你冇設定密碼管理器。</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginInfoScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginInfoScreen__only_store_your_credentials">請將憑證儲存喺你信得過嘅安全密碼管理器入面。Signal 唔會推薦最啱你嘅密碼管理器。</string>
     <!-- Action button for users who would rather write the Signal Login down themselves. -->
     <string name="SignalLoginInfoScreen__save_manually">人手記低佢</string>
     <!-- Error shown when the Signal Login could not be stored in the password manager. -->
@@ -734,6 +742,8 @@
     <string name="SignalLoginCredentialEntryScreen__show_login_info_again">顯示多次登入資訊</string>
     <!-- Error shown when what the user typed back doesn\'t match the Signal Login they were given. -->
     <string name="SignalLoginCredentialEntryScreen__that_doesnt_match_the_signal_login_you_were_shown">同你睇到嘅 Signal Login 不同</string>
+    <!-- Subtitle on the Signal Login entry screen when the user opened it from a reminder to check they still know their login -->
+    <string name="SignalLoginCredentialEntryScreen__enter_your_signal_login_to_verify_you_still_know_it">輸入你嘅 Signal Login 睇下你仲記唔記得。</string>
 
     <!-- Add username screen -->
     <!-- Title of the screen offering the user an optional username. -->
@@ -817,5 +827,17 @@
     <!-- Button text to cancel two-factor authentication -->
     <string name="TwoFactorSelectionScreen__cancel">取消</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
-    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again or choose another method.</string>
+    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">你嘅通行密鑰出現咗問題。請你再試過，或者揀過第二個方法啦。</string>
+
+    <!-- PasskeyVerificationScreen -->
+    <!-- Title of the screen asking the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__two_factor_authentication">雙重驗證</string>
+    <!-- Subtitle telling the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__to_continue_verify_your_account">要繼續，用你嘅通行密鑰嚟驗證你嘅帳戶。</string>
+    <!-- Button text to start verifying with a passkey -->
+    <string name="PasskeyVerificationScreen__continue">繼續</string>
+    <!-- Button text to cancel two-factor authentication -->
+    <string name="PasskeyVerificationScreen__cancel">取消</string>
+    <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
+    <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">你嘅通行密鑰出現咗問題。請你再試多次。</string>
 </resources>

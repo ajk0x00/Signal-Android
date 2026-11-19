@@ -1,7 +1,7 @@
 package org.thoughtcrime.securesms.conversation.clicklisteners
 
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +41,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.Buttons
 import org.signal.core.ui.compose.ComposeDialogFragment
 import org.signal.core.ui.compose.DayNightPreviews
@@ -58,7 +59,6 @@ import org.thoughtcrime.securesms.conversation.clicklisteners.PollVotesFragment.
 import org.thoughtcrime.securesms.polls.PollOption
 import org.thoughtcrime.securesms.polls.PollRecord
 import org.thoughtcrime.securesms.polls.Voter
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.recipients.ui.bottomsheet.RecipientBottomSheetDialogFragment
 import org.signal.core.ui.R as CoreUiR
 
@@ -91,9 +91,9 @@ class PollVotesFragment : ComposeDialogFragment(), RecipientBottomSheetDialogFra
     setStyle(STYLE_NO_FRAME, R.style.Signal_DayNight_Dialog_FullScreen)
   }
 
-  override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-    return super.onCreateDialog(savedInstanceState).apply {
-      window?.enableEdgeToEdge()
+  override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
+    return super.onGetLayoutInflater(savedInstanceState).also {
+      dialog?.window?.enableEdgeToEdge()
     }
   }
 

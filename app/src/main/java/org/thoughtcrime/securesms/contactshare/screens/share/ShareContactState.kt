@@ -5,7 +5,7 @@
 
 package org.thoughtcrime.securesms.contactshare.screens.share
 
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.signal.core.models.recipients.RecipientId
 
 /** State for the "Share contact" screen. */
 data class ShareContactState(
@@ -33,7 +33,8 @@ data class ShareContactState(
     val isSelected: Boolean,
     val isEditable: Boolean,
     /** When false the user cannot deselect the name. */
-    val isToggleable: Boolean = true
+    val isToggleable: Boolean = true,
+    val isOrgOnly: Boolean = false
   )
 
   data class DetailSelection(

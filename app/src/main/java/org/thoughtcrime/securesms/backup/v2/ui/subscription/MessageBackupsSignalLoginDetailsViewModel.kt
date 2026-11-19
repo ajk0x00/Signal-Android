@@ -22,7 +22,7 @@ import org.thoughtcrime.securesms.components.settings.app.account.signallogin.Si
 
 /**
  * Backs [SignalLoginViewDetailsScreen] within the backup setup flow, where the credentials are only ever shown and
- * saved. Resets belong to account settings, so this only ever emits [SignalLoginViewDetailsAction.Shared].
+ * saved. Resets belong to account settings.
  */
 class MessageBackupsSignalLoginDetailsViewModel(
   repository: SignalLoginViewDetailsRepository = SignalLoginViewDetailsRepository(),
@@ -42,10 +42,10 @@ class MessageBackupsSignalLoginDetailsViewModel(
       isGooglePasswordManagerDefault = isGooglePasswordManagerDefault
     )
   )
-  private val _actions = Channel<SignalLoginViewDetailsAction.Shared>(Channel.BUFFERED)
+  private val _actions = Channel<SignalLoginViewDetailsAction>(Channel.BUFFERED)
 
   val state: StateFlow<SignalLoginViewDetailsState> = _state.asStateFlow()
-  val actions: Flow<SignalLoginViewDetailsAction.Shared> = _actions.receiveAsFlow()
+  val actions: Flow<SignalLoginViewDetailsAction> = _actions.receiveAsFlow()
 
   override suspend fun processEvent(event: SignalLoginViewDetailsScreenEvents) {
     when (event) {
@@ -67,16 +67,41 @@ class MessageBackupsSignalLoginDetailsViewModel(
         _state.update { it.copy(showSaveToPasswordManagerConfirmation = false) }
       }
       SignalLoginViewDetailsScreenEvents.SaveAsPdfClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.LaunchSaveAsPdf)
+        _state.update { it.copy(doNotShareWarningAction = SignalLoginViewDetailsState.DoNotShareWarningAction.SAVE_AS_PDF) }
       }
       SignalLoginViewDetailsScreenEvents.ResetRecoveryKeyClicked -> {
         Log.w(TAG, "Recovery key resets aren't offered during backup setup.")
       }
-      is SignalLoginViewDetailsScreenEvents.CopyAccountIdClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(event.aci))
+      SignalLoginViewDetailsScreenEvents.CopyAccountIdClicked -> {
+        _state.update { it.copy(doNotShareWarningAction = SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_ACCOUNT_ID) }
       }
-      is SignalLoginViewDetailsScreenEvents.CopyRecoveryKeyClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(event.aep))
+      SignalLoginViewDetailsScreenEvents.CopyRecoveryKeyClicked -> {
+        _state.update { it.copy(doNotShareWarningAction = SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_RECOVERY_KEY) }
+      }
+      SignalLoginViewDetailsScreenEvents.DoNotShareWarningGotItClicked -> {
+        val state = _state.value
+        _state.update { it.copy(doNotShareWarningAction = null) }
+        when (state.doNotShareWarningAction) {
+          SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_ACCOUNT_ID -> {
+            _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(state.accountKey))
+          }
+          SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_RECOVERY_KEY -> {
+            _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(state.recoveryKey))
+          }
+          SignalLoginViewDetailsState.DoNotShareWarningAction.SAVE_AS_PDF -> {
+            _actions.send(SignalLoginViewDetailsAction.LaunchSaveAsPdf)
+          }
+          null -> {
+            Log.w(TAG, "Do-not-share warning acknowledged with nothing waiting behind it. Ignoring.")
+          }
+        }
+      }
+      SignalLoginViewDetailsScreenEvents.DoNotShareWarningLearnMoreClicked -> {
+        _state.update { it.copy(doNotShareWarningAction = null) }
+        _actions.send(SignalLoginViewDetailsAction.OpenDoNotShareLearnMoreArticle)
+      }
+      SignalLoginViewDetailsScreenEvents.DoNotShareWarningDismissed -> {
+        _state.update { it.copy(doNotShareWarningAction = null) }
       }
     }
   }

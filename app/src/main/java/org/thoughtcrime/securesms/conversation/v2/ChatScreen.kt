@@ -6,7 +6,6 @@
 package org.thoughtcrime.securesms.conversation.v2
 
 import android.view.View
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -23,7 +22,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,17 +29,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.compose.AndroidFragment
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import org.signal.core.ui.compose.keyboard.KeyboardSheetAction
 import org.signal.core.ui.compose.keyboard.KeyboardSheetController
 import org.signal.core.ui.compose.keyboard.KeyboardSheetHeight
 import org.signal.core.ui.compose.keyboard.KeyboardSheetScaffold
 import org.signal.core.ui.compose.navigationBarsCompat
+import org.signal.core.ui.compose.rememberViewModelStoreOwner
 import org.signal.core.ui.compose.safeDrawingCompat
 import org.signal.core.ui.compose.statusBarsCompat
 import org.signal.core.ui.compose.theme.SignalTheme
@@ -100,10 +96,7 @@ fun ChatScreen(
 
   val minimumVisibleContent = with(LocalDensity.current) { minimumVisibleContentPx.toDp() }
 
-  val stickerBlurRadius by animateDpAsState(
-    targetValue = if (stickerConfirmation.isShowing) StickerConfirmationBlurRadius else 0.dp,
-    label = "stickerBlurRadius"
-  )
+  val stickerConfirmationFade = rememberStickerConfirmationFade(stickerConfirmation)
 
   val keyboardHeight = remember(minimumHeight, topMargin, minimumVisibleContent, isBubble) {
     KeyboardSheetHeight(
@@ -157,10 +150,11 @@ fun ChatScreen(
           overlay = {
             ChatStickerConfirmation(
               controller = stickerConfirmation,
+              fade = stickerConfirmationFade,
               modifier = Modifier.fillMaxSize()
             )
           },
-          blurRadius = { stickerBlurRadius }
+          blurRadius = { StickerConfirmationBlurRadius * stickerConfirmationFade.value }
         ) {
           CompositionLocalProvider(LocalViewModelStoreOwner provides mediaKeyboardViewModelStoreOwner) {
             MediaKeyboard(
@@ -201,20 +195,4 @@ fun ChatScreen(
         .windowInsetsPadding(WindowInsets.statusBarsCompat.add(WindowInsets.safeDrawingCompat.only(WindowInsetsSides.Horizontal)))
     )
   }
-}
-
-/** A [ViewModelStoreOwner] that lives exactly as long as the calling composition. */
-@Composable
-private fun rememberViewModelStoreOwner(): ViewModelStoreOwner {
-  val owner = remember {
-    object : ViewModelStoreOwner {
-      override val viewModelStore = ViewModelStore()
-    }
-  }
-
-  DisposableEffect(owner) {
-    onDispose { owner.viewModelStore.clear() }
-  }
-
-  return owner
 }

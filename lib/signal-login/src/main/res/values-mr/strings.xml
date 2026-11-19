@@ -38,11 +38,21 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginViewDetailsScreen__no_password_manager_available">तुम्ही पासवर्ड व्यवस्थापक सेट अप केलेला नाही.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">केवळ तुम्हाला संरक्षित वाटेल अशा पासवर्ड व्यवस्थापकामध्येच तुमचे तपशील साठवून ठेवा. तुमच्यासाठी कोणता पासवर्ड व्यवस्थापक योग्य आहे याबाबत Signal कोणतीही शिफारस करत नाही.</string>
     <!-- Toast shown when saving the Signal Login PDF fails. -->
     <string name="SignalLoginViewDetailsScreen__unable_to_save_pdf">PDF जतन करता आले नाही. कृपया पुन्हा प्रयत्न करा.</string>
     <!-- Toast shown when the location the user picked for the Signal Login PDF refuses the write. -->
     <string name="SignalLoginViewDetailsScreen__cant_save_pdf_to_the_selected_location">निवडलेल्या ठिकाणी PDF जतन करता येत नाही.</string>
+
+    <!-- Do not share warning sheet, shown before the user copies or saves their Signal Login -->
+    <!-- Title of the sheet warning the user not to share their Signal Login. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login">तुमचे Signal Login दुसऱ्यांना देऊ नका</string>
+    <!-- Body of the warning sheet. The text inside the <b> tags is shown in bold; keep the tags around the equivalent phrase. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login_with_anyone">तुमचे Signal Login कोणालाही देऊ नका. असे केल्यास त्यांना तुमच्या खात्याचा ताबा घेता येईल. <b>Signal कधीच तुम्हाला संदेश पाठवून</b> तुमचा खाते ID किंवा रीकव्हरी की मागणार नाही. Signal असल्याची बतावणी करणाऱ्या कोणत्याही चॅटला उत्तर देऊ नका.</string>
+    <!-- Button acknowledging the warning and continuing with the copy or save the user started. -->
+    <string name="DoNotShareLoginBottomSheet__got_it">कळले</string>
+    <!-- Button opening a help article with more information about keeping the Signal Login safe. -->
+    <string name="DoNotShareLoginBottomSheet__learn_more">अधिक जाणून घ्या</string>
 
     <!-- Signal Login PDF -->
     <!-- Title at the top of the PDF that holds the user\'s Signal Login. -->

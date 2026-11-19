@@ -71,6 +71,14 @@
     <string name="RegistrationActivity_link_device">ភ្ជាប់ឧបករណ៍</string>
     <!-- Clickable text that opens a corresponding URL -->
     <string name="RegistrationActivity_learn_more">ស្វែងយល់បន្ថែម</string>
+    <!-- Dialog message shown when the server rejects the user\'s captcha response during registration -->
+    <string name="PhoneNumberEntryScreen__captcha_not_accepted">ចម្លើយផ្ទៀងផ្ទាត់របស់អ្នកមិនត្រូវបានទទួលយកទេ។ សូមព្យាយាមម្តងទៀត ឬទាក់ទងផ្នែកជំនួយ ប្រសិនបើបញ្ហានេះនៅតែបន្តកើតមាន។</string>
+    <!-- Dialog button that lets the user contact support after their captcha response was rejected -->
+    <string name="PhoneNumberEntryScreen__contact_support">ទាក់ទងផ្នែកជំនួយ</string>
+    <!-- Subject line of the support email composed when the user\'s captcha response was rejected during registration -->
+    <string name="PhoneNumberEntryScreen__contact_support_email_subject">ការចុះឈ្មោះ Signal - មិនអាចទទួលយក Captcha សម្រាប់ Android បានទេ</string>
+    <!-- Text placed in the body of the support email composed when the user\'s captcha response was rejected. Used to route the request, so it is not translated. -->
+  <!-- Removed by excludeNonTranslatables <string name="PhoneNumberEntryScreen__contact_support_email_filter" translatable="false">Signal Registration - Captcha Not Accepted for Android</string> -->
 
     <!-- CountryCodePickerScreen -->
     <!-- Title of the country code selection screen -->
@@ -243,19 +251,19 @@
     <!-- Title of the dialog shown when the entered recovery key does not match the account being registered -->
     <string name="EnterAepScreen__incorrect_recovery_key_dialog_title">សោស្តារមិនត្រឹមត្រូវ</string>
     <!-- Body of the dialog shown when the entered recovery key does not match the account being registered -->
-    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Make sure you\'re registering with the same phone number and 64-character recovery key you saved when enabling Signal backups. Backups cannot be recovered without this key.</string>
+    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">ត្រូវប្រាកដថាអ្នកកំពុងចុះឈ្មោះដោយប្រើលេខទូរសព្ទដដែល និងសោស្តារដែលមាន 64 តួអក្សរ ដែលអ្នកបានរក្សាទុកនៅពេលបើកការបម្រុងទុក Signal។ ការបម្រុងទុកមិនអាចស្តារបានទេបើគ្មានសោនេះ។</string>
     <!-- Button in the incorrect recovery key dialog that dismisses it so the user can re-enter their key -->
     <string name="EnterAepScreen__try_again">ព្យាយាមម្តងទៀត</string>
     <!-- Button in the incorrect recovery key dialog that offers to verify the phone number over SMS instead -->
-    <string name="EnterAepScreen__try_another_way">Try another way</string>
+    <string name="EnterAepScreen__try_another_way">សាកល្បងវិធីផ្សេងទៀត</string>
     <!-- Button in the incorrect recovery key dialog that opens a support article about recovery keys -->
     <string name="EnterAepScreen__recovery_key_help">ជំនួយសម្រាប់សោស្តារ</string>
     <!-- Title of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code">Verify with SMS code?</string>
+    <string name="EnterAepScreen__verify_with_sms_code">ផ្ទៀងផ្ទាត់តាមលេខកូដពីសារ SMS?</string>
     <!-- Body of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code_body">You can register your account by verifying via an SMS code Signal will send you. After entering the code, you can try restoring your backup with your recovery key again.</string>
+    <string name="EnterAepScreen__verify_with_sms_code_body">អ្នកអាចចុះឈ្មោះគណនីរបស់អ្នកបាន ដោយធ្វើការផ្ទៀងផ្ទាត់តាមរយៈលេខកូដពីសារ SMS ដែល Signal នឹងផ្ញើជូនអ្នក។ បន្ទាប់ពីបញ្ចូលលេខកូដរួច អ្នកអាចសាកល្បងស្តារការបម្រុងទុករបស់អ្នកមកវិញ ដោយប្រើសោស្តាររបស់អ្នកម្តងទៀត។</string>
     <!-- Confirm button in the verify with SMS code dialog that requests an SMS verification code -->
-    <string name="EnterAepScreen__send_code">Send code</string>
+    <string name="EnterAepScreen__send_code">ផ្ញើលេខកូដ</string>
     <!-- Text shown while preparing the restore -->
     <string name="LocalBackupRestoreScreen__preparing_restore">កំពុងរៀបចំការស្ដារ…</string>
     <!-- Title shown while restore is in progress -->
@@ -665,7 +673,7 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginInfoScreen__no_password_manager_available">អ្នកមិនបានរៀបចំមុខងារគ្រប់គ្រងពាក្យសម្ងាត់ទេ។</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginInfoScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginInfoScreen__only_store_your_credentials">រក្សាទុកព័ត៌មានផ្ទៀងផ្ទាត់របស់អ្នកនៅក្នុងកម្មវិធីគ្រប់គ្រងពាក្យសម្ងាត់ដែលអ្នកជឿជាក់ថាមានសុវត្ថិភាពតែប៉ុណ្ណោះ។ Signal មិនផ្តល់ការណែនាំថាតើកម្មវិធីគ្រប់គ្រងពាក្យសម្ងាត់មួយណាសក្តិសមសម្រាប់អ្នកនោះឡើយ។</string>
     <!-- Action button for users who would rather write the Signal Login down themselves. -->
     <string name="SignalLoginInfoScreen__save_manually">រក្សាទុកដោយផ្ទាល់ដៃ</string>
     <!-- Error shown when the Signal Login could not be stored in the password manager. -->
@@ -734,6 +742,8 @@
     <string name="SignalLoginCredentialEntryScreen__show_login_info_again">បង្ហាញព័ត៌មានចូលគណនីម្តងទៀត</string>
     <!-- Error shown when what the user typed back doesn\'t match the Signal Login they were given. -->
     <string name="SignalLoginCredentialEntryScreen__that_doesnt_match_the_signal_login_you_were_shown">វាមិនត្រូវគ្នានឹង Signal Login ដែលបានបង្ហាញទៅអ្នកទេ</string>
+    <!-- Subtitle on the Signal Login entry screen when the user opened it from a reminder to check they still know their login -->
+    <string name="SignalLoginCredentialEntryScreen__enter_your_signal_login_to_verify_you_still_know_it">បញ្ចូល Signal Login ដើម្បីផ្ទៀងផ្ទាត់ថាអ្នកនៅតែចងចាំវា។</string>
 
     <!-- Add username screen -->
     <!-- Title of the screen offering the user an optional username. -->
@@ -817,5 +827,17 @@
     <!-- Button text to cancel two-factor authentication -->
     <string name="TwoFactorSelectionScreen__cancel">បោះបង់</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
-    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again or choose another method.</string>
+    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">មានអ្វីមួយមិនប្រក្រតីជាមួយសោសម្ងាត់របស់អ្នក។ សូមព្យាយាមម្តងទៀត ឬជ្រើសរើសវិធីផ្សេងទៀត។</string>
+
+    <!-- PasskeyVerificationScreen -->
+    <!-- Title of the screen asking the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__two_factor_authentication">ការផ្ទៀងផ្ទាត់ពីរជំហាន</string>
+    <!-- Subtitle telling the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__to_continue_verify_your_account">ដើម្បីបន្ត សូមផ្ទៀងផ្ទាត់គណនីរបស់អ្នកជាមួយសោសម្ងាត់របស់អ្នក។</string>
+    <!-- Button text to start verifying with a passkey -->
+    <string name="PasskeyVerificationScreen__continue">បន្ត</string>
+    <!-- Button text to cancel two-factor authentication -->
+    <string name="PasskeyVerificationScreen__cancel">បោះបង់</string>
+    <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
+    <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">មានអ្វីមួយមិនប្រក្រតីជាមួយសោសម្ងាត់របស់អ្នក។ សូមព្យាយាមម្តងទៀត។</string>
 </resources>

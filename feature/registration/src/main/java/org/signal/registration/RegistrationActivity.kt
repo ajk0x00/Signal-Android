@@ -13,7 +13,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.IntentCompat
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.android.play.core.splitcompat.SplitCompat
 import org.signal.core.ui.compose.theme.SignalTheme
+import org.signal.locale.AppLocale
 
 /**
  * Activity entry point for the registration flow.
@@ -50,6 +52,14 @@ class RegistrationActivity : ComponentActivity() {
         }
         putExtra(START_FRESH_EXTRA, startFresh)
       }
+    }
+  }
+
+  override fun attachBaseContext(newBase: Context) {
+    super.attachBaseContext(newBase)
+    applyOverrideConfiguration(AppLocale.createOverrideConfiguration())
+    if (AppLocale.isSplitInstall) {
+      SplitCompat.installActivity(this)
     }
   }
 
