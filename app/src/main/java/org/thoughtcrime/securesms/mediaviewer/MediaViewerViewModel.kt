@@ -147,6 +147,7 @@ class MediaViewerViewModel(
       is MediaViewerEvent.ForwardClicked -> applyForwardClicked()
       is MediaViewerEvent.SaveClicked -> applySaveClicked()
       is MediaViewerEvent.EditClicked -> applyEditClicked()
+      is MediaViewerEvent.SaveToCloudClicked -> applySaveToCloudClicked()
       is MediaViewerEvent.DeleteClicked -> applyDeleteClicked()
       is MediaViewerEvent.DeleteForEveryoneValidityResolved -> applyDeleteForEveryoneValidityResolved(event)
       is MediaViewerEvent.DeleteConfirmed -> applyDeleteConfirmed(event)
@@ -316,6 +317,13 @@ class MediaViewerViewModel(
       System.currentTimeMillis()
     }
     _actions.send(MediaViewerAction.SaveMedia(uri, contentType, date))
+  }
+
+  private fun applySaveToCloudClicked() {
+    val item = _state.value.currentItem ?: return
+    viewModelScope.launch {
+      _actions.send(MediaViewerAction.SaveToCloud(item.messageId, item.attachmentId.id))
+    }
   }
 
   private fun applyEditClicked() {

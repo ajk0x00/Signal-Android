@@ -61,4 +61,5 @@
   <string name="MediaViewerScreen__album_rail_thumbnail">Media thumbnail</string>
   <!-- Time left in the playing video, shown at the end of the seek bar. %1$s is the remaining time, e.g. 0:38. The leading minus sign marks it as a countdown. -->
   <string name="MediaViewerScreen__remaining_time">−%1$s</string>
+  <string name="MediaViewerScreen__save_to_cloud">Save to Cloud</string>
 </resources>

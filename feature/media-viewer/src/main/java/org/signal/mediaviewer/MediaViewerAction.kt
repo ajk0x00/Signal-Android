@@ -30,6 +30,9 @@ sealed interface MediaViewerAction {
 
   data class SaveMedia(val uri: Uri, val contentType: String, val date: Long) : MediaViewerAction
 
+  /** Upload this message's attachment to the user's cloud storage folder. */
+  data class SaveToCloud(val messageId: Long, val attachmentId: Long) : MediaViewerAction
+
   data class OpenEditor(val media: Media) : MediaViewerAction
 
   /** Open the conversation at the message's position and finish. */

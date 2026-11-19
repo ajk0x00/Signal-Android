@@ -20,6 +20,7 @@ data class AppSettingsState(
   val allowUserToGoToDonationManagementScreen: Boolean = false,
   val userUnregistered: Boolean = false,
   val clientDeprecated: Boolean = false,
+  val showLabsPreferences: Boolean = true,
   val showInternalPreferences: Boolean = false,
   val showPayments: Boolean = false,
   val showAppUpdates: Boolean = false,

@@ -58,6 +58,7 @@ import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragmentArgs
 import org.thoughtcrime.securesms.mediapreview.MediaIntentFactory
+import org.thoughtcrime.securesms.stories.cloudstorage.SaveStoryToCloudJob
 import org.thoughtcrime.securesms.mediapreview.MediaPreviewCache
 import org.thoughtcrime.securesms.mediapreview.RecycledBitmapGuardDrawable
 import org.thoughtcrime.securesms.mediasend.MediaSendLauncher
@@ -319,6 +320,10 @@ class MediaViewerActivity : PassphraseRequiredActivity(), VoiceNoteMediaControll
         lifecycleScope.launch {
           AttachmentSaver(AttachmentSaver.ActivityHost(this@MediaViewerActivity)).saveAttachments(setOf(saveAttachment))
         }
+      }
+      is MediaViewerAction.SaveToCloud -> {
+        SaveStoryToCloudJob.enqueue(action.messageId, action.attachmentId)
+        Toast.makeText(this, R.string.MediaPreviewActivity__saving_to_cloud, Toast.LENGTH_SHORT).show()
       }
       is MediaViewerAction.OpenEditor -> {
         startActivity(MediaSendLauncher.editor(context = this, media = listOf(action.media)))

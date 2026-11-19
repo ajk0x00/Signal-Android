@@ -346,6 +346,7 @@ object MediaViewerScreenTestTags {
   const val OVERFLOW_BUTTON = "media-viewer-overflow-button"
   const val MENU_EDIT = "media-viewer-menu-edit"
   const val MENU_SAVE = "media-viewer-menu-save"
+  const val MENU_SAVE_TO_CLOUD = "media-viewer-menu-save-to-cloud"
   const val MENU_DELETE = "media-viewer-menu-delete"
   const val SHARE_BUTTON = "media-viewer-share-button"
   const val FORWARD_BUTTON = "media-viewer-forward-button"

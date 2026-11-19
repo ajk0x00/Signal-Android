@@ -64,6 +64,9 @@ sealed interface MediaViewerEvent {
 
   data object SaveClicked : MediaViewerEvent
 
+  /** Save the current attachment to the user's cloud storage folder. */
+  data object SaveToCloudClicked : MediaViewerEvent
+
   data object EditClicked : MediaViewerEvent
 
   data object DeleteClicked : MediaViewerEvent

@@ -234,6 +234,18 @@ private fun OverflowMenu(
 
       if (!isDraft) {
         DropdownMenus.Item(
+          leadingIconResId = R.drawable.symbol_cloud_24,
+          text = { Text(text = stringResource(R.string.MediaViewerScreen__save_to_cloud)) },
+          onClick = {
+            controller.hide()
+            onEvent(MediaViewerEvent.SaveToCloudClicked)
+          },
+          modifier = Modifier.testTag(MediaViewerScreenTestTags.MENU_SAVE_TO_CLOUD)
+        )
+      }
+
+      if (!isDraft) {
+        DropdownMenus.Item(
           leadingIconResId = CoreUiR.drawable.symbol_trash_24,
           text = { Text(text = stringResource(R.string.MediaViewerScreen__delete)) },
           onClick = {

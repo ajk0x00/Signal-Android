@@ -352,7 +352,7 @@ fun AppSettingsScreen(
           )
         }
 
-        if (state.showInternalPreferences) {
+        if (state.showLabsPreferences) {
           item {
             Dividers.Default()
           }
@@ -366,6 +366,14 @@ fun AppSettingsScreen(
                 .selectionHighlight(selectedRoute is AppSettingsRoute.LabsRoute)
                 .testTag(AppSettingsTestTags.ROW_LABS)
             )
+          }
+        }
+
+        if (state.showInternalPreferences) {
+          if (!state.showLabsPreferences) {
+            item {
+              Dividers.Default()
+            }
           }
 
           item {
