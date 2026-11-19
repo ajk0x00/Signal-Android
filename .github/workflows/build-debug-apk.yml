@@ -5,16 +5,9 @@ name: Build Debug APK
 # No secrets are required: the build is debug-signed with the checked-in debug key.
 
 on:
+  # On-demand only. PR builds run from build-on-label.yml when the `build`
+  # label is added; pushes are covered by verify-compile.yml.
   workflow_dispatch:
-  push:
-    branches:
-      - 'sync/**'
-      - 'feat/**'
-      - 'fix/**'
-      - 'feature/**'
-  pull_request:
-    branches:
-      - main
 
 permissions:
   contents: read
