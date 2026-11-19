@@ -7,7 +7,7 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.dependencies.AppDependencies;
 import org.thoughtcrime.securesms.jobs.AskGroqJob;
 import org.thoughtcrime.securesms.mms.QuoteModel;
-import org.thoughtcrime.securesms.recipients.RecipientId;
+import org.signal.core.models.recipients.RecipientId;
 
 /**
  * Slash command handler for /judge.
