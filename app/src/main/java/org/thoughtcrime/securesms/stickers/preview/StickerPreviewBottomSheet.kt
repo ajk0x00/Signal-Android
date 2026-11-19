@@ -49,7 +49,6 @@ import org.thoughtcrime.securesms.stickers.StickerLocator
 import org.thoughtcrime.securesms.stickers.StickerManifest
 import org.thoughtcrime.securesms.stickers.StickerPreviewDataFactory
 import org.thoughtcrime.securesms.util.MediaUtil
-import org.thoughtcrime.securesms.util.RemoteConfig
 import org.signal.core.ui.R as CoreUiR
 
 /**
@@ -79,6 +78,8 @@ class StickerPreviewBottomSheet : ComposeBottomSheetDialogFragment() {
       }
     }
   }
+
+  override val peekHeightPercentage: Float = 1f
 
   private val sticker: StickerManifest.Sticker by lazy {
     val locator = requireArguments().getParcelableCompat(ARG_STICKER_LOCATOR, StickerLocator::class.java)!!
@@ -113,7 +114,7 @@ class StickerPreviewBottomSheet : ComposeBottomSheetDialogFragment() {
           openPack(sticker)
           dismissAllowingStateLoss()
         },
-        isFavorite = state.isFavorite.takeIf { RemoteConfig.internalUser },
+        isFavorite = state.isFavorite,
         onFavoriteClick = { viewModel.onEvent(StickerPreviewEvent.FavoriteClicked) }
       )
     }
@@ -187,7 +188,7 @@ fun StickerPreviewSheetContent(
       sticker = sticker,
       modifier = Modifier
         .padding(vertical = 24.dp)
-        .size(144.dp)
+        .size(240.dp)
     )
 
     val packDetails = if (stickerManifest != null) {
@@ -213,7 +214,7 @@ fun StickerPreviewSheetContent(
 
     if (showForward) {
       Rows.TextRow(
-        text = stringResource(R.string.StickerManagement_menu_send_pack),
+        text = stringResource(R.string.StickerPreviewBottomSheet__send_sticker),
         icon = SignalIcons.Forward.imageVector,
         onClick = onForwardClick
       )

@@ -57,7 +57,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -68,6 +70,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest
@@ -93,8 +96,10 @@ import org.signal.registration.screens.attachDebugLogHelper
 import org.signal.registration.screens.shared.AccountIdErrorText
 import org.signal.registration.screens.shared.AccountIdFormat
 import org.signal.registration.screens.shared.AccountIdVisualTransformation
+import org.signal.registration.screens.shared.ContactSupportDialog
 import org.signal.registration.screens.shared.accountIdTextStyle
 import org.signal.registration.test.TestTags
+import kotlin.math.max
 import org.signal.core.ui.R as CoreR
 
 private const val TAG = "PhoneNumberScreen"
@@ -219,6 +224,26 @@ fun PhoneNumberScreen(
       message = stringResource(R.string.RegistrationActivity_the_number_you_entered_is_not_valid),
       dismiss = stringResource(android.R.string.ok),
       onDismiss = { onEvent(PhoneNumberEntryScreenEvents.InvalidPhoneNumberDialogDismissed) }
+    )
+  }
+
+  if (state.dialogs.captchaNotAccepted) {
+    Dialogs.SimpleAlertDialog(
+      title = "",
+      body = stringResource(R.string.PhoneNumberEntryScreen__captcha_not_accepted),
+      confirm = stringResource(android.R.string.ok),
+      dismiss = stringResource(R.string.PhoneNumberEntryScreen__contact_support),
+      onConfirm = { onEvent(PhoneNumberEntryScreenEvents.CaptchaNotAcceptedDialogDismissed) },
+      onDeny = { onEvent(PhoneNumberEntryScreenEvents.CaptchaNotAcceptedContactSupport) },
+      onDismissRequest = { onEvent(PhoneNumberEntryScreenEvents.CaptchaNotAcceptedDialogDismissed) }
+    )
+  }
+
+  if (state.dialogs.contactSupport) {
+    ContactSupportDialog(
+      subject = R.string.PhoneNumberEntryScreen__contact_support_email_subject,
+      filter = R.string.PhoneNumberEntryScreen__contact_support_email_filter,
+      onDismiss = { onEvent(PhoneNumberEntryScreenEvents.ContactSupportDialogDismissed) }
     )
   }
 
@@ -582,19 +607,13 @@ private fun PhoneNumberInputFields(
     }
   }
 
-  Row(
-    modifier = modifier,
-    horizontalArrangement = Arrangement.Start,
-    verticalAlignment = Alignment.Top
-  ) {
+  CountryCodeAndNumberLayout(modifier = modifier) {
     CountryCodeButton(
       countryCode = state.countryCode,
       isAccountId = isAccountId,
       onClick = { onEvent(PhoneNumberEntryScreenEvents.CountryPicker) },
       modifier = Modifier.testTag(TestTags.PHONE_NUMBER_COUNTRY_CODE_FIELD)
     )
-
-    Spacer(modifier = Modifier.width(20.dp))
 
     TextField(
       value = phoneNumberTextFieldValue,
@@ -606,7 +625,6 @@ private fun PhoneNumberInputFields(
         phoneNumberTextFieldValue = accepted
       },
       modifier = Modifier
-        .weight(1f)
         .focusRequester(focusRequester)
         .testTag(TestTags.PHONE_NUMBER_PHONE_FIELD),
       label = { TextFields.Label(stringResource(label), phoneNumberTextFieldValue.text.isNotEmpty(), interactionSource) },
@@ -646,6 +664,41 @@ private fun PhoneNumberInputFields(
         errorContainerColor = MaterialTheme.colorScheme.surfaceVariant
       )
     )
+  }
+}
+
+/**
+ * Places the number field beside the country code when it gets at least [fieldMinWidth], scaled with the font, and
+ * below it otherwise. A FlowRow can't make this call because TextField reports a 280dp intrinsic width.
+ */
+@Composable
+private fun CountryCodeAndNumberLayout(
+  modifier: Modifier = Modifier,
+  fieldMinWidth: Dp = 140.dp,
+  content: @Composable () -> Unit
+) {
+  val fontScale = LocalDensity.current.fontScale
+
+  Layout(content = content, modifier = modifier) { measurables, constraints ->
+    val (buttonMeasurable, fieldMeasurable) = measurables
+    val button = buttonMeasurable.measure(constraints.copy(minWidth = 0, minHeight = 0))
+    val spacing = 20.dp.roundToPx()
+    val inlineWidth = constraints.maxWidth - button.width - spacing
+
+    if (inlineWidth >= (fieldMinWidth * fontScale).roundToPx()) {
+      val field = fieldMeasurable.measure(constraints.copy(minWidth = inlineWidth, maxWidth = inlineWidth, minHeight = 0))
+      layout(constraints.maxWidth, max(button.height, field.height)) {
+        button.placeRelative(0, 0)
+        field.placeRelative(button.width + spacing, 0)
+      }
+    } else {
+      val field = fieldMeasurable.measure(constraints.copy(minWidth = constraints.maxWidth, minHeight = 0))
+      val gap = 8.dp.roundToPx()
+      layout(constraints.maxWidth, button.height + gap + field.height) {
+        button.placeRelative(0, 0)
+        field.placeRelative(0, button.height + gap)
+      }
+    }
   }
 }
 

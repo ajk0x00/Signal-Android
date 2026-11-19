@@ -22,10 +22,10 @@ import org.signal.core.util.SafeForegroundService
 import org.signal.core.util.SleepTimer
 import org.signal.core.util.UptimeSleepTimer
 import org.signal.core.util.concurrent.SignalExecutors
-import org.signal.core.util.groups.GroupChangeBusyException
 import org.signal.core.util.logging.Log
 import org.signal.network.config.ProxyConfig
 import org.signal.network.config.SignalServiceConfiguration
+import org.signal.storage.keyvalue.isDecisionPending
 import org.signal.storageservice.storage.protos.groups.local.DecryptedGroup
 import org.thoughtcrime.securesms.BuildConfig
 import org.thoughtcrime.securesms.R
@@ -41,13 +41,13 @@ import org.thoughtcrime.securesms.jobs.PushProcessMessageErrorJob
 import org.thoughtcrime.securesms.jobs.PushProcessMessageJob
 import org.thoughtcrime.securesms.jobs.RequestGroupV2InfoJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.keyvalue.isDecisionPending
 import org.thoughtcrime.securesms.messages.MessageDecryptor.FollowUpOperation
 import org.thoughtcrime.securesms.messages.protocol.BufferedProtocolStore
 import org.thoughtcrime.securesms.net.ConnectivityState
 import org.thoughtcrime.securesms.net.InternetConnectivityMonitor
 import org.thoughtcrime.securesms.notifications.NotificationChannels
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.notifications.NotificationIds
+import org.thoughtcrime.securesms.recipients.RecipientIds
 import org.thoughtcrime.securesms.util.AlarmSleepTimer
 import org.thoughtcrime.securesms.util.Environment
 import org.thoughtcrime.securesms.util.SignalLocalMetrics
@@ -58,7 +58,6 @@ import org.whispersystems.signalservice.api.websocket.SignalWebSocket
 import org.whispersystems.signalservice.api.websocket.WebSocketConnectionState
 import org.whispersystems.signalservice.api.websocket.WebSocketUnavailableException
 import org.whispersystems.signalservice.internal.push.Envelope
-import java.io.Closeable
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
@@ -87,7 +86,7 @@ class IncomingMessageObserver(
 
     private const val WEB_SOCKET_KEEP_ALIVE_TOKEN = "MessageRetrieval"
 
-    private const val MAX_GROUP_LOCK_ATTEMPTS = 6
+    private val ALL_GROUPS_LOCK_TIMEOUT = 30.seconds
 
     /** How long we wait for the websocket to time out before we try to connect again. */
     private val websocketReadTimeout: Long
@@ -98,8 +97,6 @@ class IncomingMessageObserver(
       get() = if (censored) 10.seconds.inWholeMilliseconds else 2.minutes.inWholeMilliseconds
 
     private val INSTANCE_COUNT = AtomicInteger(0)
-
-    const val FOREGROUND_ID = 313399
 
     private val censored: Boolean
       get() = AppDependencies.signalServiceNetworkAccess.isCensored()
@@ -193,7 +190,7 @@ class IncomingMessageObserver(
     MessageRetrievalThread().start()
 
     val registered = SignalStore.account.isRegistered && !SignalStore.account.isUnauthorizedReceived
-    if (registered && (!SignalStore.account.fcmEnabled || SignalStore.settings.forceWebsocketMode.isEnabled)) {
+    if (registered && SignalStore.settings.shouldStayConnectedInBackground()) {
       SignalExecutors.UNBOUNDED.execute {
         if (!SafeForegroundService.start(context, ForegroundService::class.java)) {
           Log.w(TAG, "Unable to start foreground service for websocket!")
@@ -271,7 +268,7 @@ class IncomingMessageObserver(
     val fcmEnabled = SignalStore.account.fcmEnabled
     val hasNetwork = internetConnection.isAssumedOnline
     val hasProxy = SignalStore.proxy.isProxyEnabled
-    val forceWebsocket = SignalStore.settings.forceWebsocketMode.isEnabled
+    val stayConnected = SignalStore.settings.shouldStayConnectedInBackground()
     val websocketAlreadyOpen = isConnectionAvailable()
     val clockSkewDetected = ClockSkewDetector.isDetected
     val clockSkew = ClockSkewDetector.skew
@@ -280,21 +277,21 @@ class IncomingMessageObserver(
     val conclusion = registered &&
       !unauthorizedReceived &&
       !clockSkewDetected &&
-      (isForeground || timeIdle < maxBackgroundTime || !fcmEnabled || forceWebsocket) &&
+      (isForeground || timeIdle < maxBackgroundTime || stayConnected) &&
       hasNetwork
 
     val needsConnectionString = if (conclusion) "Needs Connection" else "Does Not Need Connection"
 
     Log.d(
       TAG,
-      "[$needsConnectionString] Network: $hasNetwork, Foreground: $isForeground, Time Since Last Interaction: $lastInteractionString, FCM: $fcmEnabled, WS Open or Keep-alives: $websocketAlreadyOpen, Registered: $registered, Unauthorized: $unauthorizedReceived, Proxy: $hasProxy, Force websocket: $forceWebsocket, Clock skew: $clockSkewDetected ($clockSkew)"
+      "[$needsConnectionString] Network: $hasNetwork, Foreground: $isForeground, Time Since Last Interaction: $lastInteractionString, FCM: $fcmEnabled, WS Open or Keep-alives: $websocketAlreadyOpen, Registered: $registered, Unauthorized: $unauthorizedReceived, Proxy: $hasProxy, Stay connected: $stayConnected, Clock skew: $clockSkewDetected ($clockSkew)"
     )
     return conclusion
   }
 
   private fun isConnectionAvailable(): Boolean {
     val hasNetwork = internetConnection.isAssumedOnline
-    return !SignalStore.account.isUnauthorizedReceived && SignalStore.account.isRegistered && (authWebSocket.stateSnapshot == WebSocketConnectionState.CONNECTED || (authWebSocket.shouldSendKeepAlives() && hasNetwork))
+    return !SignalStore.account.isUnauthorizedReceived && SignalStore.account.isRegistered && (authWebSocket.stateSnapshot == WebSocketConnectionState.CONNECTED || (authWebSocket.hasKeepAliveTokens() && hasNetwork))
   }
 
   /** Conditions are evaluated outside of [connectionLock] so notifiers never block on them. We only park if nothing signaled since the version we evaluated against. */
@@ -447,7 +444,7 @@ class IncomingMessageObserver(
       return
     }
 
-    val senderId = RecipientId.from(serviceId)
+    val senderId = RecipientIds.from(serviceId)
 
     Log.i(TAG, "Received server receipt. Sender: $senderId, Device: ${envelope.sourceDeviceId}, Timestamp: ${envelope.clientTimestamp}")
     SignalDatabase.messages.incrementDeliveryReceiptCount(envelope.clientTimestamp!!, senderId, System.currentTimeMillis())
@@ -482,7 +479,7 @@ class IncomingMessageObserver(
       Log.i(TAG, "Initializing! (${this.hashCode()})")
       uncaughtExceptionHandler = this
 
-      sleepTimer = if (!SignalStore.account.fcmEnabled || SignalStore.settings.forceWebsocketMode.isEnabled) AlarmSleepTimer(context) else UptimeSleepTimer()
+      sleepTimer = if (SignalStore.settings.shouldStayConnectedInBackground()) AlarmSleepTimer(context) else UptimeSleepTimer()
 
       canProcessMessages = !SignalStore.registration.restoreDecisionState.isDecisionPending
     }
@@ -536,7 +533,7 @@ class IncomingMessageObserver(
                   Log.i(TAG, "Retrieved ${batch.size} envelopes!")
 
                   val startTime = System.currentTimeMillis()
-                  acquireGroupProcessingLock().use {
+                  GroupsV2ProcessingLock.acquireAllGroupsProcessingLock(ALL_GROUPS_LOCK_TIMEOUT).use {
                     ReentrantSessionLock.INSTANCE.acquire().use {
                       val batchCommitted = processBatchInTransaction(batch)
 
@@ -605,24 +602,6 @@ class IncomingMessageObserver(
         Log.i(TAG, "Looping...")
       }
       Log.w(TAG, "Terminated! (${this.hashCode()})")
-    }
-
-    /**
-     * Retries the group processing lock so a slow group job does not immediately tear down the websocket and force the batch to be redelivered.
-     */
-    private fun acquireGroupProcessingLock(): Closeable {
-      var attempt = 1
-      while (true) {
-        try {
-          return GroupsV2ProcessingLock.acquireGroupProcessingLock()
-        } catch (e: GroupChangeBusyException) {
-          if (terminated || attempt >= MAX_GROUP_LOCK_ATTEMPTS) {
-            throw e
-          }
-          Log.w(TAG, "Group processing lock is busy, waiting again. Attempt $attempt of $MAX_GROUP_LOCK_ATTEMPTS. ${e.message}")
-          attempt++
-        }
-      }
     }
 
     /**
@@ -751,7 +730,7 @@ class IncomingMessageObserver(
    */
   class ForegroundService : SafeForegroundService() {
     override val tag: String = TAG
-    override val notificationId: Int = FOREGROUND_ID
+    override val notificationId: Int = NotificationIds.INCOMING_MESSAGE_OBSERVER
 
     override fun getForegroundNotification(intent: Intent): Notification {
       return NotificationCompat.Builder(applicationContext, NotificationChannels.getInstance().BACKGROUND)

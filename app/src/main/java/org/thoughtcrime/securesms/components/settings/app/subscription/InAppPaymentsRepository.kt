@@ -48,6 +48,7 @@ import org.thoughtcrime.securesms.database.model.databaseprotos.InAppPaymentData
 import org.thoughtcrime.securesms.database.model.databaseprotos.PendingOneTimeDonation
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.jobmanager.Job
+import org.thoughtcrime.securesms.jobs.InAppPaymentAuthCheckJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.net.SignalNetwork
 import org.thoughtcrime.securesms.recipients.Recipient
@@ -475,6 +476,13 @@ object InAppPaymentsRepository {
   }
 
   /**
+   * Like [org.thoughtcrime.securesms.keyvalue.InAppPaymentValues.isLikelyASustainer], but also true if there's an active subscription badge.
+   */
+  fun isLikelyASustainer(): Boolean {
+    return SignalStore.inAppPayments.isLikelyASustainer() || Recipient.self().badges.any { it.isSubscription() && !it.isExpired() }
+  }
+
+  /**
    * Returns the last end of period stored in the key-value store for donations, 0 for backups, used by the keep-alive job.
    *
    * This is safe because, at worse, we'll end up getting a 409 and skipping redemption for a badge or backups.
@@ -487,6 +495,69 @@ object InAppPaymentsRepository {
       SignalStore.inAppPayments.getLastEndOfPeriod().seconds
     } else {
       0.seconds
+    }
+  }
+
+  /**
+   * Returns the given Stripe payment moved to [InAppPaymentTable.State.WAITING_FOR_AUTHORIZATION], or null if it is
+   * recurring and we have no subscriber to attach.
+   */
+  @WorkerThread
+  fun toWaitingForAuthorization(
+    inAppPayment: InAppPaymentTable.InAppPayment,
+    stripeIntentId: String,
+    stripeClientSecret: String
+  ): InAppPaymentTable.InAppPayment? {
+    val subscriberId = if (inAppPayment.type.recurring) {
+      getSubscriber(inAppPayment.type.requireSubscriberType())?.subscriberId ?: return null
+    } else {
+      null
+    }
+
+    return inAppPayment.copy(
+      state = InAppPaymentTable.State.WAITING_FOR_AUTHORIZATION,
+      subscriberId = subscriberId,
+      data = inAppPayment.data.newBuilder().waitForAuth(
+        waitForAuth = InAppPaymentData.WaitingForAuthorizationState(
+          stripeIntentId = stripeIntentId,
+          stripeClientSecret = stripeClientSecret,
+          enteredAt = System.currentTimeMillis()
+        )
+      ).build()
+    )
+  }
+
+  /**
+   * REQUIRES_ACTION at process start means the action dialog died with the process.
+   */
+  @JvmStatic
+  @WorkerThread
+  fun recoverAbandonedPayments() {
+    var hasStripeRecovery = false
+
+    for (payment in SignalDatabase.inAppPayments.getAllRequiresAction()) {
+      val stripeRequiresAction = payment.data.stripeRequiresAction
+      val waitingForAuth = stripeRequiresAction?.let { toWaitingForAuthorization(payment, it.stripeIntentId, it.stripeClientSecret) }
+      if (waitingForAuth != null) {
+        Log.i(TAG, "Moving abandoned InAppPayment::${payment.id.serialize()} to WAITING_FOR_AUTHORIZATION.", true)
+        SignalDatabase.inAppPayments.update(waitingForAuth)
+        hasStripeRecovery = true
+      } else {
+        Log.i(TAG, "Cancelling abandoned InAppPayment::${payment.id.serialize()} left in REQUIRES_ACTION.", true)
+        SignalDatabase.inAppPayments.update(
+          inAppPayment = payment.copy(
+            state = InAppPaymentTable.State.END,
+            notified = true,
+            data = payment.data.copy(
+              error = InAppPaymentData.Error(type = InAppPaymentData.Error.Type.SETUP_CANCELLED)
+            )
+          )
+        )
+      }
+    }
+
+    if (hasStripeRecovery) {
+      InAppPaymentAuthCheckJob.enqueueIfNeeded()
     }
   }
 

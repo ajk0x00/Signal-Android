@@ -16,7 +16,6 @@
   <!-- Removed by excludeNonTranslatables <string name="google_pay_url" translatable="false">https://pay.google.com</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
   <!-- Removed by excludeNonTranslatables <string name="pending_transfer_url" translatable="false">https://support.signal.org/hc/articles/360031949872#pending</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_faq_url" translatable="false">https://support.signal.org/hc/articles/360031949872#donate</string> -->
   <!-- Removed by excludeNonTranslatables <string name="inactive_primary_support" translatable="false">https://support.signal.org/hc/articles/9021007554074</string> -->
@@ -31,15 +30,6 @@
     <string name="save">Αποθήκευση</string>
     <string name="note_to_self">Σημείωση για εμένα</string>
 
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a weather/climate application. -->
-    <string name="app_icon_label_weather">Καιρός</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a note-taking application.-->
-    <string name="app_icon_label_notes">Σημειώσεις</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a news/journalism application. -->
-    <string name="app_icon_label_news">Νέα</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in waves of the ocean. -->
-    <string name="app_icon_label_waves">Κύματα</string>
-
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
 
@@ -47,23 +37,7 @@
     <string name="ApplicationMigrationActivity__signal_is_updating">Το Signal αναβαθμίζεται…</string>
 
     <!-- ApplicationPreferencesActivity -->
-    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Δεν έχεις ορίσει ακόμα συνθηματικό!</string>
-    <string name="ApplicationPreferencesActivity_disable_passphrase">Απενεργοποίηση συνθηματικού;</string>
-    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Αυτό θα ξεκλειδώσει μόνιμα το Signal και τις ειδοποιήσεις μηνυμάτων.</string>
-    <string name="ApplicationPreferencesActivity_disable">Απενεργοποίηση</string>
     <string name="ApplicationPreferencesActivity_error_connecting_to_server">Σφάλμα κατά τη σύνδεση με τον διακομιστή!</string>
-    <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">Τα PIN χρειάζονται για το κλείδωμα εγγραφής. Για να απενεργοποιήσεις τα PIN, πρέπει πρώτα να απενεργοποιήσεις το κλείδωμα εγγραφής.</string>
-    <string name="ApplicationPreferencesActivity_pin_created">Το PIN δημιουργήθηκε.</string>
-    <string name="ApplicationPreferencesActivity_pin_disabled">Το PIN απενεργοποιήθηκε.</string>
-    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Ηχογραφήστε το συνθηματικό της αποκατάστασης πληρωμών</string>
-    <string name="ApplicationPreferencesActivity_record_phrase">Καταγραφή φράσης</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Πριν μπορέσετε να απενεργοποιήσετε το PIN σας, πρέπει να καταγράψετε τη φράση ανάκτησης πληρωμών για να διασφαλίσετε ότι μπορείτε να ανακτήσετε τον λογαριασμό πληρωμών σας.</string>
-    <!-- The title of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_title">Δημιουργία νέου κλειδιού ανάκτησης</string>
-    <!-- The body of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_body">Πρέπει να δημιουργήσεις και να καταγράψεις ένα νέο κλειδί ανάκτησης προτού απενεργοποιήσεις το PIN σου.</string>
-    <!-- The confirmation button for a dialog letting the user know they have to rotate their recovery key if they want to disable PINs. If they click the button, they will be taken to a flow to rotate their key. -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_positive_button">Δημιουργία κλειδιού</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -387,8 +361,6 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">Ο χρήστης %1$s διέγραψε αυτό το μήνυμα</string>
     <string name="ConversationItem_you_deleted_this_message">Διέγραψες αυτό το μήνυμα</string>
-    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
-    <string name="ConversationItem_delete_for_everyone_question">Διαγραφή για όλους;</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Ο διαχειριστής %1$s διέγραψε αυτό το μήνυμα</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -498,6 +470,8 @@
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">Η ανταλλαγή μηνυμάτων SMS δεν υποστηρίζεται πλέον στο Signal. Προσκάλεσε τον χρήστη %1$s στο Signal για να κρατήσεις εδώ τη συνομιλία.</string>
     <!-- Message shown when opening a conversation with an unregistered user who used to be on Signal -->
     <string name="ConversationActivity__this_person_is_no_longer_using_signal">Αυτό το άτομο δεν χρησιμοποιεί πλέον το Signal. Προσκάλεσέ το στο Signal για να κρατήσεις εδώ τη συνομιλία.</string>
+    <!-- Message shown when opening a conversation with an unregistered user who is not on Signal -->
+    <string name="ConversationActivity__this_person_is_not_using_signal">Αυτό το άτομο δεν χρησιμοποιεί το Signal. Προσκάλεσέ το στο Signal για να κρατήσεις εδώ τη συνομιλία.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__invite_to_signal">Πρόσκληση στο Signal</string>
     <!-- Toast message shown when trying to record a voice message during an ongoing call -->
@@ -516,6 +490,8 @@
     <string name="ChatStickerConfirmation__reply_to_yourself">Απάντηση στον εαυτό σου</string>
     <!-- Content description for the button that closes the sticker confirmation without sending -->
     <string name="ChatStickerConfirmation__go_back">Πίσω</string>
+    <!-- Content description for the button that opens the sticker\'s pack, where it can be managed -->
+    <string name="ChatStickerConfirmation__manage_pack">Διαχείριση πακέτου</string>
 
     <!-- ConversationFragment -->
     <!-- Toast text when contacts activity is not found -->
@@ -539,6 +515,8 @@
     <string name="ConversationFragment_deleting_messages">Διαγραφή μηνυμάτων…</string>
     <string name="ConversationFragment_delete_for_me">Διαγραφή για μένα</string>
     <string name="ConversationFragment_delete_for_everyone">Διαγραφή για όλους</string>
+    <!-- Snackbar text shown after the user deletes one or more messages only for themselves -->
+    <string name="ConversationFragment__deleted_for_me">Έγινε διαγραφή για μένα</string>
     <!-- Title of dialog confirming whether to delete the message -->
     <plurals name="ConversationFragment_delete_selected_title">
         <item quantity="one">Διαγραφή επιλεγμένου μηνύματος;</item>
@@ -845,7 +823,6 @@
     <string name="CreateProfileActivity_error_setting_profile_photo">Σφάλμα κατά τον ορισμό φωτογραφίας προφίλ</string>
     <string name="CreateProfileActivity_problem_setting_profile">Πρόβλημα στον καθορισμό του προφίλ</string>
     <string name="CreateProfileActivity_set_up_your_profile">Δημιούργησε το προφίλ σου</string>
-    <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Το προφίλ σου και οι αλλαγές σε αυτό θα είναι ορατά στα άτομα στα οποία στέλνεις μηνύματα, στις επαφές και στις ομάδες σου.</string>
     <string name="CreateProfileActivity_set_avatar_description">Ορισμός εικόνας προφίλ</string>
 
     <!-- ProfileCreateFragment -->
@@ -987,7 +964,7 @@
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Όλα τα μηνύματα στις συνδεδεμένες συσκευές είναι ιδιωτικά</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
-    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Τα μηνύματα Signal συγχρονίζονται με το Signal στο τηλέφωνό σου, αφού αυτό συνδεθεί. Το προηγούμενο ιστορικό μηνυμάτων σου δεν θα εμφανιστεί.</string>
+    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Τα μηνύματα Signal συγχρονίζονται με το Signal στο τηλέφωνό σου, αφού αυτό συνδεθεί.</string>
     <!-- Bottom sheet description explaining that for non-desktop/iPad devices, they should go to %s to download Signal where %s is Signal\'s website -->
     <string name="LinkDeviceFragment__on_other_device_visit_signal">Χρησιμοποιώντας τη συσκευή που θέλεις να συνδέσεις, επισκέψου το %1$s για εγκατάσταση του Signal</string>
   <!-- Removed by excludeNonTranslatables <string name="LinkDeviceFragment__signal_download_url" translatable="false">signal.org/download</string> -->
@@ -1243,6 +1220,14 @@
         <item quantity="other">Τα μέλη δεν μπορούν να προστεθούν.</item>
     </plurals>
 
+    <!-- LanguagePackReadyBanner -->
+    <!-- Banner shown after a language finished downloading in the background. %1$s is the language\'s name written in that language, for example "Deutsch". -->
+    <string name="LanguagePackReadyBanner__body">"The app language %1$s is ready to use. Restart Signal to switch to it."</string>
+    <!-- Button on the banner shown after a language finished downloading. Restarts the app so the language takes effect. -->
+    <string name="LanguagePackReadyBanner__restart">Restart</string>
+    <!-- Button on the banner shown after a language finished downloading. Hides the banner without restarting and applying the new language. -->
+    <string name="LanguagePackReadyBanner__not_now">Not now</string>
+
     <!-- LeaveGroupDialog -->
     <string name="LeaveGroupDialog_leave_group">Αποχώρηση απ\' την ομάδα;</string>
     <string name="LeaveGroupDialog_you_will_no_longer_be_able_to_send_or_receive_messages_in_this_group">Δε θα μπορείς πια να στείλεις ή να λάβεις μηνύματα σε αυτήν την ομάδα.</string>
@@ -1351,17 +1336,13 @@
 
     <!-- AddGroupDetailsFragment -->
     <string name="AddGroupDetailsFragment__name_this_group">Ονομασία ομάδας</string>
-    <string name="AddGroupDetailsFragment__create_group">Δημιουργία ομάδας</string>
     <string name="AddGroupDetailsFragment__create">Δημιουργία</string>
     <string name="AddGroupDetailsFragment__members">Μέλη</string>
     <string name="AddGroupDetailsFragment__you_can_add_or_invite_friends_after_creating_this_group">Μπορείς να προσθέσεις ή να προσκαλέσεις φίλους σου αφού δημιουργήσεις την ομάδα.</string>
     <string name="AddGroupDetailsFragment__group_name_required">Όνομα ομάδας (απαιτείται)</string>
-    <string name="AddGroupDetailsFragment__group_name_optional">Όνομα ομάδας (προαιρετικά)</string>
-    <string name="AddGroupDetailsFragment__this_field_is_required">Αυτό το πεδίο απαιτείται.</string>
     <string name="AddGroupDetailsFragment__group_creation_failed">Η δημιουργία της ομάδας απέτυχε.</string>
     <string name="AddGroupDetailsFragment__try_again_later">Ξαναδοκίμασε αργότερα.</string>
     <string name="AddGroupDetailsFragment__remove">Αφαίρεση</string>
-    <string name="AddGroupDetailsFragment__sms_contact">Επαφή SMS</string>
     <string name="AddGroupDetailsFragment__remove_s_from_this_group">Αφαίρεση του/της %1$s από την ομάδα;</string>
     <!-- Title of the dialog shown when tapping an existing group while creating a new group, confirming the user wants to leave and discard their in-progress group -->
     <string name="AddGroupDetailsFragment__discard_group">Απόρριψη ομάδας;</string>
@@ -1369,8 +1350,6 @@
     <string name="AddGroupDetailsFragment__if_you_continue_to_the_group_s_your_changes_wont_be_saved">Αν συνεχίσεις στην ομάδα «%1$s», οι αλλαγές σου δεν θα αποθηκευτούν.</string>
     <!-- Label for the button that confirms discarding the in-progress group and navigating to an existing group -->
     <string name="AddGroupDetailsFragment__discard">Απόρριψη</string>
-    <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Επέλεξες μια επαφή που δεν υποστηρίζει τις ομάδες Signal, αυτή η ομάδα θα είναι με MMS. Τα εξατομικευμένα ονόματα και οι φωτογραφίες των ομάδων MMS θα είναι ορατά μόνο σε σένα. Η υποστήριξη για ομάδες MMS θα καταργηθεί σύντομα για εστίαση στην κρυπτογραφημένη ανταλλαγή μηνυμάτων.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_who_can_add_new_members">Ποιοί μπορούν να προσθέσουν νέα μέλη;</string>
@@ -1403,34 +1382,7 @@
     <!-- RemoteRestoreActivity -->
 
     <!-- ManageProfileFragment -->
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc -->
-    <string name="ManageProfileFragment__your_username">Το όνομα χρήστη, ο κωδικός QR και ο σύνδεσμός σου δεν είναι ορατά στο προφίλ σου. Να μοιράζεσαι μόνο το όνομα χρήστη σου με άτομα που εμπιστεύεσαι.</string>
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc, shown when you have no username -->
-    <string name="ManageProfileFragment__username_footer_no_username">Οι χρήστες μπορούν να σου στέλνουν μήνυμα με ένα προαιρετικό όνομα χρήστη αντί για το τηλέφωνό. Τα ονόματα χρηστών έχουν έναν μοναδικό κωδικό QR και έναν σύνδεσμο που μπορείς να μοιραστείς με φίλους.</string>
-    <string name="ManageProfileFragment_profile_name">Όνομα προφίλ</string>
-    <string name="ManageProfileFragment_username">Όνομα χρήστη</string>
-    <string name="ManageProfileFragment_about">Πληροφορίες</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">Αποτυχία ορισμού εικόνας προφίλ</string>
     <string name="ManageProfileFragment_badges">Σήματα</string>
-    <!-- Text for a button that will take the user to the screen to manage their username link and QR code -->
-    <string name="ManageProfileFragment_link_setting_text">Κωδικός QR ή Σύνδεσμος</string>
-    <string name="ManageProfileFragment__edit_photo">Επεξεργασία φωτογραφίας</string>
-    <!-- Title of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_title">Μοιράσου το όνομα χρήστη σου</string>
-    <!-- Body of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_body">Άσε τους άλλους να ξεκινήσουν μια συνομιλία μαζί σου κοινοποιώντας τον μοναδικό κωδικό QR ή τον σύνδεσμό σου.</string>
-    <!-- Snackbar message after creating username -->
-    <string name="ManageProfileFragment__username_created">Το όνομα χρήστη δημιουργήθηκε</string>
-    <!-- Snackbar message after copying username -->
-    <string name="ManageProfileFragment__username_copied">Το όνομα χρήστη αντιγράφηκε</string>
-    <!-- Snackbar message after network failure while trying to delete username -->
-    <string name="ManageProfileFragment__couldnt_delete_username">Δεν ήταν δυνατή η διαγραφή του ονόματος χρήστη. Δοκίμασε ξανά αργότερα.</string>
-    <!-- Snackbar message after successful deletion of username -->
-    <string name="ManageProfileFragment__username_deleted">Το όνομα χρήστη διαγράφηκε</string>
-    <!-- The title of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_title">Διαγραφή ονόματος χρήστη;</string>
-    <!-- The body of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_body">"Αυτό θα καταργήσει το όνομα χρήστη σου και θα απενεργοποιήσει τον κωδικό QR και τον σύνδεσμό σου. Το όνομα χρήστη %1$s θα είναι διαθέσιμο σε άλλους χρήστες. Σίγουρα;"</string>
 
     <!-- UsernameOutOfSyncReminder -->
     <!-- Displayed above the conversation list when a user needs to address an issue with their username -->
@@ -1556,11 +1508,6 @@
     <string name="InputPanel__this_action_cant_be_undone">Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
     <!-- Button inside an alert dialog confirming the deletion of their draft -->
     <string name="InputPanel__discard">Απόρριψη</string>
-
-    <!-- LearnMoreTextView -->
-    <string name="LearnMoreTextView_learn_more">Μάθε περισσότερα</string>
-
-    <string name="SpanUtil__read_more">Δες περισσότερα</string>
 
     <!-- LongMessageActivity -->
     <string name="LongMessageActivity_unable_to_find_message">Δεν βρέθηκε μήνυμα</string>
@@ -2612,6 +2559,12 @@
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_failed_to_submit" translatable="false">Failed to submit :(</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_success" translatable="false">Success!</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_share" translatable="false">Share</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting" translatable="false">Submitting debug log</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting_body" translatable="false">Collecting and uploading logs. This can take a minute.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_retry" translatable="false">Retry</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_close" translatable="false">Close</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copy" translatable="false">Copy</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copied" translatable="false">Copied to clipboard</string> -->
 
     <!-- SharedContactView -->
     <string name="SharedContactView_add_to_contacts">Προσθήκη στις επαφές</string>
@@ -2621,7 +2574,7 @@
     <!-- Button on a contact card shared in a group chat that adds the person on the card to that group -->
     <string name="SharedContactView_add_to_group">Προσθήκη σε ομάδα</string>
     <!-- Confirmation dialog body when adding the person on a shared contact card to the current group. %1$s is the person\'s name, %2$s is the group name -->
-    <string name="SharedContactView_add_s_to_s">Add %1$s to “%2$s”?</string>
+    <string name="SharedContactView_add_s_to_s">Προσθήκη του χρήστη \"%1$s\" στην ομάδα \"%2$s\";</string>
 
     <!-- SignalBottomActionBar -->
     <!-- Text to describe a button that will show more options -->
@@ -2710,6 +2663,16 @@
     </plurals>
     <!-- Message shown after copying a sticker pack link. -->
     <string name="StickerManagement_copied">Ο σύνδεσμος αντιγράφτηκε</string>
+    <!-- Title of the confirmation dialog shown before hiding a sticker pack. -->
+    <string name="StickerManagement_hide_pack_confirmation">Απόκρυψη πακέτου αυτοκόλλητων;</string>
+    <!-- Body of the confirmation dialog shown before hiding a sticker pack that is not installed. -->
+    <string name="StickerManagement_hide_pack_confirmation_body">Αυτό θα καταργήσει το πακέτο αυτοκόλλητων από τα διαθέσιμα πακέτα σου. Δεν μπορείς να τα προσθέσεις ξανά χωρίς σύνδεσμο ή μήνυμα με αυτοκόλλητο.</string>
+    <!-- Body of the confirmation dialog shown before hiding an installed sticker pack, which also removes it. -->
+    <string name="StickerManagement_hide_installed_pack_confirmation_body">Αυτό θα καταργήσει το πακέτο αυτοκόλλητων και θα το κρύψει από τα διαθέσιμα πακέτα σου. Δεν μπορείς να τα προσθέσεις ξανά χωρίς σύνδεσμο ή μήνυμα με αυτοκόλλητο.</string>
+    <!-- Snackbar shown when a pack is hidden -->
+    <string name="StickerManagement_hidden_pack">Κρυμμένο πακέτο αυτοκόλλητων</string>
+    <!-- Snackbar action label to undo hiding a sticker pack. -->
+    <string name="StickerManagement_undo">Αναίρεση</string>
 
     <!-- Sticker pack list dropdown menu label for the button to forward a sticker pack to another user. -->
     <string name="StickerManagement_menu_forward_pack">Προώθηση</string>
@@ -2719,6 +2682,8 @@
     <string name="StickerManagement_menu_install_pack">Εγκατάσταση</string>
     <!-- Sticker pack list dropdown menu label for the button to uninstall a sticker pack. -->
     <string name="StickerManagement_menu_remove_pack">Αφαίρεση</string>
+    <!-- Sticker pack list dropdown menu label for the button to hide an uninstalled sticker pack from the list of available packs. -->
+    <string name="StickerManagement_menu_hide_pack">Απόκρυψη</string>
     <!-- Sticker management screen dropdown menu label for the button to enter multi-select mode. -->
     <string name="StickerManagement_menu_select_packs">Επίλεξε πακέτα αυτοκόλλητων</string>
     <!-- Sticker pack list dropdown menu label for sending a sticker pack. -->
@@ -2761,7 +2726,6 @@
     <string name="StickerManagement_accessibility_clear_search">Εκκαθάριση αναζήτησης</string>
 
     <!-- StickerManagementAdapter -->
-    <string name="StickerManagementAdapter_untitled">Χωρίς τίτλο</string>
 
     <!-- StickerPackPreviewActivity -->
     <string name="StickerPackPreviewActivity_untitled">Χωρίς τίτλο</string>
@@ -2775,16 +2739,18 @@
     <string name="StickerPreviewBottomSheet__title_author">%1$s · %2$s</string>
     <!-- Bottom sheet option that opens the pack the sticker belongs to -->
     <string name="StickerPreviewBottomSheet__view_pack">Προβολή πακέτου</string>
+    <!-- Bottom sheet label for sending a sticker. -->
+    <string name="StickerPreviewBottomSheet__send_sticker">Αποστολή αυτοκόλλητου</string>
     <!-- Snackbar shown after a sticker was successfully added to the user\'s favorite stickers -->
-    <string name="StickerFavorites__added_to_favorites">Sticker added to Favorites</string>
+    <string name="StickerFavorites__added_to_favorites">Το αυτοκόλλητο προστέθηκε στα Αγαπημένα</string>
     <!-- Snackbar shown when the user tries to favorite a sticker but already has the maximum number of favorite stickers. Placeholder is 500. -->
-    <string name="StickerFavorites__favorites_limit_reached">You can only add %1$d stickers to Favorites</string>
+    <string name="StickerFavorites__favorites_limit_reached">Μπορείς να προσθέσεις μόνο %1$d αυτοκόλλητα στα Αγαπημένα</string>
     <!-- Snackbar shown when we are unable to add or remove a sticker. -->
-    <string name="StickerFavorites__unknown_error">Unknown error. Try again later.</string>
+    <string name="StickerFavorites__unknown_error">Άγνωστο σφάλμα. Δοκίμασε ξανά αργότερα.</string>
     <!-- Snackbar shown after a sticker was successfully removed from the user\'s favorite stickers -->
-    <string name="StickerFavorites__removed_from_favorites">Sticker removed from Favorites</string>
+    <string name="StickerFavorites__removed_from_favorites">Το αυτοκόλλητο αφαιρέθηκε από τα Αγαπημένα</string>
     <!-- Snackbar shown when the user opens their favorite stickers but has not favorited any yet -->
-    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Press and hold a sticker to add to Favorites</string>
+    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Πάτα παρατεταμένα ένα αυτοκόλλητο για προσθήκη στα Αγαπημένα</string>
 
     <!-- Menu option to save a debug log file to disk. -->
     <string name="SubmitDebugLogActivity_save">Αποθήκευση</string>
@@ -2912,52 +2878,14 @@
     <string name="UnverifiedSendDialog_send">Αποστολή</string>
 
     <!-- UsernameEditFragment -->
-    <!-- Placeholder text for custom discriminator -->
-    <string name="UsernameEditFragment__00">00</string>
-    <!-- Instructional text at the top of the username edit screen -->
-    <string name="UsernameEditFragment__choose_your_username">Διάλεξε όνομα χρήστη</string>
-    <string name="UsernameEditFragment_username">Όνομα χρήστη</string>
-    <string name="UsernameEditFragment_delete">Διαγραφή</string>
+    <!-- Toast shown after your username is deleted -->
     <string name="UsernameEditFragment_successfully_removed_username">Το όνομα χρήστη αφαιρέθηκε με επιτυχία.</string>
-    <string name="UsernameEditFragment_encountered_a_network_error">Υπήρξε σφάλμα δικτύου.</string>
-    <!-- Toast message shown if user exceeds the rate limit for reserving usernames -->
-    <string name="UsernameEditFragment_rate_limit_exceeded_error">Προσπάθησες πάρα πολλές φορές. Δοκίμασε ξανά αργότερα.</string>
-    <string name="UsernameEditFragment_this_username_is_taken">Αυτό το όνομα χρήστη χρησιμοποιείται ήδη.</string>
-    <string name="UsernameEditFragment_usernames_can_only_include">Τα ονόματα χρήστη μπορούν να περιέχουν μόνο λατινικούς χαρακτήρες a-Z, αριθμούς 0-9 και κάτω παύλες.</string>
-    <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Τα ονόματα χρήστη δεν μπορούν να αρχίζουν με αριθμό</string>
-    <string name="UsernameEditFragment_username_is_invalid">Το όνομα χρήστη δεν είναι έγκυρο.</string>
-    <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Τα ονόματα χρήστη πρέπει να είναι από %1$d εώς %2$d χαρακτήρες.</string>
-    <!-- Explanation about what usernames provide -->
-    <string name="UsernameEditFragment__usernames_let_others_message">Οι χρήστες μπορούν να σου στέλνουν μήνυμα με το προαιρετικό όνομα χρήστη αντί για το τηλέφωνό. Τα ονόματα χρήστη συνδυάζονται πάντα με ένα σύνολο αριθμών.</string>
-    <!-- Button to allow user to skip -->
-    <string name="UsernameEditFragment__skip">Παράλειψη</string>
-    <!-- Content description for done button -->
-    <string name="UsernameEditFragment__done">Τέλος</string>
-    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
-    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">Αυτό το όνομα χρήστη δεν είναι διαθέσιμο, δοκίμασε έναν άλλο αριθμό.</string>
-    <!-- Displayed when the chosen discriminator is too short -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">Μη έγκυρο όνομα χρήστη, γράψε τουλάχιστον %1$d ψηφία.</string>
-    <!-- Displayed when the chosen discriminator is too long -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Μη έγκυρο όνομα χρήστη, γράψε έως %1$d ψηφία.</string>
-    <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">Αυτός ο αριθμός δεν μπορεί να είναι 00. Γράψε ένα ψηφίο μεταξύ 1–9</string>
-    <!-- Displayed when the chosen discriminator starts with 0 and has a length > 2 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_0">Οι αριθμοί με περισσότερα από 2 ψηφία δεν μπορούν να αρχίζουν με 0</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
-    <string name="UsernameEditFragment_recovery_dialog_confirmation">Η ανάκτηση του ονόματος χρήστη θα επαναφέρει τον υπάρχοντα κωδικό QR και τον σύνδεσμό σου. Σίγουρα;</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to change their username, even if it resets their link -->
-    <string name="UsernameEditFragment_change_confirmation_message">Η αλλαγή του ονόματος χρήστη σου θα επαναφέρει τον υπάρχοντα κωδικό QR και τον σύνδεσμό σου. Είσαι σίγουρος/η;</string>
-    <!-- Text for a button in a dialog asking if the user would like to continue the operation of changing their username -->
-    <string name="UsernameEditFragment_continue">Συνέχεια</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%1$d επαφή είναι στο Signal!</item>
         <item quantity="other">%1$d επαφές είναι στο Signal!</item>
     </plurals>
 
-    <!-- UsernameShareBottomSheet -->
-    <!-- Explanation of what the sheet enables the user to do -->
-    <string name="UsernameShareBottomSheet__copy_or_share_a_username_link">Αντίγραψε ή μοιράσου έναν σύνδεσμο ονόματος χρήστη</string>
 
     <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Η μορφοποίηση του κώδικα QR που σκάναρες δεν είναι σωστή για την επιβεβαίωση του αριθμού ασφαλείας. Παρακαλώ ξαναδοκίμασε.</string>
     <string name="VerifyIdentityActivity_share_safety_number_via">Μοιράσου τον αριθμό ασφαλείας μέσω…</string>
@@ -3005,28 +2933,15 @@
     <string name="KeyCachingService_lock">Κλείδωμα του Signal</string>
 
     <!-- MediaPreviewActivity -->
-    <string name="MediaPreviewActivity_you">Εσύ</string>
-    <string name="MediaPreviewActivity_unssuported_media_type">Μη υποστηριζόμενος τύπος πολυμέσων</string>
-    <string name="MediaPreviewActivity_draft">Πρόχειρο</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_title">Διαγραφή μηνύματος;</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_message">Αυτή η επιλογή θα διαγράψει οριστικά αυτό το μήνυμα.</string>
-    <string name="MediaPreviewActivity_s_to_s">%1$s προς %2$s</string>
-    <!-- All media preview title when viewing media send by you to another recipient (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_you_to_s">Εσύ προς %1$s</string>
-    <!-- All media preview title when viewing media sent by another recipient to you (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_s_to_you">%1$s προς εσένα</string>
     <string name="MediaPreviewActivity_media_no_longer_available">Το πολυμέσο δεν είναι πια διαθέσιμο.</string>
     <!-- Notifying the user that the device has encountered a technical issue and is unable to render a video. -->
     <string name="MediaPreviewActivity_unable_to_play_media">Μη δυνατότητα αναπαραγωγής πολυμέσων.</string>
     <!-- Toast shown when there is an error finding a media-based message -->
     <string name="MediaPreviewActivity_error_finding_message">Σφάλμα κατά την εύρεση του μηνύματος.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Δεν βρέθηκε εφαρμογή που να μπορεί να διαμοιραστεί αυτό το πολυμέσο.</string>
-    <string name="MediaPreviewActivity_dismiss_due_to_error">Κλείσιμο</string>
     <string name="MediaPreviewFragment_edit_media_error">Σφάλμα πολυμέσων</string>
     <!-- This is displayed as a toast notification when we encounter an error deleting a message, including potentially on other people\'s devices -->
     <string name="MediaPreviewFragment_media_delete_error">Σφάλμα κατά τη διαγραφή του μηνύματος, το μήνυμα μπορεί να υπάρχει ακόμα</string>
-    <!-- A suffix to be attached to truncated captions that the user may tap onto to view the entire text caption -->
-    <string name="MediaPreviewFragment_read_more_overflow_text">Διάβασε Περισσότερα</string>
     <string name="MediaPreviewFragment_share">Μοιράσου</string>
 
     <!-- MessageNotifier -->
@@ -3159,6 +3074,8 @@
 
     <!-- Message explaining that it is not possible to save media to the device storage after the user denied the system save to storage permission. -->
     <string name="AttachmentSaver__unable_to_write_to_external_storage_without_permission">Η αποθήκευση στην εξωτερική μνήμη είναι αδύνατη χωρίς δικαιώματα</string>
+    <!-- Toast shown when media can\'t be saved to the device storage because its data is no longer on the device and can\'t be downloaded again. -->
+    <string name="AttachmentSaver__media_no_longer_available">Το πολυμέσο δεν είναι πια διαθέσιμο</string>
 
     <!-- Dialog title shown when attempting to save media that has been offloaded from the device by the storage optimization feature. -->
     <string name="AttachmentSaver__cant_save_media">Δεν ήταν δυνατή η αποθήκευση πολυμέσων</string>
@@ -3229,7 +3146,7 @@
 
     <!-- SetUpUsernameBanner -->
     <!-- Body of a banner on the new message screen prompting the user to create a username -->
-    <string name="SetUpUsernameBanner__choose_a_username_so_others_can_connect_with_you">Επίλεξε ένα όνομα χρήστη ώστε να επικοινωνούν οι άλλοι μαζί σου.</string>
+    <string name="SetUpUsernameBanner__choose_a_username">Διάλεξε ένα όνομα χρήστη</string>
     <!-- Button label that takes the user to the username creation screen -->
     <string name="SetUpUsernameBanner__set_up">Ρύθμιση</string>
     <!-- Accessibility label for the button that permanently dismisses the banner -->
@@ -3527,45 +3444,6 @@
 
     <string name="device_list_fragment__link_new_device">Σύνδεση νέας συσκευής</string>
 
-    <!-- expiration -->
-    <string name="expiration_off">Ανενεργό</string>
-
-    <plurals name="expiration_seconds">
-        <item quantity="one">%1$d δευτερόλεπτο</item>
-        <item quantity="other">%1$d δευτερόλεπτα</item>
-    </plurals>
-
-    <string name="expiration_seconds_abbreviated">%1$dδ</string>
-
-    <plurals name="expiration_minutes">
-        <item quantity="one">%1$d λεπτό</item>
-        <item quantity="other">%1$d λεπτά</item>
-    </plurals>
-
-    <string name="expiration_minutes_abbreviated">%1$dλ</string>
-
-    <plurals name="expiration_hours">
-        <item quantity="one">%1$d ώρα</item>
-        <item quantity="other">%1$d ώρες</item>
-    </plurals>
-
-    <string name="expiration_hours_abbreviated">%1$dώρ</string>
-
-    <plurals name="expiration_days">
-        <item quantity="one">%1$d ημέρα</item>
-        <item quantity="other">%1$d ημέρες</item>
-    </plurals>
-
-    <string name="expiration_days_abbreviated">%1$dημ</string>
-
-    <plurals name="expiration_weeks">
-        <item quantity="one">%1$d εβδομάδα</item>
-        <item quantity="other">%1$d εβδομάδες</item>
-    </plurals>
-
-    <string name="expiration_weeks_abbreviated">%1$dεβ</string>
-    <string name="expiration_combined">%1$s %2$s</string>
-
     <!-- unverified safety numbers -->
     <string name="IdentityUtil_unverified_banner_one">Ο αριθμός ασφαλείας σου με τον/την %1$s άλλαξε και δεν είναι πια επιβεβαιωμένος</string>
     <string name="IdentityUtil_unverified_banner_two">Οι αριθμοί ασφαλείας σου με τους/τις %1$s και %2$s δεν είναι πια επιβεβαιωμένοι</string>
@@ -3627,42 +3505,14 @@
     <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Τα προσαρμοσμένα ονόματα και φωτογραφίες των ομαδών MMS θα είναι ορατά μόνο από εσένα.</string>
     <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Οι περιγραφές ομάδας θα είναι ορατές στα μέλη της ομάδας και στα άτομα που έχουν προσκληθεί.</string>
 
-    <!-- EditAboutFragment -->
-    <string name="EditAboutFragment_about">Πληροφορίες</string>
-    <string name="EditAboutFragment_write_a_few_words_about_yourself">Γράψε δυο πράγματα για σένα…</string>
-    <string name="EditAboutFragment_count">%1$d/%2$d</string>
-    <string name="EditAboutFragment_speak_freely">Μίλα ελεύθερα</string>
-    <string name="EditAboutFragment_encrypted">Έχει κρυπτογραφηθεί</string>
-    <string name="EditAboutFragment_be_kind">Κάνε το καλό και ρίξτο στο γιαλό</string>
-    <string name="EditAboutFragment_coffee_lover">Λάτρης του καφέ</string>
-    <string name="EditAboutFragment_free_to_chat">Ελάτε να συζητήσουμε</string>
-    <string name="EditAboutFragment_taking_a_break">Κάνω διάλειμμα</string>
-    <string name="EditAboutFragment_working_on_something_new">Ετοιμάζω κάτι καινούργιο</string>
-
     <!-- EditProfileFragment -->
     <string name="EditProfileFragment__edit_group">Επεξεργασία ομάδας</string>
     <string name="EditProfileFragment__group_name">Όνομα ομάδας</string>
     <string name="EditProfileFragment__group_description">Περιγραφή ομάδας</string>
   <!-- Removed by excludeNonTranslatables <string name="EditProfileFragment__support_link" translatable="false">https://support.signal.org/hc/articles/360007459591</string> -->
-    <!-- The title of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_title">Αναβάθμιση του Signal</string>
-    <!-- The body of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_body">Αυτή η έκδοση Signal έχει λήξει. Αναβάθμισε τώρα για να συνεχίσεις να χρησιμοποιείς το Signal.</string>
-    <!-- The button on a dialog prompting user to update to the latest version of Signal. When clicked, the user will be taken to the store to update their app. -->
-    <string name="EditProfileFragment_deprecated_dialog_update_button">Ενημέρωση</string>
-    <!-- The title of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_title">Η συσκευή δεν είναι καταχωρημένη</string>
-    <!-- The body of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_body">Αυτή η συσκευή δεν είναι πλέον καταχωρημένη. Κάνε επανεγγραφή για να κάνεις αλλαγές στον λογαριασμό σου.</string>
-    <!-- The button on a dialog informing the user that they cannot use this app feature when they are unregistered. When clicked, the user will be taken to a screen to help them re-register. -->
-    <string name="EditProfileFragment_unregistered_dialog_reregister_button">Επανεγγραφή</string>
 
     <!-- EditProfileNameFragment -->
-    <string name="EditProfileNameFragment_your_name">Το όνομά σου</string>
-    <string name="EditProfileNameFragment_first_name">Όνομα</string>
-    <string name="EditProfileNameFragment_last_name_optional">Επώνυμο (προαιρετικό)</string>
     <string name="EditProfileNameFragment_save">Αποθήκευση</string>
-    <string name="EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later">Αποτυχία αποθήκευσης λόγω προβλημάτων δικτύου. Προσπάθησε ξανά αργότερα.</string>
 
     <!-- recipient_preferences_activity -->
     <string name="recipient_preference_activity__shared_media">Μοιρασμένα πολυμέσα</string>
@@ -3810,19 +3660,8 @@
     <string name="DebugLogsPromptDialogFragment__no_thanks">Όχι, ευχαριστώ</string>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Πρόσφατα</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Αυτό το μήνυμα</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Πρόσφατα χρησιμοποιημένα</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Δε βρέθηκαν αποτελέσματα</string>
 
-    <string name="GifQuickSearchOption__trending">Τάσεις</string>
-    <string name="GifQuickSearchOption__celebrate">Γιορτή</string>
-    <string name="GifQuickSearchOption__love">Αγάπη</string>
-    <string name="GifQuickSearchOption__thumbs_up">Μπράβο</string>
-    <string name="GifQuickSearchOption__surprised">Έκπληξη</string>
-    <string name="GifQuickSearchOption__excited">Ενθουσιασμός</string>
-    <string name="GifQuickSearchOption__sad">Λύπη</string>
-    <string name="GifQuickSearchOption__angry">Θυμός</string>
 
     <!-- arrays.xml -->
     <string name="arrays__use_default">Χρήση προκαθορισμένου</string>
@@ -3838,24 +3677,9 @@
     <string name="arrays__enabled">Ενεργοποιημένο</string>
     <string name="arrays__disabled">Απενεργοποιημένο</string>
 
-    <string name="arrays__name_and_message">Όνομα και μήνυμα</string>
-    <string name="arrays__name_only">Μόνο όνομα</string>
-    <string name="arrays__no_name_or_message">Χωρίς όνομα ή μήνυμα</string>
 
-    <string name="arrays__images">Εικόνες</string>
-    <string name="arrays__audio">Ήχοι</string>
-    <string name="arrays__video">Βίντεο</string>
-    <string name="arrays__documents">Αρχεία</string>
 
-    <string name="arrays__small">Μικρό</string>
-    <string name="arrays__normal">Κανονικό</string>
-    <string name="arrays__large">Μεγάλο</string>
-    <string name="arrays__extra_large">Πολύ μεγάλο</string>
 
-    <string name="arrays__default">Προκαθορισμένη</string>
-    <string name="arrays__high">Υψηλή</string>
-    <!-- Setting title that represent an abstract priority to assign to notifications as the max/highest priority a notification can be within the system. -->
-    <string name="arrays__max">Μέγιστη</string>
 
     <!-- plurals.xml -->
     <plurals name="hours_ago">
@@ -3863,205 +3687,32 @@
         <item quantity="other">%1$dώ</item>
     </plurals>
 
-    <string name="preferences__change_passphrase">Αλλαγή συνθηματικού</string>
-    <string name="preferences__change_your_passphrase">Αλλαγή του συνθηματικού σου</string>
-    <!-- Legacy preference menu item to enable a passphrase screen lock that is only available to those who have previously had a passphrase -->
-    <string name="preferences__enable_passphrase">Ενεργοποίηση κλειδώματος οθόνης με συνθηματικό</string>
-    <string name="preferences__lock_signal_and_message_notifications_with_a_passphrase">Κλείδωμα οθόνης και ειδοποιήσεων με συνθηματικό</string>
-    <string name="preferences__screen_security">Ασφάλεια οθόνης</string>
-    <string name="preferences__auto_lock_signal_after_a_specified_time_interval_of_inactivity">Αυτόματο κλείδωμα του Signal μετά απο κάποιο συγκεκριμένο χρόνο αδράνειας</string>
-    <!-- Legacy preference menu item to enable locking of app after inactivity -->
-    <string name="preferences__inactivity_timeout_passphrase">Συνθηματικό χρόνου αδράνειας</string>
-    <!-- Legacy preference menu item to choose the interval of inactivity before lockout -->
-    <string name="preferences__inactivity_timeout_interval">Χρονικό διάστημα χρόνου αδράνειας</string>
+    <!-- Bottom sheet message shown after an assistant app requested the contents of the screen, explaining that screenshots were automatically disabled -->
+    <string name="AssistantScreenSecurityBottomSheet__body">Εφαρμογές βοηθών AI, όπως το Gemini, μπορούν να σαρώνουν το περιεχόμενο του Signal. Για να αποτραπεί αυτό, έχει ενεργοποιηθεί η ασφάλεια οθόνης. Αυτό θα απενεργοποιήσει και τα στιγμιότυπα οθόνης.</string>
+    <!-- Bottom sheet title shown after an assistant app requested the contents of the screen and screen security was automatically turned on -->
+    <string name="AssistantScreenSecurityBottomSheet__title">Η ασφάλεια οθόνης είναι ενεργοποιημένη</string>
+    <!-- Bottom sheet button that turns screen security back off -->
+    <string name="AssistantScreenSecurityBottomSheet__turn_off_screen_security">Απενεργοποίηση ασφάλειας οθόνης</string>
+    <!-- Title of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__title">Απενεργοποίηση ασφάλειας οθόνης;</string>
+    <!-- Body of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__body">Αν το απενεργοποιήσεις, βοηθοί AI όπως το Google Gemini ενδέχεται να αποκτήσουν πρόσβαση στο περιεχόμενο του Signal και να το χρησιμοποιούν για λειτουργίες που μπορεί να μην διασφαλίζουν το απόρρητό σου.</string>
+    <!-- Dialog button that confirms turning off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__turn_off">Απενεργοποίηση</string>
+    <!-- Snackbar shown after the user turns off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__screen_security_is_off">Η ασφάλεια οθόνης είναι απενεργοποιημένη</string>
     <string name="preferences__notifications">Ειδοποιήσεις</string>
-    <!-- Preference item menu to enable notifications -->
-    <string name="preferences__enable_notifications">Ενεργοποίηση ειδοποιήσεων</string>
-    <!-- Preference header for call notifications -->
-    <string name="preferences__call_notifications">Ειδοποιήσεις κλήσεων</string>
-    <string name="preferences__led_color">Χρώμα LED</string>
     <string name="preferences__led_color_unknown">Άγνωστο</string>
-    <string name="preferences__pref_led_blink_title">Μοτίβο LED</string>
-    <string name="preferences__customize">Προσαρμογή</string>
-    <string name="preferences__change_sound_and_vibration">Αλλαγή ήχου και δόνησης</string>
-    <!-- Preference menu item to control the sound of notifications -->
-    <string name="preferences__sound">Ήχος</string>
     <string name="preferences__silent">Σε σίγαση</string>
-    <!-- Preference menu item to use the default sound for notifications -->
-    <string name="preferences__default">Προκαθορισμένη</string>
-    <string name="preferences__repeat_alerts">Επανάληψη ειδοποιήσεων</string>
-    <string name="preferences__never">Ποτέ</string>
-    <string name="preferences__one_time">Μια φορά</string>
-    <string name="preferences__two_times">Δύο φορές</string>
-    <string name="preferences__three_times">Τρεις φορές</string>
-    <string name="preferences__five_times">Πέντε φορές</string>
-    <string name="preferences__ten_times">Δέκα φορές</string>
-    <string name="preferences__vibrate">Δόνηση</string>
-    <string name="preferences__green">Πράσινο</string>
-    <string name="preferences__red">Κόκκινο</string>
-    <string name="preferences__blue">Μπλε</string>
-    <string name="preferences__orange">Πορτοκαλί</string>
-    <string name="preferences__cyan">Γαλάζιο</string>
-    <string name="preferences__magenta">Φούξια</string>
-    <string name="preferences__white">Λευκό</string>
-    <!-- Text shown when no preference label has been selected -->
-    <string name="preferences__none">Κανένα</string>
-    <string name="preferences__fast">Γρήγορο</string>
-    <string name="preferences__normal">Κανονικό</string>
-    <string name="preferences__slow">Αργό</string>
-    <string name="preferences__help">Βοήθεια</string>
-    <string name="preferences__advanced">Για προχωρημένους</string>
     <string name="preferences__donate_to_signal">Κάνε μια δωρεά στο Signal</string>
-    <!-- Preference label for making one-time donations to Signal -->
-    <string name="preferences__privacy">Ιδιωτικότητα</string>
     <!-- Preference label for stories -->
     <string name="preferences__stories">Ιστορίες</string>
-    <string name="preferences__data_and_storage">Δεδομένα και αποθηκευτικός χώρος</string>
-    <string name="preferences__storage">Αποθηκευτικός χώρος</string>
     <string name="preferences__payments">Πληρωμές</string>
-    <!-- Privacy settings payments section description -->
-    <string name="preferences__payment_lock">Κλείδωμα πληρωμής</string>
-    <string name="preferences__conversation_length_limit">Όριο μεγέθους συνομιλίας</string>
-    <string name="preferences__keep_messages">Διατήρηση μηνυμάτων</string>
     <string name="preferences__linked_devices">Συνδεμένες συσκευές</string>
-    <string name="preferences__light_theme">Φωτεινό</string>
-    <string name="preferences__dark_theme">Σκοτεινό</string>
-    <string name="preferences__appearance">Εμφάνιση</string>
-    <string name="preferences__theme">Θέμα</string>
-    <string name="preferences__chat_color_and_wallpaper">Χρώμα και ταπετσαρία συνομιλίας</string>
-    <!-- Clickable settings text allowing the user to change the icon visible on their phone\'s home screen. -->
-    <string name="preferences__app_icon">Εικονίδιο εφαρμογής</string>
-    <!-- Approval for changing the app icon. -->
-    <string name="preferences__app_icon_dialog_ok">OK</string>
-    <!-- Cancelling the operation of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_cancel">Ακύρωση</string>
-    <!-- Title for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_title">Αλλαγή του εικονιδίου και ονόματος της εφαρμογής σε \"%1$s\"</string>
-    <!-- Description for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_description">Θα πρέπει να κλείσεις το Signal για να αλλάξεις το εικονίδιο και το όνομα της εφαρμογής. Οι ειδοποιήσεις θα εμφανίζουν πάντα το προεπιλεγμένο εικονίδιο και το όνομα Signal.</string>
-    <!-- Visible warning label for the limitations of changing the app icon with learn more call to action. -->
-    <string name="preferences__app_icon_warning_learn_more">Επίλεξε ένα εικονίδιο και ένα όνομα της εφαρμογής, τα οποία θα είναι ορατά στην αρχική οθόνη και στο συρτάρι εφαρμογών του τηλεφώνου σου. Οι ειδοποιήσεις θα εμφανίζουν πάντα το προεπιλεγμένο εικονίδιο και το όνομα Signal. Μάθε περισσότερα</string>
-    <!-- Visible warning label for the limitations of changing the app icon. -->
-    <string name="preferences__app_icon_warning">Τα εικονίδια και τα ονόματα εφαρμογών είναι ορατά στην αρχική οθόνη και στο συρτάρι εφαρμογών.</string>
-    <!-- Visible warning label explaining that changing the app icon and name does not affect notifications. -->
-    <string name="preferences__app_icon_notification_warning">Οι ειδοποιήσεις θα εμφανίζουν πάντα το προεπιλεγμένο εικονίδιο και το όνομα Signal.</string>
-    <!--Call to action to get more information about the limitations of the change app icon functionality. -->
-    <string name="preferences__app_icon_learn_more">Μάθε περισσότερα</string>
-    <!--Text description of a graphic illustrating the limitations of the app icon change. -->
-    <string name="preferences__graphic_illustrating_where_the_replacement_app_icon_will_be_visible">Γραφικό που δείχνει πού θα είναι ορατό το εικονίδιο της εφαρμογής αντικατάστασης.</string>
-    <string name="preferences__disable_pin">Απενεργοποίηση PIN</string>
-    <string name="preferences__enable_pin">Ενεργοποίηση PIN</string>
-    <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">Αν απενεργοποιήσεις το PIN, θα χάσεις όλα τα δεδομένα όταν επανεγγραφτείς στο Signal, εκτός εάν δημιουργήσεις χειροκίνητα αντίγραφο ασφαλείας και το ανακτήσεις. Δεν μπορείς να ενεργοποιήσεις το Κλείδωμα Εγγραφής όσο το PIN είναι απενεργοποιημένο.</string>
-    <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">Τα PIN κρατούν τις πληροφορίες που αποθηκεύονται στο Signal κρυπτογραφημένες, οπότε μόνο εσύ έχεις πρόσβαση σε αυτές. Το προφίλ σου, οι ρυθμίσεις και οι επαφές να επαναφερθούν όταν επανεγκαταστήσεις το Signal. Δεν θα χρειάζεται να γράψεις το PIN για να ανοίξεις την εφαρμογή.</string>
-    <string name="preferences__system_default">Προκαθορισμένο του συστήματος</string>
-    <string name="preferences__language">Γλώσσα</string>
-    <!-- Title of toolbar for the advanced pin settings screen -->
-    <string name="preferences__advanced_pin_settings_title">Ρυθμίσεις PIN για προχωρημένους</string>
     <string name="preferences__submit_debug_log">Αποστολή αρχείου συμβάντων αποσφαλμάτωσης</string>
-    <string name="preferences__incognito_keyboard">Κρυφό πληκτρολόγιο</string>
-    <string name="preferences__read_receipts">Αποδεικτικά ανάγνωσης</string>
-    <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">Αν τα αποδεικτικά ανάγνωσης είναι απενεργοποιημένα, δε θα μπορείς να δεις αποδεικτικά ανάγνωσης από άλλους/ες.</string>
-    <string name="preferences__typing_indicators">Δείκτες πληκτρολόγησης</string>
-    <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">Αν οι δείκτες πληκτρολόγησης είναι απενεργοποιημένοι, δε θα μπορείς να δεις δείκτες πληκτρολόγησης από άλλους/ες.</string>
-    <string name="preferences__request_keyboard_to_disable">Να ζητηθεί από το πληκτρολόγιο να απενεργοποιήσει τη προσωποποιημένη μάθηση.</string>
-    <string name="preferences__this_setting_is_not_a_guarantee">Αυτή η ρύθμιση δεν αποτελεί εγγύηση, και το πληκτρολόγιό σου μπορεί να την αγνοήσει.</string>
-  <!-- Removed by excludeNonTranslatables <string name="preferences__incognito_keyboard_learn_more" translatable="false">https://support.signal.org/hc/articles/360055276112</string> -->
-    <string name="preferences_chats__when_using_mobile_data">Όταν χρησιμοποιούνται δεδομένα</string>
-    <string name="preferences_chats__when_using_wifi">Όταν χρησιμοποιείται WiFi</string>
-    <string name="preferences_chats__when_roaming">Κατά το roaming</string>
-    <string name="preferences_chats__media_auto_download">Αυτόματη λήψη πολυμέσων</string>
-    <string name="preferences_storage__storage_usage">Χρήση αποθηκευτικού χώρου</string>
-    <string name="preferences_storage__photos">Φωτογραφίες</string>
-    <string name="preferences_storage__videos">Βίντεο</string>
-    <string name="preferences_storage__files">Αρχεία</string>
-    <string name="preferences_storage__audio">Ήχος</string>
-    <!-- Storage usage legend label for the size of the main message database -->
-    <string name="preferences_storage__messages">Μηνύματα</string>
-    <!-- Storage usage legend label for the size of downloaded sticker packs -->
-    <string name="preferences_storage__stickers">Αυτοκόλλητα</string>
-    <!-- Storage usage legend label for all remaining app storage, such as other databases, caches and temporary files -->
-    <string name="preferences_storage__other">Άλλο</string>
-    <!-- Shown in place of the total storage size while usage is still being computed -->
-    <string name="preferences_storage__calculating">Υπολογισμός…</string>
-    <string name="preferences_storage__review_storage">Ανασκόπηση χώρου</string>
-    <string name="preferences_storage__delete_older_messages">Διαγραφή παλαιότερων μηνυμάτων;</string>
-    <!-- Dialog title shown when selecting delete message history from manage storage -->
-    <string name="preferences_storage__delete_message_history">Διαγραφή ιστορικού μηνυμάτων;</string>
-    <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">Με αυτή την ενέργεια, θα διαγραφεί μόνιμα όλο το ιστορικό μηνυμάτων και τα πολυμέσα από τη συσκευή σου, τα οποία είναι παλαιότερα από %1$s.</string>
-    <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
-    <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
-        <item quantity="one">Περιορίζει όλες τις συνομιλίες στο πιο πρόσφατα μήνυμα.</item>
-        <item quantity="other">Περιορίζει όλες τις συνομιλίες στα %1$s πιο πρόσφατα μηνύματα.</item>
-    </plurals>
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device">Με αυτή την ενέργεια, θα διαγραφεί μόνιμα όλο το ιστορικό μηνυμάτων και τα πολυμέσα από τη συσκευή σου.</string>
-    <!-- Dialog message warning about delete chat message history will delete everything everywhere including linked devices -->
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device_linked_device">Αυτό θα διαγράψει μόνιμα όλο το ιστορικό μηνυμάτων και τα πολυμέσα από τη συσκευή σου και τυχόν συνδεδεμένες συσκευές.</string>
-    <string name="preferences_storage__are_you_sure_you_want_to_delete_all_message_history">Θέλεις σίγουρα να διαγράψεις όλο το ιστορικό των μηνυμάτων;</string>
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone">Όλο το ιστορικό των μηνυμάτων θα αφαιρεθεί μόνιμα. Δεν θα έχεις τη δυνατότητα να αναιρέσεις την ενέργεια.</string>
-    <!-- Secondary warning dialog message about deleting all chat message history from everything everywhere including linked devices -->
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone_linked_device">Όλο το ιστορικό των μηνυμάτων θα αφαιρεθεί μόνιμα από όλες τις συσκευές. Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
-    <string name="preferences_storage__delete_all_now">Διαγραφή όλων τώρα</string>
-    <!-- Option for keeping messages forever when managing storage -->
-    <string name="preferences_storage__forever">Για πάντα</string>
-    <string name="preferences_storage__one_year">1 έτος</string>
-    <string name="preferences_storage__six_months">6 μήνες</string>
-    <string name="preferences_storage__thirty_days">30 ημέρες</string>
-    <!-- Option for setting no limit of the length of chat messages -->
-    <string name="preferences_storage__none">Κανένα</string>
-    <plurals name="preferences_storage__s_messages_plural">
-        <item quantity="one">%1$s μήνυμα</item>
-        <item quantity="other">%1$s μηνύματα</item>
-    </plurals>
 
-    <string name="preferences_storage__custom">Προσαρμοσμένο</string>
-    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Αναμετάδοση όλων των κλήσεων μέσω του σέρβερ Signal για να αποφύγεις την αποκάλυψη της διεύθυνσης IP σου στην επαφή. Η ενεργοποίηση θα ρίξει την ποιότητα των κλήσεων.</string>
-    <string name="preferences_advanced__always_relay_calls">Αναμετάδοση κλήσεων πάντα</string>
-    <!-- Privacy settings payments section title -->
-    <string name="preferences_app_protection__payments">Πληρωμές</string>
-    <string name="preferences_data_and_storage__manage_storage">Διαχείριση χώρου αποθήκευσης</string>
-    <string name="preferences_data_and_storage__use_less_data_for_calls">Χρήση λιγότερων δεδομένων για τις κλήσεις</string>
-    <string name="preferences_data_and_storage__never">Ποτέ</string>
-    <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi και δεδομένα κινητής</string>
-    <string name="preferences_data_and_storage__mobile_data_only">Μόνο δεδομένα κινητής</string>
-    <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Η χρήση λιγότερων δεδομένων ίσως βελτιώσει τη ποιότητα των κλήσεων σε δίκτυα με κακή σύνδεση.</string>
-    <string name="preferences_notifications__in_chat_sounds">Ήχοι μέσα στη συνομιλία</string>
-    <string name="preferences_notifications__show">Εμφάνιση</string>
-    <!-- Preference item to set notification settings when chats are muted -->
-    <string name="preferences_notifications__while_muted">Σε σίγαση</string>
-    <!-- Option in settings to turn on reaction notifications -->
-    <string name="preferences_notifications__reaction">Ειδοποιήσεις αντιδράσεων</string>
-    <!-- Body option in settings to turn on reaction notifications    -->
-    <string name="preferences_notifications__notify_reaction">Προβολή ειδοποιήσεων για αντιδράσεις σε μηνύματα που έστειλες</string>
     <!-- Option in settings to turn on unread reminders -->
     <string name="preferences_notifications__unread">Μη αναγνωσμένες υπενθυμίσεις</string>
-    <!-- Body option to turn on unread reminders -->
-    <string name="preferences_notifications__notify_unread">Περιστασιακές ειδοποιήσεις όταν υπάρχουν μη αναγνωσμένα μηνύματα σε συνομιλίες σε σίγαση</string>
-    <string name="preferences_notifications__ringtone">Ήχος κλήσης</string>
-    <string name="preferences_chats__message_text_size">Μέγεθος γραμματοσειράς μηνύματος</string>
-    <!-- Option in settings that will provide a shortcut to notification system settings to control the priority of Signal notifications -->
-    <string name="preferences_notifications__priority">Προτεραιότητα</string>
-    <!-- Option in settings to trouble shoot delayed notifications -->
-    <string name="preferences_notifications__troubleshoot">Ειδοποιήσεις αντιμετώπισης προβλημάτων</string>
-    <!-- Heading for the \'censorship circumvention\' section of privacy preferences -->
-    <string name="preferences_communication__category_censorship_circumvention">Παράκαμψη λογοκρισίας</string>
-    <!-- Title of the \'censorship circumvention\' toggle switch -->
-    <string name="preferences_communication__censorship_circumvention">Παράκαμψη λογοκρισίας</string>
-    <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Αν είναι ενεργοποιημένο, το Signal θα προσπαθήσει να παρακάμψει την λογοκρισία. Μην ενεργοποιήσεις αυτή την επιλογή εκτός και αν βρίσκεσαι σε περιοχή όπου το Signal έχει λογοκριθεί/μπλοκαριστεί.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Η παράκαμψη λογοκρισίας ενεργοποιήθηκε βάσει του αριθμού τηλεφώνου του λογαριασμού σου.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Απενεργοποίησες χειροκίνητα την παράκαμψη λογοκρισίας.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service -->
-    <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Η παράκαμψη λογοκρισίας δεν είναι απαραίτητη, είσαι ήδη συνδεμένος/η στις υπηρεσίες του Signal.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet -->
-    <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Η παράκαμψη λογοκρισίας μπορεί να ενεργοποιηθεί μόνο όταν υπάρχει σύνδεση στο διαδίκτυο.</string>
-    <string name="preferences_communication__category_sealed_sender">Προστατευμένος αποστολέας</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone">Να επιτρέπεται από οποιονδήποτε</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone_description">Ενεργοποίηση του προστατευμένου αποστολέα για εισερχόμενα μηνύματα από άτομα που δεν έχεις στις επαφές σου και άτομα με τα οποία δεν έχεις μοιραστεί το προφίλ σου.</string>
-    <string name="preferences_proxy">Proxy</string>
-    <string name="preferences_use_proxy">Χρήση proxy</string>
-    <string name="preferences_off">Ανενεργό</string>
-    <string name="preferences_on">Ενεργό</string>
     <string name="preferences_proxy_address">Διεύθυνση proxy</string>
     <string name="preferences_only_use_a_proxy_if">Χρησιμοποίησε proxy μόνο αν δεν μπορείς να συνδεθείς στο Signal από δεδομένα κινητής ή Wi-Fi.</string>
     <string name="preferences_share">Μοιράσου</string>
@@ -4075,18 +3726,6 @@
     <string name="preferences_success">Επιτυχία</string>
     <string name="preferences_failed_to_connect">Αποτυχία σύνδεσης</string>
     <string name="preferences_enter_proxy_address">Εισαγωγή διεύθυνσης proxy</string>
-    <!-- Preference title for changing navigation (bottom) bar size -->
-    <string name="preferences_navigation_bar_size">Μέγεθος μπάρας πλοήγησης</string>
-    <!-- Preference summary for normal navigation bar size -->
-    <string name="preferences_normal">Κανονικό</string>
-    <!-- Preference summary for compact navigation bar size -->
-    <string name="preferences_compact">Συμπαγές</string>
-    <!-- Dialog message body explaining that we have to restart the app in order to apply the user\'s new language setting.  -->
-    <string name="preferences_language_change_confirmation_message">Η εφαρμογή θα επανεκκινηθεί για να εφαρμόσει τη νέα ρύθμιση γλώσσας.</string>
-    <!-- Preference title for automatic key verification -->
-    <string name="preferences_automatic_key_verification">Αυτόματη επαλήθευση κλειδιού</string>
-    <!-- Preference summary for automatic key verification -->
-    <string name="preferences_automatic_key_verification_body">Όταν είναι ενεργοποιημένο, το Signal θα επιχειρήσει να επαληθεύσει αυτόματα την κρυπτογράφηση των προσωπικών συνομιλιών.</string>
 
 
     <!-- Internal only preferences -->
@@ -4467,11 +4106,6 @@
     <!-- Label for a button in a banner to learn more about why we cannot process the user\'s contacts -->
     <string name="reminder_cds_permanent_error_learn_more">Μάθε περισσότερα</string>
 
-    <!-- media_preview -->
-    <string name="media_preview__save_title">Αποθήκευση</string>
-    <string name="media_preview__edit_title">Eπεξεργασία</string>
-
-
     <!-- media_preview_activity -->
     <!-- Content description of images or videos when viewing media -->
     <string name="media_preview_activity__media_content_description">Προεπισκόπιση</string>
@@ -4600,6 +4234,12 @@
     <string name="CallNotificationBuilder__ongoing_signal_group_call">Ομαδική κλήση Signal σε εξέλιξη</string>
 
     <string name="CallNotificationBuilder_connecting">Συνδέεται…</string>
+    <!-- Notification title shown when Signal needs to be opened to use the microphone during a call -->
+    <string name="CallNotificationBuilder__open_signal">Open Signal</string>
+    <!-- Notification body shown when a call was answered from a watch or other device but Signal needs microphone permission before it can connect -->
+    <string name="CallNotificationBuilder__to_answer_this_call_allow_signal_access_to_your_microphone">To answer this call, allow Signal access to your microphone.</string>
+    <!-- Notification body shown during a call when Android blocked microphone access because Signal was in the background -->
+    <string name="CallNotificationBuilder__the_other_person_cant_hear_you_until_you_open_signal">The other person can\'t hear you until you open Signal.</string>
     <string name="enter_backup_passphrase_dialog__backup_passphrase">Συνθηματικό αντίγραφου ασφαλείας</string>
     <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Τα αντίγραφα ασφαλείας αποθηκεύονται στην εξωτερική μνήμη και κρυπτογραφούνται με το παρακάτω συνθηματικό. Πρέπει να γνωρίζεις αυτό το συνθηματικό για να επανακτήσεις το αντίγραφο ασφαλείας.</string>
     <string name="backup_enable_dialog__you_must_have_this_passphrase">Θα πρέπει να έχεις αυτο το συνθηματικό για να επανακτήσεις αντίγραφα ασφαλείας.</string>
@@ -4645,39 +4285,6 @@
     <string name="BackupUtil_never">Ποτέ</string>
     <!-- Subtext below last backup time when we do not know when the last backup was -->
     <string name="BackupUtil_unknown">Άγνωστο</string>
-    <!-- Phone number heading displayed as a screen title -->
-    <string name="preferences_app_protection__phone_number">Αριθμός τηλεφώνου</string>
-    <!-- Subtext below option to launch into phone number privacy settings screen -->
-    <string name="preferences_app_protection__choose_who_can_see">Επίλεξε ποια άτομα μπορούν να δουν τον αριθμό τηλεφώνου σου και ποια μπορούν να τον χρησιμοποιήσουν για να επικοινωνήσουν μαζί σου στο Signal.</string>
-    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_see_my_number_heading">Ποιοι χρήστες μπορούν να δουν τον αριθμό μου</string>
-    <!-- Subtext below radio buttons when who can see my number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_on_description">Ο αριθμός τηλεφώνου σου θα είναι ορατός στα άτομα και τις ομάδες που στέλνεις μηνύματα.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_on_description">Ο αριθμός τηλεφώνου σου δεν θα είναι ορατός σε κανέναν χρήστη, εκτός αν τον έχει αποθηκεύσει στις επαφές του τηλεφώνου του.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_off_description">Ο αριθμός τηλεφώνου σου δεν θα είναι ορατός σε κανέναν χρήστη.</string>
-    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_find_me_by_number_heading">Ποιοι χρήστες μπορούν να με βρουν με τον αριθμό μου</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_on_description">Όποιος έχει τον αριθμό τηλεφώνου σου θα βλέπει ότι είσαι στο Signal και θα μπορεί να ξεκινήσει συνομιλία μαζί σου.</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_off_description">Κανείς δεν θα μπορεί να δει ότι είσαι στο Signal εκτός και αν στείλεις μήνυμα ή δεν έχεις ήδη μια συνομιλία μαζί του.</string>
-    <!-- Snackbar text when pressing invalid radio item -->
-    <string name="PhoneNumberPrivacySettingsFragment__to_change_this_setting">"Για να αλλάξεις αυτή τη ρύθμιση, όρισε την επιλογή \"Ποιος μπορεί να δει τον αριθμό μου\" σε \"Κανείς\"."</string>
-    <!-- Dialog title shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_title">Σίγουρα;</string>
-    <!-- Dialog warning message shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_message">Η ρύθμιση «Ποιοι μπορούν να με βρουν με τον αριθμό μου» σε «Κανείς» θα καταστήσει δυσκολότερο για τους χρήστες να σε βρουν στο Signal.</string>
-    <!-- Dialog button text for canceling change action -->
-    <string name="PhoneNumberPrivacySettingsFragment__cancel">Ακύρωση</string>
-    <string name="PhoneNumberPrivacy_everyone">Όλοι</string>
-    <string name="PhoneNumberPrivacy_nobody">Κανένας</string>
-    <string name="preferences_app_protection__screen_lock">Κλείδωμα οθόνης</string>
-    <!-- Snackbar text shown when trying to enable screen lock but the user does not have a password or biometrics enabled -->
-    <string name="preferences_app_protection__to_use_screen_lock">Για να χρησιμοποιήσεις το κλείδωμα οθόνης, όρισε ένα PIN, μοτίβο ή κωδικό πρόσβασης σε αυτήν τη συσκευή.</string>
-    <string name="preferences_app_protection__failed_to_enable_registration_lock">Αποτυχία ενεργοποίησης Κλειδώματος εγγραφής.</string>
-    <string name="preferences_app_protection__failed_to_disable_registration_lock">Αποτυχία απενεργοποίησης Κλειδώματος εγγραφής.</string>
     <string name="RegistrationActivity_you_must_enter_your_registration_lock_PIN">Πρέπει να εισάγεις το PIN Κλειδώματος εγγραφής σου</string>
     <string name="RegistrationActivity_your_pin_has_at_least_d_digits_or_characters">Το PIN έχει τουλάχιστον %1$d ψηφία ή χαρακτήρες</string>
     <string name="RegistrationActivity_too_many_attempts">Υπερβολικά πολλές προσπάθειες</string>
@@ -4698,26 +4305,6 @@
     <string name="prompt_passphrase_activity__try_again">Ξαναπροσπάθησε</string>
 
     <!-- ScreenLockSettingsFragment -->
-    <!-- Text shown when screen lock is not enabled -->
-    <string name="ScreenLockSettingsFragment__off">Ανενεργό</string>
-    <!-- Text shown with toggle that when switched on will enable screen lock -->
-    <string name="ScreenLockSettingsFragment__use_screen_lock">Χρήση κλειδώματος οθόνης</string>
-    <!-- Description of what screen locking will do and how notification content will not be shown when screen is locked -->
-    <string name="ScreenLockSettingsFragment__your_android_device">Οι ρυθμίσεις κλειδώματος της συσκευής σου Android θα πρέπει να ξεκλειδώνουν το Signal όταν φεύγεις ή αλλάζεις εφαρμογές. Όταν είναι κλειδωμένη, οι προεπισκοπήσεις ειδοποιήσεων δεν θα εμφανίζουν το περιεχόμενο του μηνύματος.</string>
-    <!-- Title text explaining when users should start the screen lock -->
-    <string name="ScreenLockSettingsFragment__start_screen_lock">Έναρξη κλειδώματος οθόνης</string>
-    <!-- Option text explaining that screen lock should start after 1 minute of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_1_min">Μετά από 1 λεπτό</string>
-    <!-- Option text explaining that screen lock should start after 5 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_5_min">Μετά από 5 λεπτά</string>
-    <!-- Option text explaining that screen lock should start after 30 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_30_min">Μετά από 30 λεπτά</string>
-    <!-- Option text explaining that screen lock should start at a custom time set by the user -->
-    <string name="ScreenLockSettingsFragment__custom_time">Προσαρμοσμένος χρόνος</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn on screen lock -->
-    <string name="ScreenLockSettingsFragment__use_signal_screen_lock">Χρήση κλειδώματος οθόνης Signal</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn off screen lock -->
-    <string name="ScreenLockSettingsFragment__turn_off_signal_lock">Απενεργοποίησε το κλείδωμα οθόνης Signal</string>
 
     <string name="Recipient_unknown">Άγνωστο</string>
     <!-- Name to use for a user across the UI when they are unregistered and have no other name available -->
@@ -5174,61 +4761,8 @@
     <string name="GroupDescriptionDialog__group_description">Περιγραφή ομάδας</string>
 
     <!-- AppSettingsFragment -->
-    <!-- String alerting user that something is wrong with their backups subscription -->
-    <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Ανανέωσε τη συνδρομή σου στα αντίγραφα ασφαλείας Signal Secure Backups</string>
-    <!-- String alerting user that backup failed -->
-    <string name="AppSettingsFragment__couldnt_complete_backup">Δεν ήταν δυνατή η ολοκλήρωση δημιουργίας αντιγράφων ασφαλείας</string>
     <!-- String alerting user that backup redemption -->
     <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Δεν ήταν δυνατή η εξαργύρωση της συνδρομής σου για δημιουργία αντιγράφων ασφαλείας</string>
-    <!-- String alerting user that backup storage limit has been reached -->
-    <string name="AppSettingsFragment__backup_storage_limit_reached">Συμπληρώθηκε το όριο του χώρου αποθήκευσης αντιγράφων ασφαλείας</string>
-    <!-- String displayed telling user to invite their friends to Signal -->
-    <string name="AppSettingsFragment__invite_your_friends">Προσκάλεσε τους φίλους σου</string>
-    <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">Το id συνδρομητή δωρητή αντιγράφτηκε στο πρόχειρο</string>
-    <!-- String displayed in a toast when we successfully copy the backups subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">Τα αντίγραφα ασφαλείας του id συνδρομητή αντιγράφηκαν στο πρόχειρο</string>
-
-    <!-- ExportAccountDataFragment -->
-    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Τα δεδομένα του λογαριασμού σου</string>
-    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Κάνε εξαγωγή μιας αναφοράς των δεδομένων του λογαριασμού σου στο Signal. Αυτή η αναφορά δεν περιλαμβάνει μηνύματα ή πολυμέσα. %1$s</string>
-    <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Μάθε περισσότερα</string>
-    <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Εξαγωγή αναφοράς</string>
-
-    <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Εξαγωγή ως TXT</string>
-    <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Εύκολο στην ανάγνωση αρχείο κειμένου</string>
-    <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Εξαγωγή ως JSON</string>
-    <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Μηχανικά αναγνώσιμο αρχείο</string>
-
-    <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Ακύρωση</string>
-
-    <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Title of dialog shown when report fails to generate -->
-    <string name="ExportAccountDataFragment__report_generation_failed">Δεν ήταν δυνατή η δημιουργία αναφοράς</string>
-    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
-    <string name="ExportAccountDataFragment__check_network">Έλεγξε τη σύνδεσή σου και δοκίμασε πάλι.</string>
-
-    <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Εξαγωγή δεδομένων;</string>
-    <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Μοιράσου τα δεδομένα του λογαριασμού σου στο Signal μόνο με άτομα ή εφαρμογές που εμπιστεύεσαι.</string>
-    <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Εξαγωγή</string>
-
-    <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Δημιουργία αναφοράς…</string>
-    <!-- Explanation that the report is only generated on export and is not saved on the device -->
-    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Η αναφορά σου δημιουργείται μόνο κατά την εξαγωγή και δεν αποθηκεύεται από το Signal στη συσκευή σου.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Με αυτό μπορείς να αλλάξεις τον τωρινό αριθμό τηλεφώνου σου σε κάποιον καινούργιο. Δεν μπορείς να αναιρέσεις αυτή την αλλαγή.\n\nΠριν συνεχίσεις, επιβεβαίωσε πως μπορείς να λάβεις SMS ή κλήσεις στο νέο αριθμό.</string>
@@ -5426,45 +4960,15 @@
     <!-- Done button label to save selected chats to folder -->
     <string name="ChooseChatsFragment__done">Τέλος</string>
 
-    <string name="NotificationsSettingsFragment__calls">Κλήσεις</string>
-    <!-- Notification header for sounds -->
-    <string name="NotificationsSettingsFragment__sounds">Ήχοι</string>
-    <string name="NotificationsSettingsFragment__contact_joins_signal">Νέα επαφή έρχεται στο Signal</string>
-    <!-- Notification body to get notified when someone joins Signal -->
-    <string name="NotificationsSettingsFragment__notify_contact">Προβολή ειδοποίησης όταν μια επαφή σου έρχεται στο Signal</string>
-    <!-- Option to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset">Επαναφορά ρυθμίσεων ειδοποιήσεων</string>
-    <!-- Option body to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_notifications">Επαναφορά προκαθορισμένων ρυθμίσεων ειδοποιήσεων, συμπεριλαμβανομένων προσαρμοσμένων ρυθμίσεων στις συνομιλίες</string>
-    <!-- Dialog to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_body">Επαναφορά όλων των προκαθορισμέων ρυθμίσεων ειδοποιήσεων για όλες τις συνομιλίες;</string>
-    <!-- Confirmation button to reset dialog -->
-    <string name="NotificationsSettingsFragment__reset_confirm">Επαναφορά</string>
     <!-- Notification preference header -->
     <string name="NotificationsSettingsFragment__notification_profiles">Προφίλ ειδοποιήσεων</string>
-    <!-- Notification preference summary text -->
-    <string name="NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose">Δημιούργησε ένα προφίλ για να λαμβάνεις ειδοποιήσεις μόνο από τα άτομα και τις ομάδες που επιλέγεις.</string>
 
-    <!-- Header to describe screen that shows while muted settings -->
-    <string name="MutedNotificationsFragment__while">Σε σίγαση</string>
     <!-- Title for toggle row to control call settings while muted -->
     <string name="MutedNotificationsFragment__calls">Κλήσεις</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body_global">Κουδούνισμα ή ειδοποίηση όταν ξεκινά μια κλήση σε συνομιλίες σε σίγαση.</string>
     <!-- Title for toggle row to control mentions settings while muted -->
     <string name="MutedNotificationsFragment__mentions">Αναφορές</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body_global">Ειδοποίηση όταν σε αναφέρουν σε συνομιλίες σε σίγαση.</string>
     <!-- Title for toggle row to control replies settings while muted -->
     <string name="MutedNotificationsFragment__replies">Απαντήσεις</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body_global">Ειδοποίηση όταν κάποιος απαντάει σε μήνυμά σου σε συνομιλία σε σίγαση.</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body">Κουδούνισμα ή ειδοποίηση όταν ξεκινά μια κλήση σε αυτή τη συνομιλία σε σίγαση.</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body">Ειδοποίηση όταν σε αναφέρουν σε αυτή τη συνομιλία σε σίγαση.</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body">Ειδοποίηση όταν κάποιος απαντάει σε μήνυμά σου σε αυτή τη συνομιλία σε σίγαση.</string>
     <!-- Description for toggle row to control unread reminders while muted -->
     <string name="MutedNotificationsFragment__unread_body">Περιστασιακές ειδοποιήσεις όταν υπάρχουν μη αναγνωσμένα μηνύματα όσο αυτή η συνομιλία βρίσκεται σε σίγαση.</string>
 
@@ -5475,88 +4979,14 @@
     <string name="NotificationProfilesFragment__create_profile">Δημιουργία προφίλ</string>
 
     <!-- PrivacySettingsFragment -->
-    <string name="PrivacySettingsFragment__blocked">Λίστα αποκλεισμού</string>
-    <!-- Settings label that shows the number blocked contacts -->
-    <plurals name="PrivacySettingsFragment__d_contacts">
-        <item quantity="one">%1$d επαφή ή ομάδα</item>
-        <item quantity="other">%1$d επαφές ή ομάδες</item>
-    </plurals>
-    <string name="PrivacySettingsFragment__messaging">Συνομιλίες</string>
     <string name="PrivacySettingsFragment__disappearing_messages">Μηνύματα που εξαφανίζονται</string>
-    <string name="PrivacySettingsFragment__app_security">Ασφάλεια εφαρμογής</string>
-    <!-- This refers to the multi-tasking overview (recent apps) from the Android operating system.-->
-    <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Να μην επιτρέπονται τα στιγμιότυπα οθόνης (screenshots) στη λίστα με τα πρόσφατα και μέσα στην εφαρμογή</string>
-    <string name="PrivacySettingsFragment__signal_message_and_calls">Κλήσεις και μηνύματα Signal, κλήσεις που πάντα αναμεταδίδονται, και προστατευμένος αποστολέας</string>
-    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Προκαθορισμένο χρονόμετρο για νέες συνομιλίες</string>
-    <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Ορισμός ενός προκαθορισμένου χρόνου εξαφάνισης μηνυμάτων για όλες τις συνομιλίες που ξεκινάς εσύ.</string>
-    <!-- Summary for stories preference to launch into story privacy settings -->
-    <string name="PrivacySettingsFragment__payment_lock_require_lock">Απαιτείται κλείδωμα οθόνης Android ή δακτυλικό αποτύπωμα για τη μεταφορά χρημάτων</string>
-    <!-- Alert dialog title when payment lock cannot be enabled -->
-    <string name="PrivacySettingsFragment__cant_enable_title">Δεν μπορώ να ενεργοποιήσω το κλείδωμα πληρωμής</string>
-    <!-- Alert dialog description to setup screen lock or fingerprint in phone settings -->
-    <string name="PrivacySettingsFragment__cant_enable_description">Για να χρησιμοποιήσεις το Κλείδωμα πληρωμής, πρέπει πρώτα να ενεργοποιήσεις το κλείδωμα οθόνης ή το αναγνωριστικό δακτυλικού αποτυπώματος στις ρυθμίσεις του τηλεφώνου σου.</string>
-    <!-- Shown in a toast when we can\'t navigate to the user\'s system fingerprint settings -->
-    <string name="PrivacySettingsFragment__failed_to_navigate_to_system_settings">Αποτυχία πλοήγησης στις ρυθμίσεις συστήματος</string>
     <!-- Alert dialog button to go to phone settings -->
     <!-- Alert dialog button to cancel the dialog -->
 
     <!-- AdvancedPrivacySettingsFragment -->
   <!-- Removed by excludeNonTranslatables <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string> -->
-    <string name="AdvancedPrivacySettingsFragment__show_status_icon">Εμφάνιση εικονιδίου κατάστασης</string>
-    <string name="AdvancedPrivacySettingsFragment__show_an_icon">Εμφάνιση εικονιδίου στις λεπτομέρειες μηνύματος όταν αυτά έχουν παραδοθεί με χρήση του προστατευμένου αποστολέα.</string>
 
-    <!-- ExpireTimerSettingsFragment -->
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Όταν ενεργοποιηθεί, τα νέα μηνύματα που στέλνονται και λαμβάνονται σε σε νέες συνομιλίες που ξεκινάς εσύ θα εξαφανίζονται αφού διαβαστούν.</string>
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Όταν ενεργοποιηθεί, τα νέα μηνύματα που στέλνονται και λαμβάνονται σε αυτή τη συνομιλία θα εξαφανίζονται αφού διαβαστούν.</string>
-    <string name="ExpireTimerSettingsFragment__off">Ανενεργό</string>
-    <string name="ExpireTimerSettingsFragment__4_weeks">4 εβδομάδες</string>
-    <string name="ExpireTimerSettingsFragment__1_week">1 εβδομάδα</string>
-    <string name="ExpireTimerSettingsFragment__1_day">1 ημέρα</string>
-    <string name="ExpireTimerSettingsFragment__8_hours">8 ώρες</string>
-    <string name="ExpireTimerSettingsFragment__1_hour">1 ώρα</string>
-    <string name="ExpireTimerSettingsFragment__5_minutes">5 λεπτά</string>
-    <string name="ExpireTimerSettingsFragment__30_seconds">30 δευτερόλεπτα</string>
-    <string name="ExpireTimerSettingsFragment__custom_time">Προσαρμοσμένος χρόνος</string>
-    <string name="ExpireTimerSettingsFragment__set">Ορισμός</string>
-    <string name="ExpireTimerSettingsFragment__save">Αποθήκευση</string>
 
-    <string name="CustomExpireTimerSelectorView__seconds">δευτερόλεπτα</string>
-    <string name="CustomExpireTimerSelectorView__minutes">λεπτά</string>
-    <string name="CustomExpireTimerSelectorView__hours">ώρες</string>
-    <string name="CustomExpireTimerSelectorView__days">ημέρες</string>
-    <string name="CustomExpireTimerSelectorView__weeks">εβδομάδες</string>
-
-    <!-- HelpSettingsFragment -->
-    <string name="HelpSettingsFragment__support_center">Κέντρο υποστήριξης</string>
-    <string name="HelpSettingsFragment__contact_us">Επικοινώνησε μαζί μας</string>
-    <string name="HelpSettingsFragment__version">Έκδοση</string>
-    <!-- Displayed when copying help screen text to the clipboard -->
-    <string name="HelpSettingsFragment__copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
-    <string name="HelpSettingsFragment__debug_log">Αρχείο καταγραφής αποσφαλμάτωσης</string>
-    <!--    Header for the screen that displays the licenses of the open-source software dependencies of the Signal app-->
-    <string name="HelpSettingsFragment__licenses">Άδειες</string>
-    <string name="HelpSettingsFragment__terms_amp_privacy_policy">Όροι &amp; Πολιτική Απορρήτου</string>
-    <string name="HelpFragment__copyright_signal_messenger">Copyright Signal Messenger</string>
-    <string name="HelpFragment__licenced_under_the_agplv3">Υπό τους όρους της άδειας GNU AGPLv3</string>
-    <!-- Non-English translations should use "Signal is a nonprofit." instead, dropping the 501c3 reference. -->
-    <string name="HelpSettingsFragment__signal_is_a_501c3">Το Signal είναι ένας μη κερδοσκοπικός οργανισμός</string>
-
-    <!-- DataAndStorageSettingsFragment -->
-    <string name="DataAndStorageSettingsFragment__media_quality">Ποιότητα πολυμέσων</string>
-    <!-- Label shown on the manage storage row while total storage usage is still being computed -->
-    <string name="DataAndStorageSettingsFragment__calculating">Υπολογισμός…</string>
-    <!-- Category title for the quality of the media to be sent -->
-    <string name="DataAndStorageSettingsFragment__sent_media_quality">Ποιότητα απεσταλμένων πολυμέσων</string>
-    <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Η αποστολή πολυμέσων υψηλής ποιότητας θα καταναλώνει περισσότερα δεδομένα.</string>
-    <!-- Disclaimer shown under the media auto-download settings. Placeholder is a formatted size like "100 KB". -->
-    <string name="DataAndStorageSettingsFragment__voice_messages_and_stickers_under_size_are_always_auto_downloaded">Τα ηχητικά μηνύματα και τα αυτοκόλλητα (κάτω από %1$s) λαμβάνονται πάντα αυτόματα.</string>
-    <string name="DataAndStorageSettingsFragment__calls">Κλήσεις</string>
-    <!-- Title of a toggle that keeps Signal connected in the background via a persistent foreground service instead of using FCM push messages -->
-    <string name="DataAndStorageSettingsFragment__stay_connected_in_background">Μείνε σε σύνδεση στο παρασκήνιο</string>
-    <!-- Body of a confirmation dialog shown when a user tries to enable the "Stay connected in background" setting -->
-    <string name="DataAndStorageSettingsFragment__staying_connected_while_in_the_background_will_likely_result_in_increased_battery_usage">Η διατήρηση της σύνδεσης ενώ η εφαρμογή βρίσκεται στο παρασκήνιο πιθανότατα θα οδηγήσει σε αυξημένη κατανάλωση μπαταρίας. Αυτό δεν είναι απαραίτητο για τις περισσότερες συσκευές. Ενεργοποίησε αυτή την επιλογή μόνο αν αντιμετωπίζεις προβλήματα με τις ειδοποιήσεις.</string>
-    <!-- Button label that enables the "Stay connected in background" setting from a confirmation dialog -->
-    <string name="DataAndStorageSettingsFragment__enable">Ενεργοποίηση</string>
 
     <!-- ChatColorSelectionFragment -->
     <!-- Text shown on a circle button to indicate the app will automatically select a color for conversation bubbles for this chat. -->
@@ -5607,23 +5037,8 @@
     <string name="BecomeASustainerMegaphone__become_a_sustainer">Γίνε υποστηρικτής/τρια</string>
 
     <!-- KeyboardPagerFragment -->
-    <string name="KeyboardPagerFragment_emoji">Emoji</string>
-    <string name="KeyboardPagerFragment_open_emoji_search">Άνοιγμα αναζήτησης emoji</string>
-    <string name="KeyboardPagerFragment_open_sticker_search">Άνοιγμα αναζήτησης αυτοκολλήτων</string>
-    <string name="KeyboardPagerFragment_open_gif_search">Άνοιγμα αναζήτησης GIF</string>
-    <string name="KeyboardPagerFragment_stickers">Αυτοκόλλητα</string>
-    <string name="KeyboardPagerFragment_backspace">Backspace</string>
-    <string name="KeyboardPagerFragment_gifs">GIF</string>
-    <string name="KeyboardPagerFragment_search_emoji">Αναζήτηση emoji</string>
-    <string name="KeyboardPagerfragment_back_to_emoji">Πίσω στα emoji</string>
-    <string name="KeyboardPagerfragment_clear_search_entry">Εκκαθάριση αναζήτησης</string>
     <string name="KeyboardPagerFragment_search_giphy">Αναζήτηση στο GIPHY</string>
 
-    <!-- StickerSearchDialogFragment -->
-    <string name="StickerSearchDialogFragment_search_stickers">Αναζήτηση αυτοκολλήτων</string>
-    <string name="StickerSearchDialogFragment_no_results_found">Δε βρέθηκαν αποτελέσματα</string>
-    <string name="EmojiSearchFragment__no_results_found">Δε βρέθηκαν αποτελέσματα</string>
-    <string name="NotificationsSettingsFragment__unknown_ringtone">Άγνωστος ήχος κλήσης</string>
 
     <!-- ConversationSettingsFragment -->
     <!-- Dialog title displayed when non-admin tries to add a story to an audience group -->
@@ -5732,6 +5147,8 @@
     <string name="NewConversationActivity__video_call">Βιντεοκλήση</string>
     <!-- Context menu item remove -->
     <string name="NewConversationActivity__remove">Αφαίρεση</string>
+    <!-- Context menu item that hides a contact -->
+    <string name="NewConversationActivity__hide">Hide</string>
     <!-- Context menu item block -->
     <string name="NewConversationActivity__block">Αποκλεισμός</string>
     <!-- Dialog title when removing a contact -->
@@ -5740,6 +5157,12 @@
     <string name="NewConversationActivity__you_wont_see_this_person">Δεν θα βλέπεις αυτό το άτομο στην αναζήτηση. Θα λάβεις ένα αίτημα μηνύματος εάν σου στείλει μήνυμα στο μέλλον.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">Ο/Η %1$s έχει αφαιρεθεί</string>
+    <!-- Dialog title when hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__hide_s">Hide %1$s?</string>
+    <!-- Dialog body when hiding a contact -->
+    <string name="NewConversationActivity__this_person_wont_appear">This person won\'t appear in your contact list and search. If they message you in the future, you\'ll receive a message request. You can manage people you\'ve hidden in settings.</string>
+    <!-- Snackbar message after hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__s_has_been_hidden">%1$s has been hidden</string>
     <!-- Snackbar message after blocking a contact -->
     <string name="NewConversationActivity__s_has_been_blocked">Ο/Η %1$s έχει αποκλειστεί</string>
     <!-- Error message shown when looking up a person by phone number and that phone number is not associated with a signal account -->
@@ -5792,6 +5215,10 @@
 
     <!-- VectorAvatarCreationFragment -->
     <string name="VectorAvatarCreationFragment__select_a_color">Επιλογή χρώματος</string>
+
+    <!-- AvatarColorGrid -->
+    <!-- Accessibility label for one of the colors an avatar can be drawn in. %1$d is the color\'s position in the list, %2$d is how many colors there are. -->
+    <string name="AvatarColorGrid__color_d_of_d">Χρώμα %1$d από %2$d</string>
 
     <!-- Displayed in the toolbar when externally sharing text to multiple recipients -->
     <string name="ShareInterstitialActivity__share">Μοιράσου</string>
@@ -5863,15 +5290,9 @@
     <string name="MediaReviewImagePageFragment__discard_changes">Απόρριψη αλλαγών;</string>
     <string name="MediaReviewImagePageFragment__youll_lose_any_changes">Θα χάσεις όλες τις αλλαγές που έχεις κάνει σε αυτή τη φωτογραφία.</string>
 
-    <string name="BadgesOverviewFragment__my_badges">Τα σήματά μου</string>
     <string name="BadgesOverviewFragment__featured_badge">Βασικό σήμα</string>
-    <string name="BadgesOverviewFragment__display_badges_on_profile">Εμφάνιση σημάτων στο προφίλ</string>
-    <string name="BadgesOverviewFragment__failed_to_update_profile">Αποτυχία ανανέωσης προφίλ</string>
 
 
-    <string name="SelectFeaturedBadgeFragment__select_a_badge">Επιλογή σήματος</string>
-    <string name="SelectFeaturedBadgeFragment__you_must_select_a_badge">Πρέπει να επιλέξεις σήμα</string>
-    <string name="SelectFeaturedBadgeFragment__failed_to_update_profile">Αποτυχία ανανέωσης προφίλ</string>
 
     <!-- Displayed on primary button in the bottom sheet as a call-to-action to launch into the donation flow -->
     <string name="ViewBadgeBottomSheetDialogFragment__donate_now">Δωρεά</string>
@@ -5919,9 +5340,6 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Να γίνει το βασικό σήμα</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Συνέχεια</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Όταν έχεις πάνω από ένα σήματα, μπορείς να επιλέξεις ποιο μπορούν να δουν τα άλλα άτομα στο προφίλ σου.</string>
-
-    <string name="BecomeASustainerFragment__get_badges">Στηρίζοντας το Signal παίρνεις σήματα για το προφίλ σου.</string>
-    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Το Signal είναι μια μη κερδοσκοπική οργάνωση, χωρίς διαφημιστές και επενδυτές, που υποστηρίζεται από άτομα σαν κι εσένα.</string>
 
     <!-- Button label for creating a donation -->
     <string name="ManageDonationsFragment__donate_to_signal">Κάνε μια δωρεά στο Signal</string>
@@ -6161,6 +5579,10 @@
     <string name="EditNotificationProfileFragment__focus">Συγκέντρωση</string>
     <!-- Error message shown when attempting to next/save without a profile name -->
     <string name="EditNotificationProfileFragment__profile_must_have_a_name">Πρέπει να έχει όνομα</string>
+    <!-- Accessibility label for the button beside the profile name that opens the emoji picker to choose the profile\'s emoji -->
+    <string name="EditNotificationProfileFragment__choose_emoji">Επιλογή emoji</string>
+    <!-- Accessibility label for the button that clears both the profile name and its emoji -->
+    <string name="EditNotificationProfileFragment__clear_name_and_emoji">Εκκαθάριση ονόματος και emoji</string>
 
     <!-- Title for add recipients to notification profile screen in create flow -->
     <string name="AddAllowedMembers__allowed_notifications">Επιτρεπόμενες ειδοποιήσεις</string>
@@ -6175,8 +5597,6 @@
     <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
     <string name="AddAllowedMembers__notify_for_all_mentions">Ειδοποίηση για όλες τις αναφορές</string>
 
-    <!-- Call to action button on contact picker for adding to profile -->
-    <string name="SelectRecipientsFragment__add">Προσθήκη</string>
 
     <!-- Notification profiles home fragment, shown when no profiles have been created yet -->
     <string name="NotificationProfilesFragment__create_a_profile_to_receive_notifications_and_calls_only_from_the_people_and_groups_you_want_to_hear_from">Δημιούργησε ένα προφίλ για να λαμβάνεις ειδοποιήσεις και κλήσεις μόνο από τα άτομα και τις ομάδες που θέλεις.</string>
@@ -6228,20 +5648,6 @@
     <string name="EditNotificationProfileSchedule__start">Εκκίνηση</string>
     <!-- Label for showing the end time for the schedule -->
     <string name="EditNotificationProfileSchedule__end">Τέλος</string>
-    <!-- First letter of Sunday -->
-    <string name="EditNotificationProfileSchedule__sunday_first_letter">Κ</string>
-    <!-- First letter of Monday -->
-    <string name="EditNotificationProfileSchedule__monday_first_letter">Δ</string>
-    <!-- First letter of Tuesday -->
-    <string name="EditNotificationProfileSchedule__tuesday_first_letter">Τ</string>
-    <!-- First letter of Wednesday -->
-    <string name="EditNotificationProfileSchedule__wednesday_first_letter">Τ</string>
-    <!-- First letter of Thursday -->
-    <string name="EditNotificationProfileSchedule__thursday_first_letter">Π</string>
-    <!-- First letter of Friday -->
-    <string name="EditNotificationProfileSchedule__friday_first_letter">Π</string>
-    <!-- First letter of Saturday -->
-    <string name="EditNotificationProfileSchedule__saturday_first_letter">Σ</string>
     <!-- Title of select time dialog shown when setting start time for schedule -->
     <string name="EditNotificationProfileSchedule__set_start_time">Ορισμός ώρας έναρξης</string>
     <!-- Title of select time dialog shown when setting end time for schedule -->
@@ -6255,17 +5661,6 @@
     <!-- Error message shown if trying to save/use a schedule with no days selected -->
     <string name="EditNotificationProfileSchedule__schedule_must_have_at_least_one_day">Τα προγράμματα πρέπει να έχουν τουλάχιστον μια ημέρα</string>
 
-    <!-- Title for final screen shown after completing a profile creation -->
-    <string name="NotificationProfileCreated__profile_created">Το προφίλ δημιουργήθηκε</string>
-    <!-- Call to action button to press to close the created screen and move to the profile details screen -->
-    <string name="NotificationProfileCreated__done">Τέλος</string>
-    <!-- Descriptor text shown to indicate how to manually turn a profile on/off -->
-    <string name="NotificationProfileCreated__you_can_turn_your_profile_on_or_off_manually_via_the_menu_on_the_chat_list">Μπορείς να ενεργοποιήσεις και να απενεργοποιήσει το προφίλ χειροκίνητα μέσω του μενού στη λίστα συνομιλιών.</string>
-    <!-- Descriptor text shown to indicate you can add a schedule later since you did not add one during create flow -->
-    <string name="NotificationProfileCreated__add_a_schedule_in_settings_to_automate_your_profile">Πρόσθεσε ένα πρόγραμμα στις ρυθμίσεις για να αυτοματοποιήσεις το προφίλ σου.</string>
-    <!-- Descriptor text shown to indicate your profile will follow the schedule set during create flow -->
-    <string name="NotificationProfileCreated__your_profile_will_turn_on_and_off_automatically_according_to_your_schedule">Το προφίλ σου θα ενεργοποιείται και θα απενεργοποιείται αυτόματα σύμφωνα με το πρόγραμμά σου.</string>
-
     <!-- Button text shown in profile selection bottom sheet to create a new profile -->
     <string name="NotificationProfileSelection__new_profile">Νέο προφίλ</string>
     <!-- Manual enable option to manually enable a profile for 1 hour -->
@@ -6277,12 +5672,6 @@
     <!-- Descriptor text indicating how long a profile will be on when there is a time component associated with it -->
     <string name="NotificationProfileSelection__on_until_s">Ενεργό μέχρι %1$s</string>
 
-    <!-- Displayed in a toast when we fail to open the ringtone picker -->
-    <string name="NotificationSettingsFragment__failed_to_open_picker">Αποτυχία ανοίγματος επιλογέα.</string>
-    <!-- Banner title when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__to_enable_notifications">Για να ενεργοποιήσεις τις ειδοποιήσεις, το Signal χρειάζεται άδεια για να τις εμφανίσει.</string>
-    <!-- Banner action when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__turn_on">Ενεργοποίηση</string>
 
     <!-- Text description in Signal Release channel details explaining that it is the only chat from Signal -->
     <string name="ReleaseNotes__this_is_official_chat">Αυτή είναι η επίσημη και μοναδική συνομιλία από το Signal</string>
@@ -6710,6 +6099,8 @@
     <string name="GiftFlowStartFragment__next">Επόμενο</string>
     <!-- Title text on choose recipient page for badge gifting -->
     <string name="GiftFlowRecipientSelectionFragment__choose_recipient">Επιλογή παραλήπτη</string>
+    <!-- Hint text that shows in the recipient search bar on the choose recipient page for badge gifting -->
+    <string name="GiftFlowRecipientSelectionFragment__search">Αναζήτηση</string>
     <!-- Title text on confirm gift page -->
     <string name="GiftFlowConfirmationFragment__confirm_donation">Επιβεβαίωση δωρεάς</string>
     <!-- Heading text specifying who the gift will be sent to -->
@@ -6935,7 +6326,7 @@
     <string name="ChooseANewDefaultSmsAppFragment__bullet_2">2</string>
     <!-- BackupSchedulePermission Megaphone -->
     <!-- The title on an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
-    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Improve backup scheduling</string>
+    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Βελτίωση του προγραμματισμού των αντιγράφων ασφαλείας</string>
     <!-- The body text of an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
     <string name="BackupSchedulePermissionMegaphone__allow_the_alarms_permission_to_improve_automatic_daily_backups">Δώσε πρόσβαση στις \"ειδοποιήσεις\" για να βελτιώσεις τις αυτόματες καθημερινές δημιουργίες αντιγράφων ασφαλείας.</string>
     <!-- The text on a button in an alert window that, when clicked, will take the user to a screen to grant the alarms permission -->
@@ -7197,11 +6588,6 @@
     <!-- Popup menu label for clearing applied formatting -->
     <string name="TextFormatting_clear_formatting">Διαγραφή μορφοποίησης</string>
 
-    <!-- Username edit dialog -->
-    <!-- Option to open username editor displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__edit_username">Επεξεργασία ονόματος χρήστη</string>
-    <!-- Option to delete username displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__delete_username">Διαγραφή ονόματος χρήστη</string>
 
     <!-- Time duration picker -->
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
@@ -7406,12 +6792,6 @@
     <string name="EditCallLinkNameDialogFragment__call_name">Όνομα κλήσης</string>
 
     <!-- ChooseNavigationBarStyleFragment -->
-    <!-- Dialog title, displayed below the header image -->
-    <string name="ChooseNavigationBarStyleFragment__navigation_bar_size">Μέγεθος μπάρας πλοήγησης</string>
-    <!-- Toggle button label for normal size -->
-    <string name="ChooseNavigationBarStyleFragment__normal">Κανονικό</string>
-    <!-- Toggle button label for compact size -->
-    <string name="ChooseNavigationBarStyleFragment__compact">Συμπαγές</string>
 
     <!-- Title shown at top of bottom sheet dialog for displaying a message\'s edit history -->
     <string name="EditMessageHistoryDialog_title">Ιστορικό επεξεργασίας</string>
@@ -7440,69 +6820,11 @@
     <!-- Displayed as body in dialog when user attempts to delete the link -->
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">Αυτός ο σύνδεσμος δεν θα λειτουργεί πλέον για κάθε κάτοχο.</string>
 
-    <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Σύνδεσμος</string>
-    <!-- Button label for the share button in the username link settings -->
-    <string name="UsernameLinkSettings_share_button_label">Μοιράσου</string>
-    <!-- Button label for the color selector button in the username link settings -->
-    <string name="UsernameLinkSettings_color_button_label">Χρώμα</string>
-    <!-- Description text for QR code and links in the username link settings -->
-    <string name="UsernameLinkSettings_qr_description">Μοιράσου τον κωδικό QR σου μόνο με άτομα που εμπιστεύεσαι. Όταν κοινοποιηθεί, οι άλλοι θα μπορούν να δουν το όνομα χρήστη σου και να ξεκινήσουν μια συνομιλία μαζί σου.</string>
-    <!-- Content of a toast that will show after the username is copied to the clipboard -->
-    <string name="UsernameLinkSettings_username_copied_toast">Το όνομα χρήστη αντιγράφηκε</string>
-    <!-- Content of a toast that will show after the username link is copied to the clipboard -->
-    <string name="UsernameLinkSettings_link_copied_toast">Ο σύνδεσμος αντιγράφτηκε</string>
-    <!-- Content of a text field that is shown when the user has not yet set a username link -->
-    <string name="UsernameLinkSettings_link_not_set_label">Ο σύνδεσμος δεν ορίστηκε</string>
-    <!-- Content of a text field that is shown when the user is actively resetting the username link and waiting for the operation to finish -->
-    <string name="UsernameLinkSettings_resetting_link_label">Επαναφορά συνδέσμου…</string>
-    <!-- Title of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_title">Επαναφορά κωδικού QR;</string>
-    <!-- Body of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_body">Εάν επαναφέρεις τον κωδικό QR σου, ο υπάρχων κωδικός QR και ο σύνδεσμός σου δεν θα λειτουργούν πλέον.</string>
-    <!-- Label for the confirmation button on a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_confirm_button">Επαναφορά</string>
-    <!-- Button label for a button that will reset your username and give you a new link -->
-    <string name="UsernameLinkSettings_reset_button_label">Επαναφορά</string>
-    <!-- Button label for a button that indicates that the user is done changing the current setting -->
-    <string name="UsernameLinkSettings_done_button_label">Τέλος</string>
-    <!-- Label for a tab that shows a screen to view your username QR code -->
-    <string name="UsernameLinkSettings_code_tab_name">Κωδικός</string>
-    <!-- Label for a tab that shows a screen to scan a QR code -->
-    <string name="UsernameLinkSettings_scan_tab_name">Σάρωση</string>
-    <!-- Description text shown underneath the username QR code scanner -->
-    <string name="UsernameLinkSettings_qr_scan_description">Σάρωσε τον κωδικό QR στη συσκευή του άλλου χρήστη.</string>
-    <!-- App bar title for the username QR code color picker screen -->
-    <string name="UsernameLinkSettings_color_picker_app_bar_title">Χρώμα</string>
-    <!-- Body of a dialog that is displayed when we failed to read a username QR code. -->
-    <string name="UsernameLinkSettings_qr_result_invalid">Ο κωδικός QR δεν ήταν έγκυρος.</string>
-    <!-- Body of a dialog that is displayed when the username we looked up could not be found. -->
-    <string name="UsernameLinkSettings_qr_result_not_found">Δεν βρέθηκε χρήστης με όνομα χρήστη %1$s.</string>
     <!-- Body of a dialog that is displayed when the username we looked up could not be found and we also could not parse the username. -->
     <string name="UsernameLinkSettings_qr_result_not_found_no_username">Δεν βρέθηκε αυτός ο χρήστης.</string>
-    <!-- Body of a dialog that is displayed when we experienced a network error when looking up a username. -->
-    <string name="UsernameLinkSettings_qr_result_network_error">Υπήρξε σφάλμα δικτύου. Δοκίμασε ξανά.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because you had no internet. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_unavailable">Δεν έχεις πρόσβαση στο δίκτυο. Δεν έγινε επαναφορά του συνδέσμου σου. Δοκίμασε ξανά αργότερα.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_error">Προέκυψε σφάλμα δικτύου κατά την προσπάθεια επαναφοράς του συνδέσμου. Δοκίμασε ξανά αργότερα.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of an unknown error. -->
-    <string name="UsernameLinkSettings_reset_link_result_unknown_error">Προέκυψε μη αναμενόμενο σφάλμα κατά την προσπάθεια επαναφοράς του συνδέσμου σου. Δοκίμασε ξανά αργότερα.</string>
-    <!-- Body of a dialog that is displayed when we successfully reset you username link. -->
-    <string name="UsernameLinkSettings_reset_link_result_success">Έχει γίνει επαναφορά του κωδικού QR και του συνδέσμου σου και έχει δημιουργηθεί ένας νέος κωδικός QR και ένας νέος σύνδεσμος.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
     <string name="UsernameLinkSettings_scan_this_qr_code">Σάρωσε αυτόν τον κωδικό QR με το τηλέφωνό σου για να συνομιλήσεις μαζί μου στο Signal.</string>
-    <!-- Dialog title shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_qr_code_not_found">Ο κωδικός QR δεν βρέθηκε</string>
-    <!-- Dialog message shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_try_scanning_another_image_containing_a_signal_qr_code">Δοκίμασε να σαρώσεις μια άλλη εικόνα που περιέχει έναν κωδικό QR Signal.</string>
 
-    <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
-    <string name="UsernameLinkShareBottomSheet_title">Με αυτόν τον σύνδεσμο, οποιοδήποτε άτομο μπορεί να δει το όνομα χρήστη σου και να ξεκινήσει μια συνομιλία μαζί σου. Μοιράσου τον μόνο με άτομα που εμπιστεύεσαι.</string>
-    <!-- A button label for a button that, when pressed, will copy your username link to the clipboard -->
-    <string name="UsernameLinkShareBottomSheet_copy_link">Αντιγραφή συνδέσμου</string>
-    <!-- A button label for a button that, when pressed, will open a share sheet for sharing your username link -->
-    <string name="UsernameLinkShareBottomSheet_share">Μοιράσου</string>
 
     <!-- PendingParticipantsView -->
     <!-- Displayed in the popup card when a remote user attempts to join a call link -->
@@ -7632,6 +6954,30 @@
     <string name="VerifyBackupKey__backup_key_correct">Το κλειδί ανάκτησης είναι σωστό. Κράτησε το κλειδί σου ασφαλές.</string>
     <!-- Snackbar text shown when the user chooses to snooze the recovery key reminder. -->
     <string name="VerifyBackupKey__we_will_ask_again">Θα σε ρωτήσουμε ξανά σε μια εβδομάδα.</string>
+
+    <!-- Title of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__verify_your_two_factor_method">Επιβεβαίωσε τη μέθοδο ελέγχου ταυτότητας δύο παραγόντων σου</string>
+    <!-- Body of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__well_occasionally_ask_you_to_verify">Θα σου ζητάμε κατά καιρούς να επιβεβαιώνεις τη μέθοδο ελέγχου ταυτότητας δύο παραγόντων σου για να βεβαιωθούμε ότι εξακολουθεί να είναι σωστά ρυθμισμένη.</string>
+    <!-- Button of a megaphone that will take users to the screen where they verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__verify">Επιβεβαίωση</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__not_now">Όχι τώρα</string>
+    <!-- Snackbar text shown after the user verified their authenticator app from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_authenticator_app">Ευχαριστούμε που επιβεβαίωσες την εφαρμογή επαλήθευσης ταυτότητας.</string>
+    <!-- Snackbar text shown after the user verified their passkey from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_passkey">Ευχαριστούμε που επιβεβαίωσες το κλειδί πρόσβασης.</string>
+
+    <!-- Title of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login (their account ID and recovery key) -->
+    <string name="SignalLoginReminderMegaphone__verify_your_signal_login">Επιβεβαίωσε το Signal Login σου</string>
+    <!-- Body of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login -->
+    <string name="SignalLoginReminderMegaphone__well_occasionally_ask_you_to_verify">Θα σου ζητάμε κατά καιρούς να επιβεβαιώνεις τα στοιχεία σύνδεσης σου για να βεβαιωθούμε ότι τα θυμάσαι.</string>
+    <!-- Button of a megaphone that will take users to the screen where they enter their Signal Login to verify it -->
+    <string name="SignalLoginReminderMegaphone__verify">Επιβεβαίωση</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify the Signal Login -->
+    <string name="SignalLoginReminderMegaphone__not_now">Όχι τώρα</string>
+    <!-- Snackbar text shown after the user verified their Signal Login from the reminder -->
+    <string name="SignalLoginReminderMegaphone__thanks_for_confirming_your_signal_login">Ευχαριστούμε που επιβεβαίωσες το Signal Login.</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
     <string name="GrantFullScreenIntentPermission_megaphone_title">Ενεργοποίηση ειδοποιήσεων σε πλήρη οθόνη;</string>
@@ -7953,34 +7299,6 @@
     <!-- Dialog message shown when Google Play services is invalid and subscriptions are not available -->
     <string name="GooglePlayServicesAvailability__service_invalid_message">Δεν μπορείς να εγγραφείς στα ασφαλή αντίγραφα Signal επειδή το τηλέφωνό σου δεν υποστηρίζει τις υπηρεσίες Google Play. Επικοινώνησε με τον κατασκευαστή του τηλεφώνου για βοήθεια.</string>
 
-    <!-- ManageStorageSettingsFragment -->
-    <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
-    <string name="ManageStorageSettingsFragment_chat_limit">Όρια συνομιλίας</string>
-    <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
-    <string name="ManageStorageSettingsFragment_delete_message_history">Διαγραφή ιστορικού μηνυμάτων</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
-    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Τα μηνύματα που είναι παλαιότερα από τον επιλεγμένο χρόνο θα διαγραφούν οριστικά.</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
-    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Τα μηνύματα που υπερβαίνουν το επιλεγμένο μέγεθος θα διαγραφούν οριστικά.</string>
-    <!-- Setting title for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_title">Εφαρμογή ορίων σε συνδεδεμένες συσκευές</string>
-    <!-- Setting description for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_description">Όταν η επιλογή είναι ενεργοποιημένη, τα όρια συνομιλίας θα διαγράφουν επίσης μηνύματα από τις συνδεδεμένες συσκευές σου.</string>
-    <!-- Setting section title header for storage optimization -->
-    <string name="ManageStorageSettingsFragment__on_device_storage">Αποθηκευτικός χώρος Signal</string>
-    <!-- Setting row title for storage optimization -->
-    <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Βελτιστοποίηση χώρου αποθήκευσης Signal</string>
-    <!-- Setting row explanation for storage optimization -->
-    <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Ο φόρτος των αχρησιμοποίητων πολυμέσων θα μειωθεί, αλλά μπορούν να ληφθούν από το αντίγραφο ασφαλείας σου ανά πάσα στιγμή.</string>
-    <!-- Dialog message for paid tier pending dialog -->
-    <string name="ManageStorageSettingsFragment__storage_optimization_can_only_be_used">Η βελτιστοποίηση αποθηκευτικού χώρου μπορεί να χρησιμοποιηθεί μόνο με την πληρωμένη βαθμίδα των αντιγράφων ασφαλείας Signal Secure Backups. Η συνδρομή για αντίγραφα ασφαλείας βρίσκεται ακόμη υπό επεξεργασία και δεν είναι ακόμη ενεργή. Δοκίμασε αργότερα.</string>
-    <!-- Title of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__media_will_be_removed_from_your_on_device_backup">Τα αρχεία πολυμέσων θα διαγραφούν από το αντίγραφο ασφαλείας που βρίσκεται στη συσκευή σου</string>
-    <!-- Body of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__turning_on_optimize_signal_storage_will_offload">Η ενεργοποίηση της επιλογής «Βελτιστοποίηση αποθηκευτικού χώρου Signal» θα διαγράψει τα παλιά αρχεία πολυμέσων από τη συσκευή σου. Μπορείς να τα κατεβάσεις ξανά ανά πάσα στιγμή. Επίσης, θα διαγράψει τα παλιά αρχεία πολυμέσων από το αντίγραφο ασφαλείας στη συσκευή σου.</string>
-    <!-- Dialog action to confirm turning on "Optimize Signal storage" -->
-    <string name="ManageStorageSettingsFragment__turn_on">Ενεργοποίηση</string>
-
     <!-- UpgradeToEnableOptimizedStorageSheet -->
     <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
     <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">Αναβάθμισε για να ενεργοποιήσεις αυτήν τη λειτουργία</string>
@@ -8025,11 +7343,11 @@
     <!-- Retry button shown when ending a group fails -->
     <string name="EndGroupDialog__try_again">Δοκίμασε ξανά</string>
 
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, with admin name. %1$s is the admin\'s display name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, with admin name. %1$s is the admin\'s display name -->
     <string name="TerminatedGroupBottomSheet__s_ended_the_group">Ο χρήστης %1$s διέγραψε την ομάδα</string>
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, without admin name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, without admin name -->
     <string name="TerminatedGroupBottomSheet__the_group_has_been_ended">Η ομάδα έχει καταργηθεί.</string>
-    <!-- Body of bottom sheet shown when opening a terminated group -->
+    <!-- Body of bottom sheet shown when a group is ended while the user has the conversation open -->
     <string name="TerminatedGroupBottomSheet__you_can_no_longer_send_and_receive">Δεν μπορείς πλέον να στέλνεις ή να λαμβάνεις μηνύματα ή κλήσεις σε αυτή την ομάδα.</string>
 
     <!-- NoManualBackupBottomSheet -->
@@ -8328,6 +7646,12 @@
     <string name="MessageBackupsFlowFragment__a_network_failure_occurred">Παρουσιάστηκε αποτυχία δικτύου. Δοκίμασε αργότερα.</string>
     <!-- Toast message if this fragment encounters an in progress deletion -->
     <string name="MessageBackupsFlowFragment__a_backup_deletion_is_in_progress">Μια διαγραφή αντιγράφου ασφαλείας βρίσκεται σε εξέλιξη.</string>
+    <!-- Title of the device screen lock prompt shown before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__unlock_to_set_up_secure_backups">Ξεκλείδωσε για να ρυθμίσεις τα Ασφαλή αντίγραφα</string>
+    <!-- Title of the sheet explaining that the device screen lock is needed before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__to_set_up_secure_backups_confirm_its_you">Για να ρυθμίσεις τα Ασφαλή αντίγραφα, επιβεβαίωσε ότι είσαι εσύ</string>
+    <!-- Toast shown when the device screen lock wasn\'t confirmed, so backup setup didn\'t continue -->
+    <string name="MessageBackupsFlowFragment__authentication_required">Απαιτείται έλεγχος ταυτότητας</string>
 
     <!-- MessageBackupsEducationScreen -->
     <!-- Screen subtitle underneath large headline title -->
@@ -8620,6 +7944,8 @@
     <string name="MainToolbar__notification_profile_content_description">Προφίλ ειδοποιήσεων</string>
     <!-- Accessibility label for more options button in MainToolbar -->
     <string name="MainToolbar__proxy_content_description">Proxy</string>
+    <!-- Overflow menu item in MainToolbar that opens donation settings -->
+    <string name="MainToolbar__donate">Δωρεά</string>
     <!-- Accessibility label for search filter button in MainToolbar -->
   <!-- Removed by excludeNonTranslatables <string name="MainToolbar__search_filter_content_description" translatable="false">Search filter</string> -->
 
@@ -8641,9 +7967,6 @@
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__clear" translatable="false">Clear</string> -->
     <!-- SearchFilterBottomSheet: Select date dialog title -->
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__select_date" translatable="false">Select date</string> -->
-
-    <!-- Accessibility label for a button displayed in the toolbar to return to the previous screen. -->
-    <string name="DefaultTopAppBar__navigate_up_content_description">Μετάβαση προς τα πάνω</string>
 
     <!-- Accessibility label describing the action that occurs when clicking a checkbox. -->
     <string name="SignalCheckbox_accessibility_on_click_label">Ενεργοποίηση</string>
@@ -8942,6 +8265,9 @@
 
     <!-- Body of the sheet shown when a local backup restore could not be completed, explaining how to try again -->
     <string name="CouldNotCompleteBackupRestoreSheet__body_retry">Για να δοκιμάσεις ξανά, πραγματοποίησε απεγκατάσταση και εκ νέου εγκατάσταση του Signal σε αυτή τη συσκευή και επίλεξε «Επαναφορά ή μεταφορά».</string>
+
+    <!-- Button on the sheet shown when a local backup restore could not be completed, opening a support article about it -->
+    <string name="CouldNotCompleteBackupRestoreSheet__learn_more">Μάθε περισσότερα</string>
 
     <!-- Title of the sheet shown when the server reports a verification code was requested for the user\'s phone number -->
     <string name="VerificationCodeRequestedBottomSheet__title">Ζητήθηκε κωδικός επαλήθευσης</string>

@@ -5,12 +5,20 @@
 
 package org.signal.mediakeyboard.screens.sticker
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.runtime.snapshots.Snapshot
 import assertk.assertThat
 import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
+import assertk.assertions.isFalse
 import assertk.assertions.isNull
+import assertk.assertions.isTrue
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.unmockkObject
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +36,8 @@ import org.signal.mediakeyboard.MediaKeyboardAction
 import org.signal.mediakeyboard.data.KeyboardSticker
 import org.signal.mediakeyboard.data.KeyboardStickerPack
 import org.signal.mediakeyboard.data.StickerKeyboardRepository
+import org.signal.remoteconfig.FakeRemoteConfigDependencies
+import org.signal.remoteconfig.RemoteConfig
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class StickerPageViewModelTest {
@@ -53,6 +63,9 @@ class StickerPageViewModelTest {
     repository = mockk(relaxed = true)
     every { repository.allowStickerAnimation } returns true
     every { repository.observeStickerPacks() } returns packsFlow
+    RemoteConfig.initDependencies(FakeRemoteConfigDependencies())
+    mockkObject(RemoteConfig)
+    every { RemoteConfig.internalUser } returns false
 
     actions = mutableListOf()
     collectorScope = CoroutineScope(testDispatcher)
@@ -61,6 +74,7 @@ class StickerPageViewModelTest {
   @After
   fun tearDown() {
     collectorScope.cancel()
+    unmockkObject(RemoteConfig)
     Dispatchers.resetMain()
   }
 
@@ -89,6 +103,41 @@ class StickerPageViewModelTest {
     testDispatcher.scheduler.advanceUntilIdle()
 
     assertThat(viewModel.state.value.selectedPackId).isEqualTo("pack-2")
+  }
+
+  @Test
+  fun `search query - shows the search results in place of the installed packs`() {
+    val results = listOf(
+      KeyboardStickerPack(id = StickerKeyboardRepository.SEARCH_RESULTS_PACK_ID, packKey = null, title = null, cover = null, stickers = listOf(sticker))
+    )
+    coEvery { repository.searchStickerPacks("dog") } returns results
+    val viewModel = createViewModel()
+
+    viewModel.searchFieldState.setTextAndPlaceCursorAtEnd(" dog ")
+    Snapshot.sendApplyNotifications()
+    testDispatcher.scheduler.advanceUntilIdle()
+
+    assertThat(viewModel.state.value.packs).isEqualTo(results)
+    assertThat(viewModel.state.value.selectedPackId).isEqualTo(StickerKeyboardRepository.SEARCH_RESULTS_PACK_ID)
+  }
+
+  @Test
+  fun `search query cleared - returns to the installed packs`() {
+    coEvery { repository.searchStickerPacks(any()) } returns emptyList()
+    val viewModel = createViewModel()
+
+    viewModel.searchFieldState.setTextAndPlaceCursorAtEnd("dog")
+    Snapshot.sendApplyNotifications()
+    testDispatcher.scheduler.advanceUntilIdle()
+
+    assertThat(viewModel.state.value.hasNoSearchResults).isTrue()
+
+    viewModel.searchFieldState.clearText()
+    Snapshot.sendApplyNotifications()
+    testDispatcher.scheduler.advanceUntilIdle()
+
+    assertThat(viewModel.state.value.packs).isEqualTo(packs)
+    assertThat(viewModel.state.value.hasNoSearchResults).isFalse()
   }
 
   @Test
@@ -122,13 +171,22 @@ class StickerPageViewModelTest {
   }
 
   @Test
-  fun `sticker clicked - reports the selection without recording a use`() {
+  fun `sticker long pressed - reports the selection without recording a use`() {
     val viewModel = createViewModel()
-    viewModel.onEvent(StickerPageScreenEvents.StickerClicked(sticker))
+    viewModel.onEvent(StickerPageScreenEvents.StickerLongPressed(sticker))
     testDispatcher.scheduler.advanceUntilIdle()
 
     verify(exactly = 0) { repository.onStickerUsed(any()) }
     assertThat(actions).isEqualTo(listOf(MediaKeyboardAction.StickerSelected(sticker)))
+  }
+
+  @Test
+  fun `sticker long pressed in favorites - reports that it is in favorites`() {
+    val viewModel = createViewModel()
+    viewModel.onEvent(StickerPageScreenEvents.StickerLongPressed(sticker, isInFavorites = true))
+    testDispatcher.scheduler.advanceUntilIdle()
+
+    assertThat(actions).isEqualTo(listOf(MediaKeyboardAction.StickerSelected(sticker, isInFavorites = true)))
   }
 
   @Test
@@ -144,7 +202,7 @@ class StickerPageViewModelTest {
   @Test
   fun `view pack clicked - hands the pack's ids to the host`() {
     val viewModel = createViewModel()
-    viewModel.onEvent(StickerPageScreenEvents.ViewStickerPackClicked(sticker.packId, sticker.packKey))
+    viewModel.onEvent(StickerPageScreenEvents.ViewStickerPackClicked(sticker.packId, "pack-1-key"))
     testDispatcher.scheduler.advanceUntilIdle()
 
     assertThat(actions).isEqualTo(listOf(MediaKeyboardAction.ViewStickerPackClicked("pack-1", "pack-1-key")))

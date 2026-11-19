@@ -31,15 +31,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.SimpleColorFilter
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import org.signal.core.ui.util.ThemeUtil
+import org.signal.core.ui.util.ViewUtil
 import org.signal.core.util.SetUtil
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.conversation.ConversationAdapterBridge
 import org.thoughtcrime.securesms.conversation.ConversationAdapterBridge.PulseRequest
 import org.thoughtcrime.securesms.conversation.v2.items.InteractiveConversationElement
 import org.thoughtcrime.securesms.database.model.InMemoryMessageRecord
-import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper
 import java.lang.Integer.max
+import org.signal.core.ui.R as CoreUiR
 
 /**
  * Decoration which renders the background shade and selection bubble for a {@link Multiselectable} item.
@@ -63,8 +64,8 @@ class MultiselectItemDecoration(
   private val transparentBlack20 = ContextCompat.getColor(context, R.color.transparent_black_20)
   private val transparentWhite20 = ContextCompat.getColor(context, R.color.transparent_white_20)
   private val transparentWhite60 = ContextCompat.getColor(context, R.color.transparent_white_60)
-  private val ultramarine30 = ContextCompat.getColor(context, R.color.core_ultramarine_33)
-  private val ultramarine = ContextCompat.getColor(context, R.color.signal_accent_primary)
+  private val ultramarine30 = ContextCompat.getColor(context, CoreUiR.color.core_ultramarine_33)
+  private val ultramarine = ContextCompat.getColor(context, CoreUiR.color.signal_accent_primary)
 
   private val selectedParts: MutableSet<MultiselectPart> = mutableSetOf()
   private var enterExitAnimation: ValueAnimator? = null

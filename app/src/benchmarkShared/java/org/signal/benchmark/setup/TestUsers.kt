@@ -6,9 +6,13 @@ import android.preference.PreferenceManager
 import kotlinx.coroutines.runBlocking
 import okio.ByteString
 import org.signal.core.models.ServiceId.ACI
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.Util
 import org.signal.libsignal.protocol.IdentityKeyPair
 import org.signal.libsignal.protocol.SignalProtocolAddress
+import org.signal.storage.keyvalue.CertificateType
+import org.signal.storage.keyvalue.Skipped
+import org.signal.storage.protos.RestoreDecisionState
 import org.signal.storageservice.storage.protos.groups.AccessControl
 import org.signal.storageservice.storage.protos.groups.Member
 import org.signal.storageservice.storage.protos.groups.local.DecryptedGroup
@@ -19,16 +23,13 @@ import org.thoughtcrime.securesms.crypto.MasterSecretUtil
 import org.thoughtcrime.securesms.crypto.PreKeyUtil
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil
 import org.thoughtcrime.securesms.database.SignalDatabase
-import org.thoughtcrime.securesms.database.model.databaseprotos.RestoreDecisionState
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groups.GroupId
-import org.thoughtcrime.securesms.keyvalue.CertificateType
 import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.keyvalue.Skipped
 import org.thoughtcrime.securesms.net.DeviceTransferBlockingInterceptor
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.recipients.RecipientIds
 import org.thoughtcrime.securesms.registration.data.AccountRegistrationResult
 import org.thoughtcrime.securesms.registration.data.LocalRegistrationMetadataUtil
 import org.thoughtcrime.securesms.registration.data.RegistrationData
@@ -129,7 +130,7 @@ object TestUsers {
 
       for (i in generatedOthers until generatedOthers + othersCount) {
         val aci = ACI.from(UUID.randomUUID())
-        val recipientId = RecipientId.from(SignalServiceAddress(aci, "+15555551%03d".format(i)))
+        val recipientId = RecipientIds.from(SignalServiceAddress(aci, "+15555551%03d".format(i)))
         SignalDatabase.recipients.setProfileName(recipientId, ProfileName.fromParts("Buddy", "#$i"))
         SignalDatabase.recipients.setProfileKeyIfAbsent(recipientId, ProfileKeyUtil.createNew())
         SignalDatabase.recipients.setCapabilities(recipientId, SignalServiceProfile.Capabilities(true, true, true, false))
@@ -153,7 +154,7 @@ object TestUsers {
       for (i in 0 until othersCount) {
         val otherClient = Harness.otherClients[i]
 
-        val recipientId = RecipientId.from(SignalServiceAddress(otherClient.serviceId, otherClient.e164))
+        val recipientId = RecipientIds.from(SignalServiceAddress(otherClient.serviceId, otherClient.e164))
         SignalDatabase.recipients.setProfileName(recipientId, ProfileName.fromParts("Buddy", "#$i"))
         SignalDatabase.recipients.setProfileKeyIfAbsent(recipientId, otherClient.profileKey)
         SignalDatabase.recipients.setCapabilities(recipientId, SignalServiceProfile.Capabilities(true, true, true, false))

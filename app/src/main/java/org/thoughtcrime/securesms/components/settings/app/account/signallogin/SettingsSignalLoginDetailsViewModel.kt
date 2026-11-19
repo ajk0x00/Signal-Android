@@ -14,6 +14,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.signal.appsettings.routes.AppSettingsNavigationEvent
+import org.signal.appsettings.routes.AppSettingsRoute
+import org.signal.appsettings.routes.navigateBack
+import org.signal.appsettings.routes.navigateTo
 import org.signal.core.ui.compose.EventDrivenViewModel
 import org.signal.core.util.logging.Log
 import org.signal.signallogin.viewdetails.SignalLoginViewDetailsScreenEvents
@@ -30,6 +34,7 @@ import org.signal.signallogin.viewdetails.SignalLoginViewDetailsState
  *   confirmation.
  */
 class SettingsSignalLoginDetailsViewModel(
+  private val parentEventEmitter: (AppSettingsNavigationEvent) -> Unit,
   private val repository: SignalLoginViewDetailsRepository = SignalLoginViewDetailsRepository(),
   showResetRecoveryKeyButton: Boolean = false,
   isPasswordManagerAvailable: Boolean = true,
@@ -51,10 +56,12 @@ class SettingsSignalLoginDetailsViewModel(
     )
   )
   private val _resetRecoveryKeyState = MutableStateFlow(ResetRecoveryKeyState(areBackupsEnabled = repository.areBackupsEnabled()))
+  private val _snackbar = MutableStateFlow<SettingsSignalLoginDetailsSnackbar>(SettingsSignalLoginDetailsSnackbar.None)
   private val _actions = Channel<SignalLoginViewDetailsAction>(Channel.BUFFERED)
 
   val state: StateFlow<SignalLoginViewDetailsState> = _state.asStateFlow()
   val resetRecoveryKeyState: StateFlow<ResetRecoveryKeyState> = _resetRecoveryKeyState.asStateFlow()
+  val snackbar: StateFlow<SettingsSignalLoginDetailsSnackbar> = _snackbar.asStateFlow()
   val actions: Flow<SignalLoginViewDetailsAction> = _actions.receiveAsFlow()
 
   init {
@@ -74,14 +81,14 @@ class SettingsSignalLoginDetailsViewModel(
           _resetRecoveryKeyState.update { it.copy(dialog = ResetRecoveryKeyState.Dialog.DOWNLOAD_MEDIA) }
         } else {
           _resetRecoveryKeyState.update { it.copy(dialog = ResetRecoveryKeyState.Dialog.NONE) }
-          _actions.send(SignalLoginViewDetailsAction.LaunchRecoveryKeyReset)
+          parentEventEmitter.navigateTo(AppSettingsRoute.BackupsRoute.DisplayKey(startWithKeyRotation = true))
         }
       }
 
       SettingsSignalLoginDetailsEvent.TurnOffOptimizedStorageClicked -> {
         repository.turnOffOptimizedStorageAndDownloadMedia()
         _resetRecoveryKeyState.update { it.copy(dialog = ResetRecoveryKeyState.Dialog.NONE) }
-        _actions.send(SignalLoginViewDetailsAction.NavigateBack)
+        parentEventEmitter.navigateBack()
       }
 
       SettingsSignalLoginDetailsEvent.ResetRecoveryKeyDismissed -> {
@@ -99,19 +106,27 @@ class SettingsSignalLoginDetailsViewModel(
         _resetRecoveryKeyState.update { it.copy(hasResetPermitsRemaining = null) }
         refreshResetLimit()
       }
+
+      is SettingsSignalLoginDetailsEvent.SaveAsPdfFailed -> {
+        _snackbar.value = SettingsSignalLoginDetailsSnackbar.SaveAsPdfFailed(event.messageRes)
+      }
+
+      SettingsSignalLoginDetailsEvent.SnackbarDismissed -> {
+        _snackbar.value = SettingsSignalLoginDetailsSnackbar.None
+      }
     }
   }
 
   private suspend fun processScreenEvent(event: SignalLoginViewDetailsScreenEvents) {
     when (event) {
       SignalLoginViewDetailsScreenEvents.BackClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.NavigateBack)
+        parentEventEmitter.navigateBack()
       }
       SignalLoginViewDetailsScreenEvents.SaveToPasswordManagerClicked -> {
         if (_state.value.isPasswordManagerAvailable) {
           _state.update { it.copy(showSaveToPasswordManagerConfirmation = true) }
         } else {
-          _actions.send(SignalLoginViewDetailsAction.ShowNoPasswordManagerAvailable)
+          _snackbar.value = SettingsSignalLoginDetailsSnackbar.NoPasswordManagerAvailable
         }
       }
       SignalLoginViewDetailsScreenEvents.SaveToPasswordManagerConfirmed -> {
@@ -122,7 +137,7 @@ class SettingsSignalLoginDetailsViewModel(
         _state.update { it.copy(showSaveToPasswordManagerConfirmation = false) }
       }
       SignalLoginViewDetailsScreenEvents.SaveAsPdfClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.LaunchSaveAsPdf)
+        _state.update { it.copy(doNotShareWarningAction = SignalLoginViewDetailsState.DoNotShareWarningAction.SAVE_AS_PDF) }
       }
       SignalLoginViewDetailsScreenEvents.ResetRecoveryKeyClicked -> {
         _resetRecoveryKeyState.update {
@@ -136,11 +151,36 @@ class SettingsSignalLoginDetailsViewModel(
           }
         }
       }
-      is SignalLoginViewDetailsScreenEvents.CopyAccountIdClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(event.aci))
+      SignalLoginViewDetailsScreenEvents.CopyAccountIdClicked -> {
+        _state.update { it.copy(doNotShareWarningAction = SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_ACCOUNT_ID) }
       }
-      is SignalLoginViewDetailsScreenEvents.CopyRecoveryKeyClicked -> {
-        _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(event.aep))
+      SignalLoginViewDetailsScreenEvents.CopyRecoveryKeyClicked -> {
+        _state.update { it.copy(doNotShareWarningAction = SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_RECOVERY_KEY) }
+      }
+      SignalLoginViewDetailsScreenEvents.DoNotShareWarningGotItClicked -> {
+        val state = _state.value
+        _state.update { it.copy(doNotShareWarningAction = null) }
+        when (state.doNotShareWarningAction) {
+          SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_ACCOUNT_ID -> {
+            _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(state.accountKey))
+          }
+          SignalLoginViewDetailsState.DoNotShareWarningAction.COPY_RECOVERY_KEY -> {
+            _actions.send(SignalLoginViewDetailsAction.CopyTextToClipboard(state.recoveryKey))
+          }
+          SignalLoginViewDetailsState.DoNotShareWarningAction.SAVE_AS_PDF -> {
+            _actions.send(SignalLoginViewDetailsAction.LaunchSaveAsPdf)
+          }
+          null -> {
+            Log.w(TAG, "Do-not-share warning acknowledged with nothing waiting behind it. Ignoring.")
+          }
+        }
+      }
+      SignalLoginViewDetailsScreenEvents.DoNotShareWarningLearnMoreClicked -> {
+        _state.update { it.copy(doNotShareWarningAction = null) }
+        _actions.send(SignalLoginViewDetailsAction.OpenDoNotShareLearnMoreArticle)
+      }
+      SignalLoginViewDetailsScreenEvents.DoNotShareWarningDismissed -> {
+        _state.update { it.copy(doNotShareWarningAction = null) }
       }
     }
   }

@@ -34,7 +34,7 @@ public class AskSlashCommandHandler implements SlashCommandHandler {
     }
 
 
-    org.thoughtcrime.securesms.recipients.RecipientId quoteAuthorId = (quote != null) ? quote.getAuthor() : null;
+    org.signal.core.models.recipients.RecipientId quoteAuthorId = (quote != null) ? quote.getAuthor() : null;
     AskGroqJob.enqueue(threadId, question, originalSentTimestamp, fullBody, quotedText, quoteAuthorId);
     return true;
   }

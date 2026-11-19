@@ -5,8 +5,11 @@ on:
     branches:
       - 'sync/**'
       - 'verify/**'
-  pull_request:
   workflow_dispatch:
+
+concurrency:
+  group: verify-compile-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   verify-compile:
@@ -53,7 +56,7 @@ jobs:
         run: |
           ./gradlew \
             --write-verification-metadata sha256 \
-            compileWebsiteProdDebugSources \
+            compilePlayProdDebugSources \
             -Dorg.gradle.jvmargs="-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC -Dcom.android.tools.r8.deterministicdebugging=false" \
             -Dkotlin.daemon.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m" \
             --parallel \

@@ -43,6 +43,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.BottomSheets
 import org.signal.core.ui.compose.ComposeBottomSheetDialogFragment
 import org.signal.core.ui.compose.DayNightPreviews
@@ -62,7 +63,6 @@ import org.thoughtcrime.securesms.groups.memberlabel.MemberLabel
 import org.thoughtcrime.securesms.groups.ui.incommon.GroupsInCommonActivity
 import org.thoughtcrime.securesms.nicknames.ViewNoteSheet
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.stories.settings.my.SignalConnectionsBottomSheetDialogFragment
 import org.thoughtcrime.securesms.util.SignalE164Util
 import org.signal.core.ui.R as CoreUiR
@@ -241,7 +241,7 @@ private fun Content(
     )
 
     AboutRow(
-      startIcon = ImageVector.vectorResource(R.drawable.symbol_person_24),
+      startIcon = ImageVector.vectorResource(CoreUiR.drawable.symbol_person_24),
       text = if (!model.isSelf && model.displayName.isNotBlank() && model.profileName.isNotBlank() && model.displayName != model.profileName) {
         stringResource(id = R.string.AboutSheet__user_set_display_name_and_profile_name, model.displayName, model.profileName)
       } else {
@@ -346,7 +346,7 @@ private fun Content(
       }
 
       val groupsInCommonIcon = if (!model.profileSharing && model.groupsInCommon == 0) {
-        ImageVector.vectorResource(R.drawable.symbol_error_circle_24)
+        ImageVector.vectorResource(CoreUiR.drawable.symbol_error_circle_24)
       } else {
         ImageVector.vectorResource(R.drawable.symbol_group_24)
       }
@@ -743,7 +743,7 @@ private fun AboutRowPreview() {
   Previews.Preview {
     Surface {
       AboutRow(
-        startIcon = ImageVector.vectorResource(R.drawable.symbol_person_24),
+        startIcon = ImageVector.vectorResource(CoreUiR.drawable.symbol_person_24),
         text = "Maya Johnson",
         endIcon = ImageVector.vectorResource(id = R.drawable.symbol_chevron_right_compact_bold_16)
       )

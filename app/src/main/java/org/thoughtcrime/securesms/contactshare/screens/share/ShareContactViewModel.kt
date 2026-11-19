@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.EventDrivenViewModel
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.contactshare.Contact
 import org.thoughtcrime.securesms.contactshare.SharedContactSource
 import org.thoughtcrime.securesms.contactshare.screens.editname.ContactNameParts
-import org.thoughtcrime.securesms.recipients.RecipientId
 
 /** A loaded contact alongside the state derived from it. */
 data class LoadedContact(
@@ -127,7 +127,7 @@ class ShareContactViewModel(
       is ShareContactEvent.NameEdited -> {
         nameParts = event.parts
         _state.update { current ->
-          current.copy(name = current.name?.copy(displayName = event.parts.toDisplayName()))
+          current.copy(name = current.name?.copy(displayName = event.parts.toDisplayName(), isOrgOnly = event.parts.isOrgOnly))
         }
       }
 
@@ -213,7 +213,8 @@ class ShareContactViewModel(
       ),
       name = name?.copy(
         isSelected = savedState.get<Boolean>(KEY_NAME_SELECTED) ?: name.isSelected,
-        displayName = nameParts.toDisplayName().ifBlank { name.displayName }
+        displayName = nameParts.toDisplayName().ifBlank { name.displayName },
+        isOrgOnly = nameParts.isOrgOnly
       ),
       details = details.map { it.copy(isSelected = it.id in detailIds) }
     )

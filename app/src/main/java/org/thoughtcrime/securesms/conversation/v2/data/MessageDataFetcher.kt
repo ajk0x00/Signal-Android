@@ -6,6 +6,7 @@
 package org.thoughtcrime.securesms.conversation.v2.data
 
 import androidx.annotation.WorkerThread
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.UuidUtil
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.roundedString
@@ -28,7 +29,7 @@ import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelRepository
 import org.thoughtcrime.securesms.payments.Payment
 import org.thoughtcrime.securesms.polls.PollRecord
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.recipients.RecipientIds
 import org.thoughtcrime.securesms.recipients.RecipientUtil
 import java.util.UUID
 import java.util.concurrent.Callable
@@ -101,7 +102,7 @@ object MessageDataFetcher {
     val recipientsFuture = executor.submitTimed {
       messageRecords.forEach { record ->
         record.getUpdateDisplayBody(context, null)?.let { description ->
-          val ids = description.mentioned.map { RecipientId.from(it) }
+          val ids = description.mentioned.map { RecipientIds.from(it) }
           Recipient.resolvedList(ids)
         }
       }

@@ -11,13 +11,16 @@ import org.signal.donations.permits.DonationPermitsRepository
 import org.signal.libsignal.net.Network
 import org.signal.libsignal.zkgroup.profiles.ClientZkProfileOperations
 import org.signal.libsignal.zkgroup.receipts.ClientZkReceiptOperations
+import org.signal.locale.LanguageSplitRepository
 import org.signal.network.api.AccountApiV2
 import org.signal.network.api.AttachmentApi
 import org.signal.network.api.CallingApi
 import org.signal.network.api.CdnApi
 import org.signal.network.api.CdsApi
 import org.signal.network.api.CertificateApi
+import org.signal.network.api.KeysApiV2
 import org.signal.network.api.LinkDeviceApi
+import org.signal.network.api.MessageApiV2
 import org.signal.network.api.PaymentsApi
 import org.signal.network.api.ProvisioningApi
 import org.signal.network.api.RateLimitChallengeApi
@@ -29,6 +32,7 @@ import org.signal.network.config.NetworkProxyState
 import org.signal.network.config.SignalServiceConfiguration
 import org.signal.network.rest.SignalRestClient
 import org.signal.network.service.CdnService
+import org.signal.network.service.MessageService
 import org.signal.network.service.StorageServiceService
 import org.signal.network.service.TwoFactorMethodService
 import org.signal.network.service.UsernameService
@@ -131,9 +135,9 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
 
   override fun provideMessageService(
     protocolStore: SignalServiceDataStore,
-    messageApiV2: org.signal.network.api.MessageApiV2,
-    keysApiV2: org.signal.network.api.KeysApiV2
-  ): org.signal.network.service.MessageService {
+    messageApiV2: MessageApiV2,
+    keysApiV2: KeysApiV2
+  ): MessageService {
     return mockk(relaxed = true)
   }
 
@@ -283,6 +287,10 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
     return mockk(relaxed = true)
   }
 
+  override fun provideLanguageSplitRepository(): LanguageSplitRepository {
+    return mockk(relaxed = true)
+  }
+
   override fun provideUnreadReminderManager(): UnreadReminderManager {
     return mockk(relaxed = true)
   }
@@ -300,6 +308,10 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
   }
 
   override fun provideKeysApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeysApi {
+    return mockk(relaxed = true)
+  }
+
+  override fun provideKeysApiV2(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, unauthWebSocket: SignalWebSocket.UnauthenticatedWebSocket): KeysApiV2 {
     return mockk(relaxed = true)
   }
 
@@ -387,7 +399,7 @@ class MockApplicationDependencyProvider : AppDependencies.Provider {
     return mockk(relaxed = true)
   }
 
-  override fun provideRemoteConfigApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket, pushServiceSocket: PushServiceSocket): RemoteConfigApi {
+  override fun provideRemoteConfigApi(authWebSocket: SignalWebSocket.AuthenticatedWebSocket): RemoteConfigApi {
     return mockk(relaxed = true)
   }
 

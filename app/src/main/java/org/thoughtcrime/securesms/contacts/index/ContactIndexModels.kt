@@ -5,7 +5,7 @@
 
 package org.thoughtcrime.securesms.contacts.index
 
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.signal.core.models.recipients.RecipientId
 
 /**
  * Which sources a row came from, which is what decides the badges and actions the row offers.
@@ -39,10 +39,11 @@ class ContactIndexEntry(
   val contactId: Long? = null,
   /**
    * Whether [displayName] is a personal name. False when the provider had to fall back to a company,
-   * email, or phone number, which is what sends a row to the "#" section and makes it render a person
-   * glyph rather than initials.
+   * email, or phone number, which is what sends a row to the "#" section and makes it render a glyph
+   * rather than initials.
    */
   val hasPersonalName: Boolean = true,
+  val isOrgOnly: Boolean = false,
   val hasPhoto: Boolean = false
 )
 
@@ -57,7 +58,10 @@ data class ContactIndexRecord(
   val lookupKey: String?,
   val contactId: Long?,
   val hasPersonalName: Boolean,
-  val hasPhoto: Boolean
+  val isOrgOnly: Boolean,
+  val hasPhoto: Boolean,
+  /** Not stored in the index. Filled in per page, since profile photos change independently of it. */
+  val hasProfilePhoto: Boolean = false
 ) {
   val isOnSignal: Boolean
     get() = type == ContactIndexType.SIGNAL_ONLY || type == ContactIndexType.BOTH
@@ -66,7 +70,7 @@ data class ContactIndexRecord(
     get() = type == ContactIndexType.SYSTEM_ONLY || type == ContactIndexType.BOTH
 
   override fun toString(): String {
-    return "ContactIndexRecord(position=$position, type=$type, recipientId=$recipientId, hasLookupKey=${lookupKey != null}, contactId=$contactId, hasPersonalName=$hasPersonalName, hasPhoto=$hasPhoto)"
+    return "ContactIndexRecord(position=$position, type=$type, recipientId=$recipientId, hasLookupKey=${lookupKey != null}, contactId=$contactId, hasPersonalName=$hasPersonalName, isOrgOnly=$isOrgOnly, hasPhoto=$hasPhoto, hasProfilePhoto=$hasProfilePhoto)"
   }
 }
 

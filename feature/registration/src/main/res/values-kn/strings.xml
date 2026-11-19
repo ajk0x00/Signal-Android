@@ -71,6 +71,14 @@
     <string name="RegistrationActivity_link_device">ಸಾಧನ ಲಿಂಕ್ ಮಾಡಿ</string>
     <!-- Clickable text that opens a corresponding URL -->
     <string name="RegistrationActivity_learn_more">ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</string>
+    <!-- Dialog message shown when the server rejects the user\'s captcha response during registration -->
+    <string name="PhoneNumberEntryScreen__captcha_not_accepted">ನಿಮ್ಮ ದೃಢೀಕರಣ ಪ್ರತಿಕ್ರಿಯೆಯನ್ನು ಸ್ವೀಕರಿಸಲಾಗಿಲ್ಲ. ನಂತರ ಪುನಃ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಸಮಸ್ಯೆ ಮುಂದುವರಿದರೆ ಬೆಂಬಲವನ್ನು ಸಂಪರ್ಕಿಸಿ.</string>
+    <!-- Dialog button that lets the user contact support after their captcha response was rejected -->
+    <string name="PhoneNumberEntryScreen__contact_support">ಬೆಂಬಲವನ್ನು ಸಂಪರ್ಕಿಸಿ</string>
+    <!-- Subject line of the support email composed when the user\'s captcha response was rejected during registration -->
+    <string name="PhoneNumberEntryScreen__contact_support_email_subject">Signal ನೋಂದಣಿ - Android ಗೆ ಕ್ಯಾಪ್ಚ ಸ್ವೀಕರಿಸಲಾಗಿಲ್ಲ</string>
+    <!-- Text placed in the body of the support email composed when the user\'s captcha response was rejected. Used to route the request, so it is not translated. -->
+  <!-- Removed by excludeNonTranslatables <string name="PhoneNumberEntryScreen__contact_support_email_filter" translatable="false">Signal Registration - Captcha Not Accepted for Android</string> -->
 
     <!-- CountryCodePickerScreen -->
     <!-- Title of the country code selection screen -->
@@ -243,19 +251,19 @@
     <!-- Title of the dialog shown when the entered recovery key does not match the account being registered -->
     <string name="EnterAepScreen__incorrect_recovery_key_dialog_title">ತಪ್ಪಾದ ರಿಕವರಿ ಕೀ</string>
     <!-- Body of the dialog shown when the entered recovery key does not match the account being registered -->
-    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Make sure you\'re registering with the same phone number and 64-character recovery key you saved when enabling Signal backups. Backups cannot be recovered without this key.</string>
+    <string name="EnterAepScreen__incorrect_recovery_key_dialog_body">Signal ಬ್ಯಾಕಪ್‌ಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವಾಗ ನೀವು ಸೇವ್ ಮಾಡಿದ ಅದೇ ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು 64-ಅಕ್ಷರಗಳ ರಿಕವರಿ ಕೀಯೊಂದಿಗೆ ನೀವು ನೋಂದಾಯಿಸುತ್ತಿದ್ದೀರಿ ಎಂಬುದನ್ನು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ. ಈ ಕೀ ಇಲ್ಲದೆ ಬ್ಯಾಕಪ್‌ಗಳನ್ನು ರಿಕವರ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.</string>
     <!-- Button in the incorrect recovery key dialog that dismisses it so the user can re-enter their key -->
     <string name="EnterAepScreen__try_again">ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
     <!-- Button in the incorrect recovery key dialog that offers to verify the phone number over SMS instead -->
-    <string name="EnterAepScreen__try_another_way">Try another way</string>
+    <string name="EnterAepScreen__try_another_way">ಬೇರೆ ವಿಧಾನವನ್ನು ಪ್ರಯತ್ನಿಸಿ</string>
     <!-- Button in the incorrect recovery key dialog that opens a support article about recovery keys -->
     <string name="EnterAepScreen__recovery_key_help">ರಿಕವರಿ ಕೀ ಕುರಿತ ಸಹಾಯ</string>
     <!-- Title of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code">Verify with SMS code?</string>
+    <string name="EnterAepScreen__verify_with_sms_code">SMS ಕೋಡ್ ಮೂಲಕ ದೃಢೀಕರಿಸಬೇಕೇ?</string>
     <!-- Body of the dialog offering to verify the phone number with an SMS code instead of the recovery key -->
-    <string name="EnterAepScreen__verify_with_sms_code_body">You can register your account by verifying via an SMS code Signal will send you. After entering the code, you can try restoring your backup with your recovery key again.</string>
+    <string name="EnterAepScreen__verify_with_sms_code_body">Signal ನಿಮಗೆ ಕಳುಹಿಸುವ SMS ಕೋಡ್ ಬಳಸಿ ದೃಢೀಕರಿಸುವ ಮೂಲಕ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ನೀವು ನೋಂದಾಯಿಸಿಕೊಳ್ಳಬಹುದು. ಕೋಡ್ ಅನ್ನು ನಮೂದಿಸಿದ ನಂತರ, ನಿಮ್ಮ ರಿಕವರಿ ಕೀ ಬಳಸಿಕೊಂಡು ನಿಮ್ಮ ಬ್ಯಾಕಪ್ ಅನ್ನು ರಿಸ್ಟೋರ್ ಮಾಡಲು ನೀವು ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಬಹುದು.</string>
     <!-- Confirm button in the verify with SMS code dialog that requests an SMS verification code -->
-    <string name="EnterAepScreen__send_code">Send code</string>
+    <string name="EnterAepScreen__send_code">ಕೋಡ್ ಕಳುಹಿಸಿ</string>
     <!-- Text shown while preparing the restore -->
     <string name="LocalBackupRestoreScreen__preparing_restore">ರಿಸ್ಟೋರ್ ಅನ್ನು ಸಿದ್ಧಗೊಳಿಸಲಾಗುತ್ತಿದೆ…</string>
     <!-- Title shown while restore is in progress -->
@@ -667,7 +675,7 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginInfoScreen__no_password_manager_available">ನಿಮ್ಮಲ್ಲಿ ಪಾಸ್‌ವರ್ಡ್ ಮ್ಯಾನೇಜರ್ ಸೆಟಪ್ ಇಲ್ಲ.</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginInfoScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginInfoScreen__only_store_your_credentials">ಸುರಕ್ಷಿತ ಎಂದು ನೀವು ನಂಬುವ ಪಾಸ್‌ವರ್ಡ್ ಮ್ಯಾನೇಜರ್‌ನಲ್ಲಿ ಮಾತ್ರ ನಿಮ್ಮ ರುಜುವಾತುಗಳನ್ನು ಸಂಗ್ರಹಿಸಿ. ನಿಮಗೆ ಯಾವ ಪಾಸ್‌ವರ್ಡ್ ಮ್ಯಾನೇಜರ್ ಸೂಕ್ತ ಎಂಬುದರ ಕುರಿತು Signal ಶಿಫಾರಸು ಮಾಡುವುದಿಲ್ಲ.</string>
     <!-- Action button for users who would rather write the Signal Login down themselves. -->
     <string name="SignalLoginInfoScreen__save_manually">ಹಸ್ತಚಾಲಿತವಾಗಿ ಸೇವ್ ಮಾಡಿ</string>
     <!-- Error shown when the Signal Login could not be stored in the password manager. -->
@@ -736,6 +744,8 @@
     <string name="SignalLoginCredentialEntryScreen__show_login_info_again">ಲಾಗಿನ್ ಮಾಹಿತಿಯನ್ನು ಮತ್ತೊಮ್ಮೆ ತೋರಿಸಿ</string>
     <!-- Error shown when what the user typed back doesn\'t match the Signal Login they were given. -->
     <string name="SignalLoginCredentialEntryScreen__that_doesnt_match_the_signal_login_you_were_shown">ಅದು ನಿಮಗೆ ತೋರಿಸಲಾದ Signal Login ಗೆ ಹೊಂದಿಕೆಯಾಗುವುದಿಲ್ಲ</string>
+    <!-- Subtitle on the Signal Login entry screen when the user opened it from a reminder to check they still know their login -->
+    <string name="SignalLoginCredentialEntryScreen__enter_your_signal_login_to_verify_you_still_know_it">ನಿಮಗೆ ಇನ್ನೂ Signal Login ವಿವರಗಳು ನೆನಪಿವೆಯೇ ಎಂದು ದೃಢೀಕರಿಸಿಕೊಳ್ಳಲು ಅವುಗಳನ್ನು ನಮೂದಿಸಿ.</string>
 
     <!-- Add username screen -->
     <!-- Title of the screen offering the user an optional username. -->
@@ -819,5 +829,17 @@
     <!-- Button text to cancel two-factor authentication -->
     <string name="TwoFactorSelectionScreen__cancel">ರದ್ದುಮಾಡಿ</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
-    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again or choose another method.</string>
+    <string name="TwoFactorSelectionScreen__something_went_wrong_with_your_passkey">ನಿಮ್ಮ ಪಾಸ್‌ಕೀಯಲ್ಲಿ ಏನೋ ತಪ್ಪಾಗಿದೆ. ನಂತರ ಪುನಃ ಪ್ರಯತ್ನಿಸಿ ಅಥವಾ ಬೇರೆ ವಿಧಾನವನ್ನು ಆರಿಸಿ.</string>
+
+    <!-- PasskeyVerificationScreen -->
+    <!-- Title of the screen asking the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__two_factor_authentication">ಎರಡು-ಅಂಶದ ಅಥೆಂಟಿಕೇಶನ್</string>
+    <!-- Subtitle telling the user to verify their account with their passkey -->
+    <string name="PasskeyVerificationScreen__to_continue_verify_your_account">ಮುಂದುವರಿಯಲು, ನಿಮ್ಮ ಪಾಸ್‌ಕೀಯೊಂದಿಗೆ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ದೃಢೀಕರಿಸಿ.</string>
+    <!-- Button text to start verifying with a passkey -->
+    <string name="PasskeyVerificationScreen__continue">ಮುಂದುವರಿಸಿ</string>
+    <!-- Button text to cancel two-factor authentication -->
+    <string name="PasskeyVerificationScreen__cancel">ರದ್ದುಮಾಡಿ</string>
+    <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
+    <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">ನಿಮ್ಮ ಪಾಸ್‌ಕೀಯಲ್ಲಿ ಏನೋ ತಪ್ಪಾಗಿದೆ. ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.</string>
 </resources>

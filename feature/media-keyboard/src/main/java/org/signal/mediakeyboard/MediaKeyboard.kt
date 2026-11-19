@@ -48,12 +48,17 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import org.signal.core.ui.compose.CollectActions
+import org.signal.core.ui.compose.DayNightPreviews
+import org.signal.core.ui.compose.IconButtons
 import org.signal.core.ui.compose.SignalIcons
+import org.signal.core.ui.compose.SignalPreviewWrapper
 import org.signal.core.ui.compose.keyboard.KeyboardSheetDragRegion
 import org.signal.core.ui.compose.keyboard.LocalKeyboardSheetController
 import org.signal.mediakeyboard.data.MediaKeyboardRepository
@@ -93,7 +98,7 @@ fun MediaKeyboard(
   tabs: Set<MediaKeyboardTab>? = null,
   initialTab: MediaKeyboardTab? = null
 ) {
-  val host = LocalKeyboardSheetController.current
+  val host = checkNotNull(LocalKeyboardSheetController.current) { "Not inside a KeyboardSheetScaffold's keyboard content." }
   val viewModel: MediaKeyboardViewModel = viewModel(factory = MediaKeyboardViewModel.Factory(repository, host.isEnteringText, initialTab))
   val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -200,7 +205,7 @@ private fun MediaKeyboardTopBar(
       label = "searchAlpha"
     )
 
-    IconButton(
+    IconButtons.IconButton(
       onClick = {
         if (searchAction != null) {
           onAction(searchAction)
@@ -209,7 +214,7 @@ private fun MediaKeyboardTopBar(
         }
       },
       enabled = searchAlpha > 0f,
-      modifier = Modifier.graphicsLayer { alpha = searchAlpha }
+      modifier = Modifier.size(40.dp).graphicsLayer { alpha = searchAlpha }
     ) {
       Icon(
         imageVector = SignalIcons.Search.imageVector,
@@ -224,7 +229,7 @@ private fun MediaKeyboardTopBar(
     ) {
       if (state.availableTabs.size > 1) {
         Row(
-          horizontalArrangement = Arrangement.spacedBy(8.dp),
+          horizontalArrangement = Arrangement.spacedBy(4.dp),
           modifier = Modifier.horizontalScroll(rememberScrollState())
         ) {
           state.availableTabs.forEach { tab ->
@@ -243,7 +248,7 @@ private fun MediaKeyboardTopBar(
 
     when (state.selectedTab) {
       MediaKeyboardTab.EMOJI -> {
-        IconButton(onClick = { onAction(MediaKeyboardAction.Backspace) }) {
+        IconButtons.IconButton(modifier = Modifier.size(40.dp), onClick = { onAction(MediaKeyboardAction.Backspace) }) {
           Icon(
             imageVector = Icons.AutoMirrored.Outlined.Backspace,
             contentDescription = stringResource(R.string.MediaKeyboard__backspace),
@@ -252,7 +257,7 @@ private fun MediaKeyboardTopBar(
         }
       }
       MediaKeyboardTab.STICKER -> {
-        IconButton(onClick = { onAction(MediaKeyboardAction.StickerManagementClicked) }) {
+        IconButtons.IconButton(modifier = Modifier.size(40.dp), onClick = { onAction(MediaKeyboardAction.StickerManagementClicked) }) {
           Icon(
             imageVector = SignalIcons.StickerPackPlus.imageVector,
             contentDescription = stringResource(R.string.MediaKeyboard__manage_stickers),
@@ -261,10 +266,26 @@ private fun MediaKeyboardTopBar(
         }
       }
       MediaKeyboardTab.GIF -> {
-        Box(modifier = Modifier.size(48.dp))
+        Box(modifier = Modifier.size(40.dp))
       }
     }
   }
+}
+
+@PreviewWrapper(SignalPreviewWrapper::class)
+@DayNightPreviews
+@Composable
+private fun MediaKeyboardTopBarPreview() {
+  MediaKeyboardTopBar(
+    state = MediaKeyboardState(
+      offeredTabs = MediaKeyboardTab.entries,
+      initialized = true
+    ),
+    onEvent = {},
+    onAction = {},
+    onOpenSearch = {},
+    searchFieldRevealed = false
+  )
 }
 
 @Composable
@@ -284,7 +305,7 @@ private fun TabPill(
       .clip(CircleShape)
       .background(background)
       .clickable(onClick = onClick)
-      .padding(horizontal = 14.dp, vertical = 8.dp)
+      .padding(horizontal = 16.dp, vertical = 4.dp)
   )
 }
 
@@ -296,9 +317,18 @@ private fun EmojiTab(
   onSearchClicked: () -> Unit,
   onSearchFieldRevealedChange: (Boolean) -> Unit
 ) {
+  val searchQuery = remember(parentStateFlow) {
+    parentStateFlow.map { parent ->
+      parent.searchQuery.takeIf { parent.searchActive && parent.selectedTab == MediaKeyboardTab.EMOJI }
+    }
+  }
+
   val viewModel: EmojiPageViewModel = viewModel(
     key = "media-keyboard-emoji",
-    factory = EmojiPageViewModel.Factory(repository.emoji, parentStateFlow)
+    factory = EmojiPageViewModel.Factory(
+      repository = repository.emoji,
+      searchQuery = searchQuery
+    )
   )
   val state by viewModel.state.collectAsStateWithLifecycle()
 

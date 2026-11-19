@@ -99,7 +99,6 @@ import org.thoughtcrime.securesms.stickers.StickerUrl
 import org.thoughtcrime.securesms.stickers.preview.StickerPackPreviewUiState.ContentState
 import org.thoughtcrime.securesms.stickers.preview.StickerPackPreviewUiState.UserPrompt
 import org.thoughtcrime.securesms.util.MediaUtil
-import org.thoughtcrime.securesms.util.RemoteConfig
 import java.text.NumberFormat
 import kotlin.jvm.optionals.getOrElse
 import org.signal.core.ui.R as CoreUiR
@@ -245,7 +244,7 @@ private fun StickerPackPreviewScreen(
     title = stickerManifest?.let { it.title.orNull() ?: untitledPackTitle } ?: "",
     onNavigationClick = onNavigationClick,
     navigationIcon = SignalIcons.ArrowStart.imageVector,
-    navigationContentDescription = stringResource(R.string.DefaultTopAppBar__navigate_up_content_description),
+    navigationContentDescription = stringResource(CoreUiR.string.DefaultTopAppBar__navigate_up_content_description),
     snackbarHost = { Snackbars.Host(snackbarHostState) },
     titleContent = { _, toolbarTitle ->
       ToolbarTitle(
@@ -623,7 +622,7 @@ private fun StickerPreviewSheet(
   isPackInstalled: Boolean,
   onEvent: (StickerPackPreviewEvent) -> Unit
 ) {
-  val sheetState = rememberModalBottomSheetState()
+  val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val scope = rememberCoroutineScope()
 
   BottomSheets.BottomSheet(
@@ -635,7 +634,7 @@ private fun StickerPreviewSheet(
       sticker = sticker,
       canForward = isPackInstalled,
       onForwardClick = { sheetState.dismissWithAnimation(scope, onComplete = { onEvent(StickerPackPreviewEvent.StickerSent(sticker)) }) },
-      isFavorite = if (isPackInstalled && RemoteConfig.internalUser) isFavorite else null,
+      isFavorite = if (isPackInstalled) isFavorite else null,
       onFavoriteClick = { sheetState.dismissWithAnimation(scope, onComplete = { onEvent(StickerPackPreviewEvent.FavoriteClicked(sticker, isFavorite)) }) }
     )
   }

@@ -3,7 +3,7 @@ package org.thoughtcrime.securesms.database.helpers
 import android.app.Application
 import android.content.Context
 import android.database.sqlite.SQLiteException
-import org.signal.core.util.areForeignKeyConstraintsEnabled
+import org.signal.core.database.areForeignKeyConstraintsEnabled
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.helpers.migration.SignalDatabaseMigration
@@ -182,6 +182,10 @@ import org.thoughtcrime.securesms.database.helpers.migration.V326_AddUnreadRemin
 import org.thoughtcrime.securesms.database.helpers.migration.V327_AddLastUnreadReminderColumn
 import org.thoughtcrime.securesms.database.helpers.migration.V328_AddSharedNameToRecipientTable
 import org.thoughtcrime.securesms.database.helpers.migration.V329_AddStickerFavoriteColumns
+import org.thoughtcrime.securesms.database.helpers.migration.V330_AddHiddenPackColumns
+import org.thoughtcrime.securesms.database.helpers.migration.V331_AddMessageThreadDateSentIndex
+import org.thoughtcrime.securesms.database.helpers.migration.V332_WidenAttachmentMediaNameIndex
+import org.thoughtcrime.securesms.database.helpers.migration.V333_AddMediaOverviewIndexes
 import org.thoughtcrime.securesms.database.SQLiteDatabase as SignalSqliteDatabase
 
 /**
@@ -371,10 +375,14 @@ object SignalDatabaseMigrations {
     326 to V326_AddUnreadReminderColumn,
     327 to V327_AddLastUnreadReminderColumn,
     328 to V328_AddSharedNameToRecipientTable,
-    329 to V329_AddStickerFavoriteColumns
+    329 to V329_AddStickerFavoriteColumns,
+    330 to V330_AddHiddenPackColumns,
+    331 to V331_AddMessageThreadDateSentIndex,
+    332 to V332_WidenAttachmentMediaNameIndex,
+    333 to V333_AddMediaOverviewIndexes
   )
 
-  const val DATABASE_VERSION = 329
+  const val DATABASE_VERSION = 333
 
   @JvmStatic
   fun migrate(context: Application, db: SignalSqliteDatabase, oldVersion: Int, newVersion: Int) {

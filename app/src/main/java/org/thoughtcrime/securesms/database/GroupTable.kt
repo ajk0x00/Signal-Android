@@ -9,16 +9,20 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.contentValuesOf
 import okio.ByteString
 import org.intellij.lang.annotations.Language
+import org.signal.core.database.SqlUtil
+import org.signal.core.database.SqlUtil.appendArg
+import org.signal.core.database.SqlUtil.buildArgs
+import org.signal.core.database.SqlUtil.buildCaseInsensitiveGlobPattern
+import org.signal.core.database.SqlUtil.buildCollectionQuery
+import org.signal.core.database.delete
+import org.signal.core.database.exists
+import org.signal.core.database.select
+import org.signal.core.database.update
+import org.signal.core.database.withinTransaction
 import org.signal.core.models.ServiceId
 import org.signal.core.models.ServiceId.ACI
 import org.signal.core.models.ServiceId.PNI
-import org.signal.core.util.SqlUtil
-import org.signal.core.util.SqlUtil.appendArg
-import org.signal.core.util.SqlUtil.buildArgs
-import org.signal.core.util.SqlUtil.buildCaseInsensitiveGlobPattern
-import org.signal.core.util.SqlUtil.buildCollectionQuery
-import org.signal.core.util.delete
-import org.signal.core.util.exists
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.isAbsent
 import org.signal.core.util.logging.Log
 import org.signal.core.util.optionalString
@@ -34,9 +38,6 @@ import org.signal.core.util.requireInt
 import org.signal.core.util.requireLong
 import org.signal.core.util.requireNonNullString
 import org.signal.core.util.requireString
-import org.signal.core.util.select
-import org.signal.core.util.update
-import org.signal.core.util.withinTransaction
 import org.signal.libsignal.zkgroup.InvalidInputException
 import org.signal.libsignal.zkgroup.groups.GroupMasterKey
 import org.signal.libsignal.zkgroup.groups.GroupSecretParams
@@ -63,7 +64,7 @@ import org.thoughtcrime.securesms.jobs.RequestGroupV2InfoJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.profiles.AvatarHelper
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.recipients.RecipientIds
 import org.whispersystems.signalservice.api.groupsv2.DecryptedGroupUtil
 import org.whispersystems.signalservice.api.groupsv2.GroupChangeReconstruct
 import org.whispersystems.signalservice.api.groupsv2.ReceivedGroupSendEndorsements
@@ -1071,7 +1072,7 @@ class GroupTable(context: Context?, databaseHelper: SignalDatabase?) :
     }
 
     if (!keepGroupIdentifier) {
-      RecipientId.clearCache()
+      RecipientIds.clearCache()
     }
 
     AvatarHelper.delete(context, record.recipientId)
@@ -1466,7 +1467,7 @@ class GroupTable(context: Context?, databaseHelper: SignalDatabase?) :
         if (aci.isUnknown) {
           unknownMembers++
         } else if (includeSelf || selfAci != aci) {
-          recipients += RecipientId.from(aci)
+          recipients += RecipientIds.from(aci)
         }
       }
 
@@ -1475,7 +1476,7 @@ class GroupTable(context: Context?, databaseHelper: SignalDatabase?) :
           if (serviceId.isUnknown) {
             unknownPending++
           } else if (includeSelf || selfAci != serviceId) {
-            recipients += RecipientId.from(serviceId)
+            recipients += RecipientIds.from(serviceId)
           }
         }
       }
@@ -1636,7 +1637,7 @@ class GroupTable(context: Context?, databaseHelper: SignalDatabase?) :
   }
 
   private fun ReceivedGroupSendEndorsements.toGroupSendEndorsementRecords(): GroupSendEndorsementRecords {
-    return GroupSendEndorsementRecords(endorsements.map { (aci, endorsement) -> RecipientId.from(aci) to endorsement }.toMap())
+    return GroupSendEndorsementRecords(endorsements.map { (aci, endorsement) -> RecipientIds.from(aci) to endorsement }.toMap())
   }
 
   private fun serviceIdsToRecipientIds(serviceIds: Sequence<ServiceId>): MutableList<RecipientId> {
@@ -1646,7 +1647,7 @@ class GroupTable(context: Context?, databaseHelper: SignalDatabase?) :
           Log.w(TAG, "Saw an unknown UUID when mapping to RecipientIds!")
           null
         } else {
-          val id = RecipientId.from(serviceId)
+          val id = RecipientIds.from(serviceId)
           val remapped = RemappedRecords.getInstance().getRecipient(id)
           if (remapped.isPresent) {
             Log.w(TAG, "Saw that $id remapped to $remapped. Using the mapping.")
@@ -1667,7 +1668,7 @@ class GroupTable(context: Context?, databaseHelper: SignalDatabase?) :
     return if (RemappedRecords.getInstance().areAnyRemapped(ids)) {
       if (shouldRetry) {
         Log.w(TAG, "Found remapped records where we shouldn't. Clearing cache and trying again.")
-        RecipientId.clearCache()
+        RecipientIds.clearCache()
         RemappedRecords.getInstance().resetCache()
         getV2GroupMembers(decryptedGroup, false)
       } else {

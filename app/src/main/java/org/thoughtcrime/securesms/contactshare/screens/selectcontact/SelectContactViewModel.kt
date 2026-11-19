@@ -54,7 +54,7 @@ class SelectContactViewModel(
     private const val MAX_SIZE = PAGE_SIZE * 6
   }
 
-  private val _state = MutableStateFlow(SelectContactState())
+  private val _state = MutableStateFlow(SelectContactState(preferSystemContactPhotos = source.preferSystemContactPhotos))
   val state: StateFlow<SelectContactState> = _state.asStateFlow()
 
   private val _actions = Channel<SelectContactAction>(Channel.BUFFERED)
@@ -108,12 +108,12 @@ class SelectContactViewModel(
         _state.update { it.copy(isLoading = true) }
 
         val resolved = source.resolve(event.contact)
+        _state.update { it.copy(isLoading = false) }
 
         if (resolved != null) {
           _actions.send(SelectContactAction.ContactResolved(resolved))
         } else {
           Log.w(TAG, "Could not resolve the selected contact.")
-          _state.update { it.copy(isLoading = false) }
           _actions.send(SelectContactAction.CouldNotOpenContact)
         }
       }

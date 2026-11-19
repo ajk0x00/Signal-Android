@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.BottomSheets
 import org.signal.core.ui.compose.Buttons
 import org.signal.core.ui.compose.DayNightPreviews
@@ -69,7 +70,6 @@ import org.thoughtcrime.securesms.contactshare.screens.share.ShareContactState.C
 import org.thoughtcrime.securesms.contactshare.screens.share.ShareContactState.DetailLabel
 import org.thoughtcrime.securesms.contactshare.screens.share.ShareContactState.DetailSelection
 import org.thoughtcrime.securesms.conversation.colors.AvatarColor
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.signal.core.ui.R as CoreUiR
 
 /** Width of the leading selection column, so every row's content shares one text margin. */
@@ -92,7 +92,7 @@ fun ShareContactScreen(
     title = stringResource(R.string.ShareContactScreen__share_contact),
     onNavigationClick = { onEvent(ShareContactEvent.BackClicked) },
     navigationIconRes = CoreUiR.drawable.symbol_arrow_start_24,
-    navigationContentDescription = stringResource(R.string.DefaultTopAppBar__navigate_up_content_description)
+    navigationContentDescription = stringResource(CoreUiR.string.DefaultTopAppBar__navigate_up_content_description)
   ) { contentPadding ->
     if (state.isLoading) {
       Box(
@@ -111,6 +111,7 @@ fun ShareContactScreen(
               AvatarRow(
                 avatar = state.avatar,
                 displayName = state.name?.displayName.orEmpty(),
+                isOrgOnly = state.name?.isOrgOnly == true,
                 onToggle = { onEvent(ShareContactEvent.AvatarToggled) },
                 onEditClick = { onEvent(ShareContactEvent.EditPhotoClicked) }
               )
@@ -150,6 +151,7 @@ fun ShareContactScreen(
     PhotoPickerSheet(
       picker = state.photoPicker,
       displayName = state.name?.displayName.orEmpty(),
+      isOrgOnly = state.name?.isOrgOnly == true,
       onPhotoSelected = { onEvent(ShareContactEvent.PhotoSelected(it)) },
       onConfirm = { onEvent(ShareContactEvent.PhotoPickerConfirmed) },
       onDismiss = { onEvent(ShareContactEvent.PhotoPickerDismissed) }
@@ -161,6 +163,7 @@ fun ShareContactScreen(
 private fun AvatarRow(
   avatar: ShareContactState.AvatarSelection,
   displayName: String,
+  isOrgOnly: Boolean,
   onToggle: () -> Unit,
   onEditClick: () -> Unit
 ) {
@@ -178,6 +181,7 @@ private fun AvatarRow(
       ContactPhotoImage(
         photo = avatar.photo,
         displayName = displayName,
+        isOrgOnly = isOrgOnly,
         modifier = Modifier.size(AVATAR_SIZE)
       )
 
@@ -216,7 +220,13 @@ private fun NameRow(
     modifier = Modifier
       .fillMaxWidth()
       .testTag(ShareContactTestTags.NAME_ROW)
-      .then(if (name.isToggleable) Modifier.clickable(onClick = onToggle) else Modifier)
+      .then(
+        when {
+          name.isToggleable -> Modifier.clickable(onClick = onToggle)
+          name.isEditable -> Modifier.clickable(onClick = onEditClick)
+          else -> Modifier
+        }
+      )
       .padding(vertical = 16.dp)
   ) {
     SelectionColumn(isSelected = name.isSelected)
@@ -380,6 +390,7 @@ private fun Footer(
 private fun PhotoPickerSheet(
   picker: ShareContactState.PhotoPicker,
   displayName: String,
+  isOrgOnly: Boolean,
   onPhotoSelected: (String) -> Unit,
   onConfirm: () -> Unit,
   onDismiss: () -> Unit
@@ -415,6 +426,7 @@ private fun PhotoPickerSheet(
             ContactPhotoImage(
               photo = option.photo,
               displayName = displayName,
+              isOrgOnly = isOrgOnly,
               modifier = Modifier.size(photoSize)
             )
 
@@ -455,10 +467,14 @@ private fun pickerPhotoSize(available: Dp, count: Int): Dp {
 
 /** A null [photo] is the "no photo" choice, drawn the way the receiver will draw it. */
 @Composable
-private fun ContactPhotoImage(photo: ContactPhoto?, displayName: String, modifier: Modifier = Modifier) {
+private fun ContactPhotoImage(photo: ContactPhoto?, displayName: String, isOrgOnly: Boolean, modifier: Modifier = Modifier) {
   if (photo == null) {
     FallbackAvatarImage(
-      fallbackAvatar = FallbackAvatar.forTextOrDefault(displayName, AvatarColor.A100),
+      fallbackAvatar = if (isOrgOnly) {
+        FallbackAvatar.Resource.Organization(AvatarColor.A100)
+      } else {
+        FallbackAvatar.forTextOrDefault(displayName, AvatarColor.A100)
+      },
       modifier = modifier
     )
   } else if (LocalInspectionMode.current) {

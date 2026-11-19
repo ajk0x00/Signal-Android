@@ -44,10 +44,6 @@
   <string name="AddAMessageRow__view_once_media">Media që mund të shihet vetëm një herë</string>
   <!-- Accessibility label for the button at the end of the add-a-message row that turns view-once mode on and off. -->
   <string name="AddAMessageRow__toggle_view_once">Kalo në \"Shih vetëm një herë\"</string>
-  <!-- Setting option that can be selected to default media to be sent as high quality by default -->
-  <string name="SentMediaQuality__high">Lartësi</string>
-  <!-- Setting option that can be selected to default media to be sent as standard quality by default -->
-  <string name="SentMediaQuality__standard">Standard</string>
   <!-- Label for our standard quality media conversion. -->
   <string name="QualitySelectorBottomSheetDialog__standard">Standard</string>
   <!-- Description for our standard quality media conversion. -->
@@ -169,6 +165,8 @@
   <string name="CameraXFragment_photo_processing_failed">Përpunimi i fotos dështoi. Të lutem, provo sërish.</string>
   <!-- Label shown below the elapsed time while a video recording is paused -->
   <string name="CameraXFragment_paused">U ndërpre</string>
+  <!-- Accessibility label for the camera toggle that keeps the camera open after each capture so several photos or videos can be taken in a row -->
+  <string name="CameraXFragment_multi_capture">Regjistrim i shumëfishtë</string>
   <!-- Displayed in a permissions dialog when the user has denied access to hardware for image and video capture. -->
   <string name="CameraXFragment_signal_needs_the_recording_permissions_to_capture_video">Signal ka nevojë për lejet e aktivizimit të mikrofonit për të regjistruar video, por ato janë refuzuar. Ju lutemi, vazhdoni te parametrat e aplikacionit, zgjidhni \"Lejet\" dhe aktivizoni \"Mikrofoni\" dhe \"Kamera\".</string>
 

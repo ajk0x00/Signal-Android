@@ -8,6 +8,7 @@ package org.signal.mediasend
 import android.net.Uri
 import org.signal.core.models.media.Media
 import org.signal.core.models.media.MediaFolder
+import org.signal.core.models.media.SentMediaQuality
 import org.signal.mediasend.screens.edit.ScheduleSendOption
 import org.signal.mediasend.screens.edit.image.BrushTool
 import org.signal.mediasend.screens.edit.video.VideoTrimData
@@ -33,6 +34,9 @@ internal sealed interface MediaSendFlowEvent {
    * @param recordingDuration How long the recording ran, or null for a capture that was not recorded.
    */
   data class MediaCaptured(val media: Media, val recordingDuration: Duration? = null) : MediaSendFlowEvent
+
+  /** Flips [MediaSendFlowState.isMultiCaptureEnabled]. */
+  data object ToggleMultiCapture : MediaSendFlowEvent
 
   /** Data read from a QR code. Every outcome of acting on it leaves the flow, so none of it is a screen's to handle. */
   data class QrCodeScanned(val data: String) : MediaSendFlowEvent

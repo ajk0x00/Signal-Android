@@ -39,6 +39,7 @@ import org.signal.core.ui.compose.theme.SignalTheme
 import org.signal.core.util.nullIfBlank
 import org.signal.glide.compose.GlideImage
 import org.signal.glide.decryptableuri.DecryptableUri
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.compose.RoundCheckbox
 import org.thoughtcrime.securesms.components.transfercontrols.TransferProgressIndicator
@@ -82,6 +83,7 @@ fun StickerPackRow(
   onForwardClick: (StickerPack) -> Unit = {},
   onInstallClick: (StickerPack) -> Unit = {},
   onCopyClick: (StickerPack) -> Unit = {},
+  onHideClick: (StickerPack) -> Unit = {},
   onRemoveClick: (StickerPack) -> Unit = {},
   modifier: Modifier = Modifier
 ) {
@@ -162,6 +164,17 @@ fun StickerPackRow(
           text = stringResource(R.string.StickerManagement_menu_install_pack),
           onClick = {
             onInstallClick(pack)
+            menuController.hide()
+          }
+        )
+      }
+
+      if (!pack.isBlessed && pack.downloadStatus != DownloadStatus.InProgress && RemoteConfig.internalUser) {
+        MenuItem(
+          icon = ImageVector.vectorResource(CoreUiR.drawable.symbol_visible_slash_24),
+          text = stringResource(R.string.StickerManagement_menu_hide_pack),
+          onClick = {
+            onHideClick(pack)
             menuController.hide()
           }
         )

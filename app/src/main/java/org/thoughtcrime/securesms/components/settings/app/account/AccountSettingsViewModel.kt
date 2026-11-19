@@ -21,14 +21,15 @@ import org.signal.appsettings.account.AccountSettingsState.Dialog
 import org.signal.appsettings.account.AccountSettingsState.LoadState
 import org.signal.appsettings.account.AccountSettingsState.SignalLogin
 import org.signal.appsettings.account.TwoFactorMethod
+import org.signal.appsettings.routes.AppSettingsNavigationEvent
+import org.signal.appsettings.routes.AppSettingsRoute
+import org.signal.appsettings.routes.navigateBack
+import org.signal.appsettings.routes.navigateTo
 import org.signal.core.ui.compose.EventDrivenViewModel
 import org.signal.core.util.logging.Log
 import org.signal.libsignal.net.MfaKeyKind
 import org.signal.libsignal.net.RequestResult
 import org.signal.network.service.TwoFactorMethodService
-import org.signal.passwordmanager.PasskeyCreationResult
-import org.thoughtcrime.securesms.components.settings.app.account.AccountSettingsRepository.FinishPasskeyRegistrationResult
-import org.thoughtcrime.securesms.components.settings.app.account.AccountSettingsRepository.StartPasskeyRegistrationResult
 import org.thoughtcrime.securesms.lock.v2.PinKeyboardType
 import org.thoughtcrime.securesms.lock.v2.SvrConstants
 import org.thoughtcrime.securesms.net.SignalNetwork
@@ -39,6 +40,7 @@ import org.signal.network.service.TwoFactorMethodService.TwoFactorMethod as Serv
  * deletion all live.
  */
 class AccountSettingsViewModel(
+  private val parentEventEmitter: (AppSettingsNavigationEvent) -> Unit,
   private val accountRepository: AccountSettingsRepository,
   arePasskeysSupported: Boolean,
   private val twoFactorMethodService: TwoFactorMethodService = SignalNetwork.twoFactorMethodService
@@ -64,14 +66,14 @@ class AccountSettingsViewModel(
         refresh()
       }
       AccountSettingsEvent.NavigateBackClicked -> {
-        _actions.send(AccountSettingsAction.NavigateBack)
+        parentEventEmitter.navigateBack()
       }
       AccountSettingsEvent.ModifyPinClicked -> {
         _actions.send(if (_state.value.hasPin) AccountSettingsAction.LaunchChangePinFlow else AccountSettingsAction.LaunchCreatePinFlow)
       }
       AccountSettingsEvent.PinCreated -> {
         refresh()
-        _actions.send(AccountSettingsAction.ShowPinCreatedConfirmation)
+        _state.update { it.copy(snackbar = AccountSettingsState.Snackbar.PinCreated) }
       }
       is AccountSettingsEvent.PinRemindersToggled -> {
         applyPinRemindersToggled(event.enabled)
@@ -95,22 +97,32 @@ class AccountSettingsViewModel(
         _actions.send(AccountSettingsAction.AuthenticateToViewSignalLoginDetails)
       }
       AccountSettingsEvent.SignalLoginDetailsAuthenticated -> {
-        _actions.send(AccountSettingsAction.NavigateToSignalLoginDetails)
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.SignalLoginDetails)
       }
       AccountSettingsEvent.AddTotpAppClicked -> {
         applyAddTotpAppClicked()
       }
+      AccountSettingsEvent.AddTotpAppAuthenticated -> {
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.TotpSetup)
+      }
       AccountSettingsEvent.AddPasskeyClicked -> {
         applyAddPasskeyClicked()
       }
-      is AccountSettingsEvent.PasskeyCeremonyCompleted -> {
-        applyPasskeyCeremonyCompleted(event.result)
+      AccountSettingsEvent.AddPasskeyAuthenticated -> {
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.PasskeySetup)
       }
       is AccountSettingsEvent.LearnMoreClicked -> {
         _actions.send(AccountSettingsAction.OpenSupportArticle(event.url))
       }
       is AccountSettingsEvent.RenameMethodClicked -> {
-        _actions.send(AccountSettingsAction.NavigateToRenameMethod(event.method))
+        parentEventEmitter.navigateTo(
+          AppSettingsRoute.AccountRoute.RenameTwoFactorMethod(
+            methodId = event.method.id,
+            methodKind = event.method.kind,
+            methodName = event.method.name,
+            methodCreatedAt = event.method.createdAt
+          )
+        )
       }
       is AccountSettingsEvent.RemoveMethodClicked -> {
         _actions.send(AccountSettingsAction.AuthenticateToRemoveMethod(event.method))
@@ -119,22 +131,22 @@ class AccountSettingsViewModel(
         applyMethodRemovalAuthenticated(event.method)
       }
       AccountSettingsEvent.AuthenticationFailed -> {
-        _actions.send(AccountSettingsAction.ShowAuthenticationFailed)
+        _state.update { it.copy(snackbar = AccountSettingsState.Snackbar.AuthenticationRequired) }
       }
       is AccountSettingsEvent.RemoveMethodConfirmed -> {
         applyRemoveMethodConfirmed(event.method)
       }
       AccountSettingsEvent.AdvancedPinSettingsClicked -> {
-        _actions.send(AccountSettingsAction.NavigateToAdvancedPinSettings)
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.AdvancedPinSettings)
       }
       AccountSettingsEvent.ChangePhoneNumberClicked -> {
-        _actions.send(AccountSettingsAction.NavigateToChangePhoneNumber)
+        parentEventEmitter.navigateTo(AppSettingsRoute.ChangeNumberRoute.Start)
       }
       AccountSettingsEvent.TransferAccountClicked -> {
-        _actions.send(AccountSettingsAction.NavigateToDeviceTransfer)
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.OldDeviceTransfer)
       }
       AccountSettingsEvent.RequestAccountDataClicked -> {
-        _actions.send(AccountSettingsAction.NavigateToExportAccountData)
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.ExportAccountData)
       }
       AccountSettingsEvent.UpdateSignalClicked -> {
         _actions.send(AccountSettingsAction.OpenPlayStore)
@@ -150,16 +162,23 @@ class AccountSettingsViewModel(
         _actions.send(AccountSettingsAction.WipeAllData)
       }
       AccountSettingsEvent.DataWipeFailed -> {
-        _actions.send(AccountSettingsAction.ShowDataWipeFailed)
+        _state.update { it.copy(snackbar = AccountSettingsState.Snackbar.DeleteAllDataFailed) }
       }
       AccountSettingsEvent.DeleteAccountClicked -> {
         _actions.send(AccountSettingsAction.AuthenticateToDeleteAccount)
       }
       AccountSettingsEvent.DeleteAccountAuthenticated -> {
-        _actions.send(AccountSettingsAction.NavigateToDeleteAccount)
+        parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.DeleteAccount)
       }
       AccountSettingsEvent.DialogDismissed -> {
         _state.update { it.copy(dialog = Dialog.None) }
+      }
+      is AccountSettingsEvent.MethodNamed -> {
+        val kind = event.result.kind
+        _state.update { it.copy(snackbar = if (event.result.renamed) AccountSettingsState.Snackbar.MethodRenamed(kind) else AccountSettingsState.Snackbar.MethodSetUp(kind)) }
+      }
+      AccountSettingsEvent.SnackbarDismissed -> {
+        _state.update { it.copy(snackbar = AccountSettingsState.Snackbar.None) }
       }
     }
   }
@@ -195,13 +214,8 @@ class AccountSettingsViewModel(
     refresh()
 
     if (!success) {
-      _actions.send(
-        if (dialog.enable) {
-          AccountSettingsAction.ShowRegistrationLockEnableFailed
-        } else {
-          AccountSettingsAction.ShowRegistrationLockDisableFailed
-        }
-      )
+      val snackbar = if (dialog.enable) AccountSettingsState.Snackbar.RegistrationLockEnableFailed else AccountSettingsState.Snackbar.RegistrationLockDisableFailed
+      _state.update { it.copy(snackbar = snackbar) }
     }
   }
 
@@ -210,81 +224,15 @@ class AccountSettingsViewModel(
     when {
       signalLogin?.atMaxTotpApps == true -> _state.update { it.copy(dialog = Dialog.MaxTotpAppsReached) }
       signalLogin?.atMaxTwoFactorMethods == true -> _state.update { it.copy(dialog = Dialog.MaxTwoFactorMethodsReached) }
-      else -> _actions.send(AccountSettingsAction.NavigateToTotpSetup)
+      else -> _actions.send(AccountSettingsAction.AuthenticateToAddTotpApp)
     }
   }
 
-  /**
-   * Starts the ceremony, but we need to show an activity, so we send out an action for the UI to do the next step and send back the results as an event.
-   */
   private suspend fun applyAddPasskeyClicked() {
-    val signalLogin = _state.value.signalLogin
-    if (signalLogin?.atMaxTwoFactorMethods == true) {
+    if (_state.value.signalLogin?.atMaxTwoFactorMethods == true) {
       _state.update { it.copy(dialog = Dialog.MaxTwoFactorMethodsReached) }
-      return
-    }
-
-    _state.update { it.copy(dialog = Dialog.PasskeyInProgress) }
-
-    when (val result = accountRepository.startPasskeyRegistration()) {
-      is StartPasskeyRegistrationResult.Success -> {
-        _actions.send(AccountSettingsAction.CreatePasskey(result.parameters))
-      }
-      StartPasskeyRegistrationResult.TooManyMethods -> {
-        _state.update { it.copy(dialog = Dialog.MaxTwoFactorMethodsReached) }
-      }
-      StartPasskeyRegistrationResult.NetworkFailure -> {
-        _state.update { it.copy(dialog = Dialog.None) }
-        _actions.send(AccountSettingsAction.ShowPasskeyCreationFailed)
-      }
-    }
-  }
-
-  private suspend fun applyPasskeyCeremonyCompleted(result: PasskeyCreationResult) {
-    when (result) {
-      is PasskeyCreationResult.Success -> {
-        registerNewPasskey(result)
-      }
-      PasskeyCreationResult.UserCanceled -> {
-        _state.update { it.copy(dialog = Dialog.None) }
-        Log.i(TAG, "The user backed out of the passkey provider's sheet.")
-      }
-      PasskeyCreationResult.NoProviderAvailable -> {
-        _state.update { it.copy(dialog = Dialog.None) }
-        _actions.send(AccountSettingsAction.ShowNoPasskeyProvider)
-      }
-      PasskeyCreationResult.CeremonyFailed -> {
-        _state.update { it.copy(dialog = Dialog.None) }
-        _actions.send(AccountSettingsAction.ShowPasskeyCreationFailed)
-      }
-    }
-  }
-
-  /** Hands the completed ceremony to the service, which is what actually puts the passkey on the account. */
-  private suspend fun registerNewPasskey(ceremony: PasskeyCreationResult.Success) {
-    val result = accountRepository.finishPasskeyRegistration(
-      attestationObject = ceremony.attestationObject,
-      collectedClientDataJson = ceremony.collectedClientDataJson
-    )
-
-    when (result) {
-      is FinishPasskeyRegistrationResult.Success -> {
-        _state.update { it.copy(dialog = Dialog.None) }
-        refreshTwoFactorMethods()
-        _actions.send(
-          AccountSettingsAction.NavigateToNameNewPasskey(
-            TwoFactorMethod(id = result.passkeyId, kind = TwoFactorMethod.Kind.PASSKEY, name = null, createdAt = result.createdAt)
-          )
-        )
-      }
-      FinishPasskeyRegistrationResult.TooManyMethods -> {
-        _state.update { it.copy(dialog = Dialog.MaxTwoFactorMethodsReached) }
-      }
-      FinishPasskeyRegistrationResult.CeremonyRejected,
-      FinishPasskeyRegistrationResult.NetworkFailure -> {
-        _state.update { it.copy(dialog = Dialog.None) }
-        _actions.send(AccountSettingsAction.ShowPasskeyCreationFailed)
-      }
+    } else {
+      _actions.send(AccountSettingsAction.AuthenticateToAddPasskey)
     }
   }
 
@@ -298,12 +246,12 @@ class AccountSettingsViewModel(
 
     when (val result = twoFactorMethodService.removeMethod(method.id)) {
       is RequestResult.Success -> {
-        _actions.send(AccountSettingsAction.ShowMethodRemoved(method.kind))
+        _state.update { it.copy(snackbar = AccountSettingsState.Snackbar.MethodRemoved(method.kind)) }
         refreshTwoFactorMethods()
       }
       is RequestResult.RetryableNetworkError, is RequestResult.ApplicationError -> {
         Log.w(TAG, "Couldn't remove the second factor. Leaving it in the list, where it still is.")
-        _actions.send(AccountSettingsAction.ShowMethodRemovalFailed(method.kind))
+        _state.update { it.copy(snackbar = AccountSettingsState.Snackbar.MethodRemovalFailed(method.kind)) }
       }
       is RequestResult.NonSuccess -> error("Code branch is unreachable")
     }
@@ -333,7 +281,10 @@ class AccountSettingsViewModel(
 
   private suspend fun refreshTwoFactorMethods() {
     val (methods, loadState) = when (val result = twoFactorMethodService.getMethods(accountRepository.masterKey())) {
-      is RequestResult.Success -> result.result.map { it.toTwoFactorMethod() }.sortedBy { it.kind.sortRank() } to LoadState.LOADED
+      is RequestResult.Success -> {
+        accountRepository.setHasTwoFactorMethods(result.result.isNotEmpty())
+        result.result.map { it.toTwoFactorMethod() }.sortedBy { it.kind.sortRank() } to LoadState.LOADED
+      }
       is RequestResult.RetryableNetworkError, is RequestResult.ApplicationError -> {
         Log.w(TAG, "Couldn't reach the service to list the account's second factors.")
         emptyList<TwoFactorMethod>() to LoadState.NETWORK_FAILURE

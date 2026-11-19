@@ -1,0 +1,117 @@
+name: Build on label
+
+# Runs the app build when one of the trigger labels is added to a pull request,
+# so a PR can be compiled on demand without building every push.
+#
+# Trigger labels (any of): build | ci:build | build-apk
+# Adding the label again after removing it re-runs the build.
+
+on:
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: build-on-label-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Label build (playProdDebug)
+    if: >-
+      contains(fromJSON('["build","ci:build","build-apk"]'), github.event.label.name)
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+
+    steps:
+      - name: Free disk space and add swap
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/local/lib/android/sdk/ndk 2>/dev/null || true
+          sudo docker image prune --all --force 2>/dev/null || true
+          sudo swapoff -a 2>/dev/null || true
+          sudo rm -f /swapfile
+          sudo fallocate -l 8G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=8192
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+          df -h
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          submodules: true
+          lfs: true
+          fetch-depth: 1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Inject cloud storage config (optional)
+        env:
+          CONFIG_JSON: ${{ secrets.CLOUD_STORAGE_CONFIG_JSON }}
+          CONFIG_BASE64: ${{ secrets.CLOUD_STORAGE_CONFIG_BASE64 }}
+        run: |
+          mkdir -p app/src/main/assets
+          if [ -n "$CONFIG_BASE64" ]; then
+            echo "$CONFIG_BASE64" | base64 --decode > app/src/main/assets/cloud_storage_config.json
+            echo "Injected cloud_storage_config.json from base64 secret."
+          elif [ -n "$CONFIG_JSON" ]; then
+            echo "$CONFIG_JSON" > app/src/main/assets/cloud_storage_config.json
+            echo "Injected cloud_storage_config.json from json secret."
+          else
+            echo "::notice::No cloud storage config secret; building without it."
+          fi
+
+      - name: Build debug APK
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          ./gradlew \
+            --write-verification-metadata sha256 \
+            assemblePlayProdDebug \
+            -Dorg.gradle.jvmargs="-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC" \
+            -Dkotlin.daemon.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m" \
+            --parallel \
+            --build-cache \
+            -x test \
+            -x lint \
+            -x ktlintCheck \
+            -x validateScreenshots \
+            --no-configuration-cache \
+            --stacktrace
+
+      - name: Locate APK
+        id: apk
+        run: |
+          set -euo pipefail
+          APK=$(find app/build/outputs/apk -name '*.apk' | head -n 1)
+          if [ -z "$APK" ]; then
+            echo "::error::No APK produced"
+            find app/build/outputs -maxdepth 4 -type d || true
+            exit 1
+          fi
+          echo "apk=$APK" >> "$GITHUB_OUTPUT"
+          ls -lh "$APK"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: signal-pr-${{ github.event.pull_request.number }}-apk
+          path: ${{ steps.apk.outputs.apk }}
+          retention-days: 14
+          if-no-files-found: error

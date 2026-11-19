@@ -16,7 +16,6 @@
   <!-- Removed by excludeNonTranslatables <string name="google_pay_url" translatable="false">https://pay.google.com</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
   <!-- Removed by excludeNonTranslatables <string name="pending_transfer_url" translatable="false">https://support.signal.org/hc/articles/360031949872#pending</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_faq_url" translatable="false">https://support.signal.org/hc/articles/360031949872#donate</string> -->
   <!-- Removed by excludeNonTranslatables <string name="inactive_primary_support" translatable="false">https://support.signal.org/hc/articles/9021007554074</string> -->
@@ -31,15 +30,6 @@
     <string name="save">Lưu</string>
     <string name="note_to_self">Ghi chú</string>
 
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a weather/climate application. -->
-    <string name="app_icon_label_weather">Thời tiết</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a note-taking application.-->
-    <string name="app_icon_label_notes">Ghi chú</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in a news/journalism application. -->
-    <string name="app_icon_label_news">Tin tức</string>
-    <!-- Alternate label for the Signal Application in the device\'s home screen launcher, as in waves of the ocean. -->
-    <string name="app_icon_label_waves">Ngọn sóng</string>
-
     <!-- AlbumThumbnailView -->
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
 
@@ -47,23 +37,7 @@
     <string name="ApplicationMigrationActivity__signal_is_updating">Signal đang cập nhật…</string>
 
     <!-- ApplicationPreferencesActivity -->
-    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Bạn chưa thiết lập mật khẩu!</string>
-    <string name="ApplicationPreferencesActivity_disable_passphrase">Tắt mật khẩu?</string>
-    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Thao tác này sẽ vĩnh viễn mở khóa Signal và thông báo tin nhắn.</string>
-    <string name="ApplicationPreferencesActivity_disable">Tắt</string>
     <string name="ApplicationPreferencesActivity_error_connecting_to_server">Lỗi kết nối đến máy chủ!</string>
-    <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">PIN là bắt buộc khi sử dụng Khóa đăng kí. Để tắt PIN, vui lòng tắt Khóa đăng kí trước.</string>
-    <string name="ApplicationPreferencesActivity_pin_created">Mã PIN đã được tạo.</string>
-    <string name="ApplicationPreferencesActivity_pin_disabled">Đã tắt PIN.</string>
-    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Lưu lại cụm từ khôi phục thanh toán</string>
-    <string name="ApplicationPreferencesActivity_record_phrase">Lưu lại cụm từ</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Trước khi bạn có thể tắt mã PIN của mình, bạn phải lưu lại cụm từ khôi phục thanh toán để đảm bảo bạn có thể khôi phục tài khoản thanh toán của bạn.</string>
-    <!-- The title of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_title">Tạo mã khóa khôi phục mới</string>
-    <!-- The body of a dialog letting the user know they have to rotate their recovery key if they want to disable PINs -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_body">Bạn phải tạo và lưu mã khóa khôi phục để có thể tắt mã PIN.</string>
-    <!-- The confirmation button for a dialog letting the user know they have to rotate their recovery key if they want to disable PINs. If they click the button, they will be taken to a flow to rotate their key. -->
-    <string name="AdvancedPinSettingsFragment_rotate_aep_dialog_positive_button">Tạo mã khóa</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -385,8 +359,6 @@
     <!-- Conversation message shown when someone deletes their own message. Placeholder is the name of the person. -->
     <string name="ConversationItem_s_deleted_this_message">%1$s đã xóa tin nhắn này</string>
     <string name="ConversationItem_you_deleted_this_message">Bạn đã xóa tin nhắn này</string>
-    <!-- Tappable text shown on a locally-deleted message tombstone, prompting the user to promote it to a delete-for-everyone -->
-    <string name="ConversationItem_delete_for_everyone_question">Xóa cho mọi người?</string>
     <!-- Conversation message when a message has been deleted by an admin. The placeholder is the admin\'s name. -->
     <string name="ConversationItem_admin_s_deleted_this_message">Quản trị viên %1$s đã xóa tin nhắn này</string>
     <!-- Dialog error message shown when user can\'t download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other\'s name -->
@@ -494,6 +466,8 @@
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">Việc nhắn tin SMS không còn được hỗ trợ trên Signal. Mời %1$s sử dụng Signal để tiếp tục cuộc trò chuyện ở đây.</string>
     <!-- Message shown when opening a conversation with an unregistered user who used to be on Signal -->
     <string name="ConversationActivity__this_person_is_no_longer_using_signal">Người này không còn sử dụng Signal. Mời người đó sử dụng Signal để tiếp tục cuộc trò chuyện ở đây.</string>
+    <!-- Message shown when opening a conversation with an unregistered user who is not on Signal -->
+    <string name="ConversationActivity__this_person_is_not_using_signal">Người này đang không dùng Signal. Mời người đó để tiếp tục cuộc trò chuyện ở đây.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__invite_to_signal">Mời dùng Signal</string>
     <!-- Toast message shown when trying to record a voice message during an ongoing call -->
@@ -511,6 +485,8 @@
     <string name="ChatStickerConfirmation__reply_to_yourself">Trả lời chính mình</string>
     <!-- Content description for the button that closes the sticker confirmation without sending -->
     <string name="ChatStickerConfirmation__go_back">Quay lại</string>
+    <!-- Content description for the button that opens the sticker\'s pack, where it can be managed -->
+    <string name="ChatStickerConfirmation__manage_pack">Quản lý gói</string>
 
     <!-- ConversationFragment -->
     <!-- Toast text when contacts activity is not found -->
@@ -532,6 +508,8 @@
     <string name="ConversationFragment_deleting_messages">Đang xóa tin nhắn…</string>
     <string name="ConversationFragment_delete_for_me">Xóa cho tôi</string>
     <string name="ConversationFragment_delete_for_everyone">Xóa cho mọi người</string>
+    <!-- Snackbar text shown after the user deletes one or more messages only for themselves -->
+    <string name="ConversationFragment__deleted_for_me">Đã xóa cho tôi</string>
     <!-- Title of dialog confirming whether to delete the message -->
     <plurals name="ConversationFragment_delete_selected_title">
         <item quantity="other">Xóa các tin nhắn đã chọn?</item>
@@ -821,7 +799,6 @@
     <string name="CreateProfileActivity_error_setting_profile_photo">Lỗi đặt ảnh đại diện</string>
     <string name="CreateProfileActivity_problem_setting_profile">Lỗi thiết lập hồ sơ</string>
     <string name="CreateProfileActivity_set_up_your_profile">Thiết lập hồ sơ</string>
-    <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Hồ sơ và các thay đổi trên hồ sơ của bạn sẽ chỉ hiển thị với những người bạn nhắn tin, với các liên hệ, và các nhóm.</string>
     <string name="CreateProfileActivity_set_avatar_description">Đặt ảnh đại diện</string>
 
     <!-- ProfileCreateFragment -->
@@ -960,7 +937,7 @@
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Tất cả nội dung tin nhắn được bảo mật trên các thiết bị đã liên kết</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
-    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Tin nhắn Signal được đồng bộ với Signal trên điện thoại của bạn sau khi được liên kết. Lịch sử tin nhắn trước đây của bạn sẽ không xuất hiện.</string>
+    <string name="LinkDeviceFragment__signal_messages_are_synchronized">Tin nhắn Signal được đồng bộ với Signal trên điện thoại của bạn sau khi được liên kết.</string>
     <!-- Bottom sheet description explaining that for non-desktop/iPad devices, they should go to %s to download Signal where %s is Signal\'s website -->
     <string name="LinkDeviceFragment__on_other_device_visit_signal">Trên thiết bị bạn muốn liên kết, truy cập %1$s để cài đặt Signal</string>
   <!-- Removed by excludeNonTranslatables <string name="LinkDeviceFragment__signal_download_url" translatable="false">signal.org/download</string> -->
@@ -1205,6 +1182,14 @@
         <item quantity="other">Không thể thêm thành viên.</item>
     </plurals>
 
+    <!-- LanguagePackReadyBanner -->
+    <!-- Banner shown after a language finished downloading in the background. %1$s is the language\'s name written in that language, for example "Deutsch". -->
+    <string name="LanguagePackReadyBanner__body">"The app language %1$s is ready to use. Restart Signal to switch to it."</string>
+    <!-- Button on the banner shown after a language finished downloading. Restarts the app so the language takes effect. -->
+    <string name="LanguagePackReadyBanner__restart">Restart</string>
+    <!-- Button on the banner shown after a language finished downloading. Hides the banner without restarting and applying the new language. -->
+    <string name="LanguagePackReadyBanner__not_now">Not now</string>
+
     <!-- LeaveGroupDialog -->
     <string name="LeaveGroupDialog_leave_group">Rời nhóm?</string>
     <string name="LeaveGroupDialog_you_will_no_longer_be_able_to_send_or_receive_messages_in_this_group">Bạn sẽ không thể gửi hoặc nhận tin nhắn trong nhóm này nữa.</string>
@@ -1309,17 +1294,13 @@
 
     <!-- AddGroupDetailsFragment -->
     <string name="AddGroupDetailsFragment__name_this_group">Đặt tên nhóm này</string>
-    <string name="AddGroupDetailsFragment__create_group">Tạo nhóm</string>
     <string name="AddGroupDetailsFragment__create">Tạo</string>
     <string name="AddGroupDetailsFragment__members">Thành viên</string>
     <string name="AddGroupDetailsFragment__you_can_add_or_invite_friends_after_creating_this_group">Bạn có thể thêm hoặc mời bạn bè sau khi tạo nhóm này.</string>
     <string name="AddGroupDetailsFragment__group_name_required">Tên nhóm (bắt buộc)</string>
-    <string name="AddGroupDetailsFragment__group_name_optional">Tên nhóm (không bắt buộc)</string>
-    <string name="AddGroupDetailsFragment__this_field_is_required">Trường bắt buộc</string>
     <string name="AddGroupDetailsFragment__group_creation_failed">Không thể tạo nhóm.</string>
     <string name="AddGroupDetailsFragment__try_again_later">Hãy thử lại sau.</string>
     <string name="AddGroupDetailsFragment__remove">Xóa</string>
-    <string name="AddGroupDetailsFragment__sms_contact">Liên hệ SMS</string>
     <string name="AddGroupDetailsFragment__remove_s_from_this_group">Xóa %1$s khỏi nhóm này?</string>
     <!-- Title of the dialog shown when tapping an existing group while creating a new group, confirming the user wants to leave and discard their in-progress group -->
     <string name="AddGroupDetailsFragment__discard_group">Bỏ nhóm?</string>
@@ -1327,8 +1308,6 @@
     <string name="AddGroupDetailsFragment__if_you_continue_to_the_group_s_your_changes_wont_be_saved">Nếu bạn tiếp tục với nhóm \"%1$s\", các thay đổi của bạn sẽ không được lưu.</string>
     <!-- Label for the button that confirms discarding the in-progress group and navigating to an existing group -->
     <string name="AddGroupDetailsFragment__discard">Bỏ</string>
-    <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Bạn đã chọn một liên hệ không hỗ trợ nhóm Signal, vì vậy đây sẽ là nhóm MMS. Tên nhóm MMS và ảnh sẽ chỉ hiển thị với bạn. Việc hỗ trợ nhóm MMS sẽ sớm được lược bỏ để tập trung vào tính năng nhắn tin được mã hóa.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_who_can_add_new_members">Ai có thể thêm thành viên mới?</string>
@@ -1360,34 +1339,7 @@
     <!-- RemoteRestoreActivity -->
 
     <!-- ManageProfileFragment -->
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc -->
-    <string name="ManageProfileFragment__your_username">Tên người dùng, mã QR và đường dẫn không hiển thị trên hồ sơ của bạn. Chỉ chia sẻ tên người dùng với người bạn tin tưởng.</string>
-    <!-- Explanation text about usernames etc displayed underneath buttons to view and edit username etc, shown when you have no username -->
-    <string name="ManageProfileFragment__username_footer_no_username">Mọi người có thể nhắn tin cho bạn bằng tên người dùng tùy chọn thay vì số điện thoại. Tên người dùng có mã QR và đường dẫn riêng để bạn chia sẻ với bạn bè.</string>
-    <string name="ManageProfileFragment_profile_name">Tên hồ sơ</string>
-    <string name="ManageProfileFragment_username">Tên người dùng</string>
-    <string name="ManageProfileFragment_about">Thông tin</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">Không thể đặt ảnh đại diện</string>
     <string name="ManageProfileFragment_badges">Huy hiệu</string>
-    <!-- Text for a button that will take the user to the screen to manage their username link and QR code -->
-    <string name="ManageProfileFragment_link_setting_text">Mã QR hoặc Đường Dẫn</string>
-    <string name="ManageProfileFragment__edit_photo">Tùy chỉnh ảnh</string>
-    <!-- Title of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_title">Chia sẻ tên người dùng của bạn</string>
-    <!-- Body of a tooltip educating the user about a button on the screen that will take them to the username share screen -->
-    <string name="ManageProfileFragment__link_tooltip_body">Cho phép người khác bắt đầu một cuộc trò chuyện với bạn bằng cách chia sẻ mã QR hoặc đường dẫn riêng của bạn.</string>
-    <!-- Snackbar message after creating username -->
-    <string name="ManageProfileFragment__username_created">Đã tạo tên người dùng</string>
-    <!-- Snackbar message after copying username -->
-    <string name="ManageProfileFragment__username_copied">Đã sao chép tên người dùng</string>
-    <!-- Snackbar message after network failure while trying to delete username -->
-    <string name="ManageProfileFragment__couldnt_delete_username">Không thể xóa tên người dùng. Thử lại sau.</string>
-    <!-- Snackbar message after successful deletion of username -->
-    <string name="ManageProfileFragment__username_deleted">Tên người dùng đã xóa</string>
-    <!-- The title of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_title">Xóa tên người dùng?</string>
-    <!-- The body of a pop-up dialog asking the user to confirm deleting their username -->
-    <string name="ManageProfileFragment__delete_username_dialog_body">"Thao tác này sẽ xóa tên người dùng của bạn, đồng thời vô hiệu hóa mã QR và đường dẫn của bạn. %1$s sẽ có thể được sử dụng bởi thành viên khác. Bạn có chắc không?"</string>
 
     <!-- UsernameOutOfSyncReminder -->
     <!-- Displayed above the conversation list when a user needs to address an issue with their username -->
@@ -1509,11 +1461,6 @@
     <string name="InputPanel__this_action_cant_be_undone">Không thể hoàn tác hành động này.</string>
     <!-- Button inside an alert dialog confirming the deletion of their draft -->
     <string name="InputPanel__discard">Bỏ</string>
-
-    <!-- LearnMoreTextView -->
-    <string name="LearnMoreTextView_learn_more">Tìm hiểu thêm</string>
-
-    <string name="SpanUtil__read_more">Đọc thêm</string>
 
     <!-- LongMessageActivity -->
     <string name="LongMessageActivity_unable_to_find_message">Không thể tìm tin nhắn</string>
@@ -2521,6 +2468,12 @@
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_failed_to_submit" translatable="false">Failed to submit :(</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_success" translatable="false">Success!</string> -->
   <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_share" translatable="false">Share</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting" translatable="false">Submitting debug log</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_submitting_body" translatable="false">Collecting and uploading logs. This can take a minute.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_retry" translatable="false">Retry</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_close" translatable="false">Close</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copy" translatable="false">Copy</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ShakeToReport_copied" translatable="false">Copied to clipboard</string> -->
 
     <!-- SharedContactView -->
     <string name="SharedContactView_add_to_contacts">Thêm vào danh bạ</string>
@@ -2530,7 +2483,7 @@
     <!-- Button on a contact card shared in a group chat that adds the person on the card to that group -->
     <string name="SharedContactView_add_to_group">Thêm vào nhóm</string>
     <!-- Confirmation dialog body when adding the person on a shared contact card to the current group. %1$s is the person\'s name, %2$s is the group name -->
-    <string name="SharedContactView_add_s_to_s">Add %1$s to “%2$s”?</string>
+    <string name="SharedContactView_add_s_to_s">Thêm %1$s vào “%2$s”?</string>
 
     <!-- SignalBottomActionBar -->
     <!-- Text to describe a button that will show more options -->
@@ -2614,6 +2567,16 @@
     </plurals>
     <!-- Message shown after copying a sticker pack link. -->
     <string name="StickerManagement_copied">Đã sao chép liên kết</string>
+    <!-- Title of the confirmation dialog shown before hiding a sticker pack. -->
+    <string name="StickerManagement_hide_pack_confirmation">Ẩn gói nhãn dán?</string>
+    <!-- Body of the confirmation dialog shown before hiding a sticker pack that is not installed. -->
+    <string name="StickerManagement_hide_pack_confirmation_body">Thao tác này sẽ ẩn gói nhãn dán đó khỏi danh sách các gói hiện có của bạn. Bạn không thể thêm lại gói nhãn dán nếu không có đường dẫn hoặc tin nhắn chứa nhãn dán.</string>
+    <!-- Body of the confirmation dialog shown before hiding an installed sticker pack, which also removes it. -->
+    <string name="StickerManagement_hide_installed_pack_confirmation_body">Thao tác này sẽ xóa gói nhãn dán và ẩn gói đó khỏi danh sách các gói hiện có của bạn. Bạn không thể thêm lại gói nhãn dán nếu không có đường dẫn hoặc tin nhắn chứa nhãn dán.</string>
+    <!-- Snackbar shown when a pack is hidden -->
+    <string name="StickerManagement_hidden_pack">Đã ẩn gói nhãn dán</string>
+    <!-- Snackbar action label to undo hiding a sticker pack. -->
+    <string name="StickerManagement_undo">Hoàn tác</string>
 
     <!-- Sticker pack list dropdown menu label for the button to forward a sticker pack to another user. -->
     <string name="StickerManagement_menu_forward_pack">Chuyển tiếp</string>
@@ -2623,6 +2586,8 @@
     <string name="StickerManagement_menu_install_pack">Cài đặt</string>
     <!-- Sticker pack list dropdown menu label for the button to uninstall a sticker pack. -->
     <string name="StickerManagement_menu_remove_pack">Xóa</string>
+    <!-- Sticker pack list dropdown menu label for the button to hide an uninstalled sticker pack from the list of available packs. -->
+    <string name="StickerManagement_menu_hide_pack">Ẩn</string>
     <!-- Sticker management screen dropdown menu label for the button to enter multi-select mode. -->
     <string name="StickerManagement_menu_select_packs">Chọn gói nhãn dán</string>
     <!-- Sticker pack list dropdown menu label for sending a sticker pack. -->
@@ -2665,7 +2630,6 @@
     <string name="StickerManagement_accessibility_clear_search">Xoá Tìm kiếm</string>
 
     <!-- StickerManagementAdapter -->
-    <string name="StickerManagementAdapter_untitled">Chưa đặt tên</string>
 
     <!-- StickerPackPreviewActivity -->
     <string name="StickerPackPreviewActivity_untitled">Chưa đặt tên</string>
@@ -2679,16 +2643,18 @@
     <string name="StickerPreviewBottomSheet__title_author">%1$s · %2$s</string>
     <!-- Bottom sheet option that opens the pack the sticker belongs to -->
     <string name="StickerPreviewBottomSheet__view_pack">Xem gói</string>
+    <!-- Bottom sheet label for sending a sticker. -->
+    <string name="StickerPreviewBottomSheet__send_sticker">Gửi nhãn dán</string>
     <!-- Snackbar shown after a sticker was successfully added to the user\'s favorite stickers -->
-    <string name="StickerFavorites__added_to_favorites">Sticker added to Favorites</string>
+    <string name="StickerFavorites__added_to_favorites">Đã thêm nhãn dán vào Yêu thích</string>
     <!-- Snackbar shown when the user tries to favorite a sticker but already has the maximum number of favorite stickers. Placeholder is 500. -->
-    <string name="StickerFavorites__favorites_limit_reached">You can only add %1$d stickers to Favorites</string>
+    <string name="StickerFavorites__favorites_limit_reached">Bạn chỉ có thể thêm %1$d nhãn dán vào Yêu thích</string>
     <!-- Snackbar shown when we are unable to add or remove a sticker. -->
-    <string name="StickerFavorites__unknown_error">Unknown error. Try again later.</string>
+    <string name="StickerFavorites__unknown_error">Lỗi không xác định. Vui lòng thử lại sau.</string>
     <!-- Snackbar shown after a sticker was successfully removed from the user\'s favorite stickers -->
-    <string name="StickerFavorites__removed_from_favorites">Sticker removed from Favorites</string>
+    <string name="StickerFavorites__removed_from_favorites">Đã xóa nhãn dán khỏi Yêu thích</string>
     <!-- Snackbar shown when the user opens their favorite stickers but has not favorited any yet -->
-    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Press and hold a sticker to add to Favorites</string>
+    <string name="ConversationFragment__press_and_hold_a_sticker_to_add_to_favorites">Nhấn giữ nhãn dán để thêm vào Yêu thích</string>
 
     <!-- Menu option to save a debug log file to disk. -->
     <string name="SubmitDebugLogActivity_save">Lưu</string>
@@ -2816,51 +2782,13 @@
     <string name="UnverifiedSendDialog_send">Gửi</string>
 
     <!-- UsernameEditFragment -->
-    <!-- Placeholder text for custom discriminator -->
-    <string name="UsernameEditFragment__00">00</string>
-    <!-- Instructional text at the top of the username edit screen -->
-    <string name="UsernameEditFragment__choose_your_username">Chọn tên người dùng của bạn</string>
-    <string name="UsernameEditFragment_username">Tên người dùng</string>
-    <string name="UsernameEditFragment_delete">Xóa</string>
+    <!-- Toast shown after your username is deleted -->
     <string name="UsernameEditFragment_successfully_removed_username">Xóa tên người dùng thành công.</string>
-    <string name="UsernameEditFragment_encountered_a_network_error">Lỗi mạng.</string>
-    <!-- Toast message shown if user exceeds the rate limit for reserving usernames -->
-    <string name="UsernameEditFragment_rate_limit_exceeded_error">Vượt quá số lần thử, vui lòng thử lại sau.</string>
-    <string name="UsernameEditFragment_this_username_is_taken">Tên người dùng này đã được sử dụng.</string>
-    <string name="UsernameEditFragment_usernames_can_only_include">Tên người dùng chỉ có thể chứa a–Z, 0–9 và dấu gạch dưới.</string>
-    <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Tên người dùng không thể bắt đầu bằng một chữ số.</string>
-    <string name="UsernameEditFragment_username_is_invalid">Tên người dùng không hợp lệ.</string>
-    <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Tên người dùng phải nằm trong khoảng từ %1$d đến %2$d ký tự.</string>
-    <!-- Explanation about what usernames provide -->
-    <string name="UsernameEditFragment__usernames_let_others_message">Mọi người có thể nhắn tin cho bạn bằng tên người dùng (không bắt buộc) thay vì số điện thoại. Tên người dùng luôn được ghép với một dãy số.</string>
-    <!-- Button to allow user to skip -->
-    <string name="UsernameEditFragment__skip">Bỏ qua</string>
-    <!-- Content description for done button -->
-    <string name="UsernameEditFragment__done">Xong</string>
-    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
-    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">Tên người dùng này không khả dụng, thử một số khác.</string>
-    <!-- Displayed when the chosen discriminator is too short -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">Tên người dùng không hợp lệ, nhập tối thiểu %1$d số.</string>
-    <!-- Displayed when the chosen discriminator is too long -->
-    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Tên người dùng không hợp lệ, nhập tối đa %1$d số.</string>
-    <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">Số này không thể là 00. Nhập một ký tự trong khoảng 1–9</string>
-    <!-- Displayed when the chosen discriminator starts with 0 and has a length > 2 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_0">Số với nhiều hơn 2 chữ số không thể bắt đầu với số 0</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
-    <string name="UsernameEditFragment_recovery_dialog_confirmation">Khôi phục lại tên người dùng sẽ đặt lại mã QR và đường dẫn hiện tại của bạn. Bạn có chắc không?</string>
-    <!-- The body of an alert dialog asking the user to confirm that they want to change their username, even if it resets their link -->
-    <string name="UsernameEditFragment_change_confirmation_message">Thay đổi tên người dùng sẽ đặt lại mã QR và đường dẫn hiện tại của bạn. Bạn có chắc không?</string>
-    <!-- Text for a button in a dialog asking if the user would like to continue the operation of changing their username -->
-    <string name="UsernameEditFragment_continue">Tiếp tục</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="other">%1$d liên hệ của bạn đang sử dụng Signal!</item>
     </plurals>
 
-    <!-- UsernameShareBottomSheet -->
-    <!-- Explanation of what the sheet enables the user to do -->
-    <string name="UsernameShareBottomSheet__copy_or_share_a_username_link">Sao chép hoặc chia sẻ liên kết tên người dùng</string>
 
     <string name="VerifyIdentityActivity_the_scanned_qr_code_is_not_a_correctly_formatted_safety_number">Mã QR vừa quét không phải định dạng của mã số an toàn. Hãy thử lại.</string>
     <string name="VerifyIdentityActivity_share_safety_number_via">Chia sẻ mã số an toàn qua…</string>
@@ -2908,28 +2836,15 @@
     <string name="KeyCachingService_lock">Khoá Signal</string>
 
     <!-- MediaPreviewActivity -->
-    <string name="MediaPreviewActivity_you">Bạn</string>
-    <string name="MediaPreviewActivity_unssuported_media_type">Không hỗ trợ định dạng đa phương tiện này</string>
-    <string name="MediaPreviewActivity_draft">Nháp</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_title">Xóa tin nhắn?</string>
-    <string name="MediaPreviewActivity_media_delete_confirmation_message">Thao tác này sẽ xóa vĩnh viễn tin nhắn này.</string>
-    <string name="MediaPreviewActivity_s_to_s">%1$s đến %2$s</string>
-    <!-- All media preview title when viewing media send by you to another recipient (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_you_to_s">Bạn gửi đến %1$s</string>
-    <!-- All media preview title when viewing media sent by another recipient to you (allows changing of \'You\' based on context) -->
-    <string name="MediaPreviewActivity_s_to_you">%1$s gửi đến bạn</string>
     <string name="MediaPreviewActivity_media_no_longer_available">Tệp đa phương tiện không còn khả dụng.</string>
     <!-- Notifying the user that the device has encountered a technical issue and is unable to render a video. -->
     <string name="MediaPreviewActivity_unable_to_play_media">Không thể phát tập tin đa phương tiện.</string>
     <!-- Toast shown when there is an error finding a media-based message -->
     <string name="MediaPreviewActivity_error_finding_message">Có lỗi khi tìm tin nhắn.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Không thể tìm được ứng dụng có thể chia sẻ tệp đa phương tiện này.</string>
-    <string name="MediaPreviewActivity_dismiss_due_to_error">Đóng</string>
     <string name="MediaPreviewFragment_edit_media_error">Lỗi tệp Đa phương tiện</string>
     <!-- This is displayed as a toast notification when we encounter an error deleting a message, including potentially on other people\'s devices -->
     <string name="MediaPreviewFragment_media_delete_error">Có lỗi khi xóa tin nhắn, tin nhắn có thể vẫn còn</string>
-    <!-- A suffix to be attached to truncated captions that the user may tap onto to view the entire text caption -->
-    <string name="MediaPreviewFragment_read_more_overflow_text">Đọc Thêm</string>
     <string name="MediaPreviewFragment_share">Chia sẻ</string>
 
     <!-- MessageNotifier -->
@@ -3056,6 +2971,8 @@
 
     <!-- Message explaining that it is not possible to save media to the device storage after the user denied the system save to storage permission. -->
     <string name="AttachmentSaver__unable_to_write_to_external_storage_without_permission">Không thể lưu tệp vào bộ nhớ khi không có quyền</string>
+    <!-- Toast shown when media can\'t be saved to the device storage because its data is no longer on the device and can\'t be downloaded again. -->
+    <string name="AttachmentSaver__media_no_longer_available">Tập tin đa phương tiện không còn khả dụng</string>
 
     <!-- Dialog title shown when attempting to save media that has been offloaded from the device by the storage optimization feature. -->
     <string name="AttachmentSaver__cant_save_media">Không thể lưu đa phương tiện</string>
@@ -3126,7 +3043,7 @@
 
     <!-- SetUpUsernameBanner -->
     <!-- Body of a banner on the new message screen prompting the user to create a username -->
-    <string name="SetUpUsernameBanner__choose_a_username_so_others_can_connect_with_you">Chọn tên người dùng để người khác có thể kết nối với bạn.</string>
+    <string name="SetUpUsernameBanner__choose_a_username">Chọn tên người dùng</string>
     <!-- Button label that takes the user to the username creation screen -->
     <string name="SetUpUsernameBanner__set_up">Thiết Lập</string>
     <!-- Accessibility label for the button that permanently dismisses the banner -->
@@ -3418,40 +3335,6 @@
 
     <string name="device_list_fragment__link_new_device">Liên kết thiết bị mới</string>
 
-    <!-- expiration -->
-    <string name="expiration_off">Tắt</string>
-
-    <plurals name="expiration_seconds">
-        <item quantity="other">%1$d giây</item>
-    </plurals>
-
-    <string name="expiration_seconds_abbreviated">%1$dg</string>
-
-    <plurals name="expiration_minutes">
-        <item quantity="other">%1$d phút</item>
-    </plurals>
-
-    <string name="expiration_minutes_abbreviated">%1$dp</string>
-
-    <plurals name="expiration_hours">
-        <item quantity="other">%1$d giờ</item>
-    </plurals>
-
-    <string name="expiration_hours_abbreviated">%1$dh</string>
-
-    <plurals name="expiration_days">
-        <item quantity="other">%1$d ngày</item>
-    </plurals>
-
-    <string name="expiration_days_abbreviated">%1$dng</string>
-
-    <plurals name="expiration_weeks">
-        <item quantity="other">%1$d tuần</item>
-    </plurals>
-
-    <string name="expiration_weeks_abbreviated">%1$dt</string>
-    <string name="expiration_combined">%1$s%2$s</string>
-
     <!-- unverified safety numbers -->
     <string name="IdentityUtil_unverified_banner_one">Mã số an toàn với %1$s đã thay đổi và không còn hợp lệ</string>
     <string name="IdentityUtil_unverified_banner_two">Mã số an toàn với %1$s và %2$s không còn hợp lệ</string>
@@ -3511,42 +3394,14 @@
     <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Tên nhóm MMS và ảnh sẽ chỉ hiển thị với bạn.</string>
     <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Miêu tả nhóm sẽ được nhìn thấy bởi thành viên của nhóm này và những người đã được mời.</string>
 
-    <!-- EditAboutFragment -->
-    <string name="EditAboutFragment_about">Thông tin</string>
-    <string name="EditAboutFragment_write_a_few_words_about_yourself">Viết một vài từ về bản thân mình…</string>
-    <string name="EditAboutFragment_count">%1$d/%2$d</string>
-    <string name="EditAboutFragment_speak_freely">Nói chuyện tự do</string>
-    <string name="EditAboutFragment_encrypted">Đã được mã hóa</string>
-    <string name="EditAboutFragment_be_kind">Mở lòng tốt</string>
-    <string name="EditAboutFragment_coffee_lover">Nghiện cà phê</string>
-    <string name="EditAboutFragment_free_to_chat">Rảnh để trò chuyện</string>
-    <string name="EditAboutFragment_taking_a_break">Đang nghỉ ngơi</string>
-    <string name="EditAboutFragment_working_on_something_new">Đang làm một dự án mới</string>
-
     <!-- EditProfileFragment -->
     <string name="EditProfileFragment__edit_group">Sửa nhóm</string>
     <string name="EditProfileFragment__group_name">Tên nhóm</string>
     <string name="EditProfileFragment__group_description">Miêu tả nhóm</string>
   <!-- Removed by excludeNonTranslatables <string name="EditProfileFragment__support_link" translatable="false">https://support.signal.org/hc/articles/360007459591</string> -->
-    <!-- The title of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_title">Cập nhật Signal</string>
-    <!-- The body of a dialog prompting user to update to the latest version of Signal. -->
-    <string name="EditProfileFragment_deprecated_dialog_body">Phiên bản này của Signal đã hết hạn. Cập nhật ngay để tiếp tục sử dụng Signal.</string>
-    <!-- The button on a dialog prompting user to update to the latest version of Signal. When clicked, the user will be taken to the store to update their app. -->
-    <string name="EditProfileFragment_deprecated_dialog_update_button">Cập nhật</string>
-    <!-- The title of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_title">Thiết bị không được đăng ký</string>
-    <!-- The body of a dialog informing the user that they cannot use this app feature when they are unregistered. -->
-    <string name="EditProfileFragment_unregistered_dialog_body">Thiết bị này không còn được đăng ký. Đăng ký lại để thực hiện các thay đổi với tài khoản của bạn.</string>
-    <!-- The button on a dialog informing the user that they cannot use this app feature when they are unregistered. When clicked, the user will be taken to a screen to help them re-register. -->
-    <string name="EditProfileFragment_unregistered_dialog_reregister_button">Đăng ký lại</string>
 
     <!-- EditProfileNameFragment -->
-    <string name="EditProfileNameFragment_your_name">Tên của bạn</string>
-    <string name="EditProfileNameFragment_first_name">Tên</string>
-    <string name="EditProfileNameFragment_last_name_optional">Họ (không bắt buộc)</string>
     <string name="EditProfileNameFragment_save">Lưu</string>
-    <string name="EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later">Không thể lưu do lỗi mạng. Hãy thử lại sau.</string>
 
     <!-- recipient_preferences_activity -->
     <string name="recipient_preference_activity__shared_media">Tệp đa phương tiện đã chia sẻ</string>
@@ -3693,19 +3548,8 @@
     <string name="DebugLogsPromptDialogFragment__no_thanks">Không, cảm ơn</string>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recents">Gần đây</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">Tin nhắn này</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">Sử dụng gần đây</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Không tìm thấy kết quả</string>
 
-    <string name="GifQuickSearchOption__trending">Đang thịnh hành</string>
-    <string name="GifQuickSearchOption__celebrate">Chúc mừng</string>
-    <string name="GifQuickSearchOption__love">Yêu thích</string>
-    <string name="GifQuickSearchOption__thumbs_up">Ra hiệu đồng ý</string>
-    <string name="GifQuickSearchOption__surprised">Ngạc nhiên</string>
-    <string name="GifQuickSearchOption__excited">Hào hứng</string>
-    <string name="GifQuickSearchOption__sad">Buồn</string>
-    <string name="GifQuickSearchOption__angry">Tức giận</string>
 
     <!-- arrays.xml -->
     <string name="arrays__use_default">Dùng mặc định</string>
@@ -3721,227 +3565,41 @@
     <string name="arrays__enabled">Bật</string>
     <string name="arrays__disabled">Tắt</string>
 
-    <string name="arrays__name_and_message">Tên và tin nhắn</string>
-    <string name="arrays__name_only">Chỉ tên</string>
-    <string name="arrays__no_name_or_message">Không tên hay tin nhắn</string>
 
-    <string name="arrays__images">Hình ảnh</string>
-    <string name="arrays__audio">Âm thanh</string>
-    <string name="arrays__video">Video</string>
-    <string name="arrays__documents">Tài liệu</string>
 
-    <string name="arrays__small">Nhỏ</string>
-    <string name="arrays__normal">Vừa</string>
-    <string name="arrays__large">Lớn</string>
-    <string name="arrays__extra_large">Rất lớn</string>
 
-    <string name="arrays__default">Mặc định</string>
-    <string name="arrays__high">Cao</string>
-    <!-- Setting title that represent an abstract priority to assign to notifications as the max/highest priority a notification can be within the system. -->
-    <string name="arrays__max">Cao nhất</string>
 
     <!-- plurals.xml -->
     <plurals name="hours_ago">
         <item quantity="other">%1$dg</item>
     </plurals>
 
-    <string name="preferences__change_passphrase">Đổi mật khẩu</string>
-    <string name="preferences__change_your_passphrase">Đổi mật khẩu</string>
-    <!-- Legacy preference menu item to enable a passphrase screen lock that is only available to those who have previously had a passphrase -->
-    <string name="preferences__enable_passphrase">Bật khoá màn hình bằng mật khẩu</string>
-    <string name="preferences__lock_signal_and_message_notifications_with_a_passphrase">Khoá màn hình và thông báo bằng mật khẩu</string>
-    <string name="preferences__screen_security">An ninh màn hình</string>
-    <string name="preferences__auto_lock_signal_after_a_specified_time_interval_of_inactivity">Tự động khoá Signal sau một khoảng thời gian không hoạt động định trước</string>
-    <!-- Legacy preference menu item to enable locking of app after inactivity -->
-    <string name="preferences__inactivity_timeout_passphrase">Mật khẩu khoá ứng dụng khi không hoạt động</string>
-    <!-- Legacy preference menu item to choose the interval of inactivity before lockout -->
-    <string name="preferences__inactivity_timeout_interval">Khoảng thời gian khoá ứng dụng khi không hoạt động</string>
+    <!-- Bottom sheet message shown after an assistant app requested the contents of the screen, explaining that screenshots were automatically disabled -->
+    <string name="AssistantScreenSecurityBottomSheet__body">Các ứng dụng trợ lý AI như Gemini có thể quét nội dung trên Signal của bạn. Để ngăn điều này, tính năng An ninh màn hình đã được bật. Điều này cũng sẽ vô hiệu hóa thao tác chụp màn hình.</string>
+    <!-- Bottom sheet title shown after an assistant app requested the contents of the screen and screen security was automatically turned on -->
+    <string name="AssistantScreenSecurityBottomSheet__title">Đã bật bảo mật màn hình</string>
+    <!-- Bottom sheet button that turns screen security back off -->
+    <string name="AssistantScreenSecurityBottomSheet__turn_off_screen_security">Tắt bảo mật màn hình</string>
+    <!-- Title of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__title">Tắt bảo mật màn hình?</string>
+    <!-- Body of the dialog confirming that the user wants to turn off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__body">Nếu tắt, tùy chọn này có thể cho phép các trợ lý AI như Google Gemini quét nội dung trên Signal và sử dụng cho các tính năng có thể không đảm bảo sự riêng tư.</string>
+    <!-- Dialog button that confirms turning off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__turn_off">Tắt</string>
+    <!-- Snackbar shown after the user turns off screen security -->
+    <string name="AssistantScreenSecurityTurnOffDialog__screen_security_is_off">Đã tắt bảo mật màn hình</string>
     <string name="preferences__notifications">Thông báo</string>
-    <!-- Preference item menu to enable notifications -->
-    <string name="preferences__enable_notifications">Bật thông báo</string>
-    <!-- Preference header for call notifications -->
-    <string name="preferences__call_notifications">Thông báo cuộc gọi</string>
-    <string name="preferences__led_color">Màu LED</string>
     <string name="preferences__led_color_unknown">Không rõ</string>
-    <string name="preferences__pref_led_blink_title">Tần suất nháy LED</string>
-    <string name="preferences__customize">Tùy chỉnh</string>
-    <string name="preferences__change_sound_and_vibration">Thay đổi âm thanh và rung</string>
-    <!-- Preference menu item to control the sound of notifications -->
-    <string name="preferences__sound">Âm thanh</string>
     <string name="preferences__silent">Im lặng</string>
-    <!-- Preference menu item to use the default sound for notifications -->
-    <string name="preferences__default">Mặc định</string>
-    <string name="preferences__repeat_alerts">Lặp lại cảnh báo</string>
-    <string name="preferences__never">Không bao giờ</string>
-    <string name="preferences__one_time">Một lần</string>
-    <string name="preferences__two_times">Hai lần</string>
-    <string name="preferences__three_times">Ba lần</string>
-    <string name="preferences__five_times">Năm lần</string>
-    <string name="preferences__ten_times">Mười lần</string>
-    <string name="preferences__vibrate">Rung</string>
-    <string name="preferences__green">Xanh lục</string>
-    <string name="preferences__red">Đỏ</string>
-    <string name="preferences__blue">Xanh lam</string>
-    <string name="preferences__orange">Cam</string>
-    <string name="preferences__cyan">Xanh lơ</string>
-    <string name="preferences__magenta">Hồng đậm</string>
-    <string name="preferences__white">Trắng</string>
-    <!-- Text shown when no preference label has been selected -->
-    <string name="preferences__none">Không</string>
-    <string name="preferences__fast">Nhanh</string>
-    <string name="preferences__normal">Bình thường</string>
-    <string name="preferences__slow">Chậm</string>
-    <string name="preferences__help">Hỗ trợ</string>
-    <string name="preferences__advanced">Nâng cao</string>
     <string name="preferences__donate_to_signal">Ủng hộ Signal</string>
-    <!-- Preference label for making one-time donations to Signal -->
-    <string name="preferences__privacy">Riêng tư</string>
     <!-- Preference label for stories -->
     <string name="preferences__stories">Các Story</string>
-    <string name="preferences__data_and_storage">Dữ liệu và lưu trữ</string>
-    <string name="preferences__storage">Lưu trữ</string>
     <string name="preferences__payments">Thanh toán</string>
-    <!-- Privacy settings payments section description -->
-    <string name="preferences__payment_lock">Khóa thanh toán</string>
-    <string name="preferences__conversation_length_limit">Số lượng tin nhắn tối đa trong một cuộc trò chuyện</string>
-    <string name="preferences__keep_messages">Giữ tin nhắn</string>
     <string name="preferences__linked_devices">Các thiết bị được liên kết</string>
-    <string name="preferences__light_theme">Sáng</string>
-    <string name="preferences__dark_theme">Tối</string>
-    <string name="preferences__appearance">Diện mạo</string>
-    <string name="preferences__theme">Chủ đề</string>
-    <string name="preferences__chat_color_and_wallpaper">Màu cuộc trò chuyện &amp; hình nền</string>
-    <!-- Clickable settings text allowing the user to change the icon visible on their phone\'s home screen. -->
-    <string name="preferences__app_icon">Biểu tượng ứng dụng</string>
-    <!-- Approval for changing the app icon. -->
-    <string name="preferences__app_icon_dialog_ok">OK</string>
-    <!-- Cancelling the operation of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_cancel">Hủy</string>
-    <!-- Title for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_title">Thay đổi tên và biểu tượng ứng dụng thành \"%1$s\"</string>
-    <!-- Description for the confirmation dialog of changing the app icon. -->
-    <string name="preferences__app_icon_dialog_description">Cần phải đóng Signal để thay đổi tên và biểu tượng ứng dụng. Thông báo sẽ luôn hiển thị tên và biểu tượng Signal mặc định.</string>
-    <!-- Visible warning label for the limitations of changing the app icon with learn more call to action. -->
-    <string name="preferences__app_icon_warning_learn_more">Chọn một biểu tượng và tên ứng dụng, chúng sẽ được hiển thị trên màn hình chính và ngăn ứng dụng của điện thoại. Thông báo sẽ luôn hiển thị tên và biểu tượng Signal mặc định. Tìm hiểu thêm</string>
-    <!-- Visible warning label for the limitations of changing the app icon. -->
-    <string name="preferences__app_icon_warning">Các biểu tượng và tên ứng dụng được hiển thị trên màn hình chính và ngăn ứng dụng.</string>
-    <!-- Visible warning label explaining that changing the app icon and name does not affect notifications. -->
-    <string name="preferences__app_icon_notification_warning">Thông báo sẽ luôn hiển thị tên và biểu tượng Signal mặc định.</string>
-    <!--Call to action to get more information about the limitations of the change app icon functionality. -->
-    <string name="preferences__app_icon_learn_more">Tìm hiểu thêm</string>
-    <!--Text description of a graphic illustrating the limitations of the app icon change. -->
-    <string name="preferences__graphic_illustrating_where_the_replacement_app_icon_will_be_visible">Đồ họa minh họa nơi hiển thị biểu tượng ứng dụng thay thế.</string>
-    <string name="preferences__disable_pin">Tắt PIN</string>
-    <string name="preferences__enable_pin">Bật PIN</string>
-    <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">Nếu bạn tắt PIN, bạn sẽ mất toàn bộ dữ liệu khi bạn đăng kí lại với Signal trừ khi bạn sao lưu và khôi phục dữ liệu thủ công. Bạn không thể bật Khóa đăng kí khi PIN đang tắt.</string>
-    <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">Mã PIN mã hoá các thông tin được lưu trữ với Signal để chỉ mình bạn có thể truy cập được. Thông tin người dùng, cài đặt, và các liên hệ sẽ được khôi phục khi bạn cài lại Signal. Bạn không cần điền PIN mỗi lần mở ứng dụng.</string>
-    <string name="preferences__system_default">Theo hệ điều hành</string>
-    <string name="preferences__language">Ngôn ngữ</string>
-    <!-- Title of toolbar for the advanced pin settings screen -->
-    <string name="preferences__advanced_pin_settings_title">Cài đặt PIN nâng cao</string>
     <string name="preferences__submit_debug_log">Gửi nhật kí dò lỗi</string>
-    <string name="preferences__incognito_keyboard">Bàn phím ẩn danh</string>
-    <string name="preferences__read_receipts">Thông báo đã xem</string>
-    <string name="preferences__if_read_receipts_are_disabled_you_wont_be_able_to_see_read_receipts">Nếu thông báo đã xem bị tắt, bạn sẽ không thể biết người kia đã xem tin nhắn hay chưa.</string>
-    <string name="preferences__typing_indicators">Thông báo đang nhập</string>
-    <string name="preferences__if_typing_indicators_are_disabled_you_wont_be_able_to_see_typing_indicators">Nếu thông báo đang nhập bị tắt, bạn sẽ không thể biết người kia có đang nhập tin nhắn hay không.</string>
-    <string name="preferences__request_keyboard_to_disable">Yêu cầu bàn phím tắt học tập cá nhân hoá.</string>
-    <string name="preferences__this_setting_is_not_a_guarantee">Cài đặt này không phải là đảm bảo, và bàn phím của bạn có thể bỏ qua nó.</string>
-  <!-- Removed by excludeNonTranslatables <string name="preferences__incognito_keyboard_learn_more" translatable="false">https://support.signal.org/hc/articles/360055276112</string> -->
-    <string name="preferences_chats__when_using_mobile_data">Khi dùng dữ liệu di động</string>
-    <string name="preferences_chats__when_using_wifi">Khi dùng Wi-Fi</string>
-    <string name="preferences_chats__when_roaming">Khi chuyển vùng quốc tế</string>
-    <string name="preferences_chats__media_auto_download">Tự động tải đa phương tiện</string>
-    <string name="preferences_storage__storage_usage">Quản lí bộ nhớ</string>
-    <string name="preferences_storage__photos">Ảnh</string>
-    <string name="preferences_storage__videos">Video</string>
-    <string name="preferences_storage__files">Tệp</string>
-    <string name="preferences_storage__audio">Âm thanh</string>
-    <!-- Storage usage legend label for the size of the main message database -->
-    <string name="preferences_storage__messages">Tin nhắn</string>
-    <!-- Storage usage legend label for the size of downloaded sticker packs -->
-    <string name="preferences_storage__stickers">Nhãn dán</string>
-    <!-- Storage usage legend label for all remaining app storage, such as other databases, caches and temporary files -->
-    <string name="preferences_storage__other">Khác</string>
-    <!-- Shown in place of the total storage size while usage is still being computed -->
-    <string name="preferences_storage__calculating">Đang tính toán…</string>
-    <string name="preferences_storage__review_storage">Kiểm tra bộ nhớ</string>
-    <string name="preferences_storage__delete_older_messages">Xóa tin nhắn cũ?</string>
-    <!-- Dialog title shown when selecting delete message history from manage storage -->
-    <string name="preferences_storage__delete_message_history">Xóa lịch sử tin nhắn?</string>
-    <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">Thao tác này sẽ xóa tất cả lịch sử tin nhắn và đa phương tiện quá %1$s trước khỏi máy bạn.</string>
-    <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
-    <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
-        <item quantity="other">Thao tác này sẽ xóa vĩnh viễn lịch sử cuộc trò chuyện đến %1$s tin nhắn gần đây nhất.</item>
-    </plurals>
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device">Thao tác này sẽ xóa vĩnh viễn tất cả lịch sử tin nhắn và đa phương tiện khỏi máy bạn.</string>
-    <!-- Dialog message warning about delete chat message history will delete everything everywhere including linked devices -->
-    <string name="preferences_storage__this_will_delete_all_message_history_and_media_from_your_device_linked_device">Thao tác này sẽ xóa vĩnh viễn tất cả lịch sử tin nhắn và tệp đa phương tiện trên thiết bị này và bất kỳ thiết bị đã liên kết nào.</string>
-    <string name="preferences_storage__are_you_sure_you_want_to_delete_all_message_history">Bạn có muốn xóa tất cả lịch sử tin nhắn?</string>
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone">Tất cả lịch sử tin nhắn sẽ được xóa vĩnh viễn. Thao tác này không thể được hoàn tác.</string>
-    <!-- Secondary warning dialog message about deleting all chat message history from everything everywhere including linked devices -->
-    <string name="preferences_storage__all_message_history_will_be_permanently_removed_this_action_cannot_be_undone_linked_device">Tất cả lịch sử tin nhắn sẽ được xóa vĩnh viễn trên tất cả thiết bị. Hành động này không thể hoàn tác.</string>
-    <string name="preferences_storage__delete_all_now">Xóa tất cả</string>
-    <!-- Option for keeping messages forever when managing storage -->
-    <string name="preferences_storage__forever">Vĩnh viễn</string>
-    <string name="preferences_storage__one_year">1 năm</string>
-    <string name="preferences_storage__six_months">6 tháng</string>
-    <string name="preferences_storage__thirty_days">30 ngày</string>
-    <!-- Option for setting no limit of the length of chat messages -->
-    <string name="preferences_storage__none">Không</string>
-    <plurals name="preferences_storage__s_messages_plural">
-        <item quantity="other">%1$s tin nhắn</item>
-    </plurals>
 
-    <string name="preferences_storage__custom">Tùy chỉnh</string>
-    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Chuyển tiếp tất cả cuộc gọi qua máy chủ Signal để tránh lộ địa chỉ IP với đối tác. Bật tính năng này sẽ giảm chất lượng cuộc gọi.</string>
-    <string name="preferences_advanced__always_relay_calls">Luôn chuyển tiếp cuộc gọi</string>
-    <!-- Privacy settings payments section title -->
-    <string name="preferences_app_protection__payments">Thanh toán</string>
-    <string name="preferences_data_and_storage__manage_storage">Quản lí bộ nhớ</string>
-    <string name="preferences_data_and_storage__use_less_data_for_calls">Sử dụng ít lưu lượng data hơn khi gọi</string>
-    <string name="preferences_data_and_storage__never">Không bao giờ</string>
-    <string name="preferences_data_and_storage__wifi_and_mobile_data">WiFi và dữ liệu di động</string>
-    <string name="preferences_data_and_storage__mobile_data_only">Chỉ dữ liệu di động</string>
-    <string name="preference_data_and_storage__using_less_data_may_improve_calls_on_bad_networks">Sử dụng ít lưu lượng data có thể cải thiện chất lượng cuộc gọi trong môi trường mạng kém.</string>
-    <string name="preferences_notifications__in_chat_sounds">Âm thanh khi đang trò chuyện</string>
-    <string name="preferences_notifications__show">Hiện</string>
-    <!-- Preference item to set notification settings when chats are muted -->
-    <string name="preferences_notifications__while_muted">Khi đang tắt tiếng</string>
-    <!-- Option in settings to turn on reaction notifications -->
-    <string name="preferences_notifications__reaction">Thông báo về bày tỏ cảm xúc</string>
-    <!-- Body option in settings to turn on reaction notifications    -->
-    <string name="preferences_notifications__notify_reaction">Hiển thị thông báo về các cảm xúc được bày tỏ với tin nhắn bạn gửi</string>
     <!-- Option in settings to turn on unread reminders -->
     <string name="preferences_notifications__unread">Lời nhắc chưa đọc</string>
-    <!-- Body option to turn on unread reminders -->
-    <string name="preferences_notifications__notify_unread">Thỉnh thoảng thông báo khi có tin nhắn chưa đọc trong các cuộc trò chuyện đã tắt tiếng</string>
-    <string name="preferences_notifications__ringtone">Nhạc chuông</string>
-    <string name="preferences_chats__message_text_size">Cỡ chữ tin nhắn</string>
-    <!-- Option in settings that will provide a shortcut to notification system settings to control the priority of Signal notifications -->
-    <string name="preferences_notifications__priority">Mức ưu tiên</string>
-    <!-- Option in settings to trouble shoot delayed notifications -->
-    <string name="preferences_notifications__troubleshoot">Khắc phục sự cố thông báo</string>
-    <!-- Heading for the \'censorship circumvention\' section of privacy preferences -->
-    <string name="preferences_communication__category_censorship_circumvention">Tránh kiểm duyệt</string>
-    <!-- Title of the \'censorship circumvention\' toggle switch -->
-    <string name="preferences_communication__censorship_circumvention">Tránh kiểm duyệt</string>
-    <string name="preferences_communication__censorship_circumvention_if_enabled_signal_will_attempt_to_circumvent_censorship">Nếu được bật, Signal sẽ thử tránh kiểm duyệt. Không bật tính năng này trừ khi bạn đang ở một nơi đang chặn Signal.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that we automatically enabled it because we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_has_been_activated_based_on_your_accounts_phone_number">Tránh kiểm duyệt đã được bật dựa trên số điện thoại trong tài khoản của bạn.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you disabled it even though we believe you\'re in a censored country -->
-    <string name="preferences_communication__censorship_circumvention_you_have_manually_disabled">Bạn vừa tắt tính năng tránh kiểm duyệt theo cách thủ công.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re already connected to the Signal service -->
-    <string name="preferences_communication__censorship_circumvention_is_not_necessary_you_are_already_connected">Tránh kiểm duyệt là không cần thiết; bạn đã được kết nối với dịch vụ của Signal.</string>
-    <!-- Summary text for \'censorship circumvention\' toggle. Indicates that you cannot use it because you\'re not connected to the internet -->
-    <string name="preferences_communication__censorship_circumvention_can_only_be_activated_when_connected_to_the_internet">Chỉ có thể bật Tránh Kiểm duyệt khi bạn đang được kết nối internet.</string>
-    <string name="preferences_communication__category_sealed_sender">Lá thư không chủ</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone">Cho phép từ bất cứ ai</string>
-    <string name="preferences_communication__sealed_sender_allow_from_anyone_description">Bật \'Lá thư không chủ\' cho tin nhắn từ người gửi không có trong danh bạ và người bạn chưa chia sẻ hồ sơ.</string>
-    <string name="preferences_proxy">Proxy</string>
-    <string name="preferences_use_proxy">Sử dụng proxy</string>
-    <string name="preferences_off">Tắt</string>
-    <string name="preferences_on">Bật</string>
     <string name="preferences_proxy_address">Địa chỉ proxy</string>
     <string name="preferences_only_use_a_proxy_if">Chỉ dùng proxy khi bạn không thể kết nối vào Signal trên dữ liệu di động hoặc Wi-Fi.</string>
     <string name="preferences_share">Chia sẻ</string>
@@ -3955,18 +3613,6 @@
     <string name="preferences_success">Thành công</string>
     <string name="preferences_failed_to_connect">Không thể kết nối</string>
     <string name="preferences_enter_proxy_address">Nhập địa chỉ proxy</string>
-    <!-- Preference title for changing navigation (bottom) bar size -->
-    <string name="preferences_navigation_bar_size">Kích cỡ thanh điều hướng</string>
-    <!-- Preference summary for normal navigation bar size -->
-    <string name="preferences_normal">Bình thường</string>
-    <!-- Preference summary for compact navigation bar size -->
-    <string name="preferences_compact">Gọn</string>
-    <!-- Dialog message body explaining that we have to restart the app in order to apply the user\'s new language setting.  -->
-    <string name="preferences_language_change_confirmation_message">Ứng dụng sẽ khởi động lại để áp dụng cài đặt ngôn ngữ mới.</string>
-    <!-- Preference title for automatic key verification -->
-    <string name="preferences_automatic_key_verification">Xác minh mã khóa tự động</string>
-    <!-- Preference summary for automatic key verification -->
-    <string name="preferences_automatic_key_verification_body">Khi được bật, Signal sẽ cố gắng tự động xác minh mã hóa của các cuộc trò chuyện 1:1.</string>
 
 
     <!-- Internal only preferences -->
@@ -4345,11 +3991,6 @@
     <!-- Label for a button in a banner to learn more about why we cannot process the user\'s contacts -->
     <string name="reminder_cds_permanent_error_learn_more">Tìm hiểu thêm</string>
 
-    <!-- media_preview -->
-    <string name="media_preview__save_title">Lưu</string>
-    <string name="media_preview__edit_title">Sửa</string>
-
-
     <!-- media_preview_activity -->
     <!-- Content description of images or videos when viewing media -->
     <string name="media_preview_activity__media_content_description">Xem trước tệp đa phương tiện</string>
@@ -4471,6 +4112,12 @@
     <string name="CallNotificationBuilder__ongoing_signal_group_call">Đang gọi nhóm Signal</string>
 
     <string name="CallNotificationBuilder_connecting">Đang kết nối…</string>
+    <!-- Notification title shown when Signal needs to be opened to use the microphone during a call -->
+    <string name="CallNotificationBuilder__open_signal">Open Signal</string>
+    <!-- Notification body shown when a call was answered from a watch or other device but Signal needs microphone permission before it can connect -->
+    <string name="CallNotificationBuilder__to_answer_this_call_allow_signal_access_to_your_microphone">To answer this call, allow Signal access to your microphone.</string>
+    <!-- Notification body shown during a call when Android blocked microphone access because Signal was in the background -->
+    <string name="CallNotificationBuilder__the_other_person_cant_hear_you_until_you_open_signal">The other person can\'t hear you until you open Signal.</string>
     <string name="enter_backup_passphrase_dialog__backup_passphrase">Mật khẩu sao lưu</string>
     <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Sao lưu sẽ được lưu trong bộ nhớ và được mã hóa với mật khẩu bên dưới. Bạn phải có mật khẩu này để khôi phục bản sao lưu.</string>
     <string name="backup_enable_dialog__you_must_have_this_passphrase">Bạn phải có mật khẩu này để khôi phục lại một bản sao lưu.</string>
@@ -4516,39 +4163,6 @@
     <string name="BackupUtil_never">Không bao giờ</string>
     <!-- Subtext below last backup time when we do not know when the last backup was -->
     <string name="BackupUtil_unknown">Không rõ</string>
-    <!-- Phone number heading displayed as a screen title -->
-    <string name="preferences_app_protection__phone_number">Số điện thoại</string>
-    <!-- Subtext below option to launch into phone number privacy settings screen -->
-    <string name="preferences_app_protection__choose_who_can_see">Chọn người có thể thấy số điện thoại của bạn và người có thể liên hệ với bạn trên Signal với số đó.</string>
-    <!-- Section title above two radio buttons for enabling and disabling phone number display -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_see_my_number_heading">Ai Có Thể Thấy Số Điện Thoại Của Tôi</string>
-    <!-- Subtext below radio buttons when who can see my number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_on_description">Số điện thoại của bạn sẽ được hiển thị với những người và nhóm bạn nhắn tin.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to everybody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_on_description">Số điện thoại của bạn sẽ không hiển thị với bất kỳ ai trừ trường hợp người đó đã lưu số của bạn trong danh bạ trên máy họ.</string>
-    <!-- Subtext below radio buttons when who can see my number is set to nobody and who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_sharing_off_discovery_off_description">Số điện thoại của bạn sẽ không hiển thị với bất kỳ ai.</string>
-    <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
-    <string name="PhoneNumberPrivacySettingsFragment_who_can_find_me_by_number_heading">Ai Có Thể Tìm Tôi Bằng Số Điện Thoại</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_on_description">Bất kỳ ai có số điện thoại của bạn sẽ thấy bạn trên Signal và có thể bắt đầu trò chuyện với bạn.</string>
-    <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
-    <string name="PhoneNumberPrivacySettingsFragment_discovery_off_description">Sẽ không có ai nhìn thấy số điện thoại của bạn trên Signal, trừ khi bạn nhắn tin với người đó hoặc đã có một cuộc trò chuyện với người đó.</string>
-    <!-- Snackbar text when pressing invalid radio item -->
-    <string name="PhoneNumberPrivacySettingsFragment__to_change_this_setting">"Để đổi cài đặt này, đặt mục “Ai có thể thấy số của tôi” thành “Không ai cả”."</string>
-    <!-- Dialog title shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_title">Bạn có chắc không?</string>
-    <!-- Dialog warning message shown when selecting "Nobody" in phone number privacy settings for who can find me by number -->
-    <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_message">Thiết lập tùy chọn “Ai có thể tìm thấy tôi bằng số điện thoại” thành “Không ai” sẽ khiến mọi người khó tìm được bạn hơn trên Signal.</string>
-    <!-- Dialog button text for canceling change action -->
-    <string name="PhoneNumberPrivacySettingsFragment__cancel">Hủy</string>
-    <string name="PhoneNumberPrivacy_everyone">Bất cứ ai</string>
-    <string name="PhoneNumberPrivacy_nobody">Không ai</string>
-    <string name="preferences_app_protection__screen_lock">Khoá màn hình</string>
-    <!-- Snackbar text shown when trying to enable screen lock but the user does not have a password or biometrics enabled -->
-    <string name="preferences_app_protection__to_use_screen_lock">Để sử dụng khóa màn hình, đặt một mã PIN, mã khóa dạng vẽ hình hoặc mật khẩu trên thiết bị này.</string>
-    <string name="preferences_app_protection__failed_to_enable_registration_lock">Không thể bật khóa đăng kí.</string>
-    <string name="preferences_app_protection__failed_to_disable_registration_lock">Không thể tắt khóa đăng kí.</string>
     <string name="RegistrationActivity_you_must_enter_your_registration_lock_PIN">Bạn phải điền mã PIN Khóa Đăng ký của bạn</string>
     <string name="RegistrationActivity_your_pin_has_at_least_d_digits_or_characters">Mã PIN phải có tối thiểu %1$d chữ số hoặc kí tự</string>
     <string name="RegistrationActivity_too_many_attempts">Đã thử quá nhiều lần</string>
@@ -4569,26 +4183,6 @@
     <string name="prompt_passphrase_activity__try_again">Thử lại</string>
 
     <!-- ScreenLockSettingsFragment -->
-    <!-- Text shown when screen lock is not enabled -->
-    <string name="ScreenLockSettingsFragment__off">Tắt</string>
-    <!-- Text shown with toggle that when switched on will enable screen lock -->
-    <string name="ScreenLockSettingsFragment__use_screen_lock">Sử dụng khóa màn hình</string>
-    <!-- Description of what screen locking will do and how notification content will not be shown when screen is locked -->
-    <string name="ScreenLockSettingsFragment__your_android_device">Thiết lập khóa thiết bị Android của bạn sẽ được yêu cầu để mở khóa Signal khi bạn rời khỏi hoặc chuyển đổi ứng dụng. Khi đã khóa, phần xem trước thông báo sẽ không hiển thị nội dung tin nhắn.</string>
-    <!-- Title text explaining when users should start the screen lock -->
-    <string name="ScreenLockSettingsFragment__start_screen_lock">Bắt đầu khóa màn hình</string>
-    <!-- Option text explaining that screen lock should start after 1 minute of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_1_min">Sau 1 phút</string>
-    <!-- Option text explaining that screen lock should start after 5 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_5_min">Sau 5 phút</string>
-    <!-- Option text explaining that screen lock should start after 30 minutes of inactivity -->
-    <string name="ScreenLockSettingsFragment__after_30_min">Sau 30 phút</string>
-    <!-- Option text explaining that screen lock should start at a custom time set by the user -->
-    <string name="ScreenLockSettingsFragment__custom_time">Thời gian tuỳ chỉnh</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn on screen lock -->
-    <string name="ScreenLockSettingsFragment__use_signal_screen_lock">Sử dụng khóa màn hình Signal</string>
-    <!-- Title on biometrics prompt explaining that biometrics are needed to turn off screen lock -->
-    <string name="ScreenLockSettingsFragment__turn_off_signal_lock">Tắt khóa màn hình Signal</string>
 
     <string name="Recipient_unknown">Vô danh</string>
     <!-- Name to use for a user across the UI when they are unregistered and have no other name available -->
@@ -5037,61 +4631,8 @@
     <string name="GroupDescriptionDialog__group_description">Miêu tả nhóm</string>
 
     <!-- AppSettingsFragment -->
-    <!-- String alerting user that something is wrong with their backups subscription -->
-    <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Gia hạn gói đăng ký Sao lưu bảo mật Signal</string>
-    <!-- String alerting user that backup failed -->
-    <string name="AppSettingsFragment__couldnt_complete_backup">Không thể hoàn tất sao lưu</string>
     <!-- String alerting user that backup redemption -->
     <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Không thể nhận gói đăng ký sao lưu của bạn</string>
-    <!-- String alerting user that backup storage limit has been reached -->
-    <string name="AppSettingsFragment__backup_storage_limit_reached">Đã đạt giới hạn dung lượng sao lưu</string>
-    <!-- String displayed telling user to invite their friends to Signal -->
-    <string name="AppSettingsFragment__invite_your_friends">Mời bạn bè của mình</string>
-    <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">Đã sao chép id nhà ủng hộ vào clipboard</string>
-    <!-- String displayed in a toast when we successfully copy the backups subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">Đã sao chép id người đăng ký gói sao lưu vào clipboard</string>
-
-    <!-- ExportAccountDataFragment -->
-    <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Dữ liệu tài khoản của bạn</string>
-    <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Xuất một báo cáo về dữ liệu tài khoản Signal của bạn. Báo cáo này không bao gồm nội dung tin nhắn hay tệp đa phương tiện nào. %1$s</string>
-    <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Tìm hiểu thêm</string>
-    <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Xuất báo cáo</string>
-
-    <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Xuất định dạng TXT</string>
-    <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Tệp văn bản dễ đọc</string>
-    <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Xuất định dạng JSON</string>
-    <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Tệp dành cho thiết bị</string>
-
-    <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Hủy</string>
-
-    <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Title of dialog shown when report fails to generate -->
-    <string name="ExportAccountDataFragment__report_generation_failed">Không thể tạo báo cáo</string>
-    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
-    <string name="ExportAccountDataFragment__check_network">Kiểm tra kết nối của bạn và thử lại.</string>
-
-    <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Bạn muốn xuất dữ liệu?</string>
-    <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Chỉ chia sẻ dữ liệu tài khoản Signal của bạn với người hoặc ứng dụng bạn tin tưởng.</string>
-    <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Xuất</string>
-
-    <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Đang tạo báo cáo…</string>
-    <!-- Explanation that the report is only generated on export and is not saved on the device -->
-    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Báo cáo của bạn chỉ được tạo ra tại thời điểm bạn chọn xuất báo cáo và không được lưu bởi Signal trên thiết bị của bạn.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Dùng để thay đổi số điện thoại hiện tại của bạn sang một số khác. Bạn không thể khôi phục thay đổi này.\n\nTrước khi tiếp tục, hãy chắc chắn rằng số điện thoại mới của bạn đang hoạt động bình thường.</string>
@@ -5282,45 +4823,15 @@
     <!-- Done button label to save selected chats to folder -->
     <string name="ChooseChatsFragment__done">Xong</string>
 
-    <string name="NotificationsSettingsFragment__calls">Cuộc gọi</string>
-    <!-- Notification header for sounds -->
-    <string name="NotificationsSettingsFragment__sounds">Âm thanh</string>
-    <string name="NotificationsSettingsFragment__contact_joins_signal">Liên hệ tham gia Signal</string>
-    <!-- Notification body to get notified when someone joins Signal -->
-    <string name="NotificationsSettingsFragment__notify_contact">Hiển thị thông báo khi một liên hệ trong danh bạ điện thoại tham gia Signal</string>
-    <!-- Option to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset">Đặt lại cài đặt thông báo</string>
-    <!-- Option body to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_notifications">Khôi phục cài đặt thông báo về mặc định, bao gồm cả các cài đặt tùy chỉnh cho các cuộc trò chuyện của bạn</string>
-    <!-- Dialog to reset their notification settings -->
-    <string name="NotificationsSettingsFragment__reset_body">Đặt lại tất cả cài đặt thông báo về mặc định cho mọi cuộc trò chuyện?</string>
-    <!-- Confirmation button to reset dialog -->
-    <string name="NotificationsSettingsFragment__reset_confirm">Đặt lại</string>
     <!-- Notification preference header -->
     <string name="NotificationsSettingsFragment__notification_profiles">Cấu hình thông báo</string>
-    <!-- Notification preference summary text -->
-    <string name="NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose">Tạo cấu hình để chỉ nhận thông báo từ những người và nhóm bạn chọn.</string>
 
-    <!-- Header to describe screen that shows while muted settings -->
-    <string name="MutedNotificationsFragment__while">Khi đang tắt tiếng</string>
     <!-- Title for toggle row to control call settings while muted -->
     <string name="MutedNotificationsFragment__calls">Cuộc gọi</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body_global">Đổ chuông hoặc gửi thông báo khi có cuộc gọi bắt đầu trong các cuộc trò chuyện đã tắt tiếng.</string>
     <!-- Title for toggle row to control mentions settings while muted -->
     <string name="MutedNotificationsFragment__mentions">Nhắc tên</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body_global">Thông báo khi bạn được nhắc đến trong các cuộc trò chuyện đã tắt tiếng.</string>
     <!-- Title for toggle row to control replies settings while muted -->
     <string name="MutedNotificationsFragment__replies">Câu trả lời</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body_global">Thông báo khi có người trả lời tin nhắn của bạn trong các cuộc trò chuyện đã tắt tiếng.</string>
-    <!-- Description for toggle row to control call settings while muted -->
-    <string name="MutedNotificationsFragment__calls_body">Đổ chuông hoặc gửi thông báo khi có cuộc gọi bắt đầu trong lúc cuộc trò chuyện này đang bị tắt tiếng.</string>
-    <!-- Description for toggle row to control mentions settings while muted -->
-    <string name="MutedNotificationsFragment__mentions_body">Thông báo khi bạn được nhắc đến trong lúc cuộc trò chuyện này đang bị tắt tiếng.</string>
-    <!-- Description for toggle row to control replies settings while muted -->
-    <string name="MutedNotificationsFragment__replies_body">Thông báo khi có người trả lời tin nhắn của bạn trong khi cuộc trò chuyện này đang bị tắt tiếng.</string>
     <!-- Description for toggle row to control unread reminders while muted -->
     <string name="MutedNotificationsFragment__unread_body">Thỉnh thoảng thông báo khi có tin nhắn chưa đọc khi đã tắt tiếng cuộc trò chuyện này.</string>
 
@@ -5331,87 +4842,14 @@
     <string name="NotificationProfilesFragment__create_profile">Tạo cấu hình</string>
 
     <!-- PrivacySettingsFragment -->
-    <string name="PrivacySettingsFragment__blocked">Đã chặn</string>
-    <!-- Settings label that shows the number blocked contacts -->
-    <plurals name="PrivacySettingsFragment__d_contacts">
-        <item quantity="other">%1$d liên hệ hoặc nhóm</item>
-    </plurals>
-    <string name="PrivacySettingsFragment__messaging">Nhắn tin</string>
     <string name="PrivacySettingsFragment__disappearing_messages">Tin nhắn tự hủy</string>
-    <string name="PrivacySettingsFragment__app_security">Bảo mật ứng dụng</string>
-    <!-- This refers to the multi-tasking overview (recent apps) from the Android operating system.-->
-    <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Chặn chụp màn hình trong danh sách gần đây và bên trong ứng dụng</string>
-    <string name="PrivacySettingsFragment__signal_message_and_calls">Tin nhắn và cuộc gọi Signal, luôn luôn chuyển tiếp cuộc gọi, và người gửi được niêm phong</string>
-    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Đồng hồ mặc định cho tất cả cuộc trò chuyện mới</string>
-    <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Đặt đồng hồ tin nhắn biến mất mặc định cho tất cả các cuộc trò chuyện mới bắt đầu bởi bạn.</string>
-    <!-- Summary for stories preference to launch into story privacy settings -->
-    <string name="PrivacySettingsFragment__payment_lock_require_lock">Yêu cầu có khóa màn hình hoặc vân tay trên Android để chuyển khoản thanh toán</string>
-    <!-- Alert dialog title when payment lock cannot be enabled -->
-    <string name="PrivacySettingsFragment__cant_enable_title">Không thể bật khóa thanh toán</string>
-    <!-- Alert dialog description to setup screen lock or fingerprint in phone settings -->
-    <string name="PrivacySettingsFragment__cant_enable_description">Để sử dụng Khóa Thanh toán, trước tiên bạn cần bật khóa màn hình hoặc tạo vân tay xác minh người dùng trong phần cài đặt của điện thoại.</string>
-    <!-- Shown in a toast when we can\'t navigate to the user\'s system fingerprint settings -->
-    <string name="PrivacySettingsFragment__failed_to_navigate_to_system_settings">Điều hướng đến phần cài đặt hệ thống không thành công</string>
     <!-- Alert dialog button to go to phone settings -->
     <!-- Alert dialog button to cancel the dialog -->
 
     <!-- AdvancedPrivacySettingsFragment -->
   <!-- Removed by excludeNonTranslatables <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string> -->
-    <string name="AdvancedPrivacySettingsFragment__show_status_icon">Hiện biểu tượng trạng thái</string>
-    <string name="AdvancedPrivacySettingsFragment__show_an_icon">Hiện biểu tượng trong chi tiết tin nhắn khi chúng được gửi qua người gửi được niêm phong.</string>
 
-    <!-- ExpireTimerSettingsFragment -->
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Khi được bật, tin nhắn mới được gửi và nhận trong cuộc trò chuyện mới mà bạn bắt đầu sẽ biến mất sau khi chúng được đọc.</string>
-    <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Khi được bật, tin nhắn mới được nhận và gửi trong cuộc trò chuyện này sẽ biến mất sau khi chúng được đọc.</string>
-    <string name="ExpireTimerSettingsFragment__off">Tắt</string>
-    <string name="ExpireTimerSettingsFragment__4_weeks">4 tuần</string>
-    <string name="ExpireTimerSettingsFragment__1_week">1 tuần</string>
-    <string name="ExpireTimerSettingsFragment__1_day">1 ngày</string>
-    <string name="ExpireTimerSettingsFragment__8_hours">8 tiếng</string>
-    <string name="ExpireTimerSettingsFragment__1_hour">1 giờ</string>
-    <string name="ExpireTimerSettingsFragment__5_minutes">5 phút</string>
-    <string name="ExpireTimerSettingsFragment__30_seconds">30 giây</string>
-    <string name="ExpireTimerSettingsFragment__custom_time">Thời gian tuỳ chỉnh</string>
-    <string name="ExpireTimerSettingsFragment__set">Đặt</string>
-    <string name="ExpireTimerSettingsFragment__save">Lưu</string>
 
-    <string name="CustomExpireTimerSelectorView__seconds">giây</string>
-    <string name="CustomExpireTimerSelectorView__minutes">phút</string>
-    <string name="CustomExpireTimerSelectorView__hours">giờ</string>
-    <string name="CustomExpireTimerSelectorView__days">ngày</string>
-    <string name="CustomExpireTimerSelectorView__weeks">tuần</string>
-
-    <!-- HelpSettingsFragment -->
-    <string name="HelpSettingsFragment__support_center">Trung tâm hỗ trợ</string>
-    <string name="HelpSettingsFragment__contact_us">Liên hệ với chúng tôi</string>
-    <string name="HelpSettingsFragment__version">Phiên bản</string>
-    <!-- Displayed when copying help screen text to the clipboard -->
-    <string name="HelpSettingsFragment__copied_to_clipboard">Đã sao chép vào clipboard</string>
-    <string name="HelpSettingsFragment__debug_log">Nhật ký gỡ lỗi</string>
-    <!--    Header for the screen that displays the licenses of the open-source software dependencies of the Signal app-->
-    <string name="HelpSettingsFragment__licenses">Các loại giấy phép</string>
-    <string name="HelpSettingsFragment__terms_amp_privacy_policy">Điều khoản &amp; Quyền riêng tư</string>
-    <string name="HelpFragment__copyright_signal_messenger">Bản quyền Signal Messenger</string>
-    <string name="HelpFragment__licenced_under_the_agplv3">Được cấp phép GNU AGPLv3</string>
-    <!-- Non-English translations should use "Signal is a nonprofit." instead, dropping the 501c3 reference. -->
-    <string name="HelpSettingsFragment__signal_is_a_501c3">Signal là một tổ chức phi lợi nhuận</string>
-
-    <!-- DataAndStorageSettingsFragment -->
-    <string name="DataAndStorageSettingsFragment__media_quality">Chất lượng tập tin đa phương tiện</string>
-    <!-- Label shown on the manage storage row while total storage usage is still being computed -->
-    <string name="DataAndStorageSettingsFragment__calculating">Đang tính toán…</string>
-    <!-- Category title for the quality of the media to be sent -->
-    <string name="DataAndStorageSettingsFragment__sent_media_quality">Chất lượng tập tin đa phương tiện đã gửi</string>
-    <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Việc gửi tập tin đa phương tiện chất lượng cao sẽ tốn nhiều lưu lượng hơn.</string>
-    <!-- Disclaimer shown under the media auto-download settings. Placeholder is a formatted size like "100 KB". -->
-    <string name="DataAndStorageSettingsFragment__voice_messages_and_stickers_under_size_are_always_auto_downloaded">Tin nhắn thoại và nhãn dán (dưới %1$s) luôn được tự động tải xuống.</string>
-    <string name="DataAndStorageSettingsFragment__calls">Cuộc gọi</string>
-    <!-- Title of a toggle that keeps Signal connected in the background via a persistent foreground service instead of using FCM push messages -->
-    <string name="DataAndStorageSettingsFragment__stay_connected_in_background">Duy trì kết nối ở chế độ nền</string>
-    <!-- Body of a confirmation dialog shown when a user tries to enable the "Stay connected in background" setting -->
-    <string name="DataAndStorageSettingsFragment__staying_connected_while_in_the_background_will_likely_result_in_increased_battery_usage">Việc duy trì kết nối khi ứng dụng chạy ngầm có thể dẫn đến việc tiêu hao pin nhiều hơn. Điều này không cần thiết đối với hầu hết thiết bị. Chỉ bật tùy chọn này nếu bạn đang gặp vấn đề về thông báo.</string>
-    <!-- Button label that enables the "Stay connected in background" setting from a confirmation dialog -->
-    <string name="DataAndStorageSettingsFragment__enable">Bật</string>
 
     <!-- ChatColorSelectionFragment -->
     <!-- Text shown on a circle button to indicate the app will automatically select a color for conversation bubbles for this chat. -->
@@ -5460,23 +4898,8 @@
     <string name="BecomeASustainerMegaphone__become_a_sustainer">Trở thành Nhà Ủng hộ</string>
 
     <!-- KeyboardPagerFragment -->
-    <string name="KeyboardPagerFragment_emoji">Emoji</string>
-    <string name="KeyboardPagerFragment_open_emoji_search">Mở tìm kiếm emoji</string>
-    <string name="KeyboardPagerFragment_open_sticker_search">Mở tìm kiếm nhãn dán</string>
-    <string name="KeyboardPagerFragment_open_gif_search">Mở tìm kiếm ảnh động</string>
-    <string name="KeyboardPagerFragment_stickers">Nhãn dán</string>
-    <string name="KeyboardPagerFragment_backspace">Xoá lùi</string>
-    <string name="KeyboardPagerFragment_gifs">Ảnh động</string>
-    <string name="KeyboardPagerFragment_search_emoji">Tìm kiếm emoji</string>
-    <string name="KeyboardPagerfragment_back_to_emoji">Quay về emoji</string>
-    <string name="KeyboardPagerfragment_clear_search_entry">Xoá cụm tìm kiếm</string>
     <string name="KeyboardPagerFragment_search_giphy">Tìm kiếm GIPHY</string>
 
-    <!-- StickerSearchDialogFragment -->
-    <string name="StickerSearchDialogFragment_search_stickers">Tìm kiếm nhãn dán</string>
-    <string name="StickerSearchDialogFragment_no_results_found">Không tìm thấy kết quả</string>
-    <string name="EmojiSearchFragment__no_results_found">Không tìm thấy kết quả</string>
-    <string name="NotificationsSettingsFragment__unknown_ringtone">Không rõ nhạc chuông</string>
 
     <!-- ConversationSettingsFragment -->
     <!-- Dialog title displayed when non-admin tries to add a story to an audience group -->
@@ -5584,6 +5007,8 @@
     <string name="NewConversationActivity__video_call">Gọi video</string>
     <!-- Context menu item remove -->
     <string name="NewConversationActivity__remove">Xóa</string>
+    <!-- Context menu item that hides a contact -->
+    <string name="NewConversationActivity__hide">Hide</string>
     <!-- Context menu item block -->
     <string name="NewConversationActivity__block">Chặn</string>
     <!-- Dialog title when removing a contact -->
@@ -5592,6 +5017,12 @@
     <string name="NewConversationActivity__you_wont_see_this_person">Bạn sẽ không nhìn thấy người này khi tìm kiếm. Bạn sẽ nhận được một yêu cầu gửi tin nhắn nếu người này nhắn tin cho bạn trong tương lai.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s đã được xóa</string>
+    <!-- Dialog title when hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__hide_s">Hide %1$s?</string>
+    <!-- Dialog body when hiding a contact -->
+    <string name="NewConversationActivity__this_person_wont_appear">This person won\'t appear in your contact list and search. If they message you in the future, you\'ll receive a message request. You can manage people you\'ve hidden in settings.</string>
+    <!-- Snackbar message after hiding a contact. Placeholder is the contact\'s name. -->
+    <string name="NewConversationActivity__s_has_been_hidden">%1$s has been hidden</string>
     <!-- Snackbar message after blocking a contact -->
     <string name="NewConversationActivity__s_has_been_blocked">%1$s đã bị chặn</string>
     <!-- Error message shown when looking up a person by phone number and that phone number is not associated with a signal account -->
@@ -5643,6 +5074,10 @@
 
     <!-- VectorAvatarCreationFragment -->
     <string name="VectorAvatarCreationFragment__select_a_color">Chọn màu</string>
+
+    <!-- AvatarColorGrid -->
+    <!-- Accessibility label for one of the colors an avatar can be drawn in. %1$d is the color\'s position in the list, %2$d is how many colors there are. -->
+    <string name="AvatarColorGrid__color_d_of_d">Màu %1$d trên tổng số %2$d</string>
 
     <!-- Displayed in the toolbar when externally sharing text to multiple recipients -->
     <string name="ShareInterstitialActivity__share">Chia sẻ</string>
@@ -5710,15 +5145,9 @@
     <string name="MediaReviewImagePageFragment__discard_changes">Bạn có muốn hủy bỏ các thay đổi không?</string>
     <string name="MediaReviewImagePageFragment__youll_lose_any_changes">Bạn sẽ mất tất cả những thay đổi bạn đã làm trên bức ảnh này.</string>
 
-    <string name="BadgesOverviewFragment__my_badges">Huy hiệu của tôi</string>
     <string name="BadgesOverviewFragment__featured_badge">Huy hiệu mặc định</string>
-    <string name="BadgesOverviewFragment__display_badges_on_profile">Hiển thị huy hiệu trên hồ sơ cá nhân</string>
-    <string name="BadgesOverviewFragment__failed_to_update_profile">Không thể cập nhật hồ sơ cá nhân</string>
 
 
-    <string name="SelectFeaturedBadgeFragment__select_a_badge">Chọn một huy hiệu</string>
-    <string name="SelectFeaturedBadgeFragment__you_must_select_a_badge">Bạn phải chọn một huy hiệu</string>
-    <string name="SelectFeaturedBadgeFragment__failed_to_update_profile">Không thể cập nhật hồ sơ cá nhân</string>
 
     <!-- Displayed on primary button in the bottom sheet as a call-to-action to launch into the donation flow -->
     <string name="ViewBadgeBottomSheetDialogFragment__donate_now">Ủng hộ</string>
@@ -5766,9 +5195,6 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Chọn huy hiệu mặc định</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Tiếp tục</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Khi bạn có nhiều hơn một huy hiệu. bạn có thể chọn huy hiệu mặc định mà mọi người sẽ nhìn thấy trên hồ sơ của bạn.</string>
-
-    <string name="BecomeASustainerFragment__get_badges">Hãy thu thập nhiều huy hiệu đính trên hồ sơ của bạn bằng cách hỗ trợ cho Signal.</string>
-    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal là một ứng dụng phi lợi nhuận, không có quảng cáo cũng như nhà đầu tư nào. Nó chỉ được duy trì và phát triển bởi hàng triệu người dùng như bạn mà thôi.</string>
 
     <!-- Button label for creating a donation -->
     <string name="ManageDonationsFragment__donate_to_signal">Ủng hộ Signal</string>
@@ -6008,6 +5434,10 @@
     <string name="EditNotificationProfileFragment__focus">Tập trung</string>
     <!-- Error message shown when attempting to next/save without a profile name -->
     <string name="EditNotificationProfileFragment__profile_must_have_a_name">Phải có một cái tên</string>
+    <!-- Accessibility label for the button beside the profile name that opens the emoji picker to choose the profile\'s emoji -->
+    <string name="EditNotificationProfileFragment__choose_emoji">Chọn emoji</string>
+    <!-- Accessibility label for the button that clears both the profile name and its emoji -->
+    <string name="EditNotificationProfileFragment__clear_name_and_emoji">Xóa tên và emoji</string>
 
     <!-- Title for add recipients to notification profile screen in create flow -->
     <string name="AddAllowedMembers__allowed_notifications">Các thông báo được phép</string>
@@ -6022,8 +5452,6 @@
     <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
     <string name="AddAllowedMembers__notify_for_all_mentions">Thông báo cho tất cả đề cập</string>
 
-    <!-- Call to action button on contact picker for adding to profile -->
-    <string name="SelectRecipientsFragment__add">Thêm</string>
 
     <!-- Notification profiles home fragment, shown when no profiles have been created yet -->
     <string name="NotificationProfilesFragment__create_a_profile_to_receive_notifications_and_calls_only_from_the_people_and_groups_you_want_to_hear_from">Tạo cấu hình để chỉ nhận thông báo và cuộc gọi từ những người và nhóm mà bạn muốn nghe.</string>
@@ -6075,20 +5503,6 @@
     <string name="EditNotificationProfileSchedule__start">Bắt đầu</string>
     <!-- Label for showing the end time for the schedule -->
     <string name="EditNotificationProfileSchedule__end">Kết thúc</string>
-    <!-- First letter of Sunday -->
-    <string name="EditNotificationProfileSchedule__sunday_first_letter">S</string>
-    <!-- First letter of Monday -->
-    <string name="EditNotificationProfileSchedule__monday_first_letter">M</string>
-    <!-- First letter of Tuesday -->
-    <string name="EditNotificationProfileSchedule__tuesday_first_letter">T</string>
-    <!-- First letter of Wednesday -->
-    <string name="EditNotificationProfileSchedule__wednesday_first_letter">W</string>
-    <!-- First letter of Thursday -->
-    <string name="EditNotificationProfileSchedule__thursday_first_letter">T</string>
-    <!-- First letter of Friday -->
-    <string name="EditNotificationProfileSchedule__friday_first_letter">F</string>
-    <!-- First letter of Saturday -->
-    <string name="EditNotificationProfileSchedule__saturday_first_letter">S</string>
     <!-- Title of select time dialog shown when setting start time for schedule -->
     <string name="EditNotificationProfileSchedule__set_start_time">Đặt thời gian bắt đầu</string>
     <!-- Title of select time dialog shown when setting end time for schedule -->
@@ -6102,17 +5516,6 @@
     <!-- Error message shown if trying to save/use a schedule with no days selected -->
     <string name="EditNotificationProfileSchedule__schedule_must_have_at_least_one_day">Lịch trình phải có ít nhất một ngày</string>
 
-    <!-- Title for final screen shown after completing a profile creation -->
-    <string name="NotificationProfileCreated__profile_created">Cấu hình đã tạo</string>
-    <!-- Call to action button to press to close the created screen and move to the profile details screen -->
-    <string name="NotificationProfileCreated__done">Xong</string>
-    <!-- Descriptor text shown to indicate how to manually turn a profile on/off -->
-    <string name="NotificationProfileCreated__you_can_turn_your_profile_on_or_off_manually_via_the_menu_on_the_chat_list">Bạn có thể bật hoặc tắt cấu hình của mình theo cách thủ công thông qua menu trên danh sách trò chuyện.</string>
-    <!-- Descriptor text shown to indicate you can add a schedule later since you did not add one during create flow -->
-    <string name="NotificationProfileCreated__add_a_schedule_in_settings_to_automate_your_profile">Thêm lịch trình trong cài đặt để tự động hóa cấu hình của bạn.</string>
-    <!-- Descriptor text shown to indicate your profile will follow the schedule set during create flow -->
-    <string name="NotificationProfileCreated__your_profile_will_turn_on_and_off_automatically_according_to_your_schedule">Hồ sơ của bạn sẽ tự động bật và tắt theo lịch trình của bạn.</string>
-
     <!-- Button text shown in profile selection bottom sheet to create a new profile -->
     <string name="NotificationProfileSelection__new_profile">Cấu hình mới</string>
     <!-- Manual enable option to manually enable a profile for 1 hour -->
@@ -6124,12 +5527,6 @@
     <!-- Descriptor text indicating how long a profile will be on when there is a time component associated with it -->
     <string name="NotificationProfileSelection__on_until_s">Bật cho đến khi %1$s</string>
 
-    <!-- Displayed in a toast when we fail to open the ringtone picker -->
-    <string name="NotificationSettingsFragment__failed_to_open_picker">Không mở được bộ chọn.</string>
-    <!-- Banner title when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__to_enable_notifications">Để bật thông báo, Signal cần có quyền để hiển thị thông báo.</string>
-    <!-- Banner action when notification permission is disabled -->
-    <string name="NotificationSettingsFragment__turn_on">Bật</string>
 
     <!-- Text description in Signal Release channel details explaining that it is the only chat from Signal -->
     <string name="ReleaseNotes__this_is_official_chat">Đây là cuộc trò chuyện chính thức và duy nhất từ Signal</string>
@@ -6546,6 +5943,8 @@
     <string name="GiftFlowStartFragment__next">Tiếp</string>
     <!-- Title text on choose recipient page for badge gifting -->
     <string name="GiftFlowRecipientSelectionFragment__choose_recipient">Chọn người nhận</string>
+    <!-- Hint text that shows in the recipient search bar on the choose recipient page for badge gifting -->
+    <string name="GiftFlowRecipientSelectionFragment__search">Tìm kiếm</string>
     <!-- Title text on confirm gift page -->
     <string name="GiftFlowConfirmationFragment__confirm_donation">Xác nhận khoản ủng hộ</string>
     <!-- Heading text specifying who the gift will be sent to -->
@@ -6761,7 +6160,7 @@
     <string name="ChooseANewDefaultSmsAppFragment__bullet_2">2</string>
     <!-- BackupSchedulePermission Megaphone -->
     <!-- The title on an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
-    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Improve backup scheduling</string>
+    <string name="BackupSchedulePermissionMegaphone__improve_backup_reliability">Cải thiện việc lên lịch sao lưu</string>
     <!-- The body text of an alert window that asks the user to grant the alarms permission so that automatic backups run more reliably -->
     <string name="BackupSchedulePermissionMegaphone__allow_the_alarms_permission_to_improve_automatic_daily_backups">Cấp quyền \"báo thức\" để cải thiện việc sao lưu tự động hằng ngày.</string>
     <!-- The text on a button in an alert window that, when clicked, will take the user to a screen to grant the alarms permission -->
@@ -7021,11 +6420,6 @@
     <!-- Popup menu label for clearing applied formatting -->
     <string name="TextFormatting_clear_formatting">Xóa định dạng</string>
 
-    <!-- Username edit dialog -->
-    <!-- Option to open username editor displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__edit_username">Sửa tên người dùng</string>
-    <!-- Option to delete username displayed as a list item in a dialog -->
-    <string name="UsernameEditDialog__delete_username">Xóa tên người dùng</string>
 
     <!-- Time duration picker -->
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
@@ -7227,12 +6621,6 @@
     <string name="EditCallLinkNameDialogFragment__call_name">Tên cuộc gọi</string>
 
     <!-- ChooseNavigationBarStyleFragment -->
-    <!-- Dialog title, displayed below the header image -->
-    <string name="ChooseNavigationBarStyleFragment__navigation_bar_size">Kích cỡ thanh điều hướng</string>
-    <!-- Toggle button label for normal size -->
-    <string name="ChooseNavigationBarStyleFragment__normal">Bình thường</string>
-    <!-- Toggle button label for compact size -->
-    <string name="ChooseNavigationBarStyleFragment__compact">Gọn</string>
 
     <!-- Title shown at top of bottom sheet dialog for displaying a message\'s edit history -->
     <string name="EditMessageHistoryDialog_title">Lịch sử chỉnh sửa</string>
@@ -7261,69 +6649,11 @@
     <!-- Displayed as body in dialog when user attempts to delete the link -->
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">Đường dẫn này sẽ không còn hoạt động với bất kỳ ai.</string>
 
-    <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Đường dẫn</string>
-    <!-- Button label for the share button in the username link settings -->
-    <string name="UsernameLinkSettings_share_button_label">Chia sẻ</string>
-    <!-- Button label for the color selector button in the username link settings -->
-    <string name="UsernameLinkSettings_color_button_label">Màu</string>
-    <!-- Description text for QR code and links in the username link settings -->
-    <string name="UsernameLinkSettings_qr_description">Chỉ chia sẻ mã QR và đường dẫn của bạn với người bạn tin tưởng. Khi được chia sẻ, mọi người sẽ có thể thấy tên người dùng và bắt đầu cuộc trò chuyện với bạn.</string>
-    <!-- Content of a toast that will show after the username is copied to the clipboard -->
-    <string name="UsernameLinkSettings_username_copied_toast">Đã sao chép tên người dùng</string>
-    <!-- Content of a toast that will show after the username link is copied to the clipboard -->
-    <string name="UsernameLinkSettings_link_copied_toast">Đã sao chép liên kết</string>
-    <!-- Content of a text field that is shown when the user has not yet set a username link -->
-    <string name="UsernameLinkSettings_link_not_set_label">Chưa đặt đường dẫn</string>
-    <!-- Content of a text field that is shown when the user is actively resetting the username link and waiting for the operation to finish -->
-    <string name="UsernameLinkSettings_resetting_link_label">Đang đặt lại đường dẫn…</string>
-    <!-- Title of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_title">Đặt lại mã QR?</string>
-    <!-- Body of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_body">Nếu đặt lại mã QR, mã QR và đường dẫn hiện tại của bạn sẽ không còn hiệu lực nữa.</string>
-    <!-- Label for the confirmation button on a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
-    <string name="UsernameLinkSettings_reset_link_dialog_confirm_button">Đặt lại</string>
-    <!-- Button label for a button that will reset your username and give you a new link -->
-    <string name="UsernameLinkSettings_reset_button_label">Đặt lại</string>
-    <!-- Button label for a button that indicates that the user is done changing the current setting -->
-    <string name="UsernameLinkSettings_done_button_label">Xong</string>
-    <!-- Label for a tab that shows a screen to view your username QR code -->
-    <string name="UsernameLinkSettings_code_tab_name">Mã</string>
-    <!-- Label for a tab that shows a screen to scan a QR code -->
-    <string name="UsernameLinkSettings_scan_tab_name">Quét</string>
-    <!-- Description text shown underneath the username QR code scanner -->
-    <string name="UsernameLinkSettings_qr_scan_description">Quét Mã QR trên thiết bị của liên hệ của bạn.</string>
-    <!-- App bar title for the username QR code color picker screen -->
-    <string name="UsernameLinkSettings_color_picker_app_bar_title">Màu</string>
-    <!-- Body of a dialog that is displayed when we failed to read a username QR code. -->
-    <string name="UsernameLinkSettings_qr_result_invalid">Mã QR không hợp lệ.</string>
-    <!-- Body of a dialog that is displayed when the username we looked up could not be found. -->
-    <string name="UsernameLinkSettings_qr_result_not_found">Không thể tìm thấy người dùng có tên người dùng %1$s.</string>
     <!-- Body of a dialog that is displayed when the username we looked up could not be found and we also could not parse the username. -->
     <string name="UsernameLinkSettings_qr_result_not_found_no_username">Không thể tìm thấy người dùng này.</string>
-    <!-- Body of a dialog that is displayed when we experienced a network error when looking up a username. -->
-    <string name="UsernameLinkSettings_qr_result_network_error">Lỗi mạng. Xin hãy thử lại.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because you had no internet. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_unavailable">Bạn không có quyền truy cập mạng. Đường dẫn của bạn chưa được đặt lại. Thử lại sau.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
-    <string name="UsernameLinkSettings_reset_link_result_network_error">Có lỗi kết nối mạng khi đang tiến hành đặt lại đường dẫn. Thử lại sau.</string>
-    <!-- Body of a dialog that is displayed when we failed to reset your username link because of an unknown error. -->
-    <string name="UsernameLinkSettings_reset_link_result_unknown_error">Có lỗi xảy ra khi đang tiến hành đặt lại đường dẫn. Thử lại sau.</string>
-    <!-- Body of a dialog that is displayed when we successfully reset you username link. -->
-    <string name="UsernameLinkSettings_reset_link_result_success">Mã QR và đường dẫn của bạn đã được đặt lại, một mã QR và đường dẫn mới đã được tạo.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
     <string name="UsernameLinkSettings_scan_this_qr_code">Quét mã QR này bằng điện thoại của bạn để trò chuyện với tôi trên Signal.</string>
-    <!-- Dialog title shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_qr_code_not_found">Không tìm thấy mã QR</string>
-    <!-- Dialog message shown when scanning an image from the gallery for a username QR code and there is no qr code in the image. -->
-    <string name="UsernameLinkSettings_try_scanning_another_image_containing_a_signal_qr_code">Thử quét một ảnh khác có chứa mã QR của Signal.</string>
 
-    <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
-    <string name="UsernameLinkShareBottomSheet_title">Bất kỳ ai có đường dẫn này có thể xem tên người dùng của bạn và bắt đầu trò chuyện với bạn. Chỉ chia sẻ đường dẫn với người bạn tin tưởng.</string>
-    <!-- A button label for a button that, when pressed, will copy your username link to the clipboard -->
-    <string name="UsernameLinkShareBottomSheet_copy_link">Sao chép đường dẫn</string>
-    <!-- A button label for a button that, when pressed, will open a share sheet for sharing your username link -->
-    <string name="UsernameLinkShareBottomSheet_share">Chia sẻ</string>
 
     <!-- PendingParticipantsView -->
     <!-- Displayed in the popup card when a remote user attempts to join a call link -->
@@ -7451,6 +6781,30 @@
     <string name="VerifyBackupKey__backup_key_correct">Mã khóa khôi phục đúng. Cất giữ an toàn mã khóa.</string>
     <!-- Snackbar text shown when the user chooses to snooze the recovery key reminder. -->
     <string name="VerifyBackupKey__we_will_ask_again">Chúng tôi sẽ hỏi lại bạn trong một tuần nữa.</string>
+
+    <!-- Title of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__verify_your_two_factor_method">Xác minh phương thức xác thực hai yếu tố của bạn</string>
+    <!-- Body of a megaphone shown to prompt the user to verify one of their two-factor authentication methods -->
+    <string name="TwoFactorReminderMegaphone__well_occasionally_ask_you_to_verify">Thỉnh thoảng chúng tôi sẽ yêu cầu bạn xác minh phương thức xác thực hai yếu tố để đảm bảo phương thức này vẫn được thiết lập đúng.</string>
+    <!-- Button of a megaphone that will take users to the screen where they verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__verify">Xác minh</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify a two-factor method -->
+    <string name="TwoFactorReminderMegaphone__not_now">Để sau</string>
+    <!-- Snackbar text shown after the user verified their authenticator app from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_authenticator_app">Cảm ơn bạn đã xác nhận ứng dụng xác thực.</string>
+    <!-- Snackbar text shown after the user verified their passkey from the reminder -->
+    <string name="TwoFactorReminderMegaphone__thanks_for_confirming_your_passkey">Cảm ơn bạn đã xác nhận khóa truy cập.</string>
+
+    <!-- Title of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login (their account ID and recovery key) -->
+    <string name="SignalLoginReminderMegaphone__verify_your_signal_login">Xác minh Signal Login của bạn</string>
+    <!-- Body of a megaphone shown to prompt a user without a phone number to verify they still know their Signal Login -->
+    <string name="SignalLoginReminderMegaphone__well_occasionally_ask_you_to_verify">Thỉnh thoảng chúng tôi sẽ yêu cầu bạn xác minh thông tin đăng nhập để đảm bảo bạn còn nhớ.</string>
+    <!-- Button of a megaphone that will take users to the screen where they enter their Signal Login to verify it -->
+    <string name="SignalLoginReminderMegaphone__verify">Xác minh</string>
+    <!-- Button of a megaphone that will snooze the reminder to verify the Signal Login -->
+    <string name="SignalLoginReminderMegaphone__not_now">Để sau</string>
+    <!-- Snackbar text shown after the user verified their Signal Login from the reminder -->
+    <string name="SignalLoginReminderMegaphone__thanks_for_confirming_your_signal_login">Cảm ơn bạn đã xác nhận Signal Login.</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
     <string name="GrantFullScreenIntentPermission_megaphone_title">Bật thông báo toàn màn hình?</string>
@@ -7769,34 +7123,6 @@
     <!-- Dialog message shown when Google Play services is invalid and subscriptions are not available -->
     <string name="GooglePlayServicesAvailability__service_invalid_message">Bạn không thể đăng ký Sao lưu bảo mật Signal vì điện thoại của bạn không hỗ trợ các dịch vụ của Google Play. Hãy liên hệ với nhà sản xuất điện thoại để được hỗ trợ.</string>
 
-    <!-- ManageStorageSettingsFragment -->
-    <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
-    <string name="ManageStorageSettingsFragment_chat_limit">Giới hạn của cuộc trò chuyện</string>
-    <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
-    <string name="ManageStorageSettingsFragment_delete_message_history">Xóa lịch sử tin nhắn</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
-    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Tin nhắn cũ hơn thời gian đã chọn sẽ được xóa vĩnh viễn.</string>
-    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
-    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Tin nhắn vượt quá độ dài đã chọn sẽ được xóa vĩnh viễn.</string>
-    <!-- Setting title for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_title">Áp dụng giới hạn cho các thiết bị đã liên kết</string>
-    <!-- Setting description for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
-    <string name="ManageStorageSettingsFragment_apply_limits_description">Khi được bật, giới hạn của cuộc trò chuyện cũng sẽ xóa tin nhắn trên các thiết bị đã liên kết của bạn.</string>
-    <!-- Setting section title header for storage optimization -->
-    <string name="ManageStorageSettingsFragment__on_device_storage">Dung lượng của Signal</string>
-    <!-- Setting row title for storage optimization -->
-    <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Tối ưu hóa dung lượng của Signal</string>
-    <!-- Setting row explanation for storage optimization -->
-    <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Tập tin đa phương tiện không được sử dụng sẽ được gỡ bỏ, nhưng có thể được tải xuống từ bản sao lưu của bạn bất kỳ lúc nào.</string>
-    <!-- Dialog message for paid tier pending dialog -->
-    <string name="ManageStorageSettingsFragment__storage_optimization_can_only_be_used">Tối ưu hóa lưu trữ là tính năng của gói trả phí Sao lưu bảo mật Signal. Gói đăng ký sao lưu của bạn vẫn đang được xử lý và hiện chưa sẵn sàng. Vui lòng thử lại sau.</string>
-    <!-- Title of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__media_will_be_removed_from_your_on_device_backup">Tập tin đa phương tiện sẽ bị xóa khỏi bản sao lưu trên thiết bị của bạn</string>
-    <!-- Body of a dialog shown when turning on "Optimize Signal storage" while on-device backups are enabled -->
-    <string name="ManageStorageSettingsFragment__turning_on_optimize_signal_storage_will_offload">Việc bật tùy chọn \"Tối ưu hóa dung lượng của Signal\" sẽ giúp gỡ các tập tin đa phương tiện cũ khỏi thiết bị của bạn. Bạn có thể tải xuống lại bất cứ lúc nào. Tùy chọn này cũng sẽ xóa các tập tin đa phương tiện cũ khỏi bản sao lưu trên thiết bị của bạn.</string>
-    <!-- Dialog action to confirm turning on "Optimize Signal storage" -->
-    <string name="ManageStorageSettingsFragment__turn_on">Bật</string>
-
     <!-- UpgradeToEnableOptimizedStorageSheet -->
     <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
     <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">Nâng cấp để bật tính năng này</string>
@@ -7840,11 +7166,11 @@
     <!-- Retry button shown when ending a group fails -->
     <string name="EndGroupDialog__try_again">Thử lại</string>
 
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, with admin name. %1$s is the admin\'s display name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, with admin name. %1$s is the admin\'s display name -->
     <string name="TerminatedGroupBottomSheet__s_ended_the_group">%1$s đã kết thúc nhóm</string>
-    <!-- Title of bottom sheet shown when opening a terminated group for the first time, without admin name -->
+    <!-- Title of bottom sheet shown when a group is ended while the user has the conversation open, without admin name -->
     <string name="TerminatedGroupBottomSheet__the_group_has_been_ended">Nhóm đã kết thúc.</string>
-    <!-- Body of bottom sheet shown when opening a terminated group -->
+    <!-- Body of bottom sheet shown when a group is ended while the user has the conversation open -->
     <string name="TerminatedGroupBottomSheet__you_can_no_longer_send_and_receive">Bạn không thể gửi và nhận tin nhắn hoặc cuộc gọi trong nhóm này nữa.</string>
 
     <!-- NoManualBackupBottomSheet -->
@@ -8137,6 +7463,12 @@
     <string name="MessageBackupsFlowFragment__a_network_failure_occurred">Có sự cố mạng xảy ra. Vui lòng thử lại sau.</string>
     <!-- Toast message if this fragment encounters an in progress deletion -->
     <string name="MessageBackupsFlowFragment__a_backup_deletion_is_in_progress">Đnag xóa bản sao lưu.</string>
+    <!-- Title of the device screen lock prompt shown before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__unlock_to_set_up_secure_backups">Mở khóa để thiết lập Sao lưu bảo mật</string>
+    <!-- Title of the sheet explaining that the device screen lock is needed before a user without a phone number can start setting up backups -->
+    <string name="MessageBackupsFlowFragment__to_set_up_secure_backups_confirm_its_you">Để thiết lập Sao lưu bảo mật, hãy xác nhận danh tính</string>
+    <!-- Toast shown when the device screen lock wasn\'t confirmed, so backup setup didn\'t continue -->
+    <string name="MessageBackupsFlowFragment__authentication_required">Yêu cầu xác thực</string>
 
     <!-- MessageBackupsEducationScreen -->
     <!-- Screen subtitle underneath large headline title -->
@@ -8427,6 +7759,8 @@
     <string name="MainToolbar__notification_profile_content_description">Cấu hình Thông báo</string>
     <!-- Accessibility label for more options button in MainToolbar -->
     <string name="MainToolbar__proxy_content_description">Proxy</string>
+    <!-- Overflow menu item in MainToolbar that opens donation settings -->
+    <string name="MainToolbar__donate">Ủng hộ</string>
     <!-- Accessibility label for search filter button in MainToolbar -->
   <!-- Removed by excludeNonTranslatables <string name="MainToolbar__search_filter_content_description" translatable="false">Search filter</string> -->
 
@@ -8448,9 +7782,6 @@
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__clear" translatable="false">Clear</string> -->
     <!-- SearchFilterBottomSheet: Select date dialog title -->
   <!-- Removed by excludeNonTranslatables <string name="SearchFilterBottomSheet__select_date" translatable="false">Select date</string> -->
-
-    <!-- Accessibility label for a button displayed in the toolbar to return to the previous screen. -->
-    <string name="DefaultTopAppBar__navigate_up_content_description">Hướng lên trên</string>
 
     <!-- Accessibility label describing the action that occurs when clicking a checkbox. -->
     <string name="SignalCheckbox_accessibility_on_click_label">Bật tắt</string>
@@ -8747,6 +8078,9 @@
 
     <!-- Body of the sheet shown when a local backup restore could not be completed, explaining how to try again -->
     <string name="CouldNotCompleteBackupRestoreSheet__body_retry">Để thử lại, hãy gỡ cài đặt và cài đặt lại Signal trên thiết bị này, rồi chọn \"Khôi phục hoặc chuyển\".</string>
+
+    <!-- Button on the sheet shown when a local backup restore could not be completed, opening a support article about it -->
+    <string name="CouldNotCompleteBackupRestoreSheet__learn_more">Tìm hiểu thêm</string>
 
     <!-- Title of the sheet shown when the server reports a verification code was requested for the user\'s phone number -->
     <string name="VerificationCodeRequestedBottomSheet__title">Mã xác minh đã được yêu cầu</string>

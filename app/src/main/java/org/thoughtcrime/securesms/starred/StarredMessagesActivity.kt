@@ -49,6 +49,7 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.Scaffolds
 import org.signal.core.ui.compose.SignalIcons
 import org.signal.core.ui.compose.theme.SignalTheme
@@ -80,10 +81,10 @@ import org.thoughtcrime.securesms.mms.StickerSlide
 import org.thoughtcrime.securesms.polls.PollOption
 import org.thoughtcrime.securesms.polls.PollRecord
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration
 import org.thoughtcrime.securesms.video.inline.InlineVideoController
 import java.util.Locale
+import org.signal.core.ui.R as CoreUiR
 
 class StarredMessagesActivity : PassphraseRequiredActivity() {
 
@@ -158,7 +159,7 @@ private fun StarredMessagesScreen(
         title = stringResource(R.string.StarredMessagesActivity__starred_messages),
         titleContent = { _, title -> Text(text = title, style = MaterialTheme.typography.titleLarge) },
         navigationIcon = SignalIcons.ArrowStart.imageVector,
-        navigationContentDescription = stringResource(R.string.DefaultTopAppBar__navigate_up_content_description),
+        navigationContentDescription = stringResource(CoreUiR.string.DefaultTopAppBar__navigate_up_content_description),
         onNavigationClick = onNavigateBack,
         scrollBehavior = scrollBehavior
       )

@@ -7,6 +7,7 @@ package org.thoughtcrime.securesms.contactshare.screens.details
 
 import android.content.Context
 import kotlinx.coroutines.withContext
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.concurrent.SignalDispatchers
 import org.signal.core.util.nullIfBlank
 import org.thoughtcrime.securesms.R
@@ -24,7 +25,6 @@ import org.thoughtcrime.securesms.contactshare.labelText
 import org.thoughtcrime.securesms.contactshare.resolveOrCreateSignalRecipient
 import org.thoughtcrime.securesms.contactshare.resolveSignalRecipient
 import org.thoughtcrime.securesms.dependencies.AppDependencies
-import org.thoughtcrime.securesms.recipients.RecipientId
 import java.util.Locale
 
 /** Maps a received card into details screen state. */
@@ -50,7 +50,7 @@ class SharedContactDetailsRepository(
       displayName = displayName,
       organization = contact.organization.nullIfBlank()?.takeIf { it != displayName },
       photoUri = contact.avatar?.attachment?.uri?.toString(),
-      hasPersonalName = !contact.name.isEmpty || contact.organization.isNullOrBlank(),
+      isOrgOnly = contact.isOrgOnly,
       signalRecipientId = signalRecipient,
       actions = SharedContactDetailsViewModel.contactActionsFor(
         isOnSignal = isOnSignal,

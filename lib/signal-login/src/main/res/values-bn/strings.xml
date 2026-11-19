@@ -38,11 +38,21 @@
     <!-- Toast shown when the user taps the disabled save to password manager button and the device has no password manager. -->
     <string name="SignalLoginViewDetailsScreen__no_password_manager_available">আপনার কোনো পাসওয়ার্ড ম্যানেজার সেট আপ করা নেই।</string>
     <!-- Body of the dialog asking the user to confirm saving their Signal Login credentials to the device password manager. -->
-    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">Only store your credentials in a password manager that you trust is secure. Signal does not make a recommendation on which password manager is right for you.</string>
+    <string name="SignalLoginViewDetailsScreen__only_store_your_credentials">আপনার লগইন তথ্য কেবল এমন কোনো পাসওয়ার্ড ম্যানেজারে সংরক্ষণ করুন যেটি আপনার কাছে সুরক্ষিত বলে মনে হয়। কোন পাসওয়ার্ড ম্যানেজার আপনার জন্য সঠিক সে বিষয়ে Signal পরামর্শ দেয় না।</string>
     <!-- Toast shown when saving the Signal Login PDF fails. -->
     <string name="SignalLoginViewDetailsScreen__unable_to_save_pdf">PDF সেভ করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।</string>
     <!-- Toast shown when the location the user picked for the Signal Login PDF refuses the write. -->
     <string name="SignalLoginViewDetailsScreen__cant_save_pdf_to_the_selected_location">বাছাই করা স্থানে PDF সেভ করা যাচ্ছে না।</string>
+
+    <!-- Do not share warning sheet, shown before the user copies or saves their Signal Login -->
+    <!-- Title of the sheet warning the user not to share their Signal Login. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login">আপনার Signal Login তথ্য শেয়ার করবেন না</string>
+    <!-- Body of the warning sheet. The text inside the <b> tags is shown in bold; keep the tags around the equivalent phrase. -->
+    <string name="DoNotShareLoginBottomSheet__do_not_share_your_signal_login_with_anyone">আপনার Signal Login তথ্য কারো সাথেই শেয়ার করবেন না। শেয়ার করলে তারা আপনার অ্যাকাউন্ট দখলে নিয়ে নিতে পারেন। <b>Signal কখনোই আপনাকে মেসেজ দিয়ে</b> আপনার অ্যাকাউন্ট আইডি বা পুনরুদ্ধারের \'কি\' চাইবে না। Signal-এর প্রতিনিধি হওয়ার ছদ্মবেশ ধারণ করেন এমন কোনো চ্যাটের উত্তর দিবেন না।</string>
+    <!-- Button acknowledging the warning and continuing with the copy or save the user started. -->
+    <string name="DoNotShareLoginBottomSheet__got_it">বুঝতে পেরেছি</string>
+    <!-- Button opening a help article with more information about keeping the Signal Login safe. -->
+    <string name="DoNotShareLoginBottomSheet__learn_more">আরো জানুন</string>
 
     <!-- Signal Login PDF -->
     <!-- Title at the top of the PDF that holds the user\'s Signal Login. -->

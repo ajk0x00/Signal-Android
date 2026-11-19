@@ -75,6 +75,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import kotlinx.coroutines.flow.flowOf
 import org.signal.contacts.SystemContactsRepository
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.Buttons
 import org.signal.core.ui.compose.DayNightPreviews
 import org.signal.core.ui.compose.Previews
@@ -89,7 +90,6 @@ import org.thoughtcrime.securesms.avatar.fallback.FallbackAvatarImage
 import org.thoughtcrime.securesms.contacts.index.ContactIndexRecord
 import org.thoughtcrime.securesms.contacts.index.ContactIndexType
 import org.thoughtcrime.securesms.conversation.colors.AvatarColor
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.signal.core.ui.R as CoreUiR
 
 private val ROW_HEIGHT = 64.dp
@@ -112,7 +112,7 @@ fun SelectContactScreen(
     title = stringResource(R.string.SelectContactScreen__select_contact),
     onNavigationClick = { onEvent(SelectContactEvent.BackClicked) },
     navigationIconRes = CoreUiR.drawable.symbol_arrow_start_24,
-    navigationContentDescription = stringResource(R.string.DefaultTopAppBar__navigate_up_content_description)
+    navigationContentDescription = stringResource(CoreUiR.string.DefaultTopAppBar__navigate_up_content_description)
   ) { contentPadding ->
     val listState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -237,6 +237,7 @@ private fun ContactList(
         is SelectContactRow.Contact -> {
           ContactRow(
             contact = row.contact,
+            preferSystemContactPhotos = state.preferSystemContactPhotos,
             onClick = { onEvent(SelectContactEvent.ContactClicked(row.contact)) }
           )
         }
@@ -315,6 +316,7 @@ private fun SectionHeader(label: String) {
 @Composable
 private fun ContactRow(
   contact: ContactIndexRecord,
+  preferSystemContactPhotos: Boolean,
   onClick: () -> Unit
 ) {
   Row(
@@ -325,7 +327,7 @@ private fun ContactRow(
       .clickable(onClick = onClick)
       .padding(start = ROW_START_PADDING, end = 16.dp)
   ) {
-    ContactAvatar(contact = contact)
+    ContactAvatar(contact = contact, preferSystemContactPhotos = preferSystemContactPhotos)
 
     Spacer(modifier = Modifier.width(AVATAR_TO_NAME_GAP))
 
@@ -352,14 +354,18 @@ private fun ContactRow(
 }
 
 /**
- * The address book photo wins over the Signal profile photo, matching the sharing flow's preference
- * for what the user themselves filed the contact under.
+ * Without the prefer system contact photos setting, a profile photo wins. Otherwise, and as the fallback,
+ * the provider's current photo is used, matching what the share screen offers once the row is picked.
  */
 @Composable
-private fun ContactAvatar(contact: ContactIndexRecord) {
+private fun ContactAvatar(contact: ContactIndexRecord, preferSystemContactPhotos: Boolean) {
   val modifier = Modifier.size(AVATAR_SIZE)
 
   when {
+    contact.recipientId != null && !preferSystemContactPhotos && contact.hasProfilePhoto -> {
+      AvatarImage(recipientId = contact.recipientId, modifier = modifier)
+    }
+
     contact.hasPhoto && contact.contactId != null -> {
       if (LocalInspectionMode.current) {
         Image(
@@ -385,15 +391,15 @@ private fun ContactAvatar(contact: ContactIndexRecord) {
 }
 
 /**
- * A company name or bare phone number has no initials worth showing, so it falls back to the person
- * glyph rather than to the first letters of whatever the provider used as a name.
+ * A company name or bare phone number has no initials worth showing, so it falls back to a building
+ * or person glyph rather than to the first letters of whatever the provider used as a name.
  */
 private fun ContactIndexRecord.fallbackAvatar(): FallbackAvatar {
   // No recipient to derive a color from, so address book entries all share the first avatar color.
-  return if (!hasPersonalName) {
-    FallbackAvatar.Resource.Person(AvatarColor.A100)
-  } else {
-    FallbackAvatar.forTextOrDefault(displayName, AvatarColor.A100)
+  return when {
+    isOrgOnly -> FallbackAvatar.Resource.Organization(AvatarColor.A100)
+    !hasPersonalName -> FallbackAvatar.Resource.Person(AvatarColor.A100)
+    else -> FallbackAvatar.forTextOrDefault(displayName, AvatarColor.A100)
   }
 }
 
@@ -627,7 +633,8 @@ private fun previewContact(
   position: Long,
   name: String,
   type: ContactIndexType = ContactIndexType.SYSTEM_ONLY,
-  hasPersonalName: Boolean = true
+  hasPersonalName: Boolean = true,
+  isOrgOnly: Boolean = false
 ): ContactIndexRecord {
   return ContactIndexRecord(
     position = position,
@@ -638,6 +645,7 @@ private fun previewContact(
     lookupKey = if (type != ContactIndexType.SIGNAL_ONLY) "lookup-$position" else null,
     contactId = null,
     hasPersonalName = hasPersonalName,
+    isOrgOnly = isOrgOnly,
     hasPhoto = false
   )
 }
@@ -650,7 +658,7 @@ private val PREVIEW_ROWS = listOf(
   SelectContactRow.Header("C"),
   SelectContactRow.Contact(previewContact(4, "Casey Fields", ContactIndexType.BOTH)),
   SelectContactRow.Header("#"),
-  SelectContactRow.Contact(previewContact(5, "Pacific Plumbing", hasPersonalName = false)),
+  SelectContactRow.Contact(previewContact(5, "Pacific Plumbing", hasPersonalName = false, isOrgOnly = true)),
   SelectContactRow.Contact(previewContact(6, "+1 555-123-4567", hasPersonalName = false))
 )
 

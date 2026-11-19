@@ -8,13 +8,13 @@ package org.thoughtcrime.securesms.contactshare
 import android.content.Context
 import androidx.annotation.WorkerThread
 import org.signal.core.models.ServiceId.ACI
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.nullIfBlank
 import org.signal.emoji.EmojiStrings
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.util.SignalE164Util
 
 /** Detail ids are positional, so a selection can be resolved back against the contact it came from. */
@@ -84,9 +84,20 @@ internal fun Contact.resolveOrCreateSignalRecipient(): RecipientId? {
   val aci = this.signalAci ?: return null
   val id = SignalDatabase.recipients.getOrInsertFromServiceId(aci)
 
-  SignalDatabase.recipients.setSharedName(id, ProfileName.fromParts(this.name.givenName, this.name.familyName))
+  SignalDatabase.recipients.setSharedName(id, this.sharedProfileName())
 
   return id
+}
+
+/** Falls back to the nickname, then the company, when the card has no given or family name, as the display name does. */
+private fun Contact.sharedProfileName(): ProfileName {
+  val name = ProfileName.fromParts(this.name.givenName, this.name.familyName)
+  if (!name.isEmpty) {
+    return name
+  }
+
+  val fallback = this.name.nickname.nullIfBlank() ?: this.organization.nullIfBlank()
+  return ProfileName.fromParts(fallback, null)
 }
 
 internal fun Contact.Phone.labelText(context: Context): String {

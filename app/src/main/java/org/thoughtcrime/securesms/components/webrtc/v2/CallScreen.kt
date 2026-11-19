@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.AllNightPreviews
 import org.signal.core.ui.compose.BottomSheets
 import org.signal.core.ui.compose.Previews
@@ -74,6 +75,7 @@ import org.signal.core.ui.compose.TriggerAlignedPopupState
 import org.signal.core.ui.compose.theme.SignalTheme
 import org.signal.core.util.DimensionUnit
 import org.signal.emoji.EmojiStrings
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.webrtc.WebRtcLocalRenderState
 import org.thoughtcrime.securesms.components.webrtc.controls.RaiseHandSnackbar
@@ -84,14 +86,13 @@ import org.thoughtcrime.securesms.events.GroupCallRaiseHandEvent
 import org.thoughtcrime.securesms.events.GroupCallReactionEvent
 import org.thoughtcrime.securesms.events.WebRtcViewModel
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.ringrtc.CameraState
 import org.thoughtcrime.securesms.service.webrtc.PendingParticipantCollection
-import org.thoughtcrime.securesms.util.RemoteConfig
 import kotlin.math.max
 import kotlin.math.round
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import org.signal.core.ui.R as CoreUiR
 
 private const val DRAG_HANDLE_HEIGHT = 22
 private const val SHEET_TOP_PADDING = 9
@@ -671,7 +672,7 @@ private fun ParticipantContextMenu(
 
     DropdownMenuItem(
       text = { Text(stringResource(R.string.CallParticipantSheet__contact_details)) },
-      leadingIcon = { Icon(painter = painterResource(R.drawable.symbol_person_24), contentDescription = null) },
+      leadingIcon = { Icon(painter = painterResource(CoreUiR.drawable.symbol_person_24), contentDescription = null) },
       onClick = {
         onContactDetails(resolved)
         onDismiss()

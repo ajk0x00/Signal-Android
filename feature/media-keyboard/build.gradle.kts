@@ -30,6 +30,7 @@ dependencies {
   implementation(project(":core:ui"))
   implementation(project(":lib:glide"))
   implementation(project(":lib:video"))
+  implementation(project(":lib:remote-config"))
 
   // Compose BOM
   platform(libs.androidx.compose.bom).let { composeBom ->
@@ -60,11 +61,14 @@ dependencies {
   implementation(libs.accompanist.drawablepainter)
 
   // Testing
+  testImplementation(testFixtures(project(":core:ui")))
+  testImplementation(testFixtures(project(":lib:remote-config")))
   testImplementation(testLibs.junit.junit)
   testImplementation(testLibs.mockk)
   testImplementation(testLibs.assertk)
   testImplementation(testLibs.kotlinx.coroutines.test)
   testImplementation(testLibs.robolectric.robolectric)
+  testImplementation(libs.androidx.compose.ui.test.junit4)
   androidTestImplementation(testLibs.androidx.test.ext.junit)
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }

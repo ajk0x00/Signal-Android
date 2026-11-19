@@ -23,12 +23,14 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.withContext
+import org.signal.core.util.ByteSize
 import org.signal.core.util.bytes
 import org.signal.core.util.logging.Log
 import org.signal.core.util.mebiBytes
 import org.signal.core.util.throttleLatest
 import org.signal.donations.InAppPaymentType
 import org.signal.network.NetworkResult
+import org.signal.remoteconfig.RemoteConfig
 import org.thoughtcrime.securesms.backup.ArchiveUploadProgress
 import org.thoughtcrime.securesms.backup.DeletionState
 import org.thoughtcrime.securesms.backup.v2.ArchiveRestoreProgress
@@ -49,7 +51,6 @@ import org.thoughtcrime.securesms.jobs.BackupMessagesJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.keyvalue.protos.ArchiveUploadProgressState
 import org.thoughtcrime.securesms.util.Environment
-import org.thoughtcrime.securesms.util.RemoteConfig
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -346,12 +347,14 @@ class RemoteBackupsSettingsViewModel : ViewModel() {
   }
 
   private suspend fun refreshState(lastPurchase: InAppPaymentTable.InAppPayment?) {
-    try {
-      Log.i(TAG, "Performing a state refresh.")
-      performStateRefresh(lastPurchase)
-    } catch (e: Exception) {
-      Log.w(TAG, "State refresh failed", e)
-      throw e
+    withContext(Dispatchers.IO) {
+      try {
+        Log.i(TAG, "Performing a state refresh.")
+        performStateRefresh(lastPurchase)
+      } catch (e: Exception) {
+        Log.w(TAG, "State refresh failed", e)
+        throw e
+      }
     }
   }
 
@@ -369,7 +372,7 @@ class RemoteBackupsSettingsViewModel : ViewModel() {
 
         _state.update {
           it.copy(
-            totalAllowedStorageSpace = estimatedSize.toUnitString()
+            totalAllowedStorageSpace = remoteStorageAllowance.toUnitString(unitSystem = ByteSize.UnitSystem.IEC)
           )
         }
       } else {

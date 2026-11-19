@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,12 +30,18 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDefaults
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,6 +49,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,9 +75,12 @@ import org.signal.core.ui.compose.Dialogs.PermissionRationaleDialog
 import org.signal.core.ui.compose.Dialogs.SimpleAlertDialog
 import org.signal.core.ui.compose.Dialogs.SimpleMessageDialog
 import org.signal.core.ui.compose.theme.SignalTheme
+import java.time.LocalTime
 import kotlin.math.max
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import androidx.compose.material3.TimePickerDialog as Material3TimePickerDialog
+import org.signal.core.ui.R as CoreUiR
 
 object Dialogs {
 
@@ -90,6 +101,14 @@ object Dialogs {
   const val TEST_TAG_RADIO_LIST_DIALOG_DISMISS_BUTTON = "dialog-radio-list-dismiss-button"
 
   fun testTagRadioListDialogOption(index: Int) = "$TEST_TAG_RADIO_LIST_DIALOG_OPTION:$index"
+
+  /** Suffixed with the index of the option the row renders. */
+  const val TEST_TAG_LIST_DIALOG_OPTION = "dialog-list-option"
+
+  fun testTagListDialogOption(index: Int) = "$TEST_TAG_LIST_DIALOG_OPTION:$index"
+
+  const val TEST_TAG_TIME_PICKER_CONFIRM = "time-picker-confirm"
+  const val TEST_TAG_TIME_PICKER_DIAL = "time-picker-dial"
 
   object Defaults {
     val shape: Shape @Composable get() = RoundedCornerShape(28.dp)
@@ -557,6 +576,49 @@ object Dialogs {
   }
 
   /**
+   * A plain list of [options] with no buttons, where tapping one is the choice. The dialog doesn't close itself, so
+   * [onOptionClick] decides what's shown next.
+   */
+  @Composable
+  fun ListDialog(
+    options: List<String>,
+    onOptionClick: (Int) -> Unit,
+    onDismissRequest: () -> Unit,
+    properties: DialogProperties = DialogProperties()
+  ) {
+    Dialog(
+      onDismissRequest = onDismissRequest,
+      properties = properties
+    ) {
+      Surface(
+        modifier = Modifier
+          .heightIn(min = 0.dp, max = getScreenHeight() - 200.dp)
+          .background(
+            color = SignalTheme.colors.colorSurface2,
+            shape = AlertDialogDefaults.shape
+          )
+          .clip(AlertDialogDefaults.shape)
+      ) {
+        LazyColumn(modifier = Modifier.padding(vertical = 8.dp)) {
+          items(count = options.size) { index ->
+            Text(
+              text = options[index],
+              style = MaterialTheme.typography.bodyLarge,
+              modifier = Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 48.dp)
+                .clickable { onOptionClick(index) }
+                .horizontalGutters()
+                .wrapContentHeight(Alignment.CenterVertically)
+                .testTag(testTagListDialogOption(index))
+            )
+          }
+        }
+      }
+    }
+  }
+
+  /**
    * Radio list whose choice takes effect as soon as the user taps it.
    */
   @Composable
@@ -929,6 +991,64 @@ object Dialogs {
       LocalWindowInfo.current.containerSize.height.toDp()
     }
   }
+
+  /**
+   * A time picker in a dialog, starting at [initialTime]. Uses the device's 12 or 24 hour setting, and lets the user switch
+   * between the clock face and typing the time. [onTimeSelected] is called with the chosen time when it's confirmed.
+   */
+  @OptIn(ExperimentalMaterial3Api::class)
+  @Composable
+  fun TimePickerDialog(
+    title: String,
+    initialTime: LocalTime,
+    onTimeSelected: (LocalTime) -> Unit,
+    onDismissRequest: () -> Unit,
+    confirm: String = stringResource(R.string.ok),
+    dismiss: String = stringResource(R.string.cancel)
+  ) {
+    val state = rememberTimePickerState(initialHour = initialTime.hour, initialMinute = initialTime.minute)
+    var showClock by rememberSaveable { mutableStateOf(true) }
+
+    // SignalTheme has no tertiary colors, which Material uses for the selected AM/PM, so match the selected hour and minute instead.
+    val colors = TimePickerDefaults.colors(
+      periodSelectorSelectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+      periodSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    )
+
+    Material3TimePickerDialog(
+      onDismissRequest = onDismissRequest,
+      containerColor = Defaults.containerColor,
+      title = { Text(text = title, style = MaterialTheme.typography.labelMedium) },
+      confirmButton = {
+        TextButton(
+          onClick = { onTimeSelected(LocalTime.of(state.hour, state.minute)) },
+          modifier = Modifier.testTag(TEST_TAG_TIME_PICKER_CONFIRM)
+        ) {
+          Text(text = confirm)
+        }
+      },
+      dismissButton = {
+        TextButton(onClick = onDismissRequest) {
+          Text(text = dismiss)
+        }
+      },
+      modeToggleButton = {
+        IconButton(onClick = { showClock = !showClock }) {
+          if (showClock) {
+            Icon(imageVector = SignalIcons.Keyboard.imageVector, contentDescription = stringResource(CoreUiR.string.Dialogs__switch_to_text_input))
+          } else {
+            Icon(imageVector = SignalIcons.Recent.imageVector, contentDescription = stringResource(CoreUiR.string.Dialogs__switch_to_clock))
+          }
+        }
+      }
+    ) {
+      if (showClock) {
+        TimePicker(state = state, colors = colors, modifier = Modifier.testTag(TEST_TAG_TIME_PICKER_DIAL))
+      } else {
+        TimeInput(state = state, colors = colors, modifier = Modifier.testTag(TEST_TAG_TIME_PICKER_DIAL))
+      }
+    }
+  }
 }
 
 @DayNightPreviews
@@ -1030,6 +1150,17 @@ private fun ProgressDialogDeterminatePreview() {
   }
 }
 
+@PreviewWrapper(SignalPreviewWrapper::class)
+@DayNightPreviews
+@Composable
+private fun ListDialogPreview() {
+  Dialogs.ListDialog(
+    options = listOf("Edit", "Delete"),
+    onOptionClick = {},
+    onDismissRequest = {}
+  )
+}
+
 @DayNightPreviews
 @Composable
 private fun RadioListDialogPreview() {
@@ -1057,5 +1188,17 @@ private fun RadioListConfirmationDialogPreview() {
     values = arrayOf("only_admins", "all_members"),
     selectedIndex = 0,
     onConfirm = {}
+  )
+}
+
+@PreviewWrapper(SignalPreviewWrapper::class)
+@DayNightPreviews
+@Composable
+private fun TimePickerDialogPreview() {
+  Dialogs.TimePickerDialog(
+    title = "Set start time",
+    initialTime = LocalTime.of(21, 0),
+    onTimeSelected = {},
+    onDismissRequest = {}
   )
 }

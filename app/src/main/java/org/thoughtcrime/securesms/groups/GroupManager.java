@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 import org.signal.core.models.ServiceId;
+import org.signal.core.models.recipients.RecipientId;
 import org.signal.core.util.groups.GroupChangeBusyException;
 import org.signal.core.util.groups.GroupChangeFailedException;
 import org.signal.core.util.groups.GroupInsufficientRightsException;
@@ -24,9 +25,9 @@ import org.thoughtcrime.securesms.database.model.GroupRecord;
 import org.thoughtcrime.securesms.groups.v2.GroupInviteLinkUrl;
 import org.thoughtcrime.securesms.groups.v2.GroupLinkPassword;
 import org.thoughtcrime.securesms.groups.v2.processing.GroupUpdateResult;
+import org.thoughtcrime.securesms.groups.v2.processing.TriggeringMessage;
 import org.thoughtcrime.securesms.jobs.ConversationShortcutUpdateJob;
 import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.whispersystems.signalservice.api.groupsv2.GroupLinkNotActiveException;
 
 import java.io.IOException;
@@ -130,7 +131,9 @@ public final class GroupManager {
       return;
     }
 
-    leaveGroup(context, groupId.requireV2(), true);
+    boolean sendToMembers = Recipient.externalGroupExact(groupId).resolve().isProfileSharing();
+
+    leaveGroup(context, groupId.requireV2(), sendToMembers);
   }
 
   @WorkerThread
@@ -180,12 +183,11 @@ public final class GroupManager {
                                                         int revision,
                                                         long timestamp,
                                                         @Nullable byte[] signedGroupChange,
-                                                        @Nullable String serverGuid,
-                                                        @Nullable Long receivedTime)
+                                                        @Nullable TriggeringMessage triggeringMessage)
       throws GroupChangeBusyException, IOException, GroupNotAMemberException
   {
     try (GroupManagerV2.GroupUpdater updater = new GroupManagerV2(context).updater(groupMasterKey)) {
-      return updater.updateLocalToServerRevision(revision, timestamp, groupRecord, groupSecretParams, signedGroupChange, serverGuid, receivedTime);
+      return updater.updateLocalToServerRevision(revision, timestamp, groupRecord, groupSecretParams, signedGroupChange, triggeringMessage);
     }
   }
 

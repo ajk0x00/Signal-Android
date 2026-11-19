@@ -6,6 +6,7 @@
 package org.thoughtcrime.securesms.main
 
 import android.app.Application
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.lifecycle.SavedStateHandle
 import io.mockk.every
 import io.mockk.mockk
@@ -14,22 +15,30 @@ import io.mockk.unmockkObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.split.ListDetailEvents
 import org.signal.core.ui.compose.split.PaneAnchor
+import org.thoughtcrime.securesms.conversation.ConversationArgs
+import org.thoughtcrime.securesms.conversation.ConversationIntents.ConversationScreenType
 import org.thoughtcrime.securesms.database.SignalDatabase
+import org.thoughtcrime.securesms.database.ThreadTable
 import org.thoughtcrime.securesms.database.model.MessageId
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.service.webrtc.links.CallLinkRoomId
 import org.thoughtcrime.securesms.testutil.MockAppDependenciesRule
 
@@ -80,9 +89,42 @@ class MainNavigationViewModelTest {
   }
 
   /** Events are answered off the view model's own channel, so every one of them is drained before asserting. */
-  private fun MainNavigationViewModel.sendEvent(event: MainNavigationEvents) {
+  private fun MainNavigationViewModel.sendEvent(event: MainNavigationEvents, advanceClock: Boolean = true) {
     onEvent(event)
-    testDispatcher.scheduler.advanceUntilIdle()
+    settle(advanceClock)
+  }
+
+  /**
+   * Drains the event channel, then delivers the stack writes it made to the flows that read the stacks through snapshots.
+   * A composition would deliver them on its own; here nothing does. Pass [advanceClock] false so a held enter doesn't time out.
+   */
+  private fun settle(advanceClock: Boolean = true) {
+    val drain = if (advanceClock) testDispatcher.scheduler::advanceUntilIdle else testDispatcher.scheduler::runCurrent
+    drain()
+    Snapshot.sendApplyNotifications()
+    drain()
+  }
+
+  private fun conversation(threadId: Long = 10, startingPosition: Int = -1): MainDetailRoute.Conversation {
+    return MainDetailRoute.Conversation(
+      ConversationArgs(
+        recipientId = RecipientId.from(1),
+        threadId = threadId,
+        draftText = null,
+        draftMedia = null,
+        draftContentType = null,
+        media = null,
+        stickerLocator = null,
+        isBorderless = false,
+        distributionType = ThreadTable.DistributionTypes.DEFAULT,
+        startingPosition = startingPosition,
+        isFirstTimeInSelfCreatedGroup = false,
+        isWithSearchOpen = false,
+        giftBadge = null,
+        shareDataTimestamp = -1L,
+        conversationScreenType = ConversationScreenType.NORMAL
+      )
+    )
   }
 
   @Test
@@ -335,5 +377,100 @@ class MainNavigationViewModelTest {
     viewModel.sendEvent(MainNavigationEvents.ListDetailEvent(ListDetailEvents.Back))
 
     assertEquals(PaneAnchor.DETAIL_ONLY, viewModel.paneAnchor.value)
+  }
+
+  @Test
+  fun `given a conversation is open, when going to a position in it, then it stays open and is asked to scroll`() = runTest(testDispatcher) {
+    val open = conversation()
+    viewModel.navigator.processEvent(ListDetailEvents.Push(open, MainListRoute.Chats))
+
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation(startingPosition = 42)))
+
+    assertEquals(listOf(MainListRoute.Chats, open), viewModel.navigator[MainListRoute.Chats])
+    assertEquals(MainNavigationViewModel.ConversationJump(threadId = 10, position = 42), viewModel.conversationJumps.first())
+  }
+
+  @Test
+  fun `given a conversation is open and the list fills the window, when going to a position in it, then the detail is revealed`() {
+    viewModel.navigator.processEvent(ListDetailEvents.Push(conversation(), MainListRoute.Chats))
+    viewModel.sendEvent(MainNavigationEvents.ListDetailEvent(ListDetailEvents.AnchorSelected(PaneAnchor.LIST_ONLY)))
+
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation(startingPosition = 42)))
+
+    assertEquals(PaneAnchor.DETAIL_ONLY, viewModel.paneAnchor.value)
+  }
+
+  @Test
+  fun `given a conversation is open, then it is the displayed conversation`() {
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()))
+
+    assertTrue(viewModel.isDisplayingConversation(10))
+    assertFalse(viewModel.isDisplayingConversation(11))
+    assertEquals(10L, viewModel.displayedConversationThreadId.value)
+  }
+
+  @Test
+  fun `given a conversation is open, when the window holds for another, then neither is displayed until it is ready`() {
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()))
+
+    viewModel.navigator.processEvent(ListDetailEvents.HoldNextEnter)
+    settle(advanceClock = false)
+
+    assertFalse(viewModel.isDisplayingConversation(10))
+    assertNull(viewModel.displayedConversationThreadId.value)
+
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation(threadId = 11)), advanceClock = false)
+
+    assertFalse(viewModel.isDisplayingConversation(10))
+    assertFalse(viewModel.isDisplayingConversation(11))
+
+    viewModel.navigator.processEvent(ListDetailEvents.TopEntryReady)
+    settle(advanceClock = false)
+
+    assertTrue(viewModel.isDisplayingConversation(11))
+    assertEquals(11L, viewModel.displayedConversationThreadId.value)
+  }
+
+  @Test
+  fun `given a conversation is open, when the window holds for the same chat, then it is displayed once the request lands`() {
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()))
+
+    viewModel.navigator.processEvent(ListDetailEvents.HoldNextEnter)
+    assertFalse(viewModel.isDisplayingConversation(10))
+
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()), advanceClock = false)
+
+    assertTrue(viewModel.isDisplayingConversation(10))
+    assertEquals(10L, viewModel.displayedConversationThreadId.value)
+  }
+
+  @Test
+  fun `given a conversation is open, when exiting detail, then no conversation is displayed`() {
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()))
+
+    viewModel.sendEvent(MainNavigationEvents.ExitDetail)
+
+    assertFalse(viewModel.isDisplayingConversation(10))
+    assertNull(viewModel.displayedConversationThreadId.value)
+  }
+
+  @Test
+  fun `given a conversation is open, when switching to another tab, then it is not displayed`() {
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()))
+
+    viewModel.sendEvent(MainNavigationEvents.GoToTab(MainListRoute.Calls))
+
+    assertFalse(viewModel.isDisplayingConversation(10))
+    assertNull(viewModel.displayedConversationThreadId.value)
+  }
+
+  @Test
+  fun `given a conversation is open, when its settings open above it, then it is still displayed`() {
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversation()))
+
+    viewModel.sendEvent(MainNavigationEvents.GoToDetail(conversationSettings))
+
+    assertTrue(viewModel.isDisplayingConversation(10))
+    assertEquals(10L, viewModel.displayedConversationThreadId.value)
   }
 }

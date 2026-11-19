@@ -44,10 +44,6 @@
   <string name="AddAMessageRow__view_once_media">Bir kez görünür medya</string>
   <!-- Accessibility label for the button at the end of the add-a-message row that turns view-once mode on and off. -->
   <string name="AddAMessageRow__toggle_view_once">Görünümü bir kez değiştir</string>
-  <!-- Setting option that can be selected to default media to be sent as high quality by default -->
-  <string name="SentMediaQuality__high">Yüksek</string>
-  <!-- Setting option that can be selected to default media to be sent as standard quality by default -->
-  <string name="SentMediaQuality__standard">Standart</string>
   <!-- Label for our standard quality media conversion. -->
   <string name="QualitySelectorBottomSheetDialog__standard">Standart</string>
   <!-- Description for our standard quality media conversion. -->
@@ -169,6 +165,8 @@
   <string name="CameraXFragment_photo_processing_failed">Fotoğraf işlenemedi. Lütfen tekrar dene.</string>
   <!-- Label shown below the elapsed time while a video recording is paused -->
   <string name="CameraXFragment_paused">Durduruldu</string>
+  <!-- Accessibility label for the camera toggle that keeps the camera open after each capture so several photos or videos can be taken in a row -->
+  <string name="CameraXFragment_multi_capture">Çoklu çekim</string>
   <!-- Displayed in a permissions dialog when the user has denied access to hardware for image and video capture. -->
   <string name="CameraXFragment_signal_needs_the_recording_permissions_to_capture_video">Signal videoları kaydedebilmek için mikrofon erişimine ihtiyaç duyar, ancak bu erişim reddedilmiş. Lütfen uygulama ayarlarına girip \"İzinler\"i seçin, ardından \"Mikrofon\" ve \"Kamera\"yı etkinleştirin.</string>
 

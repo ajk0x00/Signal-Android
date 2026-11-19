@@ -2,6 +2,9 @@ package org.thoughtcrime.securesms.linkdevice
 
 import android.net.Uri
 import androidx.annotation.VisibleForTesting
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import org.signal.core.models.backup.MessageBackupKey
 import org.signal.core.util.Base64
 import org.signal.core.util.Stopwatch
@@ -14,7 +17,7 @@ import org.signal.core.util.logging.logW
 import org.signal.core.util.toByteArray
 import org.signal.libsignal.net.RequestResult
 import org.signal.libsignal.protocol.InvalidKeyException
-import org.signal.libsignal.protocol.ecc.ECPublicKey
+import org.signal.libsignal.provisioning.ProvisioningPublicKey
 import org.signal.network.NetworkResult
 import org.signal.network.api.CdnApi
 import org.thoughtcrime.securesms.attachments.AttachmentUploadUtil
@@ -43,6 +46,7 @@ import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import org.signal.libsignal.net.LinkedDevice as LibSignalLinkedDevice
 
 /**
@@ -51,6 +55,7 @@ import org.signal.libsignal.net.LinkedDevice as LibSignalLinkedDevice
 object LinkDeviceRepository {
 
   private val TAG = Log.tag(LinkDeviceRepository::class)
+  private val WAIT_FOR_LINK_RETRY_BACKOFF = 5.seconds
   private const val DECRYPTION_INFO = "deviceCreatedAt"
   private const val MAX_ARCHIVE_UPLOAD_ATTEMPTS = 5
 
@@ -204,6 +209,15 @@ object LinkDeviceRepository {
   }
 
   /**
+   * Accepts both standard and url-safe base64, with or without padding.
+   */
+  @VisibleForTesting
+  fun parsePublicKey(uri: Uri): ProvisioningPublicKey? {
+    val publicKeyEncoded: String = uri.getQueryParameter("pub_key") ?: return null
+    return ProvisioningPublicKey(Base64.decode(publicKeyEncoded))
+  }
+
+  /**
    * Adds a linked device to the account.
    *
    * @param ephemeralMessageBackupKey An ephemeral key to provide the linked device to sync existing message content. Do not set if link+sync is unsupported.
@@ -228,29 +242,29 @@ object LinkDeviceRepository {
     }
 
     val ephemeralId: String = uri.getQueryParameter("uuid") ?: return LinkDeviceResult.BadCode
-    val publicKey = try {
-      val publicKeyEncoded: String = uri.getQueryParameter("pub_key") ?: return LinkDeviceResult.BadCode
-      ECPublicKey(Base64.decode(publicKeyEncoded))
+    val publicKey = parsePublicKey(uri) ?: return LinkDeviceResult.BadCode
+
+    val deviceLinkResult = try {
+      SignalNetwork.linkDeviceApi.linkDevice(
+        e164 = SignalStore.account.e164,
+        aci = SignalStore.account.aci!!,
+        pni = SignalStore.account.pni,
+        deviceIdentifier = ephemeralId,
+        deviceKey = publicKey,
+        aciIdentityKeyPair = SignalStore.account.aciIdentityKey,
+        pniIdentityKeyPair = SignalStore.account.pniIdentityKeyOrNull,
+        profileKey = ProfileKeyUtil.getSelfProfileKey(),
+        accountEntropyPool = SignalStore.account.accountEntropyPool,
+        masterKey = SignalStore.svr.masterKey,
+        code = verificationCodeResult.verificationCode,
+        ephemeralMessageBackupKey = ephemeralMessageBackupKey,
+        mediaRootBackupKey = SignalStore.backup.mediaRootBackupKey,
+        authCredentialSalt = SignalStore.account.authCredentialSalt
+      )
     } catch (e: InvalidKeyException) {
+      Log.w(TAG, "Invalid public key in linking QR code", e)
       return LinkDeviceResult.KeyError
     }
-
-    val deviceLinkResult = SignalNetwork.linkDeviceApi.linkDevice(
-      e164 = SignalStore.account.e164,
-      aci = SignalStore.account.aci!!,
-      pni = SignalStore.account.pni,
-      deviceIdentifier = ephemeralId,
-      deviceKey = publicKey,
-      aciIdentityKeyPair = SignalStore.account.aciIdentityKey,
-      pniIdentityKeyPair = SignalStore.account.pniIdentityKeyOrNull,
-      profileKey = ProfileKeyUtil.getSelfProfileKey(),
-      accountEntropyPool = SignalStore.account.accountEntropyPool,
-      masterKey = SignalStore.svr.masterKey,
-      code = verificationCodeResult.verificationCode,
-      ephemeralMessageBackupKey = ephemeralMessageBackupKey,
-      mediaRootBackupKey = SignalStore.backup.mediaRootBackupKey,
-      authCredentialSalt = SignalStore.account.authCredentialSalt
-    )
 
     return when (deviceLinkResult) {
       is NetworkResult.Success -> {
@@ -277,14 +291,15 @@ object LinkDeviceRepository {
    *
    * @param token Comes from [LinkDeviceResult.Success]
    */
-  fun waitForDeviceToBeLinked(token: String, maxWaitTime: Duration): WaitForLinkedDeviceResponse? {
+  suspend fun waitForDeviceToBeLinked(token: String, maxWaitTime: Duration): WaitForLinkedDeviceResponse? {
     Log.d(TAG, "[waitForDeviceToBeLinked] Starting to wait for device.")
 
     val startTime = System.currentTimeMillis()
     var timeRemaining = maxWaitTime.inWholeMilliseconds
 
-    while (timeRemaining > 0) {
+    while (timeRemaining > 0 && currentCoroutineContext().isActive) {
       Log.d(TAG, "[waitForDeviceToBeLinked] Willing to wait for $timeRemaining ms...")
+      var retryDelay: Duration = Duration.ZERO
       val result = SignalNetwork.linkDeviceApi.waitForLinkedDevice(
         token = token,
         timeout = timeRemaining.milliseconds
@@ -300,7 +315,8 @@ object LinkDeviceRepository {
           throw result.throwable
         }
         is NetworkResult.NetworkError -> {
-          Log.w(TAG, "[waitForDeviceToBeLinked] Hit a network error while waiting for linking. Will try to wait again.", result.exception)
+          Log.w(TAG, "[waitForDeviceToBeLinked] Hit a network error while waiting for linking. Will try to wait again after $WAIT_FOR_LINK_RETRY_BACKOFF.", result.exception)
+          retryDelay = WAIT_FOR_LINK_RETRY_BACKOFF
         }
         is NetworkResult.StatusCodeError -> {
           when (result.code) {
@@ -309,14 +325,18 @@ object LinkDeviceRepository {
               return null
             }
             429 -> {
-              Log.w(TAG, "[waitForDeviceToBeLinked] Hit a rate-limit. Will try to wait again.")
+              retryDelay = result.retryAfter() ?: WAIT_FOR_LINK_RETRY_BACKOFF
+              Log.w(TAG, "[waitForDeviceToBeLinked] Hit a rate-limit. Will try to wait again after $retryDelay.")
             }
             else -> {
-              Log.w(TAG, "[waitForDeviceToBeLinked] Hit an unknown status code of ${result.code}. Will try to wait again.")
+              Log.w(TAG, "[waitForDeviceToBeLinked] Hit an unknown status code of ${result.code}. Will try to wait again after $WAIT_FOR_LINK_RETRY_BACKOFF.")
+              retryDelay = WAIT_FOR_LINK_RETRY_BACKOFF
             }
           }
         }
       }
+
+      delay(minOf(retryDelay.inWholeMilliseconds, maxWaitTime.inWholeMilliseconds - (System.currentTimeMillis() - startTime)))
 
       timeRemaining = maxWaitTime.inWholeMilliseconds - (System.currentTimeMillis() - startTime)
     }

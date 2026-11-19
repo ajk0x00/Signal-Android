@@ -1,5 +1,11 @@
 package org.thoughtcrime.securesms.keyvalue
 
+import org.signal.storage.keyvalue.KeyValueStore
+import org.signal.storage.keyvalue.SignalStoreValues
+import org.signal.storage.keyvalue.booleanValue
+import org.signal.storage.keyvalue.longValue
+import org.signal.storage.keyvalue.stringValue
+
 class CloudStorageValues(store: KeyValueStore) : SignalStoreValues(store) {
 
   companion object {
@@ -8,9 +14,9 @@ class CloudStorageValues(store: KeyValueStore) : SignalStoreValues(store) {
     private const val KEY_ENABLED = "cloudstorage.enabled"
   }
 
-  public override fun onFirstEverAppLaunch() = Unit
+  override fun onFirstEverAppLaunch() = Unit
 
-  public override fun getKeysToIncludeInBackup(): List<String> = listOf(
+  override val keysToIncludeInBackup: List<String> = listOf(
     KEY_BUCKET_NAME,
     KEY_ENABLED
   )

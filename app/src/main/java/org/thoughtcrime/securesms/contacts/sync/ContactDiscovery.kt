@@ -8,12 +8,14 @@ import org.signal.contacts.SystemContactsRepository
 import org.signal.contacts.SystemContactsRepository.ContactIterator
 import org.signal.contacts.SystemContactsRepository.ContactPhoneDetails
 import org.signal.core.models.ServiceId
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.permissions.Permissions
 import org.signal.core.util.Stopwatch
 import org.signal.core.util.StringUtil
 import org.signal.core.util.Util
 import org.signal.core.util.UuidUtil
 import org.signal.core.util.logging.Log
+import org.signal.core.util.orNull
 import org.thoughtcrime.securesms.BuildConfig
 import org.thoughtcrime.securesms.database.RecipientTable
 import org.thoughtcrime.securesms.database.SignalDatabase
@@ -25,7 +27,6 @@ import org.thoughtcrime.securesms.notifications.NotificationChannels
 import org.thoughtcrime.securesms.notifications.v2.ConversationId
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.registration.util.RegistrationUtil
 import org.thoughtcrime.securesms.storage.StorageSyncHelper
 import org.thoughtcrime.securesms.util.SignalE164Util
@@ -249,6 +250,8 @@ object ContactDiscovery {
     val localNumber: String = SignalStore.account.e164 ?: ""
 
     val contactInfos = LinkedList<ContactInfo>()
+    var readIncomplete = false
+    var foundAnySystemContacts = false
     try {
       contactsProvider().use { iterator ->
         while (iterator.hasNext()) {
@@ -268,11 +271,14 @@ object ContactDiscovery {
               ProfileName.EMPTY
             }
 
-            val recipient: Recipient = Recipient.externalContact(realNumber) ?: continue
+            val e164: String = SignalE164Util.formatNonShortCodeAsE164(realNumber) ?: continue
+            foundAnySystemContacts = true
+
+            val recipientId: RecipientId = SignalDatabase.recipients.getByE164(e164).orNull() ?: continue
 
             contactInfos.add(
               ContactInfo(
-                recipientId = recipient.id,
+                recipientId = recipientId,
                 profileName = profileName,
                 displayName = phoneDetails.displayName,
                 photoUri = phoneDetails.photoUri,
@@ -283,13 +289,20 @@ object ContactDiscovery {
             )
           }
         }
+
+        readIncomplete = iterator.stoppedEarly
       }
     } catch (e: IllegalStateException) {
       Log.w(TAG, "Hit an issue with the cursor while reading!", e)
+      readIncomplete = true
     }
 
-    if (contactInfos.isNotEmpty()) {
-      val handle = SignalDatabase.recipients.beginBulkSystemContactUpdate(clearInfoForMissingContacts)
+    if (readIncomplete && clearInfoForMissingContacts) {
+      Log.w(TAG, "Contact read stopped early. Not clearing info for contacts that weren't read.")
+    }
+
+    if (foundAnySystemContacts) {
+      val handle = SignalDatabase.recipients.beginBulkSystemContactUpdate(clearInfoForMissingContacts && !readIncomplete)
       try {
         for (contactInfo in contactInfos) {
           handle.setSystemContactInfo(

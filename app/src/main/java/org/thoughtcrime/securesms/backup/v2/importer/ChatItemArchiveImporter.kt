@@ -24,11 +24,13 @@ import org.signal.archive.proto.SimpleChatUpdate
 import org.signal.archive.proto.StandardMessage
 import org.signal.archive.proto.Sticker
 import org.signal.archive.proto.ViewOnceMessage
+import org.signal.core.database.SqlUtil
+import org.signal.core.database.update
 import org.signal.core.models.ServiceId
+import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.Base64
 import org.signal.core.util.Hex
 import org.signal.core.util.JsonUtils
-import org.signal.core.util.SqlUtil
 import org.signal.core.util.UuidUtil
 import org.signal.core.util.asList
 import org.signal.core.util.forEach
@@ -37,7 +39,6 @@ import org.signal.core.util.nullIfBlank
 import org.signal.core.util.orNull
 import org.signal.core.util.requireLong
 import org.signal.core.util.toInt
-import org.signal.core.util.update
 import org.thoughtcrime.securesms.attachments.Attachment
 import org.thoughtcrime.securesms.attachments.PointerAttachment
 import org.thoughtcrime.securesms.attachments.TombstoneAttachment
@@ -79,7 +80,7 @@ import org.thoughtcrime.securesms.payments.State
 import org.thoughtcrime.securesms.payments.proto.PaymentMetaData
 import org.thoughtcrime.securesms.polls.Voter
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.recipients.RecipientIds
 import org.thoughtcrime.securesms.stickers.StickerLocator
 import org.thoughtcrime.securesms.util.Environment
 import org.thoughtcrime.securesms.util.MessageUtil
@@ -1368,7 +1369,7 @@ class ChatItemArchiveImporter(
         val aci = ServiceId.ACI.parseOrNull(it.mentionAci!!)
 
         if (aci != null && !aci.isUnknown) {
-          val id = RecipientId.from(aci)
+          val id = RecipientIds.from(aci)
           Mention(id, it.start!!, it.length!!)
         } else {
           null

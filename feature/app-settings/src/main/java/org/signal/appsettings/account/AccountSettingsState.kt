@@ -16,7 +16,9 @@ data class AccountSettingsState(
   val isPhoneNumberless: Boolean = false,
   val arePasskeysSupported: Boolean = false,
   val signalLogin: SignalLogin? = null,
-  val dialog: Dialog = Dialog.None
+  val dialog: Dialog = Dialog.None,
+  /** The snackbar to show, or [Snackbar.None]. */
+  val snackbar: Snackbar = Snackbar.None
 ) {
 
   val isNotDeprecatedOrUnregistered: Boolean
@@ -56,6 +58,38 @@ data class AccountSettingsState(
     NETWORK_FAILURE
   }
 
+  /** Whichever snackbar the screen is showing, if any. */
+  sealed interface Snackbar {
+    data object None : Snackbar
+
+    /** A PIN was just created. */
+    data object PinCreated : Snackbar
+
+    /** The user didn't confirm it was them, so the action that needed it didn't happen. */
+    data object AuthenticationRequired : Snackbar
+
+    /** A second factor of [kind] was removed. */
+    data class MethodRemoved(val kind: TwoFactorMethod.Kind) : Snackbar
+
+    /** A second factor of [kind] was just set up and named. */
+    data class MethodSetUp(val kind: TwoFactorMethod.Kind) : Snackbar
+
+    /** A second factor of [kind] was renamed. */
+    data class MethodRenamed(val kind: TwoFactorMethod.Kind) : Snackbar
+
+    /** A second factor of [kind] couldn't be removed. */
+    data class MethodRemovalFailed(val kind: TwoFactorMethod.Kind) : Snackbar
+
+    /** Deleting all of the app's data didn't work. */
+    data object DeleteAllDataFailed : Snackbar
+
+    /** Turning registration lock on didn't work. */
+    data object RegistrationLockEnableFailed : Snackbar
+
+    /** Turning registration lock off didn't work. */
+    data object RegistrationLockDisableFailed : Snackbar
+  }
+
   /** Whichever dialog the screen is showing, if any. Only one is ever up at a time. */
   sealed interface Dialog {
     data object None : Dialog
@@ -90,8 +124,5 @@ data class AccountSettingsState(
 
     /** Explains that the account already has as many second factors of all kinds as it's allowed. */
     data object MaxTwoFactorMethodsReached : Dialog
-
-    /** Covers the two legs of a passkey ceremony that talk to the service, which a tap otherwise looks ignored during. */
-    data object PasskeyInProgress : Dialog
   }
 }
