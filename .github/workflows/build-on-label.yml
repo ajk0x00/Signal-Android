@@ -20,7 +20,7 @@ concurrency:
 
 jobs:
   build:
-    name: Label build (websiteProdDebug)
+    name: Label build (playProdDebug)
     if: >-
       contains(fromJSON('["build","ci:build","build-apk"]'), github.event.label.name)
     runs-on: ubuntu-latest
@@ -83,7 +83,7 @@ jobs:
         run: |
           ./gradlew \
             --write-verification-metadata sha256 \
-            assembleWebsiteProdDebug \
+            assemblePlayProdDebug \
             -Dorg.gradle.jvmargs="-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC" \
             -Dkotlin.daemon.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m" \
             --parallel \

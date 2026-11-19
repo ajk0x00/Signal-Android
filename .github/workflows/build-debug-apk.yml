@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   build:
-    name: Assemble websiteProdDebug
+    name: Assemble playProdDebug
     runs-on: ubuntu-latest
     timeout-minutes: 150
 
@@ -88,7 +88,7 @@ jobs:
         run: |
           ./gradlew \
             --write-verification-metadata sha256 \
-            assembleWebsiteProdDebug \
+            assemblePlayProdDebug \
             -Dorg.gradle.jvmargs="-Xmx6g -Xms512m -XX:MaxMetaspaceSize=1g -XX:+UseG1GC" \
             -Dkotlin.daemon.jvmargs="-Xmx2g -XX:MaxMetaspaceSize=512m" \
             --parallel \
